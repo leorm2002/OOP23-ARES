@@ -6,13 +6,22 @@ import it.unibo.ares.utils.Pos;
 import it.unibo.ares.utils.State;
 import it.unibo.ares.utils.parameters.Parameter;
 import it.unibo.ares.utils.parameters.Parameters;
+import it.unibo.ares.utils.parameters.ParametersImpl;
 
 public class AgentBuilderImpl implements AgentBuilder{
     private BiFunction<State, Pos, State> strategy;
     private Parameters parameters;
 
+    public AgentBuilderImpl() {
+        this.strategy = null;
+        this.parameters = new ParametersImpl();
+    }
+
     @Override
     public Agent build() {
+        if (strategy == null) {
+            throw new IllegalStateException("Cannot build agent without strategy or parameters");
+        }
         return new Agent(){
 
             @Override
@@ -36,8 +45,7 @@ public class AgentBuilderImpl implements AgentBuilder{
     @Override
     public void reset() {
         this.strategy = null;
-        //parameters clear
-
+        this.parameters = new ParametersImpl();
     }
 
     @Override

@@ -7,7 +7,7 @@ import it.unibo.ares.utils.parameters.Parameters;
 /**
  * Represents an agent in an agent-based model.
  */
-public interface Agent extends Entity {
+public interface Agent {
 
     /**
      * Performs a tick of the agent, updating the simulation enviroment state based on the current state and the agnet position.
