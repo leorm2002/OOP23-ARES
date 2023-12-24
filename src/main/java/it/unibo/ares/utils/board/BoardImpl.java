@@ -5,10 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import it.unibo.ares.utils.Pair;
 import it.unibo.ares.utils.pos.Pos;
-
 
 /**
  * Implementation of the Board interface.
@@ -17,9 +15,8 @@ import it.unibo.ares.utils.pos.Pos;
  */
 public final class BoardImpl<V> implements Board<V> {
     private final Map<Pos, V> entities;
-    
     /**
-     * Create a new board
+     * Create a new board.
      */
     public BoardImpl() {
         this.entities = new HashMap<>();
@@ -63,5 +60,4 @@ public final class BoardImpl<V> implements Board<V> {
     public Optional<V> getEntity(final Pos pos) {
         return Optional.ofNullable(entities.get(pos));
     }
-
 }

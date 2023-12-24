@@ -1,6 +1,8 @@
 package it.unibo.ares.agent;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 import java.util.stream.Collectors;
 
@@ -13,17 +15,26 @@ import it.unibo.ares.utils.pos.Pos;
 import it.unibo.ares.utils.pos.PosImpl;
 import it.unibo.ares.utils.state.State;
 import it.unibo.ares.utils.state.StateImpl;
-
+/**
+ * Unit test for {@link Agent}.
+ */
 public class AgentTest {
+    //Disable magic number chekstyle, they're random values to
+    // CHECKSTYLE: MagicNumber OFF
+
     private AgentBuilderImpl agentBuilder;
 
+    /**
+     * Istantiate a new AgentBuilder before each test.
+     */
     @BeforeEach
     public void setUp() {
         agentBuilder = new AgentBuilderImpl();
     }
 
     private State getTestState() {
-        State state = new StateImpl( 5, 5);
+        State state = new StateImpl(5, 5);
+
         return state;
     }
 
@@ -32,8 +43,11 @@ public class AgentTest {
         return agentBuilder.build();
     }
 
+    /**
+     *  Test an agent with a strategy that return the State unchanged.
+     */
     @Test
-    public void simpleAgentTest(){
+    public void simpleAgentTest() {
 
         State simpleTestState = getTestState();
         Pos testPos = new PosImpl(3, 3);
@@ -42,18 +56,17 @@ public class AgentTest {
         assertEquals(agent.tick(simpleTestState, testPos), simpleTestState);
     }
 
-    private boolean isAgentOfSameType(Agent a, Agent b){
+    private boolean isAgentOfSameType(final Agent a, final Agent b) {
         Integer type1 = a.getParameters().getParameter("type", Integer.class).get().getValue();
         Integer type2 = b.getParameters().getParameter("type", Integer.class).get().getValue();
         return type1.equals(type2);
     }
 
-    private Agent getAgentWithStrategyAndWithParameter(ParameterImpl<Integer> parameter) {
+    private Agent getAgentWithStrategyAndWithParameter(final ParameterImpl<Integer> parameter) {
         AgentBuilder b  =  new AgentBuilderImpl();
 
         //Removes all the agents of different types
         b.addStrategy((state, pos) -> {
-
             state.getAgents().stream()
             .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos).get()))
             .forEach(pair -> state.removeAgent(pair.getFirst(), pair.getSecond()));
@@ -64,30 +77,32 @@ public class AgentTest {
         return b.build();
     }
 
+    /**
+     * Test an agent with a strategy that removes all the agents of different types.
+     */
     @Test
-    public void agentWithStrategyAndParametersTest(){
+    public void agentWithStrategyAndParametersTest() {
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));
-
         State state = getTestState();
-        state.addAgent(new PosImpl(1, 1), agent1a);
+        Pos agent1aPos = new PosImpl(1, 1);
+        state.addAgent(agent1aPos, agent1a);
         state.addAgent(new PosImpl(1, 2), agent1b);
         state.addAgent(new PosImpl(1, 3), agent2);
-    
         assertEquals(state.getAgents().size(), 3);
-
-        state = agent1a.tick(state, new PosImpl(1, 1));
+        state = agent1a.tick(state, agent1aPos);
         assertEquals(2, state.getAgents().size());
-
         assertTrue(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
         assertTrue(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1b));
 
 
     }
-
-        @Test
-    public void agentWithStrategyAndParametersTest2(){
+    /**
+     * Test an agent with a strategy that removes all the agents of different types.
+     */
+    @Test
+    public void agentWithStrategyAndParametersTest2() {
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));
@@ -96,7 +111,6 @@ public class AgentTest {
         state.addAgent(new PosImpl(1, 1), agent1a);
         state.addAgent(new PosImpl(1, 2), agent1b);
         state.addAgent(new PosImpl(1, 3), agent2);
-    
         assertEquals(state.getAgents().size(), 3);
 
         state = agent2.tick(state, new PosImpl(1, 3));
@@ -105,4 +119,5 @@ public class AgentTest {
         assertTrue(!state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
         assertTrue(!state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1b));
     }
+    // CHECKSTYLE: MagicNumber ON
 }

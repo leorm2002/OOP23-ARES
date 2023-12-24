@@ -2,7 +2,10 @@ package it.unibo.ares.agent;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import it.unibo.ares.utils.parameters.ParameterImpl;
 import it.unibo.ares.utils.pos.Pos;
 import it.unibo.ares.utils.pos.PosImpl;
@@ -11,23 +14,23 @@ import it.unibo.ares.utils.state.State;
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
  */
-public final class ConcreteAgentFactory {
+public final class SchellingsAgentFactory {
 
     /**
      * Istantiate a factory for creating concrete agents.
      */
-    ConcreteAgentFactory() {
+    SchellingsAgentFactory() {
     }
-
-    private boolean isAgentOfSameType(final Agent a, final Agent b) {
-            Integer type1 = a.getParameters().getParameter("type", Integer.class)
-                .orElseThrow(() -> new IllegalArgumentException("Agent " + a + " has no type parameter"))
-                .getValue();
-            Integer type2 = b.getParameters().getParameter("type", Integer.class)
-                .orElseThrow(() -> new IllegalArgumentException("Agent " + b + " has no type parameter"))
-                .getValue();
-            return type1.equals(type2);
-    }
+    //private boolean isAgentOfSameType(final Agent a, final Agent b) {
+    private BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
+        Integer typeA = a.getParameters().getParameter("type", Integer.class)
+            .orElseThrow(() -> new IllegalArgumentException("Agent " + a + " has no type parameter"))
+            .getValue();
+        Integer typeB = b.getParameters().getParameter("type", Integer.class)
+            .orElseThrow(() -> new IllegalArgumentException("Agent " + b + " has no type parameter"))
+            .getValue();
+        return typeA.equals(typeB);
+    };
 
     private boolean isThresholdSatisfied(final State state, final Pos pos, final Agent agent) {
         Integer visionRadius = agent.getParameters().getParameter("visionRadius", Integer.class)
@@ -37,11 +40,15 @@ public final class ConcreteAgentFactory {
             .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no threshold parameter"))
             .getValue();
 
-        Set<Agent> neighBors = state.getAgentsByPosAndRadius(pos, visionRadius);
+        Set<Agent> neighBors =
+            state.getAgentsByPosAndRadius(pos, visionRadius)
+            .stream()
+            .filter(a -> !a.equals(agent))
+            .collect(Collectors.toSet());
         if (neighBors.size() == 0) {
             return true;
         }
-        Double ratio = (double) neighBors.stream().filter(a -> isAgentOfSameType(a, agent)).count() / neighBors.size();
+        Double ratio = (double) neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent)).count() / neighBors.size();
 
         return ratio >= threshold;
     }
