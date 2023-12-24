@@ -1,5 +1,6 @@
 package it.unibo.ares.utils;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -11,5 +12,6 @@ public interface Board<V> {
     Set<Pair<Pos, V>> getEntities();
     void addEntity(Pos pos, V entity);
     void removeEntity(Pos pos, V entity);
-    V getEntity(Pos pos);
+    Optional<V> getEntity(Pos pos);
+
 }

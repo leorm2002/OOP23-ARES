@@ -2,11 +2,15 @@ package it.unibo.ares.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 public class BoardImpl<V> implements Board<V> {
     Map<Pos, V> entities = new HashMap<>();
+    
+
     @Override
     public Set<Pair<Pos, V>> getEntities() {
         return entities.entrySet().stream()
@@ -25,8 +29,7 @@ public class BoardImpl<V> implements Board<V> {
     }
 
     @Override
-    public V getEntity(Pos pos) {
-        return entities.get(pos);
+    public Optional<V> getEntity(Pos pos) {
+        return Optional.ofNullable(entities.get(pos));
     }
-    
 }

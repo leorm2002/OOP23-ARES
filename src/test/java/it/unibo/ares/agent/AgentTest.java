@@ -23,7 +23,7 @@ public class AgentTest {
     }
 
     private State getTestState() {
-        State state = new StateImpl();
+        State state = new StateImpl( 3, 3);
         return state;
     }
 
@@ -55,7 +55,7 @@ public class AgentTest {
         b.addStrategy((state, pos) -> {
 
             state.getAgents().stream()
-            .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos)))
+            .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos).get()))
             .forEach(pair -> state.removeAgent(pair.getFirst(), pair.getSecond()));
 
             return state;
@@ -104,8 +104,5 @@ public class AgentTest {
 
         assertTrue(!state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
         assertTrue(!state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1b));
-
-
     }
-
 }
