@@ -59,4 +59,12 @@ public class PosImpl implements Pos {
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Pos diff(final Pos pos) {
+        return new PosImpl(this.getX() - pos.getX(), this.getY() - pos.getY());
+    }
 }

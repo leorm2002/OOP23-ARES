@@ -1,4 +1,4 @@
-package it.unibo.ares.agent;
+package it.unibo.ares.agent.factories;
 
 import java.util.Optional;
 import java.util.Set;
@@ -6,6 +6,9 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import it.unibo.ares.agent.Agent;
+import it.unibo.ares.agent.AgentBuilder;
+import it.unibo.ares.agent.AgentBuilderImpl;
 import it.unibo.ares.utils.parameters.ParameterImpl;
 import it.unibo.ares.utils.pos.Pos;
 import it.unibo.ares.utils.pos.PosImpl;
@@ -15,12 +18,6 @@ import it.unibo.ares.utils.state.State;
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory {
-
-    /**
-     * Istantiate a factory for creating concrete agents.
-     */
-    SchellingsAgentFactory() {
-    }
     //private boolean isAgentOfSameType(final Agent a, final Agent b) {
     private BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         Integer typeA = a.getParameters().getParameter("type", Integer.class)
@@ -63,7 +60,7 @@ public final class SchellingsAgentFactory {
         .findAny();
     }
 
-    Agent getSchellingSegregationModelAgent(final Integer type, final Double threshold, final Integer visionRadius) {
+    public Agent getSchellingSegregationModelAgent(final Integer type, final Double threshold, final Integer visionRadius) {
         AgentBuilder b  =  new AgentBuilderImpl();
 
         b.addParameter(new ParameterImpl<Integer>("type", type));

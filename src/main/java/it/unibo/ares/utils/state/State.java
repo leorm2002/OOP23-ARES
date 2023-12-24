@@ -63,6 +63,14 @@ public interface State {
     Optional<Agent> getAgentAt(Pos pos);
 
     /**
+     * Retrieves the entity at the specified position, if any.
+     *
+     * @param pos the position to check for an entity.
+     * @return an optional containing the entity, or empty if no entity is found.
+     */
+    Optional<Entity> getEntityAt(Pos pos);
+
+    /**
      * Adds an entity to the state at the specified position.
      *
      * @param pos    the position to add the entity.
@@ -115,4 +123,19 @@ public interface State {
      * @return a set of positions within the specified radius of the position.
      */
     Set<Pos> getPosByPosAndRadius(Pos pos, Integer radius);
+
+    /**
+     * Retrieves the agents at the specified positions, if any.
+     * @param positions the set position to check for an agent.
+     * @return a set of agents at the specified positions.
+     */
+    Set<Agent> getAgentsFromASetOfPos(Set<Pos> positions);
+
+
+    /**
+     * Retrieves the entities at the specified positions, if any.
+     * @param positions the set position to check for an entities.
+     * @return a set of entities at the specified positions.
+     */
+    Set<Entity> getEntitiesFromASetOfPos(Set<Pos> entities);
 }

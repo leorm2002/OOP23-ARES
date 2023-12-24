@@ -127,6 +127,14 @@ public final class StateImpl implements State {
      * {@inheritDoc}
      */
     @Override
+    public Optional<Entity> getEntityAt(final Pos pos) {
+        return entityBoard.getEntity(pos);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Pair<Integer, Integer> getDimensions() {
         return this.size;
     }
@@ -177,5 +185,21 @@ public final class StateImpl implements State {
                 }).collect(Collectors.joining(" "))
             ).collect(Collectors.joining("\n"));
         System.out.println(out);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Agent> getAgentsFromASetOfPos(final Set<Pos> positions) {
+        return positions.stream().map(this::getAgentAt).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Entity> getEntitiesFromASetOfPos(final Set<Pos> positions) {
+        return positions.stream().map(this::getEntityAt).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
     }
 }

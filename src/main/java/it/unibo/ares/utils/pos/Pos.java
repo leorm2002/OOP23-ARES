@@ -16,4 +16,11 @@ public interface Pos {
      * @return the y-coordinate of the position
      */
     Integer getY();
+
+    /**
+     * Returns the distance between this position and the given position.
+     * @param pos
+     * @return a new Pos object representing the distance between this position and the given position
+     */
+    Pos diff(Pos pos);
 }
