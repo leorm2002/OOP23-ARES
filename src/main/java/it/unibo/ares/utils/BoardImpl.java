@@ -32,4 +32,5 @@ public class BoardImpl<V> implements Board<V> {
     public Optional<V> getEntity(Pos pos) {
         return Optional.ofNullable(entities.get(pos));
     }
+
 }

@@ -108,5 +108,23 @@ public class StateImpl implements State {
             .collect(Collectors.toSet());
         return p;
     }
+
+    public void debugPring(){
+        var out = IntStream.range(0, size.getFirst())
+            .boxed()
+            .map(x -> IntStream.range(0, size.getSecond())
+                .mapToObj(y -> new PosImpl(x, y))
+                .map(pos -> {
+                    var a = getAgentAt(pos);
+                    if(a.isPresent()){
+                        return a.get().getParameters().getParameter("type", Integer.class).get().getValue().toString();
+                    }else {
+                        return " ";
+                    }
+                }).collect(Collectors.joining(" "))
+            ).collect(Collectors.joining("\n"));
+        
+        System.out.println(out);
+    }
     
 }

@@ -1,6 +1,7 @@
 package it.unibo.ares.utils;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 
 /**
@@ -56,4 +57,5 @@ public class PosImpl implements Pos {
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
 }

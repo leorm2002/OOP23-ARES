@@ -85,5 +85,4 @@ public class testSchelling {
         assert state.getAgentAt(pos3).isPresent() == false;
 
     }
-
 }
