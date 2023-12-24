@@ -2,12 +2,12 @@ package it.unibo.ares.agent;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.utils.Pos;
-import it.unibo.ares.utils.PosImpl;
-import it.unibo.ares.utils.State;
-import it.unibo.ares.utils.StateImpl;
+import it.unibo.ares.utils.pos.Pos;
+import it.unibo.ares.utils.pos.PosImpl;
+import it.unibo.ares.utils.state.State;
+import it.unibo.ares.utils.state.StateImpl;
 
-public class testSchelling {
+public class TestSchelling {
     @Test
     public void testSchellingSegregationModelAgent1() {
         ConcreteAgentFactory factory = new ConcreteAgentFactory();

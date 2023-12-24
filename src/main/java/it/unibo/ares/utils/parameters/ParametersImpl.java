@@ -7,104 +7,127 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ParametersImpl implements Parameters  {
-
-    private final Map<Class<?>, Map<String, Parameter<?>>> typeMap; 
-
-    
+/**
+ * Implementation of the Parameters interface.
+ * This class represents a collection of parameters and provides methods to add, get, and set parameters.
+ */
+public final class ParametersImpl implements Parameters, Cloneable  {
+    private final Map<Class<?>, Map<String, Parameter<?>>> typeMap;
+    /**
+     * It provides a default constructor that initializes a HashMap to store parameter types.
+     */
     public ParametersImpl() {
         typeMap = new HashMap<>();
     }
 
-    public ParametersImpl(Map<Class<?>, Map<String, Parameter<?>>> typeMap) {
-        this.typeMap = typeMap;
+    /**
+     * Initialize a Parameters collection from a type map.
+     * @param typeMap  the type map to initialize the collection, it's a map of maps which contains the parameters
+     *      */
+    public ParametersImpl(final Map<Class<?>, Map<String, Parameter<?>>> typeMap) {
+        this.typeMap = new HashMap<>(typeMap);
     }
 
-    private <T> void addParameter(String key, Parameter<T> parameter) {
-
+    /*
+     * {@inheritDoc}
+     */
+    private <T> void addParameter(final String key, final Parameter<T> parameter) {
         typeMap.entrySet().stream().filter(e -> e.getValue().containsKey(key)).findAny().ifPresent(e -> {
             throw new IllegalArgumentException("Parameter " + key + " already exists");
         });
 
-        if(key == null || parameter.getType() == null){
+        if (key == null || parameter.getType() == null) {
             throw new IllegalArgumentException("Parameter key or type is null");
         }
         typeMap.computeIfAbsent(parameter.getType(), k -> new HashMap<>()).put(key, parameter);
     }
 
-
+    /*
+     * {@inheritDoc}
+     */
     @Override
-    public void addParameter(String key, Class<?> type) {
-        if(this.getParameter(key, type).isPresent()) {
+    public void addParameter(final String key, final Class<?> type) {
+        if (this.getParameter(key, type).isPresent()) {
             throw new IllegalArgumentException("Parameter " + key + " already exists");
         }
-        
-        if(key == null || type == null){
-            throw new IllegalArgumentException("Parameter key or type is null");
+        if (key == null || type == null) {
+            throw new NullPointerException("Parameter key or type is null");
         }
         addParameter(key, new ParameterImpl<>(key, type));
     }
 
+    /*
+     * {@inheritDoc}
+     */
     @Override
-    public <T> void addParameter(String key, T value) {
+    public <T> void addParameter(final String key, final T value) {
         addParameter(key, new ParameterImpl<>(key, value));
     }
 
-
+    /*
+     * {@inheritDoc}
+     */
     @Override
-    public <T> void addParameter(Parameter<T> parameter) {
+    public <T> void addParameter(final Parameter<T> parameter) {
         addParameter(parameter.getKey(), parameter);
     }
 
+    /*
+     * {@inheritDoc}
+     */
     @Override
-    public <T> Optional<Parameter<T>> getParameter(String key, Class<T> type) {
-        
-
+    public <T> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
         Optional<Map<String, Parameter<?>>> parameterMap =  Optional.ofNullable(typeMap.get(type));
         if (parameterMap.isPresent()) {
             @SuppressWarnings("unchecked")
             Parameter<T> parameter =  (Parameter<T>) parameterMap.get().get(key);
-            return Optional.ofNullable( parameter);
+            return Optional.ofNullable(parameter);
         }
         return Optional.empty();
     }
 
-
+    /*
+     * {@inheritDoc}
+     */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> void setParameter(String key, T value) {
+    public <T> void setParameter(final String key, final T value) {
         Optional<Parameter<T>> parameter = getParameter(key,  (Class<T>) value.getClass());
 
-        if(parameter.isPresent()) {
+        if (parameter.isPresent()) {
             typeMap.get(value.getClass()).replace(key, parameter.get().setValue(value));
         }
-
-        parameter.orElseThrow(() -> new IllegalArgumentException("Parameter " + key + " does not exist or is not of type " + value.getClass().getName()));
+        parameter.orElseThrow(() ->
+            new IllegalArgumentException("Parameter " + key + " does not exist or not of type " + value.getClass().getName()));
     }
-
 
     private Stream<Parameter<?>> getParametersStream() {
         return typeMap.values().stream().flatMap(m -> m.values().stream());
     }
 
+    /*
+     * {@inheritDoc}
+     */
     @Override
     public Set<Parameter<?>> getParameters() {
         return getParametersStream().collect(Collectors.toSet());
     }
 
+    /*
+     * {@inheritDoc}
+     */
     @Override
     public Set<Parameter<?>> getParametersToset() {
         return getParametersStream().filter(p -> !p.isSetted()).collect(Collectors.toSet());
     }
 
+    /*
+     * {@inheritDoc}
+     */
     @Override
     public Parameters clone() {
-        Map<Class<?>, Map<String, Parameter<?>>> cloneMap = new HashMap<>();; 
-
-        typeMap.entrySet().forEach(m -> cloneMap.put(m.getKey(), new HashMap<>(m.getValue()))); 
-        
+        Map<Class<?>, Map<String, Parameter<?>>> cloneMap = new HashMap<>();
+        typeMap.entrySet().forEach(m -> cloneMap.put(m.getKey(), new HashMap<>(m.getValue())));
         return new ParametersImpl(cloneMap);
     }
-    
-    
 }

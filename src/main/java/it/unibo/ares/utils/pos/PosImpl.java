@@ -1,11 +1,9 @@
-package it.unibo.ares.utils;
+package it.unibo.ares.utils.pos;
 
 import java.util.Objects;
-import java.util.stream.IntStream;
-
 
 /**
- *  {@inheritDoc}
+ * A class that represents a position in a two-dimensional space.
  */
 public class PosImpl implements Pos {
     /**
@@ -14,12 +12,12 @@ public class PosImpl implements Pos {
      * @param x the x coordinate of the position
      * @param y the y coordinate of the position
      */
-    public PosImpl(Integer x, Integer y) {
+    public PosImpl(final Integer x, final Integer y) {
         this.x = x;
         this.y = y;
     }
 
-    private final Integer y;    
+    private final Integer y;
     private final Integer x;
 
 
@@ -43,9 +41,13 @@ public class PosImpl implements Pos {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PosImpl pos = (PosImpl) o;
         return Objects.equals(x, pos.x) && Objects.equals(y, pos.y);
     }
@@ -57,5 +59,4 @@ public class PosImpl implements Pos {
     public int hashCode() {
         return Objects.hash(x, y);
     }
-
 }

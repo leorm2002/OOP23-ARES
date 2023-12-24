@@ -1,17 +1,18 @@
 package it.unibo.ares.agent;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.utils.Pos;
-import it.unibo.ares.utils.State;
 import it.unibo.ares.utils.parameters.ParameterImpl;
+import it.unibo.ares.utils.pos.Pos;
+import it.unibo.ares.utils.state.State;
 
-public class AgentBuilderImplTest {
+final public class AgentBuilderImplTest {
     private AgentBuilderImpl agentBuilder;
 
     @BeforeEach
@@ -35,5 +36,4 @@ public class AgentBuilderImplTest {
                     .addParameter(new ParameterImpl<>("testKey3", true));
 
     }
-
 }

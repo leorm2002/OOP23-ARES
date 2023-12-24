@@ -1,8 +1,8 @@
 package it.unibo.ares.agent;
 
-import it.unibo.ares.utils.Pos;
-import it.unibo.ares.utils.State;
 import it.unibo.ares.utils.parameters.Parameters;
+import it.unibo.ares.utils.pos.Pos;
+import it.unibo.ares.utils.state.State;
 
 /**
  * Represents an agent in an agent-based model.
@@ -30,6 +30,7 @@ public interface Agent {
      *
      * @param key the key of the parameter
      * @param value the value of the parameter
+     * @param <T> the type of the parameter
      */
     <T> void setParameter(String key, T value);
 

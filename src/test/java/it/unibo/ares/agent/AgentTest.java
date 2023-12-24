@@ -8,11 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.ares.utils.Pair;
-import it.unibo.ares.utils.Pos;
-import it.unibo.ares.utils.PosImpl;
-import it.unibo.ares.utils.State;
-import it.unibo.ares.utils.StateImpl;
 import it.unibo.ares.utils.parameters.ParameterImpl;
+import it.unibo.ares.utils.pos.Pos;
+import it.unibo.ares.utils.pos.PosImpl;
+import it.unibo.ares.utils.state.State;
+import it.unibo.ares.utils.state.StateImpl;
 
 public class AgentTest {
     private AgentBuilderImpl agentBuilder;
@@ -23,7 +23,7 @@ public class AgentTest {
     }
 
     private State getTestState() {
-        State state = new StateImpl( 3, 3);
+        State state = new StateImpl( 5, 5);
         return state;
     }
 
@@ -33,10 +33,10 @@ public class AgentTest {
     }
 
     @Test
-    public void SimpleAgentTest(){
+    public void simpleAgentTest(){
 
         State simpleTestState = getTestState();
-        Pos testPos = new PosImpl(1, 1);
+        Pos testPos = new PosImpl(3, 3);
         Agent agent = getSimpleTestAgent();
 
         assertEquals(agent.tick(simpleTestState, testPos), simpleTestState);
@@ -65,7 +65,7 @@ public class AgentTest {
     }
 
     @Test
-    public void AgentWithStrategyAndParametersTest(){
+    public void agentWithStrategyAndParametersTest(){
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));
@@ -87,7 +87,7 @@ public class AgentTest {
     }
 
         @Test
-    public void AgentWithStrategyAndParametersTest2(){
+    public void agentWithStrategyAndParametersTest2(){
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));

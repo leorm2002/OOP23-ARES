@@ -1,4 +1,4 @@
-package it.unibo.ares.utils;
+package it.unibo.ares.utils.pos;
 
 /**
  * Pos represents a position with x and y coordinates.
@@ -9,12 +9,11 @@ public interface Pos {
      *
      * @return the x-coordinate of the position
      */
-    public Integer getX();
-    
+    Integer getX();
     /**
      * Returns the y-coordinate of the position.
      *
      * @return the y-coordinate of the position
      */
-    public Integer getY();
+    Integer getY();
 }

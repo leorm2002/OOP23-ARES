@@ -139,7 +139,7 @@ public class ParametersImplTest {
 
 @Test
 void testAddParameterWithNullKey() {
-    assertThrows(IllegalArgumentException.class, () -> {
+    assertThrows(NullPointerException.class, () -> {
         parameters.addParameter(null, Integer.class);
     });
 }
