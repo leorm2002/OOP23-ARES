@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.ares.agent.factories.BoidsAgentFactory;
-import it.unibo.ares.utils.directionvector.DirectionVector;
-import it.unibo.ares.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.utils.pos.Pos;
-import it.unibo.ares.utils.pos.PosImpl;
+import it.unibo.ares.core.utils.directionvector.DirectionVector;
+import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
 
 public class TestBoids {
     @Test

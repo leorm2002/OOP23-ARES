@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import it.unibo.ares.utils.board.Board;
-import it.unibo.ares.utils.board.BoardImpl;
-import it.unibo.ares.utils.pos.Pos;
-import it.unibo.ares.utils.pos.PosImpl;
+
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.board.Board;
+import it.unibo.ares.core.utils.board.BoardImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
 
 /**
  * Unit test for {@link Board}.

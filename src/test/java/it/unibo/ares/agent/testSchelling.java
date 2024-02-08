@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.ares.agent.factories.SchellingsAgentFactory;
-import it.unibo.ares.utils.pos.Pos;
-import it.unibo.ares.utils.pos.PosImpl;
-import it.unibo.ares.utils.state.State;
-import it.unibo.ares.utils.state.StateImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
+import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.state.StateImpl;
 /**
  * Unit test for a schelling segregation model agent.
  */

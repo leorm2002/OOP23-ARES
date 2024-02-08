@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.utils.Pair;
-import it.unibo.ares.utils.parameters.ParameterImpl;
-import it.unibo.ares.utils.pos.Pos;
-import it.unibo.ares.utils.pos.PosImpl;
-import it.unibo.ares.utils.state.State;
-import it.unibo.ares.utils.state.StateImpl;
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
+import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.state.StateImpl;
 /**
  * Unit test for {@link Agent}.
  */
