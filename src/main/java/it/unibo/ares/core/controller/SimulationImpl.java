@@ -6,9 +6,9 @@ import it.unibo.ares.core.controller.models.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
 
-public class SimulationImpl implements Simulation {
-    
-    public SimulationImpl(State state, Model model) {
+public final class SimulationImpl implements Simulation {
+
+    public SimulationImpl(final State state, final Model model) {
         this.state = state;
         this.model = model;
         calculating = false;
@@ -16,9 +16,8 @@ public class SimulationImpl implements Simulation {
 
     private State state;
     private final Model model;
-    private boolean running; //may be sincronized if we want to make it usable to await termination
+    private boolean running; // may be sincronized if we want to make it usable to await termination
     private boolean calculating;
-
 
     @Override
     public State getState() {
@@ -32,7 +31,7 @@ public class SimulationImpl implements Simulation {
 
     @Override
     public void start() {
-        this.running = true;        
+        this.running = true;
     }
 
     @Override
@@ -40,21 +39,21 @@ public class SimulationImpl implements Simulation {
         return this.running;
     }
 
-    private SimulationOutputData mapStateToSimulationData(State state, String simulationId) {
+    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mapStateToSimulationData'");
     }
 
-    private void tickSim(){
+    private void tickSim() {
         this.state = this.model.tick(this.state);
     }
 
     @Override
-    public CompletableFuture<SimulationOutputData> tick(String simulationId) {
-        if(!this.running) {
+    public CompletableFuture<SimulationOutputData> tick(final String simulationId) {
+        if (!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }
-        if(this.calculating) {            
+        if (this.calculating) {
             throw new IllegalStateException("Simulation is already calculating");
         }
 
@@ -66,8 +65,8 @@ public class SimulationImpl implements Simulation {
             future.complete(mapStateToSimulationData(this.state, simulationId));
             this.calculating = false;
         }).start();
-    
+
         return future;
     }
-    
+
 }

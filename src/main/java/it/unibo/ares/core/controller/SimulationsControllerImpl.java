@@ -5,8 +5,7 @@ import java.util.Map;
 import it.unibo.ares.core.controller.models.Identifier;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 
-
-public class SimulationsControllerImpl implements SimulationsController{
+public final class SimulationsControllerImpl implements SimulationsController {
     Map<String, Simulation> simulations;
     SimulationDataProvider<SimulationOutputData> processor = new SimulationDataProvider<>();
 
@@ -26,12 +25,14 @@ public class SimulationsControllerImpl implements SimulationsController{
     }
 
     @Override
-    public void onTick(){
+    public void onTick() {
         simulations.entrySet().stream()
-            .filter(e -> e.getValue().isRunning())
-            .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of the simulation
-            .forEach(f -> f.thenAccept(simData -> processor.submit(new Identifier<>(simData.getSimulationId(), simData)))); // Processing the future
+                .filter(e -> e.getValue().isRunning())
+                .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of
+                                                         // the simulation
+                .forEach(f -> f
+                        .thenAccept(simData -> processor.submit(new Identifier<>(simData.getSimulationId(), simData)))); // Processing
+                                                                                                                         // the
+                                                                                                                         // future
     }
-
-
 }

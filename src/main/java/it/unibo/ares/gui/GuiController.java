@@ -14,9 +14,10 @@ import javafx.scene.layout.VBox;
 
 /**
  * GuiController is a class that controls the GUI of the application.
- * It implements the Initializable interface and manages the interaction between the user and the GUI.
+ * It implements the Initializable interface and manages the interaction between
+ * the user and the GUI.
  */
-public class GuiController implements Initializable{
+public class GuiController implements Initializable {
 
     /**
      * writer is an instance of WriteOnGUIImpl used to write parameters on the GUI.
@@ -24,7 +25,8 @@ public class GuiController implements Initializable{
     WriteOnGUI writer = new WriteOnGUIImpl();
 
     /**
-     * calculatorSupplier is an instance of CalculatorSupplier used to supply calculator instances.
+     * calculatorSupplier is an instance of CalculatorSupplier used to supply
+     * calculator instances.
      */
     CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
 
@@ -71,9 +73,11 @@ public class GuiController implements Initializable{
 
     @FXML
     /**
-     * btnLoadClicked is a method that handles the action event of the Load button being clicked.
+     * btnLoadClicked is a method that handles the action event of the Load button
+     * being clicked.
      *
-     * @param event the ActionEvent instance representing the Load button click event
+     * @param event the ActionEvent instance representing the Load button click
+     *              event
      */
     void btnLoadClicked(ActionEvent event) {
 
@@ -81,7 +85,7 @@ public class GuiController implements Initializable{
 
     @FXML
     void btnStartClicked(final ActionEvent event) {
-        calculatorSupplier.initializer.setModel(modelIDselected);
+        calculatorSupplier.getInitializer().setModel(modelIDselected);
         /*
          * set parameters of the model
          */
@@ -92,7 +96,7 @@ public class GuiController implements Initializable{
         /*
          * write models
          */
-        HashMap<String, String> modelMap = calculatorSupplier.initializer.getModels();
+        HashMap<String, String> modelMap = calculatorSupplier.getInitializer().getModels();
         choiceModel.getItems().addAll(modelMap.keySet());
         choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
     }
@@ -101,10 +105,11 @@ public class GuiController implements Initializable{
         /*
          * write parameters of the model and agents
          */
-        String modelIDselected = calculatorSupplier.initializer.getModels().get(choiceModel.getValue());
-        calculatorSupplier.initializer.setModel(modelIDselected);
-        writer.writeChoiceBox(choiceAgent, calculatorSupplier.initializer.getAgentsSimplified().keySet());
-        writer.writeVBox(VBOXModelPar, calculatorSupplier.initializer.getModelParametersParameters(modelIDselected).getParameters());
+        String modelIDselected = calculatorSupplier.getInitializer().getModels().get(choiceModel.getValue());
+        calculatorSupplier.getInitializer().setModel(modelIDselected);
+        writer.writeChoiceBox(choiceAgent, calculatorSupplier.getInitializer().getAgentsSimplified().keySet());
+        writer.writeVBox(VBOXModelPar,
+                calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters());
         /*
          * method to call when an agent is selected
          */
@@ -115,7 +120,11 @@ public class GuiController implements Initializable{
         /*
          * write parameters of the agent
          */
-        writer.writeVBox(VBOXAgentPar, calculatorSupplier.initializer.getAgentParametersSimplified(calculatorSupplier.initializer.getAgentsSimplified().get(choiceAgent.getValue())).getParameters());
+        writer.writeVBox(VBOXAgentPar,
+                calculatorSupplier.getInitializer()
+                        .getAgentParametersSimplified(
+                                calculatorSupplier.getInitializer().getAgentsSimplified().get(choiceAgent.getValue()))
+                        .getParameters());
     }
 
 }

@@ -40,7 +40,8 @@ public interface State {
      *
      * @param pos   the position to remove the agent.
      * @param agent the agent to remove.
-     * @throws IllegalArgumentException if the agent is not found at the specified position.
+     * @throws IllegalArgumentException if the agent is not found at the specified
+     *                                  position.
      */
     void removeAgent(Pos pos, Agent agent);
 
@@ -49,7 +50,8 @@ public interface State {
      *
      * @param from the current position of the agent.
      * @param to   the new position for the agent.
-     * @throws IllegalArgumentException if the agent is not found at the specified position.
+     * @throws IllegalArgumentException if the agent is not found at the specified
+     *                                  position.
      * @throws IllegalArgumentException if the position is already occupied.
      */
     void moveAgent(Pos from, Pos to);
@@ -76,7 +78,8 @@ public interface State {
      * @param pos    the position to add the entity.
      * @param entity the entity to add.
      * @throws IllegalArgumentException if the position is already occupied.
-     * @throws IllegalArgumentException if the entity is already present in the state.
+     * @throws IllegalArgumentException if the entity is already present in the
+     *                                  state.
      */
     void addEntity(Pos pos, Entity entity);
 
@@ -85,7 +88,8 @@ public interface State {
      *
      * @param pos    the position to remove the entity.
      * @param entity the entity to remove.
-     * @throws IllegalArgumentException if the entity is not found at the specified position.
+     * @throws IllegalArgumentException if the entity is not found at the specified
+     *                                  position.
      */
     void removeEntity(Pos pos, Entity entity);
 
@@ -94,7 +98,8 @@ public interface State {
      *
      * @param from the current position of the entity.
      * @param to   the new position for the entity.
-     * @throws IllegalArgumentException if the entity is not found at the specified position.
+     * @throws IllegalArgumentException if the entity is not found at the specified
+     *                                  position.
      * @throws IllegalArgumentException if the position is already occupied.
      */
     void moveEntity(Pos from, Pos to);
@@ -126,15 +131,16 @@ public interface State {
 
     /**
      * Retrieves the agents at the specified positions, if any.
+     * 
      * @param positions the set position to check for an agent.
      * @return a set of agents at the specified positions.
      */
     Set<Agent> getAgentsFromASetOfPos(Set<Pos> positions);
 
-
     /**
      * Retrieves the entities at the specified positions, if any.
-     * @param positions the set position to check for an entities.
+     * 
+     * @param entities the set position to check for an itierities.
      * @return a set of entities at the specified positions.
      */
     Set<Entity> getEntitiesFromASetOfPos(Set<Pos> entities);

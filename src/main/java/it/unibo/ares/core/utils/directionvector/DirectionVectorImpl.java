@@ -11,7 +11,7 @@ public class DirectionVectorImpl implements DirectionVector {
     private final Double x;
     private final Double y;
 
-    private Double magnitude;
+    private final Double magnitude;
 
     /**
      * Constructs a DirectionVectorImpl object with the given x and y components.
@@ -20,19 +20,20 @@ public class DirectionVectorImpl implements DirectionVector {
      * @param x the x component of the vector
      * @param y the y component of the vector
      */
-    public DirectionVectorImpl(Double x, Double y) {
+    public DirectionVectorImpl(final Double x, final Double y) {
         this.x = x;
         this.y = y;
         this.magnitude = Math.sqrt(x * x + y * y);
     }
-        /**
+
+    /**
      * Constructs a DirectionVectorImpl object with the given x and y components.
      * The vector is normalized to have a magnitude of 1.
      *
      * @param x the x component of the vector as integer
      * @param y the y component of the vector as integer
      */
-    public DirectionVectorImpl(Integer x, Integer y) {
+    public DirectionVectorImpl(final Integer x, final Integer y) {
         this(x.doubleValue(), y.doubleValue());
     }
 
@@ -69,9 +70,9 @@ public class DirectionVectorImpl implements DirectionVector {
     }
 
     /**
-    * @inheritDoc
-    */@
-    Override
+     * @inheritDoc
+     */
+    @Override
     public Double getMagnitude() {
         return magnitude;
     }
@@ -80,7 +81,7 @@ public class DirectionVectorImpl implements DirectionVector {
      * @inheritDoc
      */
     @Override
-    public Double pointProduct(DirectionVector other) {
+    public Double pointProduct(final DirectionVector other) {
         return x * other.getX() + y * other.getY();
     }
 
@@ -96,7 +97,7 @@ public class DirectionVectorImpl implements DirectionVector {
      * @inheritDoc
      */
     @Override
-    public DirectionVector mean(DirectionVector other) {
+    public DirectionVector mean(final DirectionVector other) {
         return new DirectionVectorImpl((x + other.getX()), (y + other.getY()));
     }
 }

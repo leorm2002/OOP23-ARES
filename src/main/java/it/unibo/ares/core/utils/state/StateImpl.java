@@ -14,7 +14,8 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
 /**
- * Implementation of the State interface that represents the state of a simulation.
+ * Implementation of the State interface that represents the state of a
+ * simulation.
  * It manages the entities and agents on a board.
  */
 public final class StateImpl implements State {
@@ -33,7 +34,7 @@ public final class StateImpl implements State {
     }
 
     private Boolean isValidPosition(final Pos pos) {
-        return  pos.getX() >= 0 && pos.getX() < size.getFirst()
+        return pos.getX() >= 0 && pos.getX() < size.getFirst()
                 && pos.getY() >= 0 && pos.getY() < size.getSecond();
     }
 
@@ -144,14 +145,13 @@ public final class StateImpl implements State {
      */
     @Override
     public Set<Pos> getPosByPosAndRadius(final Pos pos, final Integer radius) {
-        return
-            IntStream.rangeClosed(pos.getX() - radius, pos.getX() + radius)
-            .boxed()
-            .flatMap(x ->
-                IntStream.rangeClosed(pos.getY() - radius, pos.getY() + radius).mapToObj(y -> new PosImpl(x, y)))
-            .filter(this::isValidPosition)
-            .filter(p -> !p.equals(pos))
-            .collect(Collectors.toSet());
+        return IntStream.rangeClosed(pos.getX() - radius, pos.getX() + radius)
+                .boxed()
+                .flatMap(x -> IntStream.rangeClosed(pos.getY() - radius, pos.getY() + radius)
+                        .mapToObj(y -> new PosImpl(x, y)))
+                .filter(this::isValidPosition)
+                .filter(p -> !p.equals(pos))
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -159,31 +159,33 @@ public final class StateImpl implements State {
      */
     @Override
     public Set<Agent> getAgentsByPosAndRadius(final Pos pos, final Integer radius) {
-        return
-            getPosByPosAndRadius(pos, radius).stream()
-            .map(this::getAgentAt)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toSet());
+        return getPosByPosAndRadius(pos, radius).stream()
+                .map(this::getAgentAt)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
     }
 
     /**
-     * Print out the state of the simulation (the type parameter). Used for debugging.
+     * Print out the state of the simulation (the type parameter). Used for
+     * debugging.
      */
     public void debugPrint() {
         var out = IntStream.range(0, size.getFirst())
-            .boxed()
-            .map(x -> IntStream.range(0, size.getSecond())
-                .mapToObj(y -> new PosImpl(x, y))
-                .map(pos -> {
-                    var a = getAgentAt(pos);
-                    if (a.isPresent()) {
-                        return a.get().getParameters().getParameter("type", Integer.class).get().getValue().toString();
-                    } else {
-                        return " ";
-                    }
-                }).collect(Collectors.joining(" "))
-            ).collect(Collectors.joining("\n"));
+                .boxed()
+                .map(x -> IntStream.range(0, size.getSecond())
+                        .mapToObj(y -> new PosImpl(x, y))
+                        .map(pos -> {
+                            var a = getAgentAt(pos);
+                            if (a.isPresent()) {
+                                return a.get().getParameters()
+                                        .getParameter("type", Integer.class)
+                                        .get().getValue().toString();
+                            } else {
+                                return " ";
+                            }
+                        }).collect(Collectors.joining(" ")))
+                .collect(Collectors.joining("\n"));
         System.out.println(out);
     }
 
@@ -192,7 +194,8 @@ public final class StateImpl implements State {
      */
     @Override
     public Set<Agent> getAgentsFromASetOfPos(final Set<Pos> positions) {
-        return positions.stream().map(this::getAgentAt).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+        return positions.stream().map(this::getAgentAt)
+                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
     }
 
     /**
@@ -200,6 +203,8 @@ public final class StateImpl implements State {
      */
     @Override
     public Set<Entity> getEntitiesFromASetOfPos(final Set<Pos> positions) {
-        return positions.stream().map(this::getEntityAt).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+        return positions.stream()
+                .map(this::getEntityAt)
+                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
     }
 }

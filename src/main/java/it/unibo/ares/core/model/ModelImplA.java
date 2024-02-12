@@ -8,14 +8,15 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
-public class ModelImplA implements Model {
-    UpdateMode updateMode;
-    Parameters parameters;
+public final class ModelImplA implements Model {
+    private UpdateMode updateMode;
+    private Parameters parameters;
+
     @Override
     public State tick(final State state) {
-        //For each agent in the state, call the tick method
-        Set<Pair<Pos,Agent>> agents = state.getAgents();
-        State newState = state; //TODO: deep copy of the state
+        // For each agent in the state, call the tick method
+        Set<Pair<Pos, Agent>> agents = state.getAgents();
+        State newState = state; // TODO: deep copy of the state
         switch (updateMode) {
             case RANDOM:
                 for (var agent : agents) {
@@ -23,12 +24,12 @@ public class ModelImplA implements Model {
                 }
                 break;
             case SEQUENTIAL:
-                //Sorta the agents by position
-                //For each agent in the state, call the tick method
+                // Sorta the agents by position
+                // For each agent in the state, call the tick method
                 for (var agent : agents) {
                     newState = agent.getSecond().tick(newState, agent.getFirst());
                 }
-                //Do nothing
+                // Do nothing
                 break;
             default:
                 throw new UnsupportedOperationException("Unimplemented update mode");
@@ -45,5 +46,5 @@ public class ModelImplA implements Model {
     public <T> void setParameter(String key, T value) {
         parameters.setParameter(key, value);
     }
-    
+
 }

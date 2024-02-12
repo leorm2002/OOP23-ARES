@@ -22,14 +22,16 @@ public interface DirectionVector {
     /**
      * Gets the x-component of the direction vector.
      *
-     * @return the x-component of the direction vector normalized to have a magnitude of 1.
+     * @return the x-component of the direction vector normalized to have a
+     *         magnitude of 1.
      */
     Double getNormalizedX();
 
     /**
      * Gets the y-component of the direction vector.
      *
-     * @return the y-component of the direction vector normalized to have a magnitude of 1.
+     * @return the y-component of the direction vector normalized to have a
+     *         magnitude of 1.
      */
     Double getNormalizedY();
 
@@ -42,6 +44,7 @@ public interface DirectionVector {
 
     /**
      * Computes the dot product between this vector and the given vector.
+     * 
      * @param other vector to compute the dot product with
      * @return the dot product between this vector and the given vector.
      */
@@ -49,14 +52,17 @@ public interface DirectionVector {
 
     /**
      * Return the normalized version of this vector.
+     * 
      * @return a vector with the same direction of this vector but with magnitude 1.
      */
     DirectionVector getNormalized();
 
     /**
      * Adds the given vector to this vector.
+     * 
      * @param other vector to add to this vector
-     * @return a new vector representing the mean of this vector and the given vector.
+     * @return a new vector representing the mean of this vector and the given
+     *         vector.
      */
     DirectionVector mean(DirectionVector other);
 
