@@ -21,8 +21,7 @@ public class SimulationImpl implements Simulation {
 
     @Override
     public State getState() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getState'");
+        return null;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class SimulationImpl implements Simulation {
         return this.running;
     }
 
-    private SimulationData mapStateToSimulationData(State state, String simulationId) {
+    private SimulationOutputData mapStateToSimulationData(State state, String simulationId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mapStateToSimulationData'");
     }
@@ -50,7 +49,7 @@ public class SimulationImpl implements Simulation {
     }
 
     @Override
-    public CompletableFuture<SimulationData> tick(String simulationId) {
+    public CompletableFuture<SimulationOutputData> tick(String simulationId) {
         if(!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }
@@ -58,7 +57,7 @@ public class SimulationImpl implements Simulation {
             throw new IllegalStateException("Simulation is already calculating");
         }
 
-        CompletableFuture<SimulationData> future = new CompletableFuture<>();
+        CompletableFuture<SimulationOutputData> future = new CompletableFuture<>();
 
         new Thread(() -> {
             this.calculating = true;

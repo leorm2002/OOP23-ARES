@@ -2,23 +2,28 @@ package it.unibo.ares.core.controller;
 
 import java.util.Map;
 
-public class SimulationController{
-    Map<String, Simulation> simulations;
-    SimulationDataProvider<SimulationData> processor = new SimulationDataProvider<>();
 
-    void addSimulation(String id, Simulation simulation) {
+public class SimulationsControllerImpl implements SimulationsController{
+    Map<String, Simulation> simulations;
+    SimulationDataProvider<SimulationOutputData> processor = new SimulationDataProvider<>();
+
+    @Override
+    public void addSimulation(final String id, final Simulation simulation) {
         simulations.put(id, simulation);
     }
 
-    void removeSimulation(String id) {
+    @Override
+    public void removeSimulation(final String id) {
         simulations.remove(id);
     }
 
-    void startSimulation(String id) {
+    @Override
+    public void startSimulation(final String id) {
         simulations.get(id).start();
     }
 
-    void onTick(){
+    @Override
+    public void onTick(){
         simulations.entrySet().stream()
             .filter(e -> e.getValue().isRunning())
             .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of the simulation

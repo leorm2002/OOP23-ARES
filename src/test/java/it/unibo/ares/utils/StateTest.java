@@ -2,8 +2,9 @@ package it.unibo.ares.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
-import it.unibo.ares.agent.Agent;
-import it.unibo.ares.agent.AgentBuilderImpl;
+
+import it.unibo.ares.core.agent.Agent;
+import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;

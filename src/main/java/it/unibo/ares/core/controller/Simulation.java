@@ -10,5 +10,5 @@ public interface Simulation {
     public Model getModel();
     public void start();
     public boolean isRunning();
-    public  CompletableFuture<SimulationData> tick(String simulationId);
+    public  CompletableFuture<SimulationOutputData> tick(String simulationId);
 }

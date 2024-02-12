@@ -3,10 +3,10 @@ package it.unibo.ares.core.controller;
 public class CalculatorSupplier {
     private static volatile CalculatorSupplier instance;
 
-    public SimulationController controller;
+    public SimulationsController controller;
     public SimulationInitializer initializer;
 
-    private CalculatorSupplier(SimulationController c, SimulationInitializer i){
+    private CalculatorSupplier(SimulationsController c, SimulationInitializer i){
         this.controller = c;
         this.initializer = i;
     }
@@ -28,7 +28,7 @@ public class CalculatorSupplier {
         synchronized(CalculatorSupplier.class){
             if(instance == null){
                 instance = new CalculatorSupplier(
-                    new SimulationController(), new SimulationInitializerImpl());
+                    new SimulationsControllerImpl(), new SimulationInitializerImpl());
                 }
             return instance;
         }

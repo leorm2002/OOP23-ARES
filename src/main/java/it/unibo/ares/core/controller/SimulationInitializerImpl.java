@@ -10,8 +10,6 @@ import it.unibo.ares.core.model.ModelBuilder;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-//TODO singleton
-
 public class SimulationInitializerImpl implements SimulationInitializer {
 
     private Map<String, ModelBuilder> models;

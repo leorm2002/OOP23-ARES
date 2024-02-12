@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.agent.factories.BoidsAgentFactory;
+import it.unibo.ares.core.agent.factories.BoidsAgentFactory;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.pos.Pos;
