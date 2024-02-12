@@ -1,6 +1,8 @@
 package it.unibo.ares.core.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import it.unibo.ares.core.model.Model;
@@ -11,9 +13,9 @@ public interface SimulationInitializer {
 
     /**
      * Gets the models available for the simulation.
-     * @return A list of pairs, where the first element is the name of the model and the second element is the identifier of the model.
+     * @return A HashMap, where the first element is the name of the model and the second element is the identifier of the model.
      */
-    List<Pair<String, String>> getModels();
+    HashMap<String,String> getModels();
 
     /**
      * Sets the model of the simulation.
@@ -41,7 +43,14 @@ public interface SimulationInitializer {
      * @return A set containing all the agents of the model, represented as a pair of strings, where the
      * first element is the name of the agent and the second element is the identifier of the group agent.
      */
-    Set<Pair<String, String>> getAgentsSimplified();
+    Map<String,String> getAgentsSimplified();
+
+    /**
+     * Gets the parameters of the agent.
+     * @param agentId The identifier of the group of agents to get the parameters from.
+     * @return A set containing all the parameters of the agent.
+     */
+    Parameters getAgentParametersSimplified(String agentId);
 
     /**
      * Sets a parameter of the agent.

@@ -1,5 +1,6 @@
 package it.unibo.ares.core.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class SimulationInitializerImpl implements SimulationInitializer {
      * @return A list of pairs, where the first element is the name of the model and the second element is the identifier of the model.
      */
     @Override
-    public List<Pair<String,String>> getModels(){
+    public HashMap<String, String> getModels(){
         return null;
     }
 
@@ -61,7 +62,7 @@ public class SimulationInitializerImpl implements SimulationInitializer {
      * first element is the name of the agent and the second element is the identifier of the group agent.
      */
     @Override
-    public Set<Pair<String,String>> getAgentsSimplified(){
+    public HashMap<String,String> getAgentsSimplified(){
         return null;
     }
 
@@ -83,6 +84,11 @@ public class SimulationInitializerImpl implements SimulationInitializer {
     @Override
     public Pair<String, Model> startSimulation(String initializationId){
         //TODO return a random uuid
+        return null;
+    }
+
+    @Override
+    public Parameters getAgentParametersSimplified(String agentId) {
         return null;
     }
 
