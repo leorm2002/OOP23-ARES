@@ -1,16 +1,17 @@
 package it.unibo.ares.core.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelBuilder;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-public class SimulationInitializerImpl implements SimulationInitializer {
+/**
+ * A class that initializes the simulation.
+ */
+public final class SimulationInitializerImpl implements SimulationInitializer {
 
     private Map<String, ModelBuilder> models;
 

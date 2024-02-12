@@ -28,7 +28,7 @@ public interface Simulation {
     void start();
 
     /**
-     * Stops the simulation.
+     * @return true if the simulation is running, false otherwise.
      */
     boolean isRunning();
 

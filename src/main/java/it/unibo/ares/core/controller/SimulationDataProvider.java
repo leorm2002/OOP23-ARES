@@ -7,16 +7,25 @@ import java.util.concurrent.Flow.Subscriber;
 
 import it.unibo.ares.core.controller.models.Identifier;
 
-public class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
+public final class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
     private Map<String, Subscriber<T>> subscribers = new HashMap<>();
 
-    // Method to subscribe a subscriber with an ID
-    public void subscribe(String id, Subscriber<T> subscriber) {
+    /**
+     * Subscribes the subscriber to the data provider with the given ID.
+     * 
+     * @param id
+     * @param subscriber
+     */
+    public void subscribe(final String id, final Subscriber<T> subscriber) {
         subscribers.put(id, subscriber);
     }
 
-    // Method to publish data to a specific subscriber by ID
-    public void submit(Identifier<T> identifier) {
+    /**
+     * Submits the data inside the identifier to the subscriber with the same ID.
+     * 
+     * @param identifier
+     */
+    public void submit(final Identifier<T> identifier) {
         Subscriber<T> subscriber = subscribers.get(identifier.getId());
         if (subscriber != null) {
             subscriber.onNext(identifier.getData());
@@ -25,9 +34,14 @@ public class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
         }
     }
 
+    /**
+     * Not to use.
+     * 
+     * @param subscriber
+     */
+    @Deprecated
     @Override
-    public void subscribe(Subscriber<? super Identifier<T>> subscriber) {
+    public void subscribe(final Subscriber<? super Identifier<T>> subscriber) {
         // Not to use
     }
-
 }

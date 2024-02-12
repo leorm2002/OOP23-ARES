@@ -43,7 +43,7 @@ public final class ModelImplA implements Model {
     }
 
     @Override
-    public <T> void setParameter(String key, T value) {
+    public <T> void setParameter(final String key, final T value) {
         parameters.setParameter(key, value);
     }
 

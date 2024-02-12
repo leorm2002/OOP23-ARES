@@ -1,5 +1,8 @@
 package it.unibo.ares.core.controller;
 
+/**
+ * A controller for all the simulations.
+ */
 public interface SimulationsController {
 
     /**
@@ -19,9 +22,14 @@ public interface SimulationsController {
 
     /**
      * restart the simulation of the given id.
+     * 
+     * @param id The identifier of the simulation.
      */
     void startSimulation(String id);
 
-    void onTick();
+    /**
+     * tick each simulation.
+     */
+    void tick();
 
 }

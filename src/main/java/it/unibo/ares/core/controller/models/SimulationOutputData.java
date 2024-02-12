@@ -1,5 +1,9 @@
 package it.unibo.ares.core.controller.models;
 
+/**
+ * A simple class used to identify a data with a string.
+ * 
+ */
 public final class SimulationOutputData {
     /**
      * Gets the data of the simulation.

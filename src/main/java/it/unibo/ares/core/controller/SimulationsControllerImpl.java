@@ -25,7 +25,7 @@ public final class SimulationsControllerImpl implements SimulationsController {
     }
 
     @Override
-    public void onTick() {
+    public void tick() {
         simulations.entrySet().stream()
                 .filter(e -> e.getValue().isRunning())
                 .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of

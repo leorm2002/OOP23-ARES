@@ -39,20 +39,18 @@ public final class CalculatorSupplier {
         }
     }
 
+    /**
+     * @return the controller
+     */
     public SimulationsController getController() {
         return controller;
     }
 
-    public void setController(SimulationsController controller) {
-        this.controller = controller;
-    }
-
+    /**
+     * @return the initializer
+     */
     public SimulationInitializer getInitializer() {
         return initializer;
-    }
-
-    public void setInitializer(SimulationInitializer initializer) {
-        this.initializer = initializer;
     }
 
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
