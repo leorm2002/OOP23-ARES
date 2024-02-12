@@ -18,7 +18,7 @@ public interface WriteOnGUI {
      * @param choiceBox the ChoiceBox<String> to be written to
      * @param list the list of strings to be written to the ChoiceBox
      */
-    public void writeChoiceBox(ChoiceBox<String> choiceBox, Set<String> list);
+    void writeChoiceBox(ChoiceBox<String> choiceBox, Set<String> list);
 
     /**
      * Writes the specified map to a VBox.
@@ -26,6 +26,5 @@ public interface WriteOnGUI {
      * @param vBox the VBox to be written to
      * @param parameters the parameters to be written to the VBox
      */
-    public void writeVBox(VBox vBox, Set<Parameter<?>> parameters);
-    
+    void writeVBox(VBox vBox, Set<Parameter<?>> parameters);
 }

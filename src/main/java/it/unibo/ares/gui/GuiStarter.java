@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  * GuiStarter is a class that extends the Application class from JavaFX.
  * It is the entry point for the JavaFX application.
  */
-public class GuiStarter extends Application{
+public class GuiStarter extends Application {
 
     /**
      * The start method is the main entry point for all JavaFX applications.
@@ -21,7 +21,7 @@ public class GuiStarter extends Application{
      * @param window the primary stage for this application, onto which the application scene can be set.
      */
     @Override
-    public void start(Stage window) {
+    public void start(final Stage window) {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("resources/prova.fxml"));
@@ -31,8 +31,7 @@ public class GuiStarter extends Application{
             window.show();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        
+        } 
     }
  
     /**
@@ -40,8 +39,7 @@ public class GuiStarter extends Application{
      *
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
-    
 }

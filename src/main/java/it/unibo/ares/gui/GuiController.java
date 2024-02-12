@@ -80,7 +80,7 @@ public class GuiController implements Initializable{
     }
 
     @FXML
-    void btnStartClicked(ActionEvent event) {
+    void btnStartClicked(final ActionEvent event) {
         calculatorSupplier.initializer.setModel(modelIDselected);
         /*
          * set parameters of the model
@@ -88,11 +88,11 @@ public class GuiController implements Initializable{
     }
 
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
+    public void initialize(final URL arg0, final ResourceBundle arg1) {
         /*
          * write models
          */
-        HashMap<String,String> modelMap = calculatorSupplier.initializer.getModels();
+        HashMap<String, String> modelMap = calculatorSupplier.initializer.getModels();
         choiceModel.getItems().addAll(modelMap.keySet());
         choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
     }
@@ -105,14 +105,13 @@ public class GuiController implements Initializable{
         calculatorSupplier.initializer.setModel(modelIDselected);
         writer.writeChoiceBox(choiceAgent, calculatorSupplier.initializer.getAgentsSimplified().keySet());
         writer.writeVBox(VBOXModelPar, calculatorSupplier.initializer.getModelParametersParameters(modelIDselected).getParameters());
-        
         /*
          * method to call when an agent is selected
          */
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
-    private void writeAgentParametersList(ActionEvent e) {
+    private void writeAgentParametersList(final ActionEvent e) {
         /*
          * write parameters of the agent
          */
