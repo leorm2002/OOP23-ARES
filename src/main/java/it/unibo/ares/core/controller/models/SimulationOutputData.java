@@ -1,4 +1,4 @@
-package it.unibo.ares.core.controller;
+package it.unibo.ares.core.controller.models;
 
 public class SimulationOutputData {
     public String getData(){

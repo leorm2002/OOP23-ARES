@@ -2,6 +2,9 @@ package it.unibo.ares.core.controller;
 
 import java.util.Map;
 
+import it.unibo.ares.core.controller.models.Identifier;
+import it.unibo.ares.core.controller.models.SimulationOutputData;
+
 
 public class SimulationsControllerImpl implements SimulationsController{
     Map<String, Simulation> simulations;

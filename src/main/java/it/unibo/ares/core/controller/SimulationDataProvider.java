@@ -1,46 +1,33 @@
 package it.unibo.ares.core.controller;
 
-import java.util.concurrent.SubmissionPublisher;
-import java.util.concurrent.Flow.Processor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.Flow.Subscriber;
-import java.util.concurrent.Flow.Subscription;
 
-public class SimulationDataProvider<T> extends SubmissionPublisher<Identifier<T>> implements Processor<Identifier<T>, Identifier<T>>{
-    private Subscription subscription;
+import it.unibo.ares.core.controller.models.Identifier;
 
-    @Override
-    public void onSubscribe(Subscription subscription) {
-        this.subscription = subscription;
-        subscription.request(1); // Request the first item
+public class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
+    private Map<String, Subscriber<T>> subscribers = new HashMap<>();
 
+    // Method to subscribe a subscriber with an ID
+    public void subscribe(String id, Subscriber<T> subscriber) {
+        subscribers.put(id, subscriber);
     }
 
-    @Override
-    public void onNext(Identifier<T> item) {
-        submit(item);
-        subscription.request(1); // Request the next item
+    // Method to publish data to a specific subscriber by ID
+    public void submit(Identifier<T> identifier) {
+        Subscriber<T> subscriber = subscribers.get(identifier.getId());
+        if (subscriber != null) {
+            subscriber.onNext(identifier.getData());
+        } else {
+            System.out.println("No subscriber found with ID: " + identifier.getId());
+        }
     }
 
-    @Override
-    public void onError(Throwable throwable) {
-        throwable.printStackTrace();
-    }
-
-    @Override
-    public void onComplete() {
-        close(); // Close the publisher when the processor completes
-    }
-
-    /**
-     * Method used from a simulation user to subscribe in order to receive the simulation data.
-     * The subscriber must be a subscriber of the java.util.concurrent.Flow library. thus it must implement the methods of the Subscriber interface.
-     * The data will be sent to the subscriber through the onNext method of the subscriber.
-     * @param subscriber The subscriber that wants to receive the simulation data.
-     * @see java.util.concurrent.Flow.Publisher#subscribe(java.util.concurrent.Flow.Subscriber)
-     */
     @Override
     public void subscribe(Subscriber<? super Identifier<T>> subscriber) {
-        super.subscribe(subscriber);
+        // Not to use
     }
     
 }

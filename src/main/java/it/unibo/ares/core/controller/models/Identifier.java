@@ -1,4 +1,4 @@
-package it.unibo.ares.core.controller;
+package it.unibo.ares.core.controller.models;
 
 public class Identifier<T> {
     private final String id;
