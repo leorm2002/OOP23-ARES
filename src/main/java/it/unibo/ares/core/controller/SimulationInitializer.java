@@ -9,6 +9,9 @@ import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
+/**
+ * Used to creare and parametrize an istance of a simulation to be runned on the system
+ */
 public interface SimulationInitializer {
 
     /**

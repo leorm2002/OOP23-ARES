@@ -1,6 +1,6 @@
 package it.unibo.ares.core.controller;
 
-public class SimulationData {
+public class SimulationOutputData {
     public String getData(){
         return "data";
     }

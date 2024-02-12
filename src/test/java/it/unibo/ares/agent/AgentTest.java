@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.unibo.ares.core.agent.Agent;
+import it.unibo.ares.core.agent.AgentBuilder;
+import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
