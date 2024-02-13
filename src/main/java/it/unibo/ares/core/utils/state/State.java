@@ -131,7 +131,7 @@ public interface State {
 
     /**
      * Retrieves the agents at the specified positions, if any.
-     * 
+     *
      * @param positions the set position to check for an agent.
      * @return a set of agents at the specified positions.
      */
@@ -139,9 +139,16 @@ public interface State {
 
     /**
      * Retrieves the entities at the specified positions, if any.
-     * 
+     *
      * @param entities the set position to check for an itierities.
      * @return a set of entities at the specified positions.
      */
     Set<Entity> getEntitiesFromASetOfPos(Set<Pos> entities);
+
+    /**
+     * Print the state for debugging purposes.
+     */
+    public void debugPrint();
+
+    public State copy();
 }

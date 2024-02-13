@@ -24,7 +24,7 @@ public class GuiStarter extends Application {
     public void start(final Stage window) {
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("resources/prova.fxml"));
+            root = FXMLLoader.load(ClassLoader.getSystemResource("prova.fxml"));
             Scene scene = new Scene(root);
             window.setTitle("ARES");
             window.setScene(scene);

@@ -96,8 +96,8 @@ public class GuiController implements Initializable {
         /*
          * write models
          */
-        HashMap<String, String> modelMap = calculatorSupplier.getInitializer().getModels();
-        choiceModel.getItems().addAll(modelMap.keySet());
+        //HashMap<String, String> modelMap = calculatorSupplier.getInitializer().getModels();
+        //choiceModel.getItems().addAll(modelMap.keySet());
         choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
     }
 

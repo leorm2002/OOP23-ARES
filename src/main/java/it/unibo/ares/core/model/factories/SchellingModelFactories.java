@@ -88,8 +88,6 @@ public class SchellingModelFactories {
                 return builder
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class))
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoB", Integer.class))
-                                .addParameter(new ParameterImpl<Supplier<Agent>>("agentsSupplier",
-                                                SchellingsAgentFactory::getSchellingSegregationModelAgent))
                                 .addParameter(new ParameterImpl<>("size", Integer.class))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))

@@ -166,10 +166,7 @@ public final class StateImpl implements State {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Print out the state of the simulation (the type parameter). Used for
-     * debugging.
-     */
+    @Override
     public void debugPrint() {
         var out = IntStream.range(0, size.getFirst())
                 .boxed()
@@ -206,5 +203,13 @@ public final class StateImpl implements State {
         return positions.stream()
                 .map(this::getEntityAt)
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+    }
+
+    @Override
+    public State copy() {
+        StateImpl copy = new StateImpl(size.getFirst(), size.getSecond());
+        entityBoard.getEntities().forEach(e -> copy.addEntity(e.getFirst(), e.getSecond()));
+        agentBoard.getEntities().forEach(e -> copy.addAgent(e.getFirst(), e.getSecond()));
+        return copy;
     }
 }
