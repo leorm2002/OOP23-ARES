@@ -1,5 +1,8 @@
 package it.unibo.ares.core.model;
 
+import java.util.Set;
+
+import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 
@@ -28,5 +31,11 @@ public interface Model {
      * @param <T>   the type of the parameter
      */
     <T> void setParameter(String key, T value);
+
+    boolean isOver(State state);
+
+    void initilize();
+
+    Set<Agent> getAgentsSimplified();
 
 }
