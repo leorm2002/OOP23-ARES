@@ -30,16 +30,16 @@ public class WriteOnGUIImpl implements WriteOnGUI {
         Iterator<Parameter<?>> it = parameters.iterator();
         while (it.hasNext()) {
             Parameter<?> p = it.next();
-
+            final int txtSize = 15, lblSize = 18, marginBottom = 20, marginRightLeft = 10;
             /*
              * creating a label and a textfield for each parameter and setting his style
              */
             Label lbl = new Label(p.getKey());
             TextField txt = new TextField();
-            VBox.setMargin(txt, new Insets(0, 10, 20, 10));
-            txt.setId("txt" + p.getKey());
-            txt.setFont(Font.font(15));
-            lbl.setFont(Font.font(18));
+            VBox.setMargin(txt, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
+            txt.setId(p.getKey());
+            txt.setFont(Font.font(txtSize));
+            lbl.setFont(Font.font(lblSize));
             lbl.wrapTextProperty().setValue(true);
 
             /*
@@ -51,6 +51,13 @@ public class WriteOnGUIImpl implements WriteOnGUI {
         }
     }
 
+    /**
+     * Writes the specified set of strings to a ChoiceBox.
+     * It clears the ChoiceBox and then adds the new set of strings.
+     *
+     * @param choiceBox the ChoiceBox<String> to be written to
+     * @param set       the set of strings to be written to the ChoiceBox
+     */
     @Override
     public void writeChoiceBox(final ChoiceBox<String> choiceBox, final Set<String> set) {
         /*

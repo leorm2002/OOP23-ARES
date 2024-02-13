@@ -22,18 +22,18 @@ public class GuiController implements Initializable {
     /**
      * writer is an instance of WriteOnGUIImpl used to write parameters on the GUI.
      */
-    WriteOnGUI writer = new WriteOnGUIImpl();
+    private WriteOnGUI writer = new WriteOnGUIImpl();
 
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances.
      */
-    CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
+    private CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
 
     /**
      * modelIDselected is a string that holds the ID of the selected model.
      */
-    String modelIDselected;
+    private String modelIDselected;
 
     @FXML
     /**
@@ -79,18 +79,40 @@ public class GuiController implements Initializable {
      * @param event the ActionEvent instance representing the Load button click
      *              event
      */
-    void btnLoadClicked(ActionEvent event) {
+    void btnLoadClicked(final ActionEvent event) {
 
     }
 
     @FXML
+    /**
+     * btnStartClicked is a method that handles the action event of the Start button
+     * being clicked. It sets the model in the calculator initializer to the
+     * selected model ID and sets the parameters of the model and the agents.
+     *
+     * @param event the ActionEvent instance representing the Start button click
+     *              event
+     */
     void btnStartClicked(final ActionEvent event) {
         calculatorSupplier.getInitializer().setModel(modelIDselected);
-        /*
-         * set parameters of the model
-         */
+        ParameterSetter parameterSetter = new ParameterSetter();
+        ParameterReader parameterReader = new ParameterReader();
+        HashMap<String, Object> modelParameters = parameterReader.readParameters(VBOXModelPar);
+        parameterSetter.setModelParameters(calculatorSupplier.getInitializer(), modelParameters);
     }
 
+    /**
+     * The initialize method is called after all @FXML annotated members have been
+     * injected.
+     * This method initializes the choiceModel with the model names from the
+     * calculator initializer.
+     * It also sets an action event handler for the choiceModel that writes the
+     * agents and model parameters list.
+     *
+     * @param arg0 The location used to resolve relative paths for the root object,
+     *             or null if the location is not known.
+     * @param arg1 The resources used to localize the root object, or null if the
+     *             root object was not localized.
+     */
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         /*
@@ -101,7 +123,17 @@ public class GuiController implements Initializable {
         choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
     }
 
-    private void writeAgentsAndModelParametersList(ActionEvent e) {
+    /**
+     * The writeAgentsAndModelParametersList method is called when an action event
+     * occurs.
+     * It writes the parameters of the model and agents to the GUI.
+     * It also sets an action event handler for the choiceAgent that calls the
+     * writeAgentParametersList method.
+     *
+     * @param e the ActionEvent instance representing the event that triggered this
+     *          method
+     */
+    private void writeAgentsAndModelParametersList(final ActionEvent e) {
         /*
          * write parameters of the model and agents
          */
@@ -116,6 +148,13 @@ public class GuiController implements Initializable {
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
+    /**
+     * The writeAgentParametersList method is called when an action event occurs.
+     * It writes the parameters of the selected agent to the GUI.
+     *
+     * @param e the ActionEvent instance representing the event that triggered this
+     *          method
+     */
     private void writeAgentParametersList(final ActionEvent e) {
         /*
          * write parameters of the agent
