@@ -1,5 +1,6 @@
 package it.unibo.ares.core.model;
 
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -15,7 +16,7 @@ public interface ModelBuilder {
      * @return An instance of the Model interface.
      * @throws IllegalStateException if the strategy is not set.
      */
-    Pair<Model, State> build();
+    Model build();
 
     /**
      * Resets the model to its initial state.
@@ -33,7 +34,7 @@ public interface ModelBuilder {
      */
     <T> ModelBuilder addParameter(Parameter<T> parameter);
 
-    ModelBuilder addExitFunction(Predicate<State> exitfFunction);
+    ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction);
 
     ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
 

@@ -32,9 +32,9 @@ public interface Model {
      */
     <T> void setParameter(String key, T value);
 
-    boolean isOver(State state);
+    boolean isOver(State oldState, State newState);
 
-    void initilize();
+    State initilize();
 
     Set<Agent> getAgentsSimplified();
 

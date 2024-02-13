@@ -1,6 +1,7 @@
 package it.unibo.ares.core.model;
 
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -8,60 +9,72 @@ import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.core.utils.parameters.ParametersImpl;
+import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
 public class ModelBuilderImpl implements ModelBuilder {
+    Parameters parameters;
+    BiPredicate<State, State> exitfFunction;
+    Function<Parameters, State> initFunction;
 
     @Override
     public void reset() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+        this.parameters = null;
+        this.exitfFunction = null;
+        this.initFunction = null;
     }
 
     @Override
     public <T> ModelBuilder addParameter(Parameter<T> parameter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addParameter'");
+        if (parameters == null) {
+            parameters = new ParametersImpl();
+        }
+        parameters.addParameter(parameter);
+
+        return this;
     }
 
     @Override
-    public ModelBuilder addExitFunction(Predicate<State> exitfFunction) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addExitFunction'");
+    public ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction) {
+        this.exitfFunction = exitfFunction;
+        return this;
     }
 
     @Override
-    public Pair<Model, State> build() {
-        Model model = new Model() {
+    public Model build() {
+        return new Model() {
 
             @Override
-            public State tick(State state) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'tick'");
+            public State tick(final State state) {
+                Set<Pair<Pos, Agent>> agents = state.getAgents();
+                State newState = state.copy();
+                for (Pair<Pos, Agent> pair : agents) {
+                    Agent agent = pair.getSecond();
+                    Pos pos = pair.getFirst();
+                    agent.tick(newState, pos);
+                }
+                return newState;
             }
 
             @Override
             public Parameters getParameters() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getParameters'");
+                return parameters;
             }
 
             @Override
             public <T> void setParameter(String key, T value) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'setParameter'");
+                parameters.setParameter(key, value);
             }
 
             @Override
-            public boolean isOver(State state) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'isOver'");
+            public boolean isOver(State oldState, State newState) {
+                return exitfFunction.test(oldState, newState);
             }
 
             @Override
-            public void initilize() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'initilize'");
+            public State initilize() {
+                return initFunction.apply(parameters);
             }
 
             @Override
@@ -71,13 +84,13 @@ public class ModelBuilderImpl implements ModelBuilder {
             }
 
         };
-        return null;
     }
 
     @Override
     public ModelBuilder addInitFunction(Function<Parameters, State> initFunction) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addInitFunction'");
+        this.initFunction = initFunction;
+
+        return this;
     }
 
 }
