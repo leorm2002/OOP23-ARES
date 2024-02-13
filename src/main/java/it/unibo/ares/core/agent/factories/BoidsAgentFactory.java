@@ -16,7 +16,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
 
 public final class BoidsAgentFactory {
 
-    public boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
+    private boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
             final Integer angle) {
         double radAng = Math.toRadians(angle);
 
@@ -27,19 +27,20 @@ public final class BoidsAgentFactory {
         return radAngleBetween <= radAng && vectorToNewPoint.getMagnitude() <= distance;
     }
 
-    public Set<Pos> getAgentsCells(final State state, final Set<Pos> cells) {
+    private Set<Pos> getAgentsCells(final State state, final Set<Pos> cells) {
         return cells.stream()
                 .filter(p -> state.getAgentAt(p).isPresent())
                 .collect(Collectors.toSet());
     }
 
-    public Set<Pos> getObstacles(final State state, final Set<Pos> cells) {
+    private Set<Pos> getObstacles(final State state, final Set<Pos> cells) {
         return cells.stream()
                 .filter(p -> state.getAgentAt(p).isPresent() || state.getEntityAt(p).isPresent())
                 .collect(Collectors.toSet());
     }
 
-    Set<Pos> computeCloseCells(final Pos pos, final DirectionVector dir, final Integer distance, final Integer angle) {
+    private Set<Pos> computeCloseCells(final Pos pos, final DirectionVector dir, final Integer distance,
+            final Integer angle) {
         State a = new StateImpl(pos.getX() + distance + 1, pos.getY() + distance + 1);
 
         return a.getPosByPosAndRadius(pos, distance)
@@ -48,7 +49,7 @@ public final class BoidsAgentFactory {
                 .collect(Collectors.toSet());
     }
 
-    public DirectionVector collisionAvoindance(
+    private DirectionVector collisionAvoindance(
             final State s, final Pos pos, final DirectionVector dir,
             final Integer distance, final Integer angle) {
         var closeCells = computeCloseCells(pos, dir, distance, angle);
@@ -56,7 +57,7 @@ public final class BoidsAgentFactory {
         return null;
     }
 
-    public DirectionVector directionAlignment(
+    private DirectionVector directionAlignment(
             final State s, final Pos pos, final DirectionVector dir, final Integer distance,
             final Integer angle) {
         var closeCells = computeCloseCells(pos, dir, distance, angle);
@@ -71,7 +72,7 @@ public final class BoidsAgentFactory {
         return dirMean;
     }
 
-    public DirectionVector directionCenterCohesion(State s, final Pos pos, final DirectionVector dir,
+    private DirectionVector directionCenterCohesion(State s, final Pos pos, final DirectionVector dir,
             final Integer distance, final Integer angle) {
         // Compute a vector pointing to che center of the flock
         var closeCells = computeCloseCells(pos, dir, distance, angle);
