@@ -13,11 +13,14 @@ plugins {
      */
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.29.0"
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.beryx.jlink' version '2.26.0'
 }
 
 repositories {
     mavenCentral()
 }
+
 
 val javaFXModules = listOf(
     "base",
@@ -54,10 +57,16 @@ tasks.withType<Test> {
     // Enables JUnit 5 Jupiter module
     useJUnitPlatform()
 }
-
+/*
 val main: String by project
 
 application {
     // Define the main class for the application
     mainClass.set(main)
+}*/
+
+application {
+    mainClass = "it.unibo.ares.gui"
+    mainModule = "hellofx"
 }
+
