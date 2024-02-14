@@ -39,4 +39,16 @@ final class SimulationsControllerImpl implements SimulationsController {
     public void subscribe(String id, Subscriber<SimulationOutputData> subscriber) {
         processor.subscribe(id, subscriber);
     }
+
+    @Override
+    public void pauseSimulation(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pauseSimulation'");
+    }
+
+    @Override
+    public void restartSimulation(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'restartSimulation'");
+    }
 }

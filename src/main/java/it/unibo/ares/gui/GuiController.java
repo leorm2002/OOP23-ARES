@@ -1,7 +1,6 @@
 package it.unibo.ares.gui;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import it.unibo.ares.core.controller.CalculatorSupplier;
@@ -23,6 +22,12 @@ public class GuiController implements Initializable {
      * writer is an instance of WriteOnGUIImpl used to write parameters on the GUI.
      */
     private WriteOnGUI writer = new WriteOnGUIImpl();
+    /*
+     * configurationSessionId is a string that holds the ID of the configuration
+     * 
+     */
+    private String configurationSessionId, simulationId;
+    private RecieverImpl reciever = new RecieverImpl();
 
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
@@ -85,19 +90,18 @@ public class GuiController implements Initializable {
 
     @FXML
     /**
-     * btnStartClicked is a method that handles the action event of the Start button
-     * being clicked. It sets the model in the calculator initializer to the
-     * selected model ID and sets the parameters of the model and the agents.
+     * The btnStartClicked method is an event handler that is called when the
+     * "Start" button is clicked.
+     * It starts the simulation and updates the GUI accordingly.
      *
-     * @param event the ActionEvent instance representing the Start button click
-     *              event
+     * @param event the ActionEvent instance representing the button click event
      */
     void btnStartClicked(final ActionEvent event) {
-        calculatorSupplier.getInitializer().setModel(modelIDselected);
-        ParameterSetter parameterSetter = new ParameterSetter();
-        ParameterReader parameterReader = new ParameterReader();
-        HashMap<String, Object> modelParameters = parameterReader.readParameters(VBOXModelPar);
-        parameterSetter.setModelParameters(calculatorSupplier.getInitializer(), modelParameters);
+        /*
+         * start simulation
+         */
+        configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
+        simulationId = calculatorSupplier.startSimulation(configurationSessionId, reciever);
     }
 
     /**
@@ -118,8 +122,7 @@ public class GuiController implements Initializable {
         /*
          * write models
          */
-        //HashMap<String, String> modelMap = calculatorSupplier.getInitializer().getModels();
-        //choiceModel.getItems().addAll(modelMap.keySet());
+        writer.writeChoiceBox(choiceModel, calculatorSupplier.getInitializer().getModels().keySet());
         choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
     }
 
@@ -140,8 +143,10 @@ public class GuiController implements Initializable {
         String modelIDselected = calculatorSupplier.getInitializer().getModels().get(choiceModel.getValue());
         calculatorSupplier.getInitializer().setModel(modelIDselected);
         writer.writeChoiceBox(choiceAgent, calculatorSupplier.getInitializer().getAgentsSimplified().keySet());
+        writer.setAgentOrModel('m');
         writer.writeVBox(VBOXModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters());
+                calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters(),
+                 calculatorSupplier.getInitializer());
         /*
          * method to call when an agent is selected
          */
@@ -159,11 +164,13 @@ public class GuiController implements Initializable {
         /*
          * write parameters of the agent
          */
+        writer.setAgentOrModel('a');
         writer.writeVBox(VBOXAgentPar,
                 calculatorSupplier.getInitializer()
                         .getAgentParametersSimplified(
                                 calculatorSupplier.getInitializer().getAgentsSimplified().get(choiceAgent.getValue()))
-                        .getParameters());
+                        .getParameters(), calculatorSupplier.getInitializer());
     }
+
 
 }

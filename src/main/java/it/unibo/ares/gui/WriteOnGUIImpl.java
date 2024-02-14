@@ -1,8 +1,8 @@
 package it.unibo.ares.gui;
 
-import java.util.Iterator;
 import java.util.Set;
 
+import it.unibo.ares.core.controller.SimulationInitializer;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
@@ -16,21 +16,30 @@ import javafx.scene.text.Font;
  * It provides methods to write data to a VBox and a ChoiceBox.
  */
 public class WriteOnGUIImpl implements WriteOnGUI {
+    /*
+     * The agentOrModel attribute is a string that specifies whether the data is for
+     * an agent or a model.
+     */
+    private String agentOrModel;
 
     /**
-     * Writes the specified set of parameters to a VBox.
-     * It creates a label and a textfield for each parameter and adds them to the VBox.
+     * The writeVBox method writes a set of parameters to a VBox. It clears the
+     * VBox's children,
+     * then for each parameter, it creates a new TextField with the parameter's name
+     * as the ID and the parameter's value as the text,
+     * and adds the TextField to the VBox's children.
      *
-     * @param vbox the VBox to be written to
-     * @param parameters the set of parameters to be written to the VBox
+     * @param vbox        the VBox to write the parameters to
+     * @param parameters  a Set containing the parameters to write to the VBox
+     * @param initializer the SimulationInitializer instance for setting the
+     *                    parameters
      */
     @Override
-    public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters) {
+    public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters,
+            final SimulationInitializer initializer) {
         vbox.getChildren().clear();
-        Iterator<Parameter<?>> it = parameters.iterator();
-        while (it.hasNext()) {
-            Parameter<?> p = it.next();
-            final int txtSize = 15, lblSize = 18, marginBottom = 20, marginRightLeft = 10;
+        final int txtSize = 15, lblSize = 18, marginBottom = 20, marginRightLeft = 10;
+        parameters.stream().forEach(p -> {
             /*
              * creating a label and a textfield for each parameter and setting his style
              */
@@ -41,14 +50,37 @@ public class WriteOnGUIImpl implements WriteOnGUI {
             txt.setFont(Font.font(txtSize));
             lbl.setFont(Font.font(lblSize));
             lbl.wrapTextProperty().setValue(true);
-
             /*
-             * setting the textfield with the value of the parameter and adding it to the vbox
+             * adding an event listener to the textfield to update the parameter value when
+             * the textfield loses focus
+             * 2 cases: agent or model texfield, the event listener is different because the
+             * method to call is different
+             */
+            switch (agentOrModel) {
+                case "agent":
+                    txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                        if (!newVal) {
+                            initializer.setAgentParameterSimplified(txt.getId(), p.getKey(), txt.getText());
+                        }
+                    });
+                    break;
+                case "model":
+                    txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                        if (!newVal) {
+                            initializer.setModelParameter(p.getKey(), txt.getText());
+                        }
+                    });
+                default:
+                    break;
+            }
+            /*
+             * setting the textfield with the value of the parameter and adding it to the
+             * vbox
              */
             txt.appendText(p.getValue().toString());
             vbox.getChildren().add(lbl);
             vbox.getChildren().add(txt);
-        }
+        });
     }
 
     /**
@@ -65,5 +97,17 @@ public class WriteOnGUIImpl implements WriteOnGUI {
          */
         choiceBox.getItems().clear();
         choiceBox.getItems().addAll(set);
+    }
+
+    /**
+     * The setAgentOrModel method sets whether the current context is for an agent
+     * or a model.
+     * If the input character is 'a', the context is set to "agent". Otherwise, it
+     * is set to "model".
+     *
+     * @param c the character indicating the context (either 'a' or 'm')
+     */
+    public void setAgentOrModel(final char c) {
+        this.agentOrModel = c == 'a' ? "agent" : "model";
     }
 }

@@ -2,7 +2,6 @@ package it.unibo.ares.gui;
 
 import java.io.IOException;
 
-import it.unibo.ares.core.controller.SimulationInitializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

@@ -2,6 +2,7 @@ package it.unibo.ares.gui;
 
 import java.util.Set;
 
+import it.unibo.ares.core.controller.SimulationInitializer;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
@@ -23,8 +24,16 @@ public interface WriteOnGUI {
     /**
      * Writes the specified map to a VBox.
      *
-     * @param vBox the VBox to be written to
-     * @param parameters the parameters to be written to the VBox
+     * @param vBox        the VBox to be written to
+     * @param parameters  the parameters to be written to the VBox
+     * @param initializer the SimulationInitializer instance for setting the parameters
      */
-    void writeVBox(VBox vBox, Set<Parameter<?>> parameters);
+    void writeVBox(VBox vBox, Set<Parameter<?>> parameters, SimulationInitializer initializer);
+
+    /**
+     * Sets the agent or model.
+     *
+     * @param c the character representing the agent or model
+     */
+    void setAgentOrModel(char c);
 }
