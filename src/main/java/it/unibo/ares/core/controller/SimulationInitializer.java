@@ -82,5 +82,5 @@ public interface SimulationInitializer {
      * @return The id of the simulation session, used to identify the simulation
      *         session.
      */
-    Pair<String, Model> startSimulation(String initializationId);
+    Pair<String, Simulation> startSimulation(String initializationId);
 }

@@ -6,7 +6,7 @@ import java.util.concurrent.Flow.Subscriber;
 import it.unibo.ares.core.controller.models.Identifier;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 
-public final class SimulationsControllerImpl implements SimulationsController {
+final class SimulationsControllerImpl implements SimulationsController {
     Map<String, Simulation> simulations;
     SimulationDataProvider<SimulationOutputData> processor = new SimulationDataProvider<>();
 

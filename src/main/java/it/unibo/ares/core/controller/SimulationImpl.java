@@ -10,7 +10,7 @@ import it.unibo.ares.core.utils.state.State;
  * A simulation is a class that contains the state of the simulation and the
  * model of the simulation.
  */
-public final class SimulationImpl implements Simulation {
+final class SimulationImpl implements Simulation {
 
     /**
      * Creates a new simulation with the given state and model.

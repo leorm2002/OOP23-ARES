@@ -13,7 +13,7 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 /**
  * A class that initializes the simulation.
  */
-public final class SimulationInitializerImpl implements SimulationInitializer {
+final class SimulationInitializerImpl implements SimulationInitializer {
 
     private Map<String, ModelBuilder> models;
     private Map<String, Pair<Model, State>> builtModels;
@@ -97,7 +97,7 @@ public final class SimulationInitializerImpl implements SimulationInitializer {
      *         session.
      */
     @Override
-    public Pair<String, Model> startSimulation(final String initializationId) {
+    public Pair<String, Simulation> startSimulation(final String initializationId) {
         // TODO return a random uuid
         return null;
     }
