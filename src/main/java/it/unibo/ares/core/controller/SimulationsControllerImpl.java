@@ -1,6 +1,7 @@
 package it.unibo.ares.core.controller;
 
 import java.util.Map;
+import java.util.concurrent.Flow.Subscriber;
 
 import it.unibo.ares.core.controller.models.Identifier;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
@@ -32,7 +33,10 @@ public final class SimulationsControllerImpl implements SimulationsController {
                                                          // the simulation
                 .forEach(f -> f
                         .thenAccept(simData -> processor.submit(new Identifier<>(simData.getSimulationId(), simData)))); // Processing
-                                                                                                                         // the
-                                                                                                                         // future
+    }
+
+    @Override
+    public void subscribe(String id, Subscriber<SimulationOutputData> subscriber) {
+        processor.subscribe(id, subscriber);
     }
 }

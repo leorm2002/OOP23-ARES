@@ -1,5 +1,9 @@
 package it.unibo.ares.core.controller;
 
+import java.util.concurrent.Flow.Subscriber;
+
+import it.unibo.ares.core.controller.models.SimulationOutputData;
+
 public final class CalculatorSupplier {
     private static volatile CalculatorSupplier instance;
 
@@ -10,12 +14,16 @@ public final class CalculatorSupplier {
      * Starts the simulation with the given initialization id.
      *
      * @param initializationId The id of the initialization to start.
+     * @param the              instance of the subscriber which the data of the
+     *                         simulation will be passed to.
      * @return The id of the simulation.
      */
-    public String startSimulation(final String initializationId) {
+    public String startSimulation(final String initializationId, Subscriber<SimulationOutputData> subscriber) {
         var resp = initializer.startSimulation(initializationId);
         // TODO creare simulation
+
         controller.addSimulation(initializationId, null);
+        controller.subscribe(initializationId, subscriber);
         return initializationId;
     }
 

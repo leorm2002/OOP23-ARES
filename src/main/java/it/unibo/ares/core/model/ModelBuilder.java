@@ -2,9 +2,6 @@ package it.unibo.ares.core.model;
 
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
-
-import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
@@ -34,8 +31,20 @@ public interface ModelBuilder {
      */
     <T> ModelBuilder addParameter(Parameter<T> parameter);
 
+    /**
+     * Add the function that will be used to check wether the simulation is
+     * over
+     * 
+     * @param exitfFunction
+     * @return
+     */
     ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction);
 
+    /**
+     * Add the function that initialize the state of the model
+     * 
+     * @param initFunction
+     * @return
+     */
     ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
-
 }

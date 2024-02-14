@@ -1,5 +1,9 @@
 package it.unibo.ares.core.controller;
 
+import java.util.concurrent.Flow.Subscriber;
+
+import it.unibo.ares.core.controller.models.SimulationOutputData;
+
 /**
  * A controller for all the simulations.
  */
@@ -31,5 +35,7 @@ public interface SimulationsController {
      * tick each simulation.
      */
     void tick();
+
+    void subscribe(String id, Subscriber<SimulationOutputData> subscriber);
 
 }

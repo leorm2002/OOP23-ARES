@@ -32,10 +32,28 @@ public interface Model {
      */
     <T> void setParameter(String key, T value);
 
+    /**
+     * Given the old state and the new state returns weather the simulation reached
+     * the end.
+     * 
+     * @param oldState
+     * @param newState
+     * @return
+     */
     boolean isOver(State oldState, State newState);
 
+    /**
+     * Initializes the model. Fail if not all parameters are setted
+     *
+     * @return the initial state of the model
+     */
     State initilize();
 
+    /**
+     * Returns the agents of the model
+     * 
+     * @return
+     */
     Set<Agent> getAgentsSimplified();
 
 }

@@ -1,11 +1,9 @@
 package it.unibo.ares.core.model.factories;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,7 +31,7 @@ public class SchellingModelFactories {
                 Random r;
                 Set<Integer> extracted;
 
-                UniquePositionGetter(List<Pos> positions) {
+                UniquePositionGetter(final List<Pos> positions) {
                         r = new Random();
                         this.positions = positions;
                         this.extracted = new HashSet<>();
@@ -50,11 +48,11 @@ public class SchellingModelFactories {
                 }
         }
 
-        private int getAgentType(int na, int nb, int index) {
+        private int getAgentType(final int na, final int nb, final int index) {
                 return index < na ? 0 : 1;
         }
 
-        private State schellingInitializer(Parameters parameters) {
+        private State schellingInitializer(final Parameters parameters) {
                 int size = parameters.getParameter("size", Integer.class).get().getValue();
                 int na = parameters.getParameter("numeroAgentiTipoA", Integer.class).get().getValue();
                 int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class).get().getValue();
@@ -81,6 +79,14 @@ public class SchellingModelFactories {
                 return state;
         }
 
+        /**
+         * Returna a schelling model, before calling initialize you should set:
+         * numeroAgentiTipoA (integer)
+         * numeroAgentiTipoB (integer)
+         * size (integer)
+         * 
+         * @return
+         */
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 // We need only one agent supplier since all agents are equal and only differs

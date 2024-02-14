@@ -3,7 +3,6 @@ package it.unibo.ares.core;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.factories.SchellingModelFactories;
 import it.unibo.ares.core.utils.state.State;
-import it.unibo.ares.core.utils.state.StateImpl;
 
 public class runner {
     public static void main(String[] args) throws InterruptedException {

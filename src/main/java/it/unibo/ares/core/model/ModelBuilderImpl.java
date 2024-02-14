@@ -3,7 +3,6 @@ package it.unibo.ares.core.model;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
