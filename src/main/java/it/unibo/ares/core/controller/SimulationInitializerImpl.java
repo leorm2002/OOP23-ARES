@@ -3,6 +3,8 @@ package it.unibo.ares.core.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelBuilder;
 import it.unibo.ares.core.utils.Pair;
@@ -14,6 +16,7 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 public final class SimulationInitializerImpl implements SimulationInitializer {
 
     private Map<String, ModelBuilder> models;
+    private Map<String, Pair<Model, State>> builtModels;
 
     /**
      * Gets the models available for the simulation.
@@ -71,6 +74,7 @@ public final class SimulationInitializerImpl implements SimulationInitializer {
      */
     @Override
     public HashMap<String, String> getAgentsSimplified() {
+
         return null;
     }
 
