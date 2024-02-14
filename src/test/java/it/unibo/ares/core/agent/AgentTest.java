@@ -1,8 +1,7 @@
-package it.unibo.ares.agent;
+package it.unibo.ares.core.agent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 import java.util.stream.Collectors;
 
@@ -18,11 +17,12 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+
 /**
  * Unit test for {@link Agent}.
  */
 public class AgentTest {
-    //Disable magic number chekstyle, they're random values to
+    // Disable magic number chekstyle, they're random values to
     // CHECKSTYLE: MagicNumber OFF
 
     private AgentBuilderImpl agentBuilder;
@@ -47,7 +47,7 @@ public class AgentTest {
     }
 
     /**
-     *  Test an agent with a strategy that return the State unchanged.
+     * Test an agent with a strategy that return the State unchanged.
      */
     @Test
     public void simpleAgentTest() {
@@ -66,13 +66,13 @@ public class AgentTest {
     }
 
     private Agent getAgentWithStrategyAndWithParameter(final ParameterImpl<Integer> parameter) {
-        AgentBuilder b  =  new AgentBuilderImpl();
+        AgentBuilder b = new AgentBuilderImpl();
 
-        //Removes all the agents of different types
+        // Removes all the agents of different types
         b.addStrategy((state, pos) -> {
             state.getAgents().stream()
-            .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos).get()))
-            .forEach(pair -> state.removeAgent(pair.getFirst(), pair.getSecond()));
+                    .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos).get()))
+                    .forEach(pair -> state.removeAgent(pair.getFirst(), pair.getSecond()));
 
             return state;
         });
@@ -99,8 +99,8 @@ public class AgentTest {
         assertTrue(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
         assertTrue(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1b));
 
-
     }
+
     /**
      * Test an agent with a strategy that removes all the agents of different types.
      */

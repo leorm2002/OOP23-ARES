@@ -12,7 +12,7 @@ import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
-public class ModelBuilderImpl implements ModelBuilder {
+class ModelBuilderImpl implements ModelBuilder {
     Parameters parameters;
     BiPredicate<State, State> exitfFunction;
     Function<Parameters, State> initFunction;

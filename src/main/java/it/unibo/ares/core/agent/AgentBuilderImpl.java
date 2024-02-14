@@ -12,7 +12,7 @@ import it.unibo.ares.core.utils.state.State;
 /**
  * Implementation of the AgentBuilder interface.
  */
-public class AgentBuilderImpl implements AgentBuilder {
+class AgentBuilderImpl implements AgentBuilder {
     private BiFunction<State, Pos, State> strategy;
     private Parameters parameters;
 

@@ -1,4 +1,4 @@
-package it.unibo.ares.core.model.factories;
+package it.unibo.ares.core.model;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,10 +9,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.factories.SchellingsAgentFactory;
-import it.unibo.ares.core.model.Model;
-import it.unibo.ares.core.model.ModelBuilder;
-import it.unibo.ares.core.model.ModelBuilderImpl;
+import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;

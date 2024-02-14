@@ -1,4 +1,4 @@
-package it.unibo.ares.utils.parameters;
+package it.unibo.ares.core.utils.parameters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,8 +14,8 @@ import it.unibo.ares.core.utils.parameters.ParameterImpl;
  */
 public class ParameterImplTest {
     /**
-    * Test the constructor with a value.
-    */
+     * Test the constructor with a value.
+     */
     @Test
     void testConstructorWithValue() {
         String key = "testKey";
@@ -27,6 +27,7 @@ public class ParameterImplTest {
         assertEquals(Integer.class, parameter.getType());
         assertTrue(parameter.isSetted());
     }
+
     /**
      * Test the constructor with a type.
      */
@@ -38,13 +39,14 @@ public class ParameterImplTest {
 
         assertEquals(key, parameter.getKey());
         assertThrows(IllegalStateException.class,
-            () -> parameter.getValue()
-        );
+                () -> parameter.getValue());
         assertEquals(type, parameter.getType());
         assertFalse(parameter.isSetted());
     }
+
     /**
-     * Verify that an IllegalStateException is thrown when trying to get the value of a parameter that has not been setted.
+     * Verify that an IllegalStateException is thrown when trying to get the value
+     * of a parameter that has not been setted.
      * Verify we're getting the right value when the parameter has been setted.
      */
     @Test
@@ -55,8 +57,7 @@ public class ParameterImplTest {
 
         assertFalse(parameter.isSetted());
         assertThrows(IllegalStateException.class,
-            () -> parameter.getValue()
-        );
+                () -> parameter.getValue());
 
         var settedParameter = parameter.setValue(value);
 

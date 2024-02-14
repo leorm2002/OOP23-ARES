@@ -1,7 +1,6 @@
-package it.unibo.ares.agent;
+package it.unibo.ares.core.agent;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 import java.util.function.BiFunction;
 
@@ -28,7 +27,8 @@ public final class AgentBuilderImplTest {
     }
 
     /**
-     * Should throw an IllegalStateException if we try to build an agent without a strategy.
+     * Should throw an IllegalStateException if we try to build an agent without a
+     * strategy.
      */
     @Test
     void testBuildWithNullStrategy() {
@@ -44,8 +44,8 @@ public final class AgentBuilderImplTest {
     void testBuild() {
         BiFunction<State, Pos, State> strategy = (state, pos) -> state;
         agentBuilder.addStrategy(strategy)
-                    .addParameter(new ParameterImpl<>("testKey", 10))
-                    .addParameter(new ParameterImpl<>("testKey2", "testValue"))
-                    .addParameter(new ParameterImpl<>("testKey3", true));
+                .addParameter(new ParameterImpl<>("testKey", 10))
+                .addParameter(new ParameterImpl<>("testKey2", "testValue"))
+                .addParameter(new ParameterImpl<>("testKey3", true));
     }
 }

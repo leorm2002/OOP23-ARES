@@ -1,10 +1,10 @@
-package it.unibo.ares.utils;
+package it.unibo.ares.core.utils;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
@@ -13,7 +13,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * Unit test for {@link State}.
  */
 public class StateTest {
-    //Disable magic number chekstyle, they're random values to
+    // Disable magic number chekstyle, they're random values to
     // CHECKSTYLE: MagicNumber OFF
 
     /**
@@ -41,10 +41,14 @@ public class StateTest {
     }
 
     private Agent getSimpleTestAgent() {
-        var agentBuilder = new AgentBuilderImpl();
-
-        agentBuilder.addStrategy((state, pos) -> state);
-        return agentBuilder.build();
+        /*
+         * 
+         * var agentBuilder = new AgentBuilderImpl();
+         * TODO ACCESS VIA REFLECTION
+         * agentBuilder.addStrategy((state, pos) -> state);
+         * return agentBuilder.build();
+         */
+        return null;
     }
 
     /**

@@ -6,7 +6,7 @@ import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 
-public interface ModelBuilder {
+interface ModelBuilder {
     /**
      * Builds an instance of the Model interface.
      *

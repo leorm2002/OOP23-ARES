@@ -1,11 +1,11 @@
-package it.unibo.ares.agent;
+package it.unibo.ares.core.agent;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.factories.SchellingsAgentFactory;
+import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;

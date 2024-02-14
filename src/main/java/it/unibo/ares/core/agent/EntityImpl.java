@@ -1,9 +1,10 @@
 package it.unibo.ares.core.agent;
+
 /**
  * Implementation of the {@link Entity} interface.
  * Represents an entity with a name.
  */
-public final class EntityImpl implements Entity {
+final class EntityImpl implements Entity {
     private String name;
 
     /**
@@ -11,6 +12,7 @@ public final class EntityImpl implements Entity {
      */
     public EntityImpl() {
     }
+
     /*
      * {@inheritDoc}
      */
@@ -21,6 +23,7 @@ public final class EntityImpl implements Entity {
         }
         return name;
     }
+
     /*
      * {@inheritDoc}
      */

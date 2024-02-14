@@ -1,11 +1,8 @@
-package it.unibo.ares.core.agent.factories;
+package it.unibo.ares.core.agent;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentBuilder;
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;

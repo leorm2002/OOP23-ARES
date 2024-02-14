@@ -6,7 +6,6 @@ import java.util.Map;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.Model;
-import it.unibo.ares.core.model.ModelBuilder;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
@@ -15,8 +14,7 @@ import it.unibo.ares.core.utils.parameters.Parameters;
  */
 final class SimulationInitializerImpl implements SimulationInitializer {
 
-    private Map<String, ModelBuilder> models;
-    private Map<String, Pair<Model, State>> builtModels;
+    private Map<String, Model> models;
 
     /**
      * Gets the models available for the simulation.

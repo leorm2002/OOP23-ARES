@@ -1,7 +1,7 @@
 package it.unibo.ares.core;
 
 import it.unibo.ares.core.model.Model;
-import it.unibo.ares.core.model.factories.SchellingModelFactories;
+import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.state.State;
 
 public class runner {

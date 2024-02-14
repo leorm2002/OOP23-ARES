@@ -1,4 +1,4 @@
-package it.unibo.ares.utils;
+package it.unibo.ares.core.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -31,6 +31,7 @@ public class BoardTest {
         assertTrue(retrievedEntity.isPresent());
         assertEquals(entity, retrievedEntity.get());
     }
+
     /**
      * Test removing an entity from the board.
      */
@@ -44,6 +45,7 @@ public class BoardTest {
         Optional<String> retrievedEntity = board.getEntity(pos);
         assertFalse(retrievedEntity.isPresent());
     }
+
     /**
      * Test getting all the entities from the board.
      */
@@ -61,8 +63,10 @@ public class BoardTest {
         assertTrue(entities.contains(new Pair<>(pos1, entity1)));
         assertTrue(entities.contains(new Pair<>(pos2, entity2)));
     }
+
     /**
-     * Test throwing an IllegalArgumentException when trying to add an entity to a position already occupied.
+     * Test throwing an IllegalArgumentException when trying to add an entity to a
+     * position already occupied.
      */
     @Test
     public void testThrowingDuplicateAdd() {
@@ -74,8 +78,10 @@ public class BoardTest {
             board.addEntity(pos, entity);
         });
     }
+
     /**
-     * Test throwing an IllegalArgumentException when trying to remove an entity from a position where it is not present.
+     * Test throwing an IllegalArgumentException when trying to remove an entity
+     * from a position where it is not present.
      */
     @Test
     public void testThrowingRemoveNotPresent() {

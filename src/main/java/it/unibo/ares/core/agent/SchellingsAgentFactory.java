@@ -1,4 +1,4 @@
-package it.unibo.ares.core.agent.factories;
+package it.unibo.ares.core.agent;
 
 import java.util.Optional;
 import java.util.Set;
@@ -6,9 +6,6 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentBuilder;
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;

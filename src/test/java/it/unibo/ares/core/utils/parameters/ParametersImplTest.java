@@ -1,4 +1,4 @@
-package it.unibo.ares.utils.parameters;
+package it.unibo.ares.core.utils.parameters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,6 +43,7 @@ public class ParametersImplTest {
         assertTrue(parameter.isPresent());
         assertFalse(parameter.get().isSetted());
     }
+
     /**
      * Test adding a parameter with a value.
      */
@@ -53,11 +54,12 @@ public class ParametersImplTest {
 
         parameters.addParameter(key, value);
 
-        Optional<Parameter<Integer>>  parameter = parameters.getParameter(key, Integer.class);
+        Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
         assertTrue(parameter.isPresent());
         assertTrue(parameter.get().isSetted());
         assertEquals(value, parameter.get().getValue());
     }
+
     /**
      * Test getting a parameter.
      */
@@ -90,6 +92,7 @@ public class ParametersImplTest {
         assertTrue(parameter.get().isSetted());
         assertEquals(newValue, parameter.get().getValue());
     }
+
     /**
      * Test getting all the parameters.
      */
@@ -168,8 +171,10 @@ public class ParametersImplTest {
         assertEquals(value, parameter.get().getValue());
         assertNotSame(parameters, clone);
     }
+
     /**
-     * Test adding a parameter with a null key and verify that a NullPointerException is thrown.
+     * Test adding a parameter with a null key and verify that a
+     * NullPointerException is thrown.
      */
     @Test
     void testAddParameterWithNullKey() {
@@ -177,8 +182,10 @@ public class ParametersImplTest {
             parameters.addParameter(null, Integer.class);
         });
     }
+
     /**
-     * Test adding a parameter with a duplicate key and verify that a IllegalArgumentException is thrown.
+     * Test adding a parameter with a duplicate key and verify that a
+     * IllegalArgumentException is thrown.
      */
     @Test
     void testAddParameterWithDuplicateKey() {
@@ -192,8 +199,10 @@ public class ParametersImplTest {
             // CHECKSTYLE: MagicNumber ON
         });
     }
+
     /**
-     * Test adding a parameter with a duplicate key of a different type and verify that a IllegalArgumentException is thrown.
+     * Test adding a parameter with a duplicate key of a different type and verify
+     * that a IllegalArgumentException is thrown.
      */
     @Test
     void testAddParameterWithDuplicateKeyOfDifferentType() {
@@ -207,8 +216,10 @@ public class ParametersImplTest {
             parameters.addParameter(key, value2);
         });
     }
+
     /**
-     * Test setting a non existing parameter and verify that a NullPointerException is thrown.
+     * Test setting a non existing parameter and verify that a NullPointerException
+     * is thrown.
      */
     @Test
     void testSetMissingParametr() {
@@ -219,8 +230,10 @@ public class ParametersImplTest {
             parameters.setParameter(key, value);
         });
     }
+
     /**
-     * Test setting a parameter originally created from an existing value with a type different that
+     * Test setting a parameter originally created from an existing value with a
+     * type different that
      * the right one and verify that a IllegalArgumentException is thrown.
      */
     @Test
@@ -234,9 +247,11 @@ public class ParametersImplTest {
             parameters.setParameter(key, "test");
         });
     }
+
     /**
-     * Test setting a parameter originally created declaring the expected type with a type different
-     *  that the right one and verify that a IllegalArgumentException is thrown.
+     * Test setting a parameter originally created declaring the expected type with
+     * a type different
+     * that the right one and verify that a IllegalArgumentException is thrown.
      */
     @Test
     void testSetParametrOfWrongTypeWithType() {
