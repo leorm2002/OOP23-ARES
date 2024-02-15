@@ -35,6 +35,8 @@ class AgentBuilderImpl implements AgentBuilder {
         String id = UUID.randomUUID().toString();
         return new Agent() {
 
+            private String type;
+
             @Override
             public State tick(final State state, final Pos pos) {
                 return strategy.apply(state, pos);
@@ -65,6 +67,16 @@ class AgentBuilderImpl implements AgentBuilder {
                 }
                 final Agent agent = (Agent) obj;
                 return id.equals(agent.getId());
+            }
+
+            @Override
+            public String getType() {
+                return type;
+            }
+
+            @Override
+            public void setType(String type) {
+                this.type = type;
             }
         };
     }

@@ -9,6 +9,8 @@ import it.unibo.ares.core.utils.state.State;
 /**
  * The AgentBuilder interface represents a builder for creating instances of the
  * Agent interface.
+ * The AgentBuilder interface represents a builder for creating instances of the
+ * Agent interface.
  */
 interface AgentBuilder {
     /**
@@ -43,4 +45,5 @@ interface AgentBuilder {
      * @return the agent builder with the added strategy.
      */
     AgentBuilder addStrategy(BiFunction<State, Pos, State> strategy);
+
 }

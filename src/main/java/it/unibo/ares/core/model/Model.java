@@ -56,4 +56,6 @@ public interface Model {
      */
     Set<Agent> getAgentsSimplified();
 
+    Set<Agent> getAgents();
+
 }

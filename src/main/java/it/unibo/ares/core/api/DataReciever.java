@@ -10,7 +10,7 @@ import it.unibo.ares.core.controller.models.SimulationOutputData;
  * to receive data from a Publisher.
  * It must be extended to be used, and the method onNext must be implemented,
  * this methods is called every time some new data is available.
- * 
+ *
  */
 public abstract class DataReciever implements Subscriber<SimulationOutputData> {
     /**

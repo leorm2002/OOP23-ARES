@@ -82,6 +82,12 @@ class ModelBuilderImpl implements ModelBuilder {
                 throw new UnsupportedOperationException("Unimplemented method 'getAgentsSimplified'");
             }
 
+            @Override
+            public Set<Agent> getAgents() {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'getAgents'");
+            }
+
         };
     }
 

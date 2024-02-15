@@ -9,12 +9,15 @@ import java.util.stream.Stream;
 
 /**
  * Implementation of the Parameters interface.
- * This class represents a collection of parameters and provides methods to add, get, and set parameters.
+ * This class represents a collection of parameters and provides methods to add,
+ * get, and set parameters.
  */
-public final class ParametersImpl implements Parameters, Cloneable  {
+public final class ParametersImpl implements Parameters, Cloneable {
     private final Map<Class<?>, Map<String, Parameter<?>>> typeMap;
+
     /**
-     * It provides a default constructor that initializes a HashMap to store parameter types.
+     * It provides a default constructor that initializes a HashMap to store
+     * parameter types.
      */
     public ParametersImpl() {
         typeMap = new HashMap<>();
@@ -22,8 +25,10 @@ public final class ParametersImpl implements Parameters, Cloneable  {
 
     /**
      * Initialize a Parameters collection from a type map.
-     * @param typeMap  the type map to initialize the collection, it's a map of maps which contains the parameters
-     *      */
+     * 
+     * @param typeMap the type map to initialize the collection, it's a map of maps
+     *                which contains the parameters
+     */
     public ParametersImpl(final Map<Class<?>, Map<String, Parameter<?>>> typeMap) {
         this.typeMap = new HashMap<>(typeMap);
     }
@@ -77,10 +82,10 @@ public final class ParametersImpl implements Parameters, Cloneable  {
      */
     @Override
     public <T> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
-        Optional<Map<String, Parameter<?>>> parameterMap =  Optional.ofNullable(typeMap.get(type));
+        Optional<Map<String, Parameter<?>>> parameterMap = Optional.ofNullable(typeMap.get(type));
         if (parameterMap.isPresent()) {
             @SuppressWarnings("unchecked")
-            Parameter<T> parameter =  (Parameter<T>) parameterMap.get().get(key);
+            Parameter<T> parameter = (Parameter<T>) parameterMap.get().get(key);
             return Optional.ofNullable(parameter);
         }
         return Optional.empty();
@@ -92,13 +97,13 @@ public final class ParametersImpl implements Parameters, Cloneable  {
     @Override
     @SuppressWarnings("unchecked")
     public <T> void setParameter(final String key, final T value) {
-        Optional<Parameter<T>> parameter = getParameter(key,  (Class<T>) value.getClass());
+        Optional<Parameter<T>> parameter = getParameter(key, (Class<T>) value.getClass());
 
         if (parameter.isPresent()) {
             typeMap.get(value.getClass()).replace(key, parameter.get().setValue(value));
         }
-        parameter.orElseThrow(() ->
-            new IllegalArgumentException("Parameter " + key + " does not exist or not of type " + value.getClass().getName()));
+        parameter.orElseThrow(() -> new IllegalArgumentException(
+                "Parameter " + key + " does not exist or not of type " + value.getClass().getName()));
     }
 
     private Stream<Parameter<?>> getParametersStream() {

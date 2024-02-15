@@ -2,19 +2,31 @@ package it.unibo.ares.core.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.Model;
+import it.unibo.ares.core.model.factories.SchellingModelFactories;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.core.utils.state.State;
 
 /**
  * A class that initializes the simulation.
  */
-final class SimulationInitializerImpl implements SimulationInitializer {
+public final class SimulationInitializerImpl extends SimulationInitializer {
 
-    private Map<String, Model> models;
+    private Map<String, Model> intilizingModels;
+    private Map<String, Pair<State, Model>> initializedModels;
+    private Map<String, Supplier<Model>> modelsSupplier;
+
+    public SimulationInitializerImpl() {
+        this.modelsSupplier = new HashMap<>();
+        modelsSupplier.put(SchellingModelFactories.getModelID(), SchellingModelFactories::getModel);
+        this.intilizingModels = new HashMap<>();
+    }
 
     /**
      * Gets the models available for the simulation.
@@ -23,8 +35,8 @@ final class SimulationInitializerImpl implements SimulationInitializer {
      *         the second element is the identifier of the model.
      */
     @Override
-    public HashMap<String, String> getModels() {
-        return null;
+    public Set<String> getModels() {
+        return modelsSupplier.keySet();
     }
 
     /**
@@ -36,8 +48,9 @@ final class SimulationInitializerImpl implements SimulationInitializer {
      */
     @Override
     public String setModel(final String modelId) {
-        // TODO return a random uuid
-        return null;
+        String randomID = "";
+        this.intilizingModels.put(randomID, this.modelsSupplier.get(modelId).get());
+        return randomID;
     }
 
     /**
@@ -47,7 +60,7 @@ final class SimulationInitializerImpl implements SimulationInitializer {
      */
     @Override
     public Parameters getModelParametersParameters(final String modelId) {
-        return null;
+        return this.intilizingModels.get(modelId).getParameters().clone();
     }
 
     /**
@@ -57,7 +70,8 @@ final class SimulationInitializerImpl implements SimulationInitializer {
      * @param value The value of the parameter to set.
      */
     @Override
-    public void setModelParameter(final String key, final Object value) {
+    public void setModelParameter(final String modelId, final String key, final Object value) {
+        this.intilizingModels.get(modelId).getParameters().setParameter(key, value);
     }
 
     /**
@@ -71,37 +85,51 @@ final class SimulationInitializerImpl implements SimulationInitializer {
      *         identifier of the group agent.
      */
     @Override
-    public HashMap<String, String> getAgentsSimplified() {
-
-        return null;
+    public Set<String> getAgentsSimplified(String modelId) {
+        // TODO RICALCOLO SE CAMBIA MODEL
+        this.initializedModels.computeIfAbsent(modelId,
+                id -> new Pair<>(intilizingModels.get(modelId).initilize(), intilizingModels.get(modelId)));
+        return this.initializedModels.get(modelId)
+                .getFirst()
+                .getAgents()
+                .stream()
+                .map(Pair::getSecond)
+                .map(Agent::getType)
+                .collect(Collectors.toSet());
     }
 
     /**
-     * Sets a parameter of the agent.
+     * Sets a parameter of all the agent with the given type
      * 
-     * @param agentId The identifier of the group of agents to set the parameter to.
-     * @param key     The key of the parameter to set.
-     * @param value   The value of the parameter to set.
+     * @param agentType The identifier of the group of agents to set the parameter
+     *                  to.
+     * @param key       The key of the parameter to set.
+     * @param value     The value of the parameter to set.
      */
     @Override
-    public void setAgentParameterSimplified(final String agentId, final String key, final Object value) {
-
-    }
-
-    /**
-     * Starts the simulation.
-     * 
-     * @return The id of the simulation session, used to identify the simulation
-     *         session.
-     */
-    @Override
-    public Pair<String, Simulation> startSimulation(final String initializationId) {
-        // TODO return a random uuid
-        return null;
+    public void setAgentParameterSimplified(final String modelId, final String agentType, final String key,
+            final Object value) {
+        this.initializedModels.get(modelId).getFirst().getAgents().stream()
+                .map(Pair::getSecond)
+                .filter(ag -> ag.getId().equals(agentType))
+                .forEach(ag -> ag.getParameters().setParameter(key, value));
     }
 
     @Override
     public Parameters getAgentParametersSimplified(final String agentId) {
         return null;
+    }
+
+    /**
+     * Starts the simulation.
+     *
+     * @return The id of the simulation session, used to identify the simulation
+     *         session.
+     */
+    @Override
+    public Pair<String, Model> startSimulation(final String initializationId) {
+        Model model = intilizingModels.get(initializationId);
+
+        return new Pair<String, Model>(initializationId, model);
     }
 }

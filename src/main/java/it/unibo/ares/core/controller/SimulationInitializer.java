@@ -2,6 +2,7 @@ package it.unibo.ares.core.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
@@ -11,15 +12,15 @@ import it.unibo.ares.core.utils.parameters.Parameters;
  * Used to creare and parametrize an istance of a simulation to be runned on the
  * system.
  */
-public interface SimulationInitializer {
+public abstract class SimulationInitializer {
 
     /**
      * Gets the models available for the simulation.
      * 
-     * @return A HashMap, where the first element is the name of the model and the
-     *         second element is the identifier of the model.
+     * @return A set of strings each identifying a different model
+     *
      */
-    HashMap<String, String> getModels();
+    public abstract Set<String> getModels();
 
     /**
      * Sets the model of the simulation.
@@ -28,14 +29,14 @@ public interface SimulationInitializer {
      * @return The id of the configuration session, used to identify the
      *         configuration session.
      */
-    String setModel(String modelId);
+    public abstract String setModel(String modelId);
 
     /**
      * Gets the parameters of the model.
      * 
      * @return a set containing all the parameters of the model.
      */
-    Parameters getModelParametersParameters(String modelId);
+    public abstract Parameters getModelParametersParameters(String modelId);
 
     /**
      * Sets a parameter of the model.
@@ -43,7 +44,7 @@ public interface SimulationInitializer {
      * @param key   The key of the parameter to set.
      * @param value The value of the parameter to set.
      */
-    void setModelParameter(String key, Object value);
+    public abstract void setModelParameter(String modelId, String key, Object value);
 
     /**
      * Gets a simplified view of the agents of the model, it permets only to
@@ -55,7 +56,7 @@ public interface SimulationInitializer {
      *         first element is the name of the agent and the second element is the
      *         identifier of the group agent.
      */
-    Map<String, String> getAgentsSimplified();
+    public abstract Set<String> getAgentsSimplified(String modelId);
 
     /**
      * Gets the parameters of the agent.
@@ -64,7 +65,7 @@ public interface SimulationInitializer {
      *                from.
      * @return A set containing all the parameters of the agent.
      */
-    Parameters getAgentParametersSimplified(String agentId);
+    public abstract Parameters getAgentParametersSimplified(String agentId);
 
     /**
      * Sets a parameter of the agent.
@@ -73,7 +74,7 @@ public interface SimulationInitializer {
      * @param key     The key of the parameter to set.
      * @param value   The value of the parameter to set.
      */
-    void setAgentParameterSimplified(String agentId, String key, Object value);
+    public abstract void setAgentParameterSimplified(String modelId, String agentId, String key, Object value);
 
     /**
      * Starts the simulation.
@@ -82,5 +83,5 @@ public interface SimulationInitializer {
      * @return The id of the simulation session, used to identify the simulation
      *         session.
      */
-    Pair<String, Simulation> startSimulation(String initializationId);
+    abstract Pair<String, Model> startSimulation(String initializationId);
 }

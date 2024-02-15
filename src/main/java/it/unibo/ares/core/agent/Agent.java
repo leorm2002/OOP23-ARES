@@ -36,4 +36,8 @@ public interface Agent {
     <T> void setParameter(String key, T value);
 
     String getId();
+
+    String getType();
+
+    void setType(String type);
 }
