@@ -1,7 +1,10 @@
 package it.unibo.ares.gui;
 
+import java.util.HashMap;
+
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.utils.pos.Pos;
 
 /**
  * RecieverImpl is a class that extends the DataReciever class.
@@ -18,5 +21,6 @@ public class RecieverImpl extends DataReciever {
      * @param item the SimulationOutputData instance representing the received data
      */
     public void onNext(final SimulationOutputData item) {
+        HashMap<Pos, String> pos = item.getData();
     }
 }

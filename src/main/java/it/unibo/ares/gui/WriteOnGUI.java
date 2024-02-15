@@ -36,4 +36,9 @@ public interface WriteOnGUI {
      * @param c the character representing the agent or model
      */
     void setAgentOrModel(char c);
+
+    /*
+     * Sets the model id.
+     */
+    public void setModelId(final String modelId);
 }

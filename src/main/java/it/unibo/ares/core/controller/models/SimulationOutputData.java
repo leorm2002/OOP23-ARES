@@ -1,5 +1,8 @@
 package it.unibo.ares.core.controller.models;
 
+import it.unibo.ares.core.utils.pos.Pos;
+import java.util.HashMap;
+
 /**
  * A simple class used to identify a data with a string.
  * 
@@ -10,8 +13,8 @@ public final class SimulationOutputData {
      *
      * @return the data of the simulation.
      */
-    public String getData() {
-        return "data";
+    public HashMap<Pos, String> getData() {
+        return null;
     }
 
     /**

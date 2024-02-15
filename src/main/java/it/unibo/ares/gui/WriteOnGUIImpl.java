@@ -21,6 +21,10 @@ public class WriteOnGUIImpl implements WriteOnGUI {
      * an agent or a model.
      */
     private String agentOrModel;
+    /*
+     * The modelId attribute is a string that holds the ID of the model.
+     */
+    private String modelId;
 
     /**
      * The writeVBox method writes a set of parameters to a VBox. It clears the
@@ -60,14 +64,14 @@ public class WriteOnGUIImpl implements WriteOnGUI {
                 case "agent":
                     txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
                         if (!newVal) {
-                            initializer.setAgentParameterSimplified(txt.getId(), p.getKey(), txt.getText());
+                            initializer.setAgentParameterSimplified(this.modelId, txt.getId(), p.getKey(), txt.getText());
                         }
                     });
                     break;
                 case "model":
                     txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
                         if (!newVal) {
-                            initializer.setModelParameter(p.getKey(), txt.getText());
+                            initializer.setModelParameter(this.modelId, p.getKey(), txt.getText());
                         }
                     });
                 default:
@@ -109,5 +113,12 @@ public class WriteOnGUIImpl implements WriteOnGUI {
      */
     public void setAgentOrModel(final char c) {
         this.agentOrModel = c == 'a' ? "agent" : "model";
+    }
+
+    /*
+     * The setModelId method sets the modelId attribute to the specified string.
+     */
+    public void setModelId(final String modelId) {
+        this.modelId = modelId;
     }
 }

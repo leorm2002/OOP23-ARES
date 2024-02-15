@@ -122,7 +122,7 @@ public class GuiController implements Initializable {
         /*
          * write models
          */
-        writer.writeChoiceBox(choiceModel, calculatorSupplier.getInitializer().getModels().keySet());
+        writer.writeChoiceBox(choiceModel, calculatorSupplier.getInitializer().getModels());
         choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
     }
 
@@ -140,9 +140,10 @@ public class GuiController implements Initializable {
         /*
          * write parameters of the model and agents
          */
-        String modelIDselected = calculatorSupplier.getInitializer().getModels().get(choiceModel.getValue());
+        String modelIDselected = choiceModel.getValue();
         calculatorSupplier.getInitializer().setModel(modelIDselected);
-        writer.writeChoiceBox(choiceAgent, calculatorSupplier.getInitializer().getAgentsSimplified().keySet());
+        writer.setModelId(modelIDselected);
+        writer.writeChoiceBox(choiceAgent, calculatorSupplier.getInitializer().getAgentsSimplified(modelIDselected));
         writer.setAgentOrModel('m');
         writer.writeVBox(VBOXModelPar,
                 calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters(),
@@ -167,9 +168,7 @@ public class GuiController implements Initializable {
         writer.setAgentOrModel('a');
         writer.writeVBox(VBOXAgentPar,
                 calculatorSupplier.getInitializer()
-                        .getAgentParametersSimplified(
-                                calculatorSupplier.getInitializer().getAgentsSimplified().get(choiceAgent.getValue()))
-                        .getParameters(), calculatorSupplier.getInitializer());
+                        .getAgentParametersSimplified(choiceAgent.getValue()).getParameters(), calculatorSupplier.getInitializer());
     }
 
 
