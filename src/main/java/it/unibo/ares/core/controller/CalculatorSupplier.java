@@ -3,6 +3,7 @@ package it.unibo.ares.core.controller;
 import java.util.concurrent.Flow.Subscriber;
 
 import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 
 public final class CalculatorSupplier {
@@ -20,9 +21,9 @@ public final class CalculatorSupplier {
      * @return The id of the simulation.
      */
     public String startSimulation(final String initializationId, Subscriber<SimulationOutputData> subscriber) {
-        Pair<String, Simulation> resp = initializer.startSimulation(initializationId);
-        controller.addSimulation(resp.getFirst(), resp.getSecond());
-        controller.subscribe(initializationId, subscriber);
+        Pair<String, Model> resp = initializer.startSimulation(initializationId);
+        // controller.addSimulation(resp.getFirst(), resp.getSecond());
+        // controller.subscribe(initializationId, subscriber);
         return initializationId;
     }
 

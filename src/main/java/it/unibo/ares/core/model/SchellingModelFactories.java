@@ -17,6 +17,7 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
 
 /**
  * Generate an instance of a schelling segregation model. It permits the
@@ -24,33 +25,16 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * the number of agents (two types)
  */
 public class SchellingModelFactories {
-        private class UniquePositionGetter {
-                List<Pos> positions;
-                Random r;
-                Set<Integer> extracted;
 
-                UniquePositionGetter(final List<Pos> positions) {
-                        r = new Random();
-                        this.positions = positions;
-                        this.extracted = new HashSet<>();
-                }
-
-                Pos get() {
-                        int position = Stream.generate(() -> r.nextInt(positions.size()))
-                                        .filter(i -> !extracted.contains(i))
-                                        .limit(1)
-                                        .findAny()
-                                        .orElseThrow();
-                        extracted.add(position);
-                        return positions.get(position);
-                }
+        public static String getModelId() {
+                return "Schelling";
         }
 
-        private int getAgentType(final int na, final int nb, final int index) {
+        private static int getAgentType(final int na, final int nb, final int index) {
                 return index < na ? 0 : 1;
         }
 
-        private State schellingInitializer(final Parameters parameters) {
+        private static State schellingInitializer(final Parameters parameters) {
                 int size = parameters.getParameter("size", Integer.class).get().getValue();
                 int na = parameters.getParameter("numeroAgentiTipoA", Integer.class).get().getValue();
                 int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class).get().getValue();
@@ -85,19 +69,17 @@ public class SchellingModelFactories {
          * 
          * @return
          */
-        public Model getModel() {
+        public static Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 // We need only one agent supplier since all agents are equal and only differs
                 // in the type
                 return builder
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class))
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoB", Integer.class))
-                                .addParameter(new ParameterImpl<Supplier<Agent>>("agentsSupplier",
-                                                SchellingsAgentFactory::getSchellingSegregationModelAgent))
                                 .addParameter(new ParameterImpl<>("size", Integer.class))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
-                                .addInitFunction(this::schellingInitializer)
+                                .addInitFunction(SchellingModelFactories::schellingInitializer)
                                 .build();
 
         }

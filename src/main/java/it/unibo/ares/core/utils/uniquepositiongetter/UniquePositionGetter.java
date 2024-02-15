@@ -1,4 +1,4 @@
-package it.unibo.ares.core.utils.randompositiongetter;
+package it.unibo.ares.core.utils.uniquepositiongetter;
 
 import java.util.HashSet;
 import java.util.List;

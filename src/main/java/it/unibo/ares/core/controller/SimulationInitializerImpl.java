@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.Model;
-import it.unibo.ares.core.model.factories.SchellingModelFactories;
+import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
@@ -24,7 +24,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
 
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
-        modelsSupplier.put(SchellingModelFactories.getModelID(), SchellingModelFactories::getModel);
+        modelsSupplier.put(SchellingModelFactories.getModelId(), SchellingModelFactories::getModel);
         this.intilizingModels = new HashMap<>();
     }
 
