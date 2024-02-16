@@ -15,6 +15,7 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
+import javafx.beans.binding.StringBinding;
 
 /**
  * Generate an instance of a schelling segregation model. It permits the
@@ -28,8 +29,8 @@ public class SchellingModelFactories {
                 return MODEL_ID;
         }
 
-        private static int getAgentType(final int na, final int index) {
-                return index < na ? 0 : 1;
+        private static String getAgentType(final int na, final int index) {
+                return index < na ? "A" : "B";
         }
 
         private static State schellingInitializer(final Parameters parameters) throws IllegalAccessException {
@@ -56,7 +57,7 @@ public class SchellingModelFactories {
                                 .limit(total)
                                 .collect(Collectors.toList());
                 IntStream.range(0, total)
-                                .forEach(i -> agents.get(i).setParameter("type", getAgentType(na, i)));
+                                .forEach(i -> agents.get(i).setType(getAgentType(na, i)));
                 IntStream.range(0, total)
                                 .forEach(i -> state.addAgent(getter.get(), agents.get(i)));
 

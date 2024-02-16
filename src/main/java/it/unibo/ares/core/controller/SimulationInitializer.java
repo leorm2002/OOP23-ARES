@@ -59,11 +59,15 @@ public abstract class SimulationInitializer {
     /**
      * Gets the parameters of the agent.
      * 
-     * @param agentId The identifier of the group of agents to get the parameters
-     *                from.
-     * @return A set containing all the parameters of the agent.
+     * @param agentId                   The identifier of the group of agents to get
+     *                                  the parameters
+     *                                  from.
+     * @param initialization_session_id The identifier of the model to get the
+     *                                  parameters from.
+     * @return A Parameters containing all the parameters of the agent.
      */
-    public abstract Parameters getAgentParametersSimplified(String agentId);
+    public abstract Parameters getAgentParametersSimplified(final String initialization_session_id,
+            final String agentId);
 
     /**
      * Sets a parameter of the agent.

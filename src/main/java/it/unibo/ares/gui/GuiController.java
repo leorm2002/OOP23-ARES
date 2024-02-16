@@ -147,7 +147,7 @@ public class GuiController implements Initializable {
         writer.setAgentOrModel('m');
         writer.writeVBox(VBOXModelPar,
                 calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters(),
-                 calculatorSupplier.getInitializer());
+                calculatorSupplier.getInitializer());
         /*
          * method to call when an agent is selected
          */
@@ -168,8 +168,8 @@ public class GuiController implements Initializable {
         writer.setAgentOrModel('a');
         writer.writeVBox(VBOXAgentPar,
                 calculatorSupplier.getInitializer()
-                        .getAgentParametersSimplified(choiceAgent.getValue()).getParameters(), calculatorSupplier.getInitializer());
+                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
+                calculatorSupplier.getInitializer());
     }
-
 
 }
