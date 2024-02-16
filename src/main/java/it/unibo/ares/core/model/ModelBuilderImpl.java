@@ -75,19 +75,6 @@ class ModelBuilderImpl implements ModelBuilder {
             public State initilize() {
                 return initFunction.apply(parameters);
             }
-
-            @Override
-            public Set<Agent> getAgentsSimplified() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getAgentsSimplified'");
-            }
-
-            @Override
-            public Set<Agent> getAgents() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getAgents'");
-            }
-
         };
     }
 
