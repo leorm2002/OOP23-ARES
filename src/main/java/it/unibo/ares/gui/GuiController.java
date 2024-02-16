@@ -14,10 +14,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import java.util.HashMap;
 
 /**
  * GuiController is a class that controls the GUI of the application.
@@ -247,11 +249,35 @@ public class GuiController implements Initializable {
     
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
+        readParameters(VBOXModelPar).entrySet().forEach(e -> {
+            calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(), Integer.parseInt(e.getValue().toString()));
+        });
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
+        disableVBox(VBOXModelPar);
+        btnInitialize.setDisable(true);
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
+    private HashMap<String, Object> readParameters(VBox vbox) {
+        HashMap<String, Object> map = new HashMap<>();
+        for (javafx.scene.Node node : vbox.getChildren()) {
+            if (node instanceof TextField) {
+                TextField textField = (TextField) node;
+                map.put(textField.getId(), textField.getText());
+            }
+        }
+        return map;
+    }
+
+    private void disableVBox(VBox vbox) {
+        for (javafx.scene.Node node : vbox.getChildren()) {
+            if (node instanceof TextField) {
+                TextField textField = (TextField) node;
+                textField.setDisable(true);
+            }
+        }
+    }
 
     /**
      * The writeAgentParametersList method is called when an action event occurs.
@@ -262,12 +288,12 @@ public class GuiController implements Initializable {
      */
     private void writeAgentParametersList(final ActionEvent e) {
         /*
-         * write parameters of the agent
+         * write parameters of the agent and disable the model parameters
          */
         writer.setAgentOrModel('a');
         writer.writeVBox(VBOXAgentPar,
                 calculatorSupplier.getInitializer()
-                        .getAgentParametersSimplified(simulationId, choiceAgent.getValue()).getParameters(),
+                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
                          calculatorSupplier.getInitializer());
     }
 }

@@ -72,8 +72,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      * @param value The value of the parameter to set.
      */
     @Override
-    public void setModelParameter(final String modelId, final String key, final Object value) {
-        this.intilizingModels.get(modelId).getParameters().setParameter(key, value);
+    public void setModelParameter(final String configurationId, final String key, final Object value) {
+        this.intilizingModels.get(configurationId).getParameters().setParameter(key, value);
     }
 
     /**

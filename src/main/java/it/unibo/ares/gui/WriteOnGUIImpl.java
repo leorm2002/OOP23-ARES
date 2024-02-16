@@ -58,6 +58,7 @@ public class WriteOnGUIImpl implements WriteOnGUI {
                 txt.setText(p.getValue().toString());
             } catch (Exception e) {
                 txt.setText("");
+                txt.setPromptText(p.getType().getSimpleName());
             }
             vbox.getChildren().add(lbl);
             vbox.getChildren().add(txt);
@@ -67,6 +68,8 @@ public class WriteOnGUIImpl implements WriteOnGUI {
              * 2 cases: agent or model texfield, the event listener is different because the
              * method to call is different
              */
+
+             /*
             switch (agentOrModel) {
                 case "agent":
                     txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
@@ -77,17 +80,13 @@ public class WriteOnGUIImpl implements WriteOnGUI {
                     break;
                 case "model":
                     txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
-                        if (!newVal) {
+                        if (newVal && oldVal) {
                             initializer.setModelParameter(this.modelId, p.getKey(), txt.getText());
                         }
                     });
                 default:
                     break;
-            }
-            /*
-             * setting the textfield with the value of the parameter and adding it to the
-             * vbox
-             */
+            }*/
         });
     }
 
