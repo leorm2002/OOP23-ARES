@@ -67,6 +67,9 @@ public class GuiController implements Initializable {
     @FXML
     private Label lblModelChose;
 
+    @FXML
+    private Button btnInitialize;
+
     /**
      * The btnPauseClicked method is an event handler that is called when the
      * "Pause" button is clicked.
@@ -182,7 +185,6 @@ public class GuiController implements Initializable {
         /*
          * start simulation
          */
-        configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, reciever);
 
 
@@ -217,7 +219,7 @@ public class GuiController implements Initializable {
          * write models
          */
         writer.writeChoiceBox(choiceModel, calculatorSupplier.getInitializer().getModels());
-        choiceModel.setOnAction(this::writeAgentsAndModelParametersList);
+        choiceModel.setOnAction(this::writeModelParametersList);
     }
 
     /**
@@ -230,23 +232,26 @@ public class GuiController implements Initializable {
      * @param e the ActionEvent instance representing the event that triggered this
      *          method
      */
-    private void writeAgentsAndModelParametersList(final ActionEvent e) {
+    private void writeModelParametersList(final ActionEvent e) {
         /*
-         * write parameters of the model and agents
+         * write parameters of the model
          */
         String modelIDselected = choiceModel.getValue();
-        calculatorSupplier.getInitializer().setModel(modelIDselected);
+        configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
         writer.setModelId(modelIDselected);
-        writer.writeChoiceBox(choiceAgent, calculatorSupplier.getInitializer().getAgentsSimplified(modelIDselected));
         writer.setAgentOrModel('m');
         writer.writeVBox(VBOXModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters(),
+                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId).getParameters(),
                 calculatorSupplier.getInitializer());
-        /*
-         * method to call when an agent is selected
-         */
+    }
+    
+    @FXML
+    void btnInitializeClicked(final ActionEvent event) {
+        writer.writeChoiceBox(choiceAgent,
+                calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
+
 
     /**
      * The writeAgentParametersList method is called when an action event occurs.
@@ -262,7 +267,7 @@ public class GuiController implements Initializable {
         writer.setAgentOrModel('a');
         writer.writeVBox(VBOXAgentPar,
                 calculatorSupplier.getInitializer()
-                        .getAgentParametersSimplified(choiceAgent.getValue()).getParameters(),
+                        .getAgentParametersSimplified(simulationId, choiceAgent.getValue()).getParameters(),
                          calculatorSupplier.getInitializer());
     }
 }

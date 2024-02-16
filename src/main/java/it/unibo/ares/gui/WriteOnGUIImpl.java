@@ -54,6 +54,13 @@ public class WriteOnGUIImpl implements WriteOnGUI {
             txt.setFont(Font.font(txtSize));
             lbl.setFont(Font.font(lblSize));
             lbl.wrapTextProperty().setValue(true);
+            try {
+                txt.setText(p.getValue().toString());
+            } catch (Exception e) {
+                txt.setText("");
+            }
+            vbox.getChildren().add(lbl);
+            vbox.getChildren().add(txt);
             /*
              * adding an event listener to the textfield to update the parameter value when
              * the textfield loses focus
@@ -81,9 +88,6 @@ public class WriteOnGUIImpl implements WriteOnGUI {
              * setting the textfield with the value of the parameter and adding it to the
              * vbox
              */
-            txt.appendText(p.getValue().toString());
-            vbox.getChildren().add(lbl);
-            vbox.getChildren().add(txt);
         });
     }
 

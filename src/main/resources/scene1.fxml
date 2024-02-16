@@ -45,7 +45,15 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="110.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnStart" mnemonicParsing="false" onAction="#btnStartClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" text="START">
+            <Button fx:id="btnInitialize" mnemonicParsing="false" onAction="#btnInitializeClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: LIGHTGREEN;" text="INIZIALIZZA MODELLO">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="30.0" left="50.0" top="30.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btnStart" mnemonicParsing="false" onAction="#btnStartClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: GREEN;" text="START">
                <HBox.margin>
                   <Insets bottom="30.0" left="50.0" top="30.0" />
                </HBox.margin>
