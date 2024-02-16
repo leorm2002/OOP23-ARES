@@ -42,7 +42,7 @@ public class TestBoids {
                                 .flatMap(x -> IntStream.range(-10, 10).mapToObj(y -> new PosImpl(x, y)))
                                 .filter(p -> !inside.contains(p))
                                 .collect(Collectors.toSet());
-                Method method = Class.forName("it.unibo.ares.core.agent.factories.BoidsAgentFactory")
+                Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
                                 .getDeclaredMethod("insideCone", Pos.class, Pos.class, DirectionVector.class,
                                                 Integer.class,
                                                 Integer.class);
