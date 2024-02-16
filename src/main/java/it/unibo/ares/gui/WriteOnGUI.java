@@ -37,8 +37,11 @@ public interface WriteOnGUI {
      */
     void setAgentOrModel(char c);
 
-    /*
-     * Sets the model id.
+    /**
+     * The setModelId method sets the ID of the model, it's useful for setting the right modelId
+     * when we setting parameters for the model and his agents.
+     *
+     * @param modelId the ID of the model
      */
-    public void setModelId(final String modelId);
+    void setModelId(String modelId);
 }

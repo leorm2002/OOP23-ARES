@@ -12,7 +12,6 @@ import it.unibo.ares.core.utils.pos.Pos;
  */
 public class RecieverImpl extends DataReciever {
 
-    @Override
     /**
      * The onNext method is called when new SimulationOutputData is received.
      * This method is meant to be overridden with implementation specific to the
@@ -20,6 +19,7 @@ public class RecieverImpl extends DataReciever {
      *
      * @param item the SimulationOutputData instance representing the received data
      */
+    @Override
     public void onNext(final SimulationOutputData item) {
         HashMap<Pos, String> pos = item.getData();
     }

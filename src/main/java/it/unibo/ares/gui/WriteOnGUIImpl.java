@@ -115,8 +115,10 @@ public class WriteOnGUIImpl implements WriteOnGUI {
         this.agentOrModel = c == 'a' ? "agent" : "model";
     }
 
-    /*
-     * The setModelId method sets the modelId attribute to the specified string.
+    /**
+     * The setModelId method sets the ID of the model to be displayed on the GUI.
+     *
+     * @param modelId the ID of the model
      */
     public void setModelId(final String modelId) {
         this.modelId = modelId;
