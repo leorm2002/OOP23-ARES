@@ -19,21 +19,21 @@ public interface SimulationsController {
 
     /**
      * remove the simulation from the current session.
-     * 
+     *
      * @param id The identifier of the simulation.
      */
     void removeSimulation(String id);
 
     /**
      * start the simulation of the given id.
-     * 
+     *
      * @param id The identifier of the simulation.
      */
     void startSimulation(String id);
 
     /**
      * pause the simulation of the given id.
-     * 
+     *
      * @param id The identifier of the simulation.
      */
     void pauseSimulation(String id);

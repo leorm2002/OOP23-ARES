@@ -1,10 +1,7 @@
 
 package it.unibo.ares.core.model;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -18,6 +15,7 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
+import javafx.beans.binding.StringBinding;
 
 /**
  * Generate an instance of a schelling segregation model. It permits the
@@ -25,21 +23,26 @@ import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
  * the number of agents (two types)
  */
 public class SchellingModelFactories {
+        private static final String MODEL_ID = "Schelling";
 
         public static String getModelId() {
-                return "Schelling";
+                return MODEL_ID;
         }
 
-        private static int getAgentType(final int na, final int nb, final int index) {
-                return index < na ? 0 : 1;
+        private static String getAgentType(final int na, final int index) {
+                return index < na ? "A" : "B";
         }
 
-        private static State schellingInitializer(final Parameters parameters) {
-                int size = parameters.getParameter("size", Integer.class).get().getValue();
-                int na = parameters.getParameter("numeroAgentiTipoA", Integer.class).get().getValue();
-                int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class).get().getValue();
+        private static State schellingInitializer(final Parameters parameters) throws IllegalAccessException {
+                int size = parameters.getParameter("size", Integer.class)
+                                .orElseThrow(IllegalAccessException::new).getValue();
+                int na = parameters.getParameter("numeroAgentiTipoA", Integer.class)
+                                .orElseThrow(IllegalAccessException::new).getValue();
+                int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class)
+                                .orElseThrow(IllegalAccessException::new).getValue();
+                int total = na + nb;
                 State state = new StateImpl(size, size);
-                if (size * size < na + nb) {
+                if (size * size < total) {
                         throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
                 }
                 List<Pos> validPositions = IntStream.range(0, size).boxed()
@@ -51,11 +54,11 @@ public class SchellingModelFactories {
 
                 List<Agent> agents = Stream
                                 .generate(SchellingsAgentFactory::getSchellingSegregationModelAgent)
-                                .limit(na + nb)
+                                .limit(total)
                                 .collect(Collectors.toList());
-                IntStream.range(0, na + nb)
-                                .forEach(i -> agents.get(i).setParameter("type", getAgentType(na, nb, i)));
-                IntStream.range(0, na + nb)
+                IntStream.range(0, total)
+                                .forEach(i -> agents.get(i).setType(getAgentType(na, i)));
+                IntStream.range(0, total)
                                 .forEach(i -> state.addAgent(getter.get(), agents.get(i)));
 
                 return state;
@@ -79,7 +82,14 @@ public class SchellingModelFactories {
                                 .addParameter(new ParameterImpl<>("size", Integer.class))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
-                                .addInitFunction(SchellingModelFactories::schellingInitializer)
+                                .addInitFunction(t -> {
+                                        try {
+                                                return schellingInitializer(t);
+                                        } catch (IllegalAccessException e) {
+                                                throw new IllegalArgumentException(
+                                                                "Missing parameters for the model initialization");
+                                        }
+                                })
                                 .build();
 
         }

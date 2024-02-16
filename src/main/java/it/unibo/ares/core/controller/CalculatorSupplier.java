@@ -16,20 +16,21 @@ public final class CalculatorSupplier {
      * Starts the simulation with the given initialization id.
      *
      * @param initializationId The id of the initialization to start.
-     * @param the              instance of the subscriber which the data of the
+     * @param subscriber       instance of the subscriber which the data of the
      *                         simulation will be passed to.
      * @return The id of the simulation.
      */
     public String startSimulation(final String initializationId, Subscriber<SimulationOutputData> subscriber) {
         Pair<String, Model> resp = initializer.startSimulation(initializationId);
-        // controller.addSimulation(resp.getFirst(), resp.getSecond());
-        // controller.subscribe(initializationId, subscriber);
+        controller.addSimulation(resp.getFirst(),
+                new SimulationImpl(resp.getSecond().initilize(), resp.getSecond()));
+        controller.subscribe(initializationId, subscriber);
         return initializationId;
     }
 
     /**
      * Returns the singleton instance of the calculator supplier.
-     * 
+     *
      * @return
      */
     public static CalculatorSupplier getInstance() {

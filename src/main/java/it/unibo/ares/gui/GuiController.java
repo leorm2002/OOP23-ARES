@@ -241,7 +241,7 @@ public class GuiController implements Initializable {
         writer.setAgentOrModel('m');
         writer.writeVBox(VBOXModelPar,
                 calculatorSupplier.getInitializer().getModelParametersParameters(modelIDselected).getParameters(),
-                 calculatorSupplier.getInitializer());
+                calculatorSupplier.getInitializer());
         /*
          * method to call when an agent is selected
          */
