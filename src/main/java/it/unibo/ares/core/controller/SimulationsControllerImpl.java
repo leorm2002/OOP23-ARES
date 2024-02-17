@@ -6,7 +6,7 @@ import java.util.concurrent.Flow.Subscriber;
 import it.unibo.ares.core.controller.models.Identifier;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 
-final class SimulationsControllerImpl implements SimulationsController {
+final class SimulationsControllerImpl extends SimulationsController {
     Map<String, Simulation> simulations;
     SimulationDataProvider<SimulationOutputData> processor = new SimulationDataProvider<>();
 
@@ -36,7 +36,7 @@ final class SimulationsControllerImpl implements SimulationsController {
     }
 
     @Override
-    public void subscribe(String id, Subscriber<SimulationOutputData> subscriber) {
+    void subscribe(String id, Subscriber<SimulationOutputData> subscriber) {
         processor.subscribe(id, subscriber);
     }
 
@@ -46,9 +46,4 @@ final class SimulationsControllerImpl implements SimulationsController {
         throw new UnsupportedOperationException("Unimplemented method 'pauseSimulation'");
     }
 
-    @Override
-    public void restartSimulation(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'restartSimulation'");
-    }
 }

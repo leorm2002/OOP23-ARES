@@ -137,7 +137,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     @Override
-    public Pair<String, Model> startSimulation(final String initializationId) {
+    Pair<String, Model> startSimulation(final String initializationId) {
         if (!this.initializedModels.containsKey(initializationId)) {
             throw new IllegalArgumentException("The model has not been initialized");
         }

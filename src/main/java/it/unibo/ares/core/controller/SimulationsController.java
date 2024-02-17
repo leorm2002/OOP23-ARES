@@ -7,7 +7,7 @@ import it.unibo.ares.core.controller.models.SimulationOutputData;
 /**
  * A controller for all the simulations.
  */
-public interface SimulationsController {
+public abstract class SimulationsController {
 
     /**
      * Adds a new simulation to the current session.
@@ -15,41 +15,34 @@ public interface SimulationsController {
      * @param id         The identifier of the simulation.
      * @param simulation The simulation to add.
      */
-    void addSimulation(String id, Simulation simulation);
+    public abstract void addSimulation(String id, Simulation simulation);
 
     /**
      * remove the simulation from the current session.
      *
      * @param id The identifier of the simulation.
      */
-    void removeSimulation(String id);
-
-    /**
-     * start the simulation of the given id.
-     *
-     * @param id The identifier of the simulation.
-     */
-    void startSimulation(String id);
+    public abstract void removeSimulation(String id);
 
     /**
      * pause the simulation of the given id.
      *
      * @param id The identifier of the simulation.
      */
-    void pauseSimulation(String id);
+    public abstract void pauseSimulation(String id);
 
     /**
-     * restart the simulation of the given id.
-     * 
+     * start the simulation of the given id.
+     *
      * @param id The identifier of the simulation.
      */
-    void restartSimulation(String id);
+    public abstract void startSimulation(String id);
 
     /**
      * tick each simulation.
      */
-    void makeModelsTick();
+    public abstract void makeModelsTick();
 
-    void subscribe(String id, Subscriber<SimulationOutputData> subscriber);
+    abstract void subscribe(String id, Subscriber<SimulationOutputData> subscriber);
 
 }

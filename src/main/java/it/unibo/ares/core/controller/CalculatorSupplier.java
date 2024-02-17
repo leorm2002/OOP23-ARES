@@ -24,6 +24,7 @@ public final class CalculatorSupplier {
         Pair<String, Model> resp = initializer.startSimulation(initializationId);
         controller.addSimulation(resp.getFirst(),
                 new SimulationImpl(resp.getSecond().initilize(), resp.getSecond()));
+
         controller.subscribe(initializationId, subscriber);
         return initializationId;
     }
