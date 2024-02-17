@@ -18,7 +18,7 @@ import it.unibo.ares.core.utils.state.State;
 public final class FireSpreadAgentFactory {
 
         private static Integer FIRE_TYPE = 1;
-        private static Integer TREE_TYPE = 1;
+        private static Integer TREE_TYPE = 2;
 
         private static BiPredicate<Agent, Agent> isAgentOfDiffType = (a, b) -> {
                 Integer typeA = a.getParameters().getParameter("type", Integer.class)
@@ -127,11 +127,18 @@ public final class FireSpreadAgentFactory {
         /**
          * Gets the spread of the Fire-type Agent.
          */
-        private static Set<Pos> getSpreadPositionIfAvailable(final State state, final Agent agent) {
+        private static Set<Pos> getSpreadPositionIfAvailable(final State state, final Pos pos, final Agent agent) {
+                Integer visionRadius = agent.getParameters()
+                                .getParameter("visionRadius", Integer.class)
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Agent " + agent + " has no visionRadius parameter"))
+                                .getValue();
+
                 return IntStream.range(0, state.getDimensions().getFirst())
                                 .boxed()
                                 .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
                                                 .mapToObj(y -> new PosImpl(x, y)))
+                                .filter(p -> state.getPosByPosAndRadius(pos, visionRadius).contains(p))
                                 .filter(p -> state.getAgentAt(p).isPresent())
                                 .filter(p -> isAgentOfDiffType.test(agent, state.getAgentAt(p).get()))
                                 .filter(p -> isFlammable(state.getAgentAt(p).get()))
@@ -143,7 +150,7 @@ public final class FireSpreadAgentFactory {
                 Agent agent = currentState.getAgentAt(agentPosition).get();
 
                 if (!isExtinguished(currentState, agentPosition, agent)) {
-                        Set<Pos> spreadPos = getSpreadPositionIfAvailable(currentState, agent);
+                        Set<Pos> spreadPos = getSpreadPositionIfAvailable(currentState, agentPosition, agent);
                         spreadPos.forEach(newPos -> spreadFire(currentState, newPos, agent));
                 } else {
                         currentState.removeAgent(agentPosition, agent);
@@ -181,7 +188,7 @@ public final class FireSpreadAgentFactory {
                                         Agent agent = state.getAgentAt(pos).get();
 
                                         if (!isExtinguished(state, pos, agent)) {
-                                                Set<Pos> spreadPos = getSpreadPositionIfAvailable(state, agent);
+                                                Set<Pos> spreadPos = getSpreadPositionIfAvailable(state, pos, agent);
                                                 spreadPos.forEach(newPos -> spreadFire(state, newPos, agent));
                                         } else {
                                                 state.removeAgent(pos, agent);
