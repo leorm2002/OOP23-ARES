@@ -78,6 +78,8 @@ public interface Parameters {
      */
     Set<Parameter<?>> getParametersToset();
 
+    boolean areAllParametersSetted();
+
     Parameters clone();
 
 }
