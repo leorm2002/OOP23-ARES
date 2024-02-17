@@ -151,4 +151,6 @@ public interface State {
     public void debugPrint();
 
     public State copy();
+
+    public boolean isFree(Pos pos);
 }

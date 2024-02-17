@@ -17,21 +17,32 @@ public class PosImpl implements Pos {
         this.y = y;
     }
 
+    /**
+     * Constructs a new PosImpl object with the specified x and y coordinates
+     * takes double as input, they will be rounded to the nearest integer.
+     *
+     * @param x the x coordinate of the position
+     * @param y the y coordinate of the position
+     */
+    public PosImpl(final Double x, final Double y) {
+        this.x = Math.round(x.floatValue());
+        this.y = Math.round(y.floatValue());
+    }
+
     private final Integer y;
     private final Integer x;
 
-
     /**
-    *  {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public Integer getX() {
         return this.x;
     }
 
     /**
-    *  {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public Integer getY() {
         return this.y;

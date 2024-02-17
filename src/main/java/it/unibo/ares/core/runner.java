@@ -1,11 +1,21 @@
 package it.unibo.ares.core;
 
+import java.util.Random;
+
+import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.Model;
+import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.state.State;
+import javafx.scene.paint.Paint;
 
 public class runner {
-    public static void main(String[] args) throws InterruptedException {
+    private static Random r;
+
+    private static void runSchelling() {
         SchellingModelFactories f = new SchellingModelFactories();
 
         Model schelling = f.getModel();
@@ -40,5 +50,58 @@ public class runner {
 
         System.out.println("Simulation ended");
 
+    }
+
+    private static DirectionVectorImpl getRandomDir() {
+        return new DirectionVectorImpl(r.nextInt(50), r.nextInt(50));
+    }
+
+    private static void runBoids() throws InterruptedException {
+        r = new Random();
+        ModelFactory f = new BoidsModelFactory();
+
+        Model boids = f.getModel();
+
+        boids.setParameter("size", 30);
+        boids.setParameter("numeroUccelli", 100);
+
+        State state = boids.initilize();
+        state.getAgents().stream().map(Pair::getSecond).forEach(a -> {
+            a.setParameter("distance", 5);
+            a.setParameter("angle", 90);
+            a.setParameter("direction", getRandomDir());
+            a.setParameter("collisionAvoidanceWeight", 1.0);
+            a.setParameter("alignmentWeight", 3.0);
+            a.setParameter("cohesionWeight", 3.0);
+            a.setParameter("stepSize", 3);
+
+        });
+
+        System.out.println("Initial state");
+        state.debugPrint();
+        int i = 1;
+        State newState = boids.tick(state);
+        System.out.println("");
+        System.out.println("After tick" + i++);
+        System.out.println("");
+
+        state.debugPrint();
+
+        while (!boids.isOver(state, newState)) {
+            state = newState;
+            newState = boids.tick(state);
+            System.out.println("");
+            System.out.println("After tick" + i++);
+            System.out.println("");
+            newState.debugPrint();
+            Thread.sleep(100);
+        }
+
+        System.out.println("Simulation ended");
+
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        runBoids();
     }
 }

@@ -5,25 +5,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
-import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
-import javafx.css.Style;
 
 public class SimulationInitilizerTest {
+    ModelFactory sf;
+
+    @BeforeEach
+    public void init() {
+        sf = new SchellingModelFactories();
+    }
 
     @Test
     public void testGetModels() {
         SimulationInitializerImpl simulationInitializerImpl = new SimulationInitializerImpl();
-        assertTrue(simulationInitializerImpl.getModels().contains(SchellingModelFactories.getModelId()));
+        assertTrue(simulationInitializerImpl.getModels().contains(sf.getModelId()));
     }
 
     @Test
     public void testInitializeModelWithoutSettingParameters() {
         SimulationInitializerImpl simulationInitializerImpl = new SimulationInitializerImpl();
-        String modelId = SchellingModelFactories.getModelId();
+        String modelId = sf.getModelId();
         String simId = simulationInitializerImpl.setModel(modelId);
         assertThrows(IllegalStateException.class, () -> simulationInitializerImpl.getAgentsSimplified(simId));
     }
@@ -31,7 +37,7 @@ public class SimulationInitilizerTest {
     @Test
     public void testInitializeModel() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
-        String modelId = SchellingModelFactories.getModelId();
+        String modelId = sf.getModelId();
         String simId = simulationInitializer.setModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
@@ -42,7 +48,7 @@ public class SimulationInitilizerTest {
     @Test
     public void testParametrizeAgent() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
-        String modelId = SchellingModelFactories.getModelId();
+        String modelId = sf.getModelId();
         String simId = simulationInitializer.setModel(modelId);
         Parameters params = simulationInitializer.getModelParametersParameters(simId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);

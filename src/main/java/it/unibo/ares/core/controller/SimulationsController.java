@@ -48,7 +48,7 @@ public interface SimulationsController {
     /**
      * tick each simulation.
      */
-    void tick();
+    void makeModelsTick();
 
     void subscribe(String id, Subscriber<SimulationOutputData> subscriber);
 

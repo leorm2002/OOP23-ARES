@@ -14,7 +14,7 @@ import it.unibo.ares.core.utils.state.State;
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
  */
-public final class SchellingsAgentFactory {
+public final class SchellingsAgentFactory implements AgentFactory {
     // private boolean isAgentOfSameType(final Agent a, final Agent b) {
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         Integer typeA = a.getParameters().getParameter("type", Integer.class)
@@ -77,7 +77,8 @@ public final class SchellingsAgentFactory {
         return b.build();
     }
 
-    public static Agent getSchellingSegregationModelAgent() {
+    @Override
+    public Agent createAgent() {
         AgentBuilder b = new AgentBuilderImpl();
 
         b.addParameter(new ParameterImpl<Integer>("type", Integer.class));

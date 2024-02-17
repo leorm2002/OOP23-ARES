@@ -175,9 +175,7 @@ public final class StateImpl implements State {
                         .map(pos -> {
                             var a = getAgentAt(pos);
                             if (a.isPresent()) {
-                                return a.get().getParameters()
-                                        .getParameter("type", Integer.class)
-                                        .get().getValue().toString();
+                                return a.get().getType();
                             } else {
                                 return " ";
                             }
@@ -211,5 +209,10 @@ public final class StateImpl implements State {
         entityBoard.getEntities().forEach(e -> copy.addEntity(e.getFirst(), e.getSecond()));
         agentBoard.getEntities().forEach(e -> copy.addAgent(e.getFirst(), e.getSecond()));
         return copy;
+    }
+
+    @Override
+    public boolean isFree(Pos pos) {
+        return entityBoard.getEntity(pos).isEmpty() && agentBoard.getEntity(pos).isEmpty();
     }
 }

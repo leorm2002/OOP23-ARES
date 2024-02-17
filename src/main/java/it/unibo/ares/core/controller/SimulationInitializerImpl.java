@@ -8,7 +8,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import it.unibo.ares.core.agent.Agent;
+import it.unibo.ares.core.agent.SchellingsAgentFactory;
+import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.Model;
+import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -25,7 +28,10 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
 
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
-        modelsSupplier.put(SchellingModelFactories.getModelId(), SchellingModelFactories::getModel);
+        ModelFactory sf = new SchellingModelFactories();
+        ModelFactory bf = new BoidsModelFactory();
+        modelsSupplier.put(sf.getModelId(), sf::getModel);
+        modelsSupplier.put(bf.getModelId(), bf::getModel);
         this.intilizingModels = new HashMap<>();
         this.initializedModels = new HashMap<>();
     }
@@ -50,6 +56,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     @Override
     public String setModel(final String modelId) {
+        // TODO AGGIUNGERE METODO PER RIMUOVERE MODELLO IN INIZIALIZZAXIONE PASSANDO ID
         String randomID = UUID.randomUUID().toString();
         this.intilizingModels.put(randomID, this.modelsSupplier.get(modelId).get());
         return randomID;
@@ -129,14 +136,19 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
                 .orElseThrow();
     }
 
-    /**
-     * Starts the simulation.
-     *
-     * @return The id of the simulation session, used to identify the simulation
-     *         session.
-     */
     @Override
     public Pair<String, Model> startSimulation(final String initializationId) {
+        if (!this.initializedModels.containsKey(initializationId)) {
+            throw new IllegalArgumentException("The model has not been initialized");
+        }
+        if (initializedModels.get(initializationId).getFirst().getAgents()
+                .stream()
+                .map(Pair::getSecond)
+                .map(Agent::getParameters)
+                .map(Parameters::getParametersToset)
+                .anyMatch(s -> !s.isEmpty())) {
+            throw new IllegalArgumentException("Some agent parameters are not set");
+        }
         Model model = intilizingModels.get(initializationId);
 
         return new Pair<String, Model>(initializationId, model);

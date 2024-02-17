@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import it.unibo.ares.core.agent.Agent;
+import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -15,17 +16,16 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
-import javafx.beans.binding.StringBinding;
 
 /**
  * Generate an instance of a schelling segregation model. It permits the
  * paramtrization of:
  * the number of agents (two types)
  */
-public class SchellingModelFactories {
+public class SchellingModelFactories implements ModelFactory {
         private static final String MODEL_ID = "Schelling";
 
-        public static String getModelId() {
+        public String getModelId() {
                 return MODEL_ID;
         }
 
@@ -51,9 +51,9 @@ public class SchellingModelFactories {
                                 .toList();
 
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-
+                AgentFactory schellingFactory = new SchellingsAgentFactory();
                 List<Agent> agents = Stream
-                                .generate(SchellingsAgentFactory::getSchellingSegregationModelAgent)
+                                .generate(schellingFactory::createAgent)
                                 .limit(total)
                                 .collect(Collectors.toList());
                 IntStream.range(0, total)
@@ -72,7 +72,7 @@ public class SchellingModelFactories {
          * 
          * @return
          */
-        public static Model getModel() {
+        public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 // We need only one agent supplier since all agents are equal and only differs
                 // in the type

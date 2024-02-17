@@ -81,9 +81,10 @@ public abstract class SimulationInitializer {
     /**
      * Starts the simulation.
      *
-     * @param initializationId The identifier of the initialization session to start
      * @return The id of the simulation session, used to identify the simulation
      *         session.
+     * @throws IllegalArgumentException if the model has not been initialized or if
+     *                                  some agent parameters are not set.
      */
     abstract Pair<String, Model> startSimulation(String initializationId);
 }

@@ -83,6 +83,11 @@ public final class ParametersImpl implements Parameters, Cloneable {
     @Override
     public <T> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
         Optional<Map<String, Parameter<?>>> parameterMap = Optional.ofNullable(typeMap.get(type));
+        if (!parameterMap.isPresent()) {
+            // if the type is not present, try to find the a super type
+            parameterMap = typeMap.entrySet().stream().filter(e -> e.getKey().isAssignableFrom(type))
+                    .map(Map.Entry::getValue).findAny();
+        }
         if (parameterMap.isPresent()) {
             @SuppressWarnings("unchecked")
             Parameter<T> parameter = (Parameter<T>) parameterMap.get().get(key);
@@ -98,7 +103,6 @@ public final class ParametersImpl implements Parameters, Cloneable {
     @SuppressWarnings("unchecked")
     public <T> void setParameter(final String key, final T value) {
         Optional<Parameter<T>> parameter = getParameter(key, (Class<T>) value.getClass());
-
         if (parameter.isPresent()) {
             typeMap.get(value.getClass()).replace(key, parameter.get().setValue(value));
         }
