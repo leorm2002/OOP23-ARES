@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import it.unibo.ares.core.agent.Agent;
@@ -34,6 +35,15 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         this.intilizingModels = new HashMap<>();
         this.initializedModels = new HashMap<>();
+    }
+
+    private void setAgentParameter(final String initializationId, final String agentType, final String key,
+            final Object value, Predicate<Agent> predicate) {
+        this.initializedModels.get(
+                initializationId).getFirst().getAgents().stream()
+                .map(Pair::getSecond)
+                .filter(predicate::test)
+                .forEach(ag -> ag.setParameter(key, value));
     }
 
     /**
@@ -123,11 +133,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     public void setAgentParameterSimplified(final String initializationId, final String agentType,
             final String key,
             final Object value) {
-        this.initializedModels.get(
-                initializationId).getFirst().getAgents().stream()
-                .map(Pair::getSecond)
-                .filter(ag -> ag.getType().equals(agentType))
-                .forEach(ag -> ag.setParameter(key, value));
+        setAgentParameter(initializationId, agentType, key, value, ag -> ag.getType().equals(agentType));
     }
 
     @Override
