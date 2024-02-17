@@ -8,13 +8,21 @@ import java.util.HashMap;
  * 
  */
 public final class SimulationOutputData {
+    private HashMap<Pos, String> data;
+    private String simulationId;
+
+    public SimulationOutputData(HashMap<Pos, String> data, String simulationId) {
+        this.data = data;
+        this.simulationId = simulationId;
+    }
+
     /**
      * Gets the data of the simulation.
      *
      * @return the data of the simulation.
      */
     public HashMap<Pos, String> getData() {
-        return null;
+        return data;
     }
 
     /**
@@ -23,6 +31,6 @@ public final class SimulationOutputData {
      * @return the id of the simulation.
      */
     public String getSimulationId() {
-        return "id";
+        return simulationId;
     }
 }

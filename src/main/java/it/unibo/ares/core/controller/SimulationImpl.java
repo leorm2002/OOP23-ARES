@@ -1,10 +1,13 @@
 package it.unibo.ares.core.controller;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
+import java.util.HashMap;
+import it.unibo.ares.core.utils.Pair;
 
 /**
  * A simulation is a class that contains the state of the simulation and the
@@ -50,8 +53,14 @@ final class SimulationImpl implements Simulation {
     }
 
     private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mapStateToSimulationData'");
+        return new SimulationOutputData(
+                state.getAgents().stream()
+                        .collect(Collectors.toMap(
+                                Pair::getFirst,
+                                pair -> pair.getSecond().getType(),
+                                (existingValue, newValue) -> newValue,
+                                HashMap::new)),
+                simulationSessionId);
     }
 
     private void tickSim() {
