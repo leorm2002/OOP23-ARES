@@ -139,4 +139,9 @@ public final class ParametersImpl implements Parameters, Cloneable {
         typeMap.entrySet().forEach(m -> cloneMap.put(m.getKey(), new HashMap<>(m.getValue())));
         return new ParametersImpl(cloneMap);
     }
+
+    @Override
+    public boolean areAllParametersSetted() {
+        return getParametersStream().allMatch(Parameter::isSetted);
+    }
 }
