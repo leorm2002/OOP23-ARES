@@ -12,7 +12,7 @@ import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-public class SimulationInitilizerTest {
+public class SimulationInitializerTest {
     ModelFactory sf;
 
     @BeforeEach
