@@ -8,6 +8,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.unibo.ares.core.model.MockModelProvider;
+import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -59,5 +61,14 @@ public class SimulationInitializerTest {
         String agent = agents.stream().findAny().get();
         Parameters agentParams = simulationInitializer.getAgentParametersSimplified(simId, agent);
         assertTrue(agentParams.getParametersToset().size() > 0);
+    }
+
+    @Test
+    public void test1() {
+        Model m = MockModelProvider.getMockModel();
+        var state = m.initilize();
+        state = m.tick(state);
+        state = m.tick(state);
+        state.debugPrint();
     }
 }

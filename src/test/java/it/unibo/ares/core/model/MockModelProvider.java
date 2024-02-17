@@ -14,6 +14,7 @@ public class MockModelProvider {
             state.addAgent(new PosImpl(0, 0), MockAgentProvider.getMockAgent());
             return state;
         });
+
         return builder.build();
     }
 }

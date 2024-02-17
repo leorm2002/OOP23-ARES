@@ -1,13 +1,10 @@
 package it.unibo.ares.core.model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.BoidsAgentFactory;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
