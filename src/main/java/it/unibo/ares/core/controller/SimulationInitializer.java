@@ -34,7 +34,7 @@ public abstract class SimulationInitializer {
      * 
      * @return a set containing all the parameters of the model.
      */
-    public abstract Parameters getModelParametersParameters(String modelId);
+    public abstract Parameters getModelParametersParameters(String initializationId);
 
     /**
      * Sets a parameter of the model.
@@ -42,7 +42,7 @@ public abstract class SimulationInitializer {
      * @param key   The key of the parameter to set.
      * @param value The value of the parameter to set.
      */
-    public abstract void setModelParameter(String modelId, String key, Object value);
+    public abstract void setModelParameter(String initializationId, String key, Object value);
 
     /**
      * Gets a simplified view of the agents of the model, it permets only to
@@ -54,19 +54,19 @@ public abstract class SimulationInitializer {
      *         first element is the name of the agent and the second element is the
      *         identifier of the group agent.
      */
-    public abstract Set<String> getAgentsSimplified(String modelId);
+    public abstract Set<String> getAgentsSimplified(String initializationId);
 
     /**
      * Gets the parameters of the agent.
      * 
-     * @param agentId                   The identifier of the group of agents to get
-     *                                  the parameters
-     *                                  from.
-     * @param initialization_session_id The identifier of the model to get the
-     *                                  parameters from.
+     * @param agentId          The identifier of the group of agents to get
+     *                         the parameters
+     *                         from.
+     * @param initializationId The identifier of the model to get the
+     *                         parameters from.
      * @return A Parameters containing all the parameters of the agent.
      */
-    public abstract Parameters getAgentParametersSimplified(final String initialization_session_id,
+    public abstract Parameters getAgentParametersSimplified(final String initializationId,
             final String agentId);
 
     /**
@@ -76,7 +76,7 @@ public abstract class SimulationInitializer {
      * @param key     The key of the parameter to set.
      * @param value   The value of the parameter to set.
      */
-    public abstract void setAgentParameterSimplified(String modelId, String agentId, String key, Object value);
+    public abstract void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value);
 
     /**
      * Starts the simulation.

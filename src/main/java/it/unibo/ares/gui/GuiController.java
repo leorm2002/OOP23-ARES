@@ -99,7 +99,8 @@ public class GuiController implements Initializable {
         /*
          * restart simulation
          */
-        calculatorSupplier.getController().restartSimulation(simulationId);
+        // calculatorSupplier.getController().restartSimulation(simulationId); TODO
+        // RIMUOVERE
     }
 
     /**
@@ -112,7 +113,8 @@ public class GuiController implements Initializable {
     @FXML
     void btnStoplicked(final ActionEvent event) throws IOException {
         /*
-         * stop simulation and switch scene to scene1, where the user can select a new model
+         * stop simulation and switch scene to scene1, where the user can select a new
+         * model
          */
         root = FXMLLoader.load(getClass().getResource("scene1.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -120,7 +122,6 @@ public class GuiController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
 
     /**
      * modelIDselected is a string that holds the ID of the selected model.
@@ -177,7 +178,6 @@ public class GuiController implements Initializable {
          */
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, reciever);
 
-
         /*
          * switch scene
          */
@@ -232,14 +232,16 @@ public class GuiController implements Initializable {
         writer.setModelId(modelIDselected);
         writer.setAgentOrModel('m');
         writer.writeVBox(VBOXModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId).getParameters(),
+                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
+                        .getParameters(),
                 calculatorSupplier.getInitializer());
     }
-    
+
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
         readParameters(VBOXModelPar).entrySet().forEach(e -> {
-            calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(), Integer.parseInt(e.getValue().toString()));
+            calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(),
+                    Integer.parseInt(e.getValue().toString()));
         });
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
@@ -263,7 +265,8 @@ public class GuiController implements Initializable {
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
         readParameters(VBOXAgentPar).entrySet().forEach(e -> {
-            calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), e.getKey(),
+            calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId,
+                    choiceAgent.getValue(), e.getKey(),
                     Integer.parseInt(e.getValue().toString()));
         });
     }
@@ -292,6 +295,6 @@ public class GuiController implements Initializable {
         writer.writeVBox(VBOXAgentPar,
                 calculatorSupplier.getInitializer()
                         .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
-                         calculatorSupplier.getInitializer());
+                calculatorSupplier.getInitializer());
     }
 }
