@@ -122,8 +122,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
             final Object value) {
         this.initializedModels.get(initialization_session_id).getFirst().getAgents().stream()
                 .map(Pair::getSecond)
-                .filter(ag -> ag.getId().equals(agentType))
-                .forEach(ag -> ag.getParameters().setParameter(key, value));
+                .filter(ag -> ag.getType().equals(agentType))
+                .forEach(ag -> ag.setParameter(key, value));
     }
 
     @Override
