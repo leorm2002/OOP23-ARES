@@ -49,7 +49,7 @@ final class SimulationImpl implements Simulation {
         return this.running;
     }
 
-    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationId) {
+    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mapStateToSimulationData'");
     }
@@ -59,7 +59,7 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
-    public CompletableFuture<SimulationOutputData> tick(final String simulationId) {
+    public CompletableFuture<SimulationOutputData> tick(final String simulationSessionId) {
         if (!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }
@@ -72,7 +72,7 @@ final class SimulationImpl implements Simulation {
         new Thread(() -> {
             this.calculating = true;
             tickSim();
-            future.complete(mapStateToSimulationData(this.state, simulationId));
+            future.complete(mapStateToSimulationData(this.state, simulationSessionId));
             this.calculating = false;
         }).start();
 
