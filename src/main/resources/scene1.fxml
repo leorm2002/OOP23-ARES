@@ -53,17 +53,17 @@
                   <Insets bottom="30.0" left="50.0" top="30.0" />
                </HBox.margin>
             </Button>
+            <Button fx:id="btnSetAgent" alignment="CENTER" mnemonicParsing="false" onAction="#btnSetAgentClicked" prefHeight="200.0" prefWidth="200.0" text="SET PARAMETRI AGENTE">
+               <HBox.margin>
+                  <Insets bottom="30.0" left="50.0" right="10.0" top="30.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
             <Button fx:id="btnStart" mnemonicParsing="false" onAction="#btnStartClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: GREEN;" text="START">
                <HBox.margin>
                   <Insets bottom="30.0" left="50.0" top="30.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="btnLoad" alignment="CENTER" mnemonicParsing="false" onAction="#btnLoadClicked" prefHeight="200.0" prefWidth="200.0" text="LOAD">
-               <HBox.margin>
-                  <Insets bottom="30.0" left="50.0" right="10.0" top="30.0" />
                </HBox.margin>
                <font>
                   <Font size="20.0" />

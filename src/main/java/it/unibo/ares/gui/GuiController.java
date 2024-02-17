@@ -143,7 +143,7 @@ public class GuiController implements Initializable {
     /**
      * btnLoad is a Button that triggers the loading of a model when clicked.
      */
-    private Button btnLoad;
+    private Button btnSetAgent;
 
     @FXML
     /**
@@ -162,18 +162,6 @@ public class GuiController implements Initializable {
      * choiceModel is a ChoiceBox that allows the user to select a model.
      */
     private ChoiceBox<String> choiceModel;
-
-    /**
-     * btnLoadClicked is a method that handles the action event of the Load button
-     * being clicked.
-     *
-     * @param event the ActionEvent instance representing the Load button click
-     *              event
-     */
-    @FXML
-    void btnLoadClicked(final ActionEvent event) {
-
-    }
 
     /**
      * The btnStartClicked method is an event handler that is called when the
@@ -221,6 +209,7 @@ public class GuiController implements Initializable {
          * write models
          */
         writer.writeChoiceBox(choiceModel, calculatorSupplier.getInitializer().getModels());
+        btnSetAgent.setDisable(false);
         choiceModel.setOnAction(this::writeModelParametersList);
     }
 
@@ -256,6 +245,7 @@ public class GuiController implements Initializable {
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
         disableVBox(VBOXModelPar);
         btnInitialize.setDisable(true);
+        btnSetAgent.setDisable(false);
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
@@ -268,6 +258,14 @@ public class GuiController implements Initializable {
             }
         }
         return map;
+    }
+
+    @FXML
+    void btnSetAgentClicked(final ActionEvent event) {
+        readParameters(VBOXAgentPar).entrySet().forEach(e -> {
+            calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), e.getKey(),
+                    Integer.parseInt(e.getValue().toString()));
+        });
     }
 
     private void disableVBox(VBox vbox) {
