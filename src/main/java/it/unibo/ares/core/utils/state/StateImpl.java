@@ -30,7 +30,7 @@ public final class StateImpl implements State {
      * @param height the height of the state
      */
     public StateImpl(final Integer width, final Integer height) {
-        this.size = new Pair<Integer, Integer>(width, height);
+        this.size = new Pair<>(width, height);
     }
 
     private Boolean isValidPosition(final Pos pos) {
