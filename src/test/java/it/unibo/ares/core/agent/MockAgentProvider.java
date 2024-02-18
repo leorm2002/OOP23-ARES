@@ -22,4 +22,8 @@ public class MockAgentProvider {
         });
         return builder.build();
     }
+
+    private MockAgentProvider() {
+        throw new IllegalStateException("Utility class");
+    }
 }

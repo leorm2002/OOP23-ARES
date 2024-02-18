@@ -102,4 +102,8 @@ class Runner {
     public static void main(final String[] args) throws InterruptedException {
         runBoids();
     }
+
+    private Runner() {
+        throw new IllegalStateException("Utility class");
+    }
 }

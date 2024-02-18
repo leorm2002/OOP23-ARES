@@ -13,9 +13,9 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
 class ModelBuilderImpl implements ModelBuilder {
-    Parameters parameters;
-    BiPredicate<State, State> exitfFunction;
-    Function<Parameters, State> initFunction;
+    private Parameters parameters;
+    private BiPredicate<State, State> exitfFunction;
+    private Function<Parameters, State> initFunction;
 
     @Override
     public void reset() {
@@ -25,7 +25,7 @@ class ModelBuilderImpl implements ModelBuilder {
     }
 
     @Override
-    public <T> ModelBuilder addParameter(Parameter<T> parameter) {
+    public <T> ModelBuilder addParameter(final Parameter<T> parameter) {
         if (parameters == null) {
             parameters = new ParametersImpl();
         }
@@ -35,7 +35,7 @@ class ModelBuilderImpl implements ModelBuilder {
     }
 
     @Override
-    public ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction) {
+    public ModelBuilder addExitFunction(final BiPredicate<State, State> exitfFunction) {
         this.exitfFunction = exitfFunction;
         return this;
     }
@@ -62,12 +62,12 @@ class ModelBuilderImpl implements ModelBuilder {
             }
 
             @Override
-            public <T> void setParameter(String key, T value) {
+            public <T> void setParameter(final String key, final T value) {
                 parameters.setParameter(key, value);
             }
 
             @Override
-            public boolean isOver(State oldState, State newState) {
+            public boolean isOver(final State oldState, final State newState) {
                 return exitfFunction.test(oldState, newState);
             }
 
@@ -79,7 +79,7 @@ class ModelBuilderImpl implements ModelBuilder {
     }
 
     @Override
-    public ModelBuilder addInitFunction(Function<Parameters, State> initFunction) {
+    public ModelBuilder addInitFunction(final Function<Parameters, State> initFunction) {
         this.initFunction = initFunction;
 
         return this;

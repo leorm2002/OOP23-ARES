@@ -22,9 +22,10 @@ import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
  * paramtrization of:
  * the number of agents (two types)
  */
-public class SchellingModelFactories implements ModelFactory {
+public final class SchellingModelFactories implements ModelFactory {
         private static final String MODEL_ID = "Schelling";
 
+        @Override
         public String getModelId() {
                 return MODEL_ID;
         }
@@ -68,10 +69,11 @@ public class SchellingModelFactories implements ModelFactory {
          * Returna a schelling model, before calling initialize you should set:
          * numeroAgentiTipoA (integer)
          * numeroAgentiTipoB (integer)
-         * size (integer)
+         * size (integer).
          * 
-         * @return
+         * @return a scheeling model
          */
+        @Override
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 // We need only one agent supplier since all agents are equal and only differs

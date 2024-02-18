@@ -26,7 +26,7 @@ import java.util.HashMap;
  * It implements the Initializable interface and manages the interaction between
  * the user and the GUI.
  */
-public class GuiController implements Initializable {
+public final class GuiController implements Initializable {
 
     /**
      * writer is an instance of WriteOnGUIImpl used to write parameters on the GUI.
@@ -132,13 +132,13 @@ public class GuiController implements Initializable {
     /**
      * VBOXAgentPar is a VBox that holds the parameters for the agent.
      */
-    private VBox VBOXAgentPar;
+    private VBox VboxAgentPar;
 
     @FXML
     /**
      * VBOXModelPar is a VBox that holds the parameters for the model.
      */
-    private VBox VBOXModelPar;
+    private VBox VboxModelPar;
 
     @FXML
     /**
@@ -231,7 +231,7 @@ public class GuiController implements Initializable {
         configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
         writer.setModelId(modelIDselected);
         writer.setAgentOrModel('m');
-        writer.writeVBox(VBOXModelPar,
+        writer.writeVBox(VboxModelPar,
                 calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
                         .getParameters(),
                 calculatorSupplier.getInitializer());
@@ -239,19 +239,19 @@ public class GuiController implements Initializable {
 
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
-        readParameters(VBOXModelPar).entrySet().forEach(e -> {
+        readParameters(VboxModelPar).entrySet().forEach(e -> {
             calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(),
                     Integer.parseInt(e.getValue().toString()));
         });
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
-        disableVBox(VBOXModelPar);
+        disableVBox(VboxModelPar);
         btnInitialize.setDisable(true);
         btnSetAgent.setDisable(false);
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
-    private HashMap<String, Object> readParameters(VBox vbox) {
+    private HashMap<String, Object> readParameters(final VBox vbox) {
         HashMap<String, Object> map = new HashMap<>();
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
@@ -264,14 +264,14 @@ public class GuiController implements Initializable {
 
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
-        readParameters(VBOXAgentPar).entrySet().forEach(e -> {
+        readParameters(VboxAgentPar).entrySet().forEach(e -> {
             calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId,
                     choiceAgent.getValue(), e.getKey(),
                     Integer.parseInt(e.getValue().toString()));
         });
     }
 
-    private void disableVBox(VBox vbox) {
+    private void disableVBox(final VBox vbox) {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField textField = (TextField) node;
@@ -292,7 +292,7 @@ public class GuiController implements Initializable {
          * write parameters of the agent and disable the model parameters
          */
         writer.setAgentOrModel('a');
-        writer.writeVBox(VBOXAgentPar,
+        writer.writeVBox(VboxAgentPar,
                 calculatorSupplier.getInitializer()
                         .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
                 calculatorSupplier.getInitializer());

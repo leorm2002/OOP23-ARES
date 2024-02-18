@@ -6,6 +6,9 @@ import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 
+/**
+ * Represents a builder for creating models.
+ */
 interface ModelBuilder {
     /**
      * Builds an instance of the Model interface.
@@ -27,24 +30,24 @@ interface ModelBuilder {
      * @throws NullPointerException     if the parameter key or type is null.
      * @param parameter the parameter to add.
      * @param <T>       the type of the parameter value (ex. Integer, String, ...).
-     * @return the agent builder with the added parameter.
+     * @return the model builder with the added parameter.
      */
     <T> ModelBuilder addParameter(Parameter<T> parameter);
 
     /**
      * Add the function that will be used to check wether the simulation is
-     * over
+     * over.
      * 
      * @param exitfFunction
-     * @return
+     * @return the model builder with the added exit function
      */
     ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction);
 
     /**
-     * Add the function that initialize the state of the model
+     * Add the function that initialize the state of the model.
      * 
      * @param initFunction
-     * @return
+     * @return the model builder with the added init function
      */
     ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
 }

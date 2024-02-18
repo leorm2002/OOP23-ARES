@@ -26,6 +26,9 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     private Map<String, Pair<State, Model>> initializedModels;
     private Map<String, Supplier<Model>> modelsSupplier;
 
+    /**
+     * Creates a new instance of the simulation initializer.
+     */
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
         ModelFactory sf = new SchellingModelFactories();
@@ -37,7 +40,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     private void setAgentParameter(final String initializationId, final String agentType, final String key,
-            final Object value, Predicate<Agent> predicate) {
+            final Object value, final Predicate<Agent> predicate) {
         this.initializedModels.get(
                 initializationId).getFirst().getAgents().stream()
                 .map(Pair::getSecond)
@@ -103,7 +106,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      *         identifier of the group agent.
      */
     @Override
-    public Set<String> getAgentsSimplified(String initializationId) {
+    public Set<String> getAgentsSimplified(final String initializationId) {
         // TODO RICALCOLO SE CAMBIA MODEL
         this.initializedModels.computeIfAbsent(
                 initializationId,
@@ -121,7 +124,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     /**
-     * Sets a parameter of all the agent with the given type
+     * Sets a parameter of all the agent with the given type.
      * 
      * @param agentType The identifier of the group of agents to set the parameter
      *                  to.

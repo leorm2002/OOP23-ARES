@@ -16,7 +16,7 @@ public abstract class DataReciever implements Subscriber<SimulationOutputData> {
     /**
      * This method is called every time some error happens.
      *
-     * @param data The new data.
+     * @param throwable The throwable.
      */
     @Override
     public void onError(final Throwable throwable) {

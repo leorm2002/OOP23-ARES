@@ -27,4 +27,8 @@ public class MockModelProvider {
 
         return builder.build();
     }
+
+    private MockModelProvider() {
+        throw new IllegalStateException("Utility class");
+    }
 }

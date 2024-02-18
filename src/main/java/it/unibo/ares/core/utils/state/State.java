@@ -163,5 +163,5 @@ public interface State {
      * @param pos the position to check.
      * @return true if the position is free, false otherwise.
      */
-    public boolean isFree(Pos pos);
+    boolean isFree(Pos pos);
 }

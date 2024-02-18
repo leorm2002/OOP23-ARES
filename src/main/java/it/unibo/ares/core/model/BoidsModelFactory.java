@@ -16,6 +16,7 @@ import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
 public class BoidsModelFactory implements ModelFactory {
     private static final String MODEL_ID = "Boids";
 
+    @Override
     public String getModelId() {
         return MODEL_ID;
     }
@@ -48,6 +49,15 @@ public class BoidsModelFactory implements ModelFactory {
         return state;
     }
 
+    @Override
+    /**
+     * Creates a new model.
+     * Should contain all the parameters needed for the model initialization:
+     * - size: the size of the grid
+     * - numeroUccelli: the number of agents
+     * 
+     * @return the model
+     */
     public Model getModel() {
         ModelBuilder builder = new ModelBuilderImpl();
         // We need only one agent supplier since all agents are equal and only differs

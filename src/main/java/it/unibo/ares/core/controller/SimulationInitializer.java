@@ -32,6 +32,8 @@ public abstract class SimulationInitializer {
     /**
      * Gets the parameters of the model.
      * 
+     * @param initializationId The identifier of the model to get the parameters
+     *                         from.
      * @return a set containing all the parameters of the model.
      */
     public abstract Parameters getModelParametersParameters(String initializationId);
@@ -39,8 +41,9 @@ public abstract class SimulationInitializer {
     /**
      * Sets a parameter of the model.
      * 
-     * @param key   The key of the parameter to set.
-     * @param value The value of the parameter to set.
+     * @param initializationId The identifier of the model to set the parameter to.
+     * @param key              The key of the parameter to set.
+     * @param value            The value of the parameter to set.
      */
     public abstract void setModelParameter(String initializationId, String key, Object value);
 
@@ -49,6 +52,7 @@ public abstract class SimulationInitializer {
      * parametrize the agents
      * as a group and not singularly, it is useful for the frontend.
      * 
+     * @param initializationId The identifier of the model to get the agents from.
      * @return A set containing all the agents of the model, represented as a pair
      *         of strings, where the
      *         first element is the name of the agent and the second element is the
@@ -66,20 +70,23 @@ public abstract class SimulationInitializer {
      *                         parameters from.
      * @return A Parameters containing all the parameters of the agent.
      */
-    public abstract Parameters getAgentParametersSimplified(final String initializationId,
-            final String agentId);
+    public abstract Parameters getAgentParametersSimplified(String initializationId,
+            String agentId);
 
     /**
      * Sets a parameter of the agent.
      * 
-     * @param agentId The identifier of the group of agents to set the parameter to.
-     * @param key     The key of the parameter to set.
-     * @param value   The value of the parameter to set.
+     * @param initializationId The identifier of the group of agents to set the
+     *                         parameter to.
+     * @param key              The key of the parameter to set.
+     * @param value            The value of the parameter to set.
      */
     public abstract void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value);
 
     /**
      * Starts the simulation.
+     * 
+     * @param initializationId The identifier of the model to start the simulation
      *
      * @return The id of the simulation session, used to identify the simulation
      *         session.
