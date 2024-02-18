@@ -92,4 +92,21 @@ final class SimulationImpl implements Simulation {
         return future;
     }
 
+    @Override
+    public SimulationOutputData tickSync(String simulationSessionId) {
+        if (!this.running) {
+            throw new IllegalStateException("Simulation is not running");
+        }
+        if (this.calculating) {
+            throw new IllegalStateException("Simulation is already calculating");
+        }
+
+        this.calculating = true;
+        tickSim();
+        SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId);
+        this.calculating = false;
+
+        return data;
+    }
+
 }

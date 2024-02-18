@@ -25,6 +25,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
 
     private final SimulationsController controller;
     private final SimulationInitializer initializer;
+    private final Ticker ticker;
 
     /**
      * Starts the simulation with the given initialization id.
@@ -38,7 +39,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
         Pair<String, Model> resp = initializer.startSimulation(initializationId);
         controller.addSimulation(resp.getFirst(),
                 new SimulationImpl(resp.getSecond().initilize(), resp.getSecond()));
-
+        controller.startSimulation(initializationId);
         controller.subscribe(initializationId, subscriber);
         return initializationId;
     }
@@ -66,6 +67,8 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
+        this.ticker = new TickerImpl(controller::makeModelsTick, 0, 1);
+        ticker.start();
     }
 
     @Override

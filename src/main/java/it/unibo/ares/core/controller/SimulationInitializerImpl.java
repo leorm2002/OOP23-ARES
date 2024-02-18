@@ -161,7 +161,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
                 .map(Pair::getSecond)
                 .map(Agent::getParameters)
                 .map(Parameters::getParametersToset)
-                .anyMatch(s -> !s.isEmpty())) {
+                .anyMatch(s -> s.isEmpty())) {
             throw new IllegalArgumentException("Some agent parameters are not set");
         }
         Model model = intilizingModels.get(initializationId);

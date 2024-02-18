@@ -3,14 +3,12 @@ package it.unibo.ares.cli;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import it.unibo.ares.cli.utils.StringCaster;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
@@ -56,10 +54,11 @@ public class CliInitializer {
                 if (agentId.isPresent()) {
                     CalculatorSupplier.getInstance()
                             .setAgentParameterSimplified(initializationId, agentId.get(), param.getKey(),
-                                    value);
+                                    StringCaster.cast(value, param.getType()));
                 } else {
                     CalculatorSupplier.getInstance()
-                            .setModelParameter(initializationId, param.getKey(), value);
+                            .setModelParameter(initializationId, param.getKey(),
+                                    StringCaster.cast(value, param.getType()));
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println("*********** Parametro non valido ***********");
