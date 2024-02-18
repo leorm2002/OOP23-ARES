@@ -1,18 +1,18 @@
 package it.unibo.ares.core.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
 
 import it.unibo.ares.core.controller.models.Identifier;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 
 final class SimulationsControllerImpl extends SimulationsController {
-    private final Map<String, Simulation> simulations;
+    private final ConcurrentMap<String, Simulation> simulations;
     private final SimulationDataProvider<SimulationOutputData> processor;
 
     SimulationsControllerImpl() {
-        this.simulations = new HashMap<>();
+        this.simulations = new ConcurrentHashMap<>();
         this.processor = new SimulationDataProvider<>();
     }
 

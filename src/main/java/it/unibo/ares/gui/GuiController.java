@@ -5,9 +5,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.controller.models.SimulationOutputData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +32,7 @@ import java.util.LinkedHashSet;
  * It implements the Initializable interface and manages the interaction between
  * the user and the GUI.
  */
-public final class GuiController implements Initializable {
+public final class GuiController extends DataReciever implements Initializable {
 
     /*
      * parameters is an instance of Parameters used to hold the parameters
@@ -46,7 +48,6 @@ public final class GuiController implements Initializable {
      * 
      */
     private String configurationSessionId, simulationId;
-    private RecieverImpl reciever = new RecieverImpl();
     /*
      * variables useful for switching scene
      */
@@ -141,13 +142,13 @@ public final class GuiController implements Initializable {
     /**
      * VBOXAgentPar is a VBox that holds the parameters for the agent.
      */
-    private VBox VboxAgentPar;
+    private VBox vboxAgentPar;
 
     @FXML
     /**
      * VBOXModelPar is a VBox that holds the parameters for the model.
      */
-    private VBox VboxModelPar;
+    private VBox vboxModelPar;
 
     @FXML
     /**
@@ -185,7 +186,7 @@ public final class GuiController implements Initializable {
         /*
          * start simulation
          */
-        simulationId = calculatorSupplier.startSimulation(configurationSessionId, reciever);
+        simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
 
         /*
          * switch scene
@@ -239,21 +240,24 @@ public final class GuiController implements Initializable {
         String modelIDselected = choiceModel.getValue();
         configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
         writer.setModelId(modelIDselected);
-        parameters = calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId).getParameters();
+        parameters = calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
+                .getParameters();
         writer.setAgentOrModel('m');
-        writer.writeVBox(VboxModelPar, parameters,
+        writer.writeVBox(vboxModelPar,
+                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
+                        .getParameters(),
                 calculatorSupplier.getInitializer());
     }
 
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
-        readParameters(VboxModelPar).entrySet().forEach(e -> {
+        readParameters(vboxModelPar).entrySet().forEach(e -> {
             calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(),
                     Integer.parseInt(e.getValue().toString()));
         });
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
-        disableVBox(VboxModelPar);
+        disableVBox(vboxModelPar);
         btnInitialize.setDisable(true);
         btnSetAgent.setDisable(false);
         choiceAgent.setOnAction(this::writeAgentParametersList);
@@ -264,33 +268,35 @@ public final class GuiController implements Initializable {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField textField = (TextField) node;
-                switch (parameters.stream().filter(p -> p.getKey().equals(textField.getId())).findFirst().get().getType().getSimpleName()) {
+                switch (parameters.stream().filter(p -> p.getKey().equals(textField.getId())).findFirst().get()
+                        .getType().getSimpleName()) {
                     case "Integer":
-                        //cast to Integer
+                        // cast to Integer
                         map.put(textField.getId(), Integer.parseInt(textField.getText()));
                         break;
                     case "Double":
-                        //cast to Double
+                        // cast to Double
                         double value = Double.parseDouble(textField.getText().replace(",", "."));
                         map.put(textField.getId(), value);
                         break;
                     case "Boolean":
-                        //cast to Boolean
+                        // cast to Boolean
                         map.put(textField.getId(), Boolean.parseBoolean(textField.getText()));
                         break;
                     case "Float":
-                        //cast to Float
+                        // cast to Float
                         map.put(textField.getId(), Float.parseFloat(textField.getText()));
                         break;
                     case "DirectionVectorImpl":
-                        //cast to Direction Vector
+                        // cast to Direction Vector
                         // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
                         String[] elementi = textField.getText().split("\\s+");
 
                         if (elementi.length < 2) {
                             System.out.println("Inserire almeno due elementi separati da spazio!");
                         }
-                        map.put(textField.getId(), new DirectionVectorImpl(Integer.parseInt(elementi[0]), Integer.parseInt(elementi[1])));
+                        map.put(textField.getId(),
+                                new DirectionVectorImpl(Integer.parseInt(elementi[0]), Integer.parseInt(elementi[1])));
                         break;
                     default:
                         break;
@@ -302,7 +308,7 @@ public final class GuiController implements Initializable {
 
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
-        readParameters(VboxAgentPar).entrySet().forEach(e -> {
+        readParameters(vboxAgentPar).entrySet().forEach(e -> {
             calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId,
                     choiceAgent.getValue(), e.getKey(), e.getValue());
         });
@@ -329,11 +335,15 @@ public final class GuiController implements Initializable {
          * write parameters of the agent and disable the model parameters
          */
         writer.setAgentOrModel('a');
-        parameters = calculatorSupplier.getInitializer().getAgentParametersSimplified(configurationSessionId, 
-                choiceAgent
-                        .getValue())
-                .getParameters();
-        writer.writeVBox(VboxAgentPar, parameters,
-                         calculatorSupplier.getInitializer());
+        writer.writeVBox(vboxAgentPar,
+                calculatorSupplier.getInitializer()
+                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
+                calculatorSupplier.getInitializer());
+    }
+
+    @Override
+    public void onNext(SimulationOutputData item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onNext'");
     }
 }

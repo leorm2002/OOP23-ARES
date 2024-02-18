@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,8 +24,8 @@ import it.unibo.ares.core.utils.state.State;
  */
 public final class SimulationInitializerImpl extends SimulationInitializer {
 
-    private Map<String, Model> intilizingModels;
-    private Map<String, Pair<State, Model>> initializedModels;
+    private ConcurrentMap<String, Model> intilizingModels;
+    private ConcurrentMap<String, Pair<State, Model>> initializedModels;
     private Map<String, Supplier<Model>> modelsSupplier;
 
     /**
@@ -35,8 +37,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         ModelFactory bf = new BoidsModelFactory();
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
-        this.intilizingModels = new HashMap<>();
-        this.initializedModels = new HashMap<>();
+        this.intilizingModels = new ConcurrentHashMap<>();
+        this.initializedModels = new ConcurrentHashMap<>();
     }
 
     private void setAgentParameter(final String initializationId, final String agentType, final String key,

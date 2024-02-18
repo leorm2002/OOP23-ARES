@@ -80,6 +80,8 @@ public abstract class SimulationInitializer {
      *                         parameter to.
      * @param key              The key of the parameter to set.
      * @param value            The value of the parameter to set.
+     * @param agentId          The identifier of the group of agents to set the
+     *                         parameter to.
      */
     public abstract void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value);
 

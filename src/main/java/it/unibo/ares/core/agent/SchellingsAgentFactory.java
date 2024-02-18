@@ -57,6 +57,14 @@ public final class SchellingsAgentFactory implements AgentFactory {
                 .findAny();
     }
 
+    /**
+     * Creates a new agent for the Schelling Segregation Model.
+     * 
+     * @param type         The type of the agent.
+     * @param threshold    The threshold of the agent.
+     * @param visionRadius The vision radius of the agent.
+     * @return The agent.
+     */
     public Agent getSchellingSegregationModelAgent(final Integer type, final Double threshold,
             final Integer visionRadius) {
         AgentBuilder b = new AgentBuilderImpl();

@@ -6,7 +6,7 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 /**
  * Provides a mock agent for testing purposes.
  */
-public class MockAgentProvider {
+public final class MockAgentProvider {
     /**
      * Returns a mock agent that moves the agent in the top-right direction.
      * 
