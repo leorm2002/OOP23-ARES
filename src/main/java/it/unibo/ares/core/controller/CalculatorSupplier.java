@@ -6,6 +6,10 @@ import it.unibo.ares.core.controller.models.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 
+/**
+ * This class is used as an entry point for the simulation system, it is used to
+ * access the initialization and the controller of the simulations.
+ */
 public final class CalculatorSupplier {
     private static volatile CalculatorSupplier instance;
 
@@ -20,10 +24,11 @@ public final class CalculatorSupplier {
      *                         simulation will be passed to.
      * @return The id of the simulation.
      */
-    public String startSimulation(final String initializationId, Subscriber<SimulationOutputData> subscriber) {
+    public String startSimulation(final String initializationId, final Subscriber<SimulationOutputData> subscriber) {
         Pair<String, Model> resp = initializer.startSimulation(initializationId);
         controller.addSimulation(resp.getFirst(),
                 new SimulationImpl(resp.getSecond().initilize(), resp.getSecond()));
+
         controller.subscribe(initializationId, subscriber);
         return initializationId;
     }
@@ -31,7 +36,7 @@ public final class CalculatorSupplier {
     /**
      * Returns the singleton instance of the calculator supplier.
      *
-     * @return
+     * @return the singleton instance of the calculator supplier.
      */
     public static CalculatorSupplier getInstance() {
         CalculatorSupplier curr = instance;

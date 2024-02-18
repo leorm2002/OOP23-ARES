@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
  * It implements the Initializable interface and manages the interaction between
  * the user and the GUI.
  */
-public class GuiController implements Initializable {
+public final class GuiController implements Initializable {
 
     /*
      * parameters is an instance of Parameters used to hold the parameters
@@ -108,7 +108,8 @@ public class GuiController implements Initializable {
         /*
          * restart simulation
          */
-        calculatorSupplier.getController().restartSimulation(simulationId);
+        // calculatorSupplier.getController().restartSimulation(simulationId); TODO
+        // RIMUOVERE
     }
 
     /**
@@ -121,7 +122,8 @@ public class GuiController implements Initializable {
     @FXML
     void btnStoplicked(final ActionEvent event) throws IOException {
         /*
-         * stop simulation and switch scene to scene1, where the user can select a new model
+         * stop simulation and switch scene to scene1, where the user can select a new
+         * model
          */
         root = FXMLLoader.load(getClass().getResource("scene1.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -129,7 +131,6 @@ public class GuiController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
 
     /**
      * modelIDselected is a string that holds the ID of the selected model.
@@ -140,13 +141,13 @@ public class GuiController implements Initializable {
     /**
      * VBOXAgentPar is a VBox that holds the parameters for the agent.
      */
-    private VBox VBOXAgentPar;
+    private VBox VboxAgentPar;
 
     @FXML
     /**
      * VBOXModelPar is a VBox that holds the parameters for the model.
      */
-    private VBox VBOXModelPar;
+    private VBox VboxModelPar;
 
     @FXML
     /**
@@ -185,7 +186,6 @@ public class GuiController implements Initializable {
          * start simulation
          */
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, reciever);
-
 
         /*
          * switch scene
@@ -241,24 +241,25 @@ public class GuiController implements Initializable {
         writer.setModelId(modelIDselected);
         parameters = calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId).getParameters();
         writer.setAgentOrModel('m');
-        writer.writeVBox(VBOXModelPar, parameters,
+        writer.writeVBox(VboxModelPar, parameters,
                 calculatorSupplier.getInitializer());
     }
-    
+
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
-        readParameters(VBOXModelPar).entrySet().forEach(e -> {
-            calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(), Integer.parseInt(e.getValue().toString()));
+        readParameters(VboxModelPar).entrySet().forEach(e -> {
+            calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(),
+                    Integer.parseInt(e.getValue().toString()));
         });
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
-        disableVBox(VBOXModelPar);
+        disableVBox(VboxModelPar);
         btnInitialize.setDisable(true);
         btnSetAgent.setDisable(false);
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
-    private HashMap<String, Object> readParameters(VBox vbox) {
+    private HashMap<String, Object> readParameters(final VBox vbox) {
         HashMap<String, Object> map = new HashMap<>();
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
@@ -301,13 +302,13 @@ public class GuiController implements Initializable {
 
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
-        readParameters(VBOXAgentPar).entrySet().forEach(e -> {
-            calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), e.getKey(),
-                    e.getValue());
+        readParameters(VboxAgentPar).entrySet().forEach(e -> {
+            calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId,
+                    choiceAgent.getValue(), e.getKey(), e.getValue());
         });
     }
 
-    private void disableVBox(VBox vbox) {
+    private void disableVBox(final VBox vbox) {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField textField = (TextField) node;
@@ -332,7 +333,7 @@ public class GuiController implements Initializable {
                 choiceAgent
                         .getValue())
                 .getParameters();
-        writer.writeVBox(VBOXAgentPar, parameters,
+        writer.writeVBox(VboxAgentPar, parameters,
                          calculatorSupplier.getInitializer());
     }
 }

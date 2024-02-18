@@ -1,5 +1,6 @@
 package it.unibo.ares.core.agent;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.BiFunction;
@@ -7,7 +8,6 @@ import java.util.function.BiFunction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
@@ -15,7 +15,7 @@ import it.unibo.ares.core.utils.state.State;
 /**
  * Unit test for {@link AgentBuilderImpl}.
  */
-public final class AgentBuilderImplTest {
+final class AgentBuilderImplTest {
     private AgentBuilderImpl agentBuilder;
 
     /**
@@ -43,9 +43,11 @@ public final class AgentBuilderImplTest {
     @Test
     void testBuild() {
         BiFunction<State, Pos, State> strategy = (state, pos) -> state;
-        agentBuilder.addStrategy(strategy)
-                .addParameter(new ParameterImpl<>("testKey", 10))
-                .addParameter(new ParameterImpl<>("testKey2", "testValue"))
-                .addParameter(new ParameterImpl<>("testKey3", true));
+        assertDoesNotThrow(() -> {
+            agentBuilder.addStrategy(strategy)
+                    .addParameter(new ParameterImpl<>("testKey", 10))
+                    .addParameter(new ParameterImpl<>("testKey2", "testValue"))
+                    .addParameter(new ParameterImpl<>("testKey3", true));
+        });
     }
 }

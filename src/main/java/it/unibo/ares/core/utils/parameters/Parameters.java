@@ -78,6 +78,18 @@ public interface Parameters {
      */
     Set<Parameter<?>> getParametersToset();
 
-    Parameters clone();
+    /**
+     * Checks if all the parameters are set.
+     * 
+     * @return true if all the parameters are set, false otherwise
+     */
+    boolean areAllParametersSetted();
+
+    /**
+     * Clones the parameters.
+     * 
+     * @return a modifiable deep copy of the parameters
+     */
+    Parameters copy();
 
 }

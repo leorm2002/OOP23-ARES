@@ -1,13 +1,10 @@
 package it.unibo.ares.core.model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.BoidsAgentFactory;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -19,6 +16,7 @@ import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
 public class BoidsModelFactory implements ModelFactory {
     private static final String MODEL_ID = "Boids";
 
+    @Override
     public String getModelId() {
         return MODEL_ID;
     }
@@ -45,12 +43,21 @@ public class BoidsModelFactory implements ModelFactory {
                 .limit(total)
                 .forEach(a -> {
                     a.setType("B");
-                    state.addAgent(getter.get(), a);
+                    state.addAgent(getter.next(), a);
                 });
 
         return state;
     }
 
+    @Override
+    /**
+     * Creates a new model.
+     * Should contain all the parameters needed for the model initialization:
+     * - size: the size of the grid
+     * - numeroUccelli: the number of agents
+     * 
+     * @return the model
+     */
     public Model getModel() {
         ModelBuilder builder = new ModelBuilderImpl();
         // We need only one agent supplier since all agents are equal and only differs

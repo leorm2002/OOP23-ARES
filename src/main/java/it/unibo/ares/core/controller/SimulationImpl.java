@@ -1,10 +1,13 @@
 package it.unibo.ares.core.controller;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
+import java.util.HashMap;
+import it.unibo.ares.core.utils.Pair;
 
 /**
  * A simulation is a class that contains the state of the simulation and the
@@ -49,9 +52,14 @@ final class SimulationImpl implements Simulation {
         return this.running;
     }
 
-    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mapStateToSimulationData'");
+    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId) {
+        return new SimulationOutputData(state.getAgents().stream()
+                .collect(Collectors.toMap(
+                        Pair::getFirst,
+                        pair -> pair.getSecond().getType(),
+                        (existingValue, newValue) -> newValue,
+                        HashMap::new)),
+                simulationSessionId);
     }
 
     private void tickSim() {
@@ -59,7 +67,7 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
-    public CompletableFuture<SimulationOutputData> tick(final String simulationId) {
+    public CompletableFuture<SimulationOutputData> tick(final String simulationSessionId) {
         if (!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }
@@ -72,7 +80,7 @@ final class SimulationImpl implements Simulation {
         new Thread(() -> {
             this.calculating = true;
             tickSim();
-            future.complete(mapStateToSimulationData(this.state, simulationId));
+            future.complete(mapStateToSimulationData(this.state, simulationSessionId));
             this.calculating = false;
         }).start();
 

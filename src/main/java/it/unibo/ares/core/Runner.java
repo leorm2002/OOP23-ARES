@@ -8,11 +8,9 @@ import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.state.State;
-import javafx.scene.paint.Paint;
 
-public class runner {
+class Runner {
     private static Random r;
 
     private static void runSchelling() {
@@ -30,14 +28,14 @@ public class runner {
             a.getSecond().setParameter("threshold", 0.9);
         });
         System.out.println("Initial state");
-        state.debugPrint();
+        state.printState();
         int i = 1;
         State newState = schelling.tick(state);
         System.out.println("");
         System.out.println("After tick" + i++);
         System.out.println("");
 
-        state.debugPrint();
+        state.printState();
 
         while (schelling.isOver(state, newState)) {
             state = newState;
@@ -45,7 +43,7 @@ public class runner {
             System.out.println("");
             System.out.println("After tick" + i++);
             System.out.println("");
-            newState.debugPrint();
+            newState.printState();
         }
 
         System.out.println("Simulation ended");
@@ -78,14 +76,14 @@ public class runner {
         });
 
         System.out.println("Initial state");
-        state.debugPrint();
+        state.printState();
         int i = 1;
         State newState = boids.tick(state);
         System.out.println("");
         System.out.println("After tick" + i++);
         System.out.println("");
 
-        state.debugPrint();
+        state.printState();
 
         while (!boids.isOver(state, newState)) {
             state = newState;
@@ -93,7 +91,7 @@ public class runner {
             System.out.println("");
             System.out.println("After tick" + i++);
             System.out.println("");
-            newState.debugPrint();
+            newState.printState();
             Thread.sleep(100);
         }
 
@@ -101,7 +99,11 @@ public class runner {
 
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(final String[] args) throws InterruptedException {
         runBoids();
+    }
+
+    private Runner() {
+        throw new IllegalStateException("Utility class");
     }
 }

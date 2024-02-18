@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
@@ -26,6 +26,9 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     private Map<String, Pair<State, Model>> initializedModels;
     private Map<String, Supplier<Model>> modelsSupplier;
 
+    /**
+     * Creates a new instance of the simulation initializer.
+     */
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
         ModelFactory sf = new SchellingModelFactories();
@@ -34,6 +37,15 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         this.intilizingModels = new HashMap<>();
         this.initializedModels = new HashMap<>();
+    }
+
+    private void setAgentParameter(final String initializationId, final String agentType, final String key,
+            final Object value, final Predicate<Agent> predicate) {
+        this.initializedModels.get(
+                initializationId).getFirst().getAgents().stream()
+                .map(Pair::getSecond)
+                .filter(predicate::test)
+                .forEach(ag -> ag.setParameter(key, value));
     }
 
     /**
@@ -68,8 +80,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      * @return a set containing all the parameters of the model.
      */
     @Override
-    public Parameters getModelParametersParameters(final String initialization_id) {
-        return this.intilizingModels.get(initialization_id).getParameters().clone();
+    public Parameters getModelParametersParameters(final String initializationId) {
+        return this.intilizingModels.get(initializationId).getParameters().copy();
     }
 
     /**
@@ -79,8 +91,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      * @param value The value of the parameter to set.
      */
     @Override
-    public void setModelParameter(final String configurationId, final String key, final Object value) {
-        this.intilizingModels.get(configurationId).getParameters().setParameter(key, value);
+    public void setModelParameter(final String initializationId, final String key, final Object value) {
+        this.intilizingModels.get(initializationId).getParameters().setParameter(key, value);
     }
 
     /**
@@ -94,12 +106,15 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      *         identifier of the group agent.
      */
     @Override
-    public Set<String> getAgentsSimplified(String initializationa_sess_id) {
+    public Set<String> getAgentsSimplified(final String initializationId) {
         // TODO RICALCOLO SE CAMBIA MODEL
-        this.initializedModels.computeIfAbsent(initializationa_sess_id,
-                id -> new Pair<>(intilizingModels.get(initializationa_sess_id).initilize(),
-                        intilizingModels.get(initializationa_sess_id)));
-        return this.initializedModels.get(initializationa_sess_id)
+        this.initializedModels.computeIfAbsent(
+                initializationId,
+                id -> new Pair<>(intilizingModels.get(
+                        initializationId).initilize(),
+                        intilizingModels.get(initializationId)));
+        return this.initializedModels.get(
+                initializationId)
                 .getFirst()
                 .getAgents()
                 .stream()
@@ -109,7 +124,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     /**
-     * Sets a parameter of all the agent with the given type
+     * Sets a parameter of all the agent with the given type.
      * 
      * @param agentType The identifier of the group of agents to set the parameter
      *                  to.
@@ -117,18 +132,15 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      * @param value     The value of the parameter to set.
      */
     @Override
-    public void setAgentParameterSimplified(final String initialization_session_id, final String agentType,
+    public void setAgentParameterSimplified(final String initializationId, final String agentType,
             final String key,
             final Object value) {
-        this.initializedModels.get(initialization_session_id).getFirst().getAgents().stream()
-                .map(Pair::getSecond)
-                .filter(ag -> ag.getType().equals(agentType))
-                .forEach(ag -> ag.setParameter(key, value));
+        setAgentParameter(initializationId, agentType, key, value, ag -> ag.getType().equals(agentType));
     }
 
     @Override
-    public Parameters getAgentParametersSimplified(final String initialization_session_id, final String agentId) {
-        return this.initializedModels.get(initialization_session_id).getFirst().getAgents().stream()
+    public Parameters getAgentParametersSimplified(final String initializationId, final String agentId) {
+        return this.initializedModels.get(initializationId).getFirst().getAgents().stream()
                 .map(Pair::getSecond)
                 .filter(ag -> ag.getType().equals(agentId))
                 .map(Agent::getParameters)
@@ -137,7 +149,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     @Override
-    public Pair<String, Model> startSimulation(final String initializationId) {
+    Pair<String, Model> startSimulation(final String initializationId) {
         if (!this.initializedModels.containsKey(initializationId)) {
             throw new IllegalArgumentException("The model has not been initialized");
         }

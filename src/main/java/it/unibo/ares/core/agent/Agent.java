@@ -35,9 +35,24 @@ public interface Agent {
      */
     <T> void setParameter(String key, T value);
 
+    /**
+     * Retrieves the id of the agent.
+     *
+     * @return the id of the agent
+     */
     String getId();
 
+    /**
+     * Sets the type of the agent.
+     *
+     * @return the type of the agent
+     */
     String getType();
 
+    /**
+     * Sets the type of the agent.
+     *
+     * @param type the type of the agent
+     */
     void setType(String type);
 }

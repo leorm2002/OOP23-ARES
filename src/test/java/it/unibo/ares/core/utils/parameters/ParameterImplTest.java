@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
-
 /**
  * Test class for {@link ParameterImpl}.
  */

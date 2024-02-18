@@ -30,7 +30,7 @@ public final class StateImpl implements State {
      * @param height the height of the state
      */
     public StateImpl(final Integer width, final Integer height) {
-        this.size = new Pair<Integer, Integer>(width, height);
+        this.size = new Pair<>(width, height);
     }
 
     private Boolean isValidPosition(final Pos pos) {
@@ -167,7 +167,7 @@ public final class StateImpl implements State {
     }
 
     @Override
-    public void debugPrint() {
+    public void printState() {
         var out = IntStream.range(0, size.getFirst())
                 .boxed()
                 .map(x -> IntStream.range(0, size.getSecond())
@@ -212,7 +212,7 @@ public final class StateImpl implements State {
     }
 
     @Override
-    public boolean isFree(Pos pos) {
+    public boolean isFree(final Pos pos) {
         return entityBoard.getEntity(pos).isEmpty() && agentBoard.getEntity(pos).isEmpty();
     }
 }
