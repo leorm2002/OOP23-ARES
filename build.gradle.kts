@@ -38,7 +38,7 @@ dependencies {
     // implementation("com.google.guava:guava:28.1-jre")
 
     // JavaFX: comment out if you do not need them
-    val javaFxVersion = 15
+    val javaFxVersion = 21
     for (platform in supportedPlatforms) {
         for (module in javaFXModules) {
             implementation("org.openjfx:javafx-$module:$javaFxVersion:$platform")
@@ -58,5 +58,5 @@ tasks.withType<Test> {
 
 application {
     // Define the main class for the application
-    mainClass.set("it.unibo.ares.gui.App")
+    mainClass.set("it.unibo.ares.ApplicationRunner")
 }
