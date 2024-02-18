@@ -33,9 +33,9 @@ public class SimController extends DataReciever {
             for (int x = 0; x <= data.getWidth(); x++) {
                 Pos pos = new PosImpl(x, y);
                 if (data.getData().containsKey(pos)) {
-                    System.out.print(data.getData().get(pos));
+                    System.out.print(data.getData().get(pos) + " ");
                 } else {
-                    System.out.print(" ");
+                    System.out.print("  ");
                 }
             }
             System.out.println();

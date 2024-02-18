@@ -164,4 +164,12 @@ public interface State {
      * @return true if the position is free, false otherwise.
      */
     boolean isFree(Pos pos);
+
+    /**
+     * Check if a position is inside the state.
+     * 
+     * @param pos the position to check.
+     * @return true if the position is inside the state, false otherwise.
+     */
+    boolean isInside(Pos pos);
 }

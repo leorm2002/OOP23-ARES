@@ -215,4 +215,9 @@ public final class StateImpl implements State {
     public boolean isFree(final Pos pos) {
         return entityBoard.getEntity(pos).isEmpty() && agentBoard.getEntity(pos).isEmpty();
     }
+
+    @Override
+    public boolean isInside(Pos pos) {
+        return isValidPosition(pos);
+    }
 }

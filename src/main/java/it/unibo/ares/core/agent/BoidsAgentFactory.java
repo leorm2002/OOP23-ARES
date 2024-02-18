@@ -1,8 +1,10 @@
 package it.unibo.ares.core.agent;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
@@ -124,6 +126,21 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return new PosImpl(limit(pos.getX(), size.getFirst()), limit(pos.getY(), size.getSecond()));
         }
 
+        private Pos getPosNear(final Pos pos, final State state, final int distance) {
+                Optional<Pos> newPos = IntStream.rangeClosed(-distance, distance).boxed()
+                                .flatMap(y -> IntStream.rangeClosed(-distance, distance)
+                                                .mapToObj(x -> new PosImpl(x, y)))
+                                .filter(state::isInside)
+                                .filter(state::isFree)
+                                .findAny()
+                                .map(Pos.class::cast);
+                if (newPos.isEmpty()) {
+                        return getPosNear(pos, state, distance + 1);
+                }
+
+                return newPos.get();
+        }
+
         private State tickFunction(final State currentState, final Pos agentPosition) {
                 Random r = new Random();
                 if (!currentState.getAgentAt(agentPosition).isPresent()) {
@@ -159,8 +176,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 currentState.getDimensions());
 
                 if (!currentState.isFree(newPos)) {
-                        newPos = limit(new PosImpl(r.nextInt(3) - 1 + newPos.getX(), r.nextInt(3) - 1 + newPos.getX()),
-                                        currentState.getDimensions());
+                        newPos = getPosNear(newPos, currentState, 1);
                 }
                 if (currentState.isFree(newPos)) {
                         currentState.moveAgent(agentPosition, newPos);
