@@ -22,6 +22,10 @@ class ModelBuilderImpl implements ModelBuilder {
     private BiPredicate<State, State> exitfFunction;
     private Function<Parameters, State> initFunction;
 
+    ModelBuilderImpl() {
+        reset();
+    }
+
     @Override
     public void reset() {
         this.parameters = new ParametersImpl();

@@ -6,7 +6,7 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 /**
  * Provides a mock agent for testing purposes.
  */
-public final class MockAgentProvider {
+public final class SimpleAgentProvider {
     /**
      * Returns a mock agent that moves the agent in the top-right direction.
      * 
@@ -20,10 +20,12 @@ public final class MockAgentProvider {
             state.moveAgent(pos, newPos);
             return state;
         });
-        return builder.build();
+        Agent agent = builder.build();
+        agent.setType("A");
+        return agent;
     }
 
-    private MockAgentProvider() {
+    private SimpleAgentProvider() {
         throw new IllegalStateException("Utility class");
     }
 }

@@ -198,7 +198,7 @@ public final class GuiController extends DataReciever implements Initializable {
          * write models
          */
         if (arg0.toString().contains("scene1.fxml")) {
-            writer.writeChoiceBox(choiceModel, calculatorSupplier.getInitializer().getModels());
+            writer.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
             btnSetAgent.setDisable(true);
             btnStart.setDisable(true);
             choiceModel.setOnAction(this::writeModelParametersList);
@@ -220,7 +220,7 @@ public final class GuiController extends DataReciever implements Initializable {
          * write parameters of the model
          */
         String modelIDselected = choiceModel.getValue();
-        configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
+        configurationSessionId = calculatorSupplier.setModel(modelIDselected);
         writer.writeVBox(vboxModelPar,
                 calculatorSupplier.getModelParametersParameters(configurationSessionId)
                         .getParameters());
@@ -229,7 +229,7 @@ public final class GuiController extends DataReciever implements Initializable {
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
         readParameters(vboxModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId))
+                calculatorSupplier.getModelParametersParameters(configurationSessionId))
                 .entrySet().forEach(e -> {
                     calculatorSupplier.setModelParameter(configurationSessionId,
                             e.getKey(),
