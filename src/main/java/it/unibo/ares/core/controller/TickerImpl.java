@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * It uses a ScheduledExecutorService to schedule the task.
  */
 public class TickerImpl implements Ticker {
+    private static final long AWAIT_TERMINATION_TIME = 60L;
     private final ScheduledExecutorService scheduler;
     private final long initialDelay;
     private final long period;
@@ -47,7 +48,7 @@ public class TickerImpl implements Ticker {
     public void stop() {
         scheduler.shutdown();
         try {
-            if (!scheduler.awaitTermination(60, TimeUnit.SECONDS)) {
+            if (!scheduler.awaitTermination(AWAIT_TERMINATION_TIME, TimeUnit.SECONDS)) {
                 scheduler.shutdownNow();
             }
         } catch (InterruptedException ie) {
