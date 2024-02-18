@@ -15,7 +15,7 @@ public abstract class SimulationsController {
      * @param id         The identifier of the simulation.
      * @param simulation The simulation to add.
      */
-    protected abstract void addSimulation(String id, Simulation simulation);
+    abstract void addSimulation(String id, Simulation simulation);
 
     /**
      * remove the simulation from the current session.
@@ -41,7 +41,7 @@ public abstract class SimulationsController {
     /**
      * tick each simulation.
      */
-    protected abstract void makeModelsTick();
+    abstract void makeModelsTick();
 
     abstract void subscribe(String id, Subscriber<SimulationOutputData> subscriber);
 

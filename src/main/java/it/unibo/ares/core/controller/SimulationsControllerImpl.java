@@ -17,7 +17,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    protected void addSimulation(final String id, final Simulation simulation) {
+    void addSimulation(final String id, final Simulation simulation) {
         simulations.put(id, simulation);
     }
 
@@ -32,7 +32,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    protected void makeModelsTick() {
+    void makeModelsTick() {
         simulations.entrySet().stream()
                 .filter(e -> e.getValue().isRunning())
                 .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of
