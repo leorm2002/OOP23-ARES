@@ -25,7 +25,7 @@ class TestSchelling {
         // CHECKSTYLE: MagicNumber ON
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
         Pos pos = new PosImpl(1, 1);
-        Agent type1Agent = factory.getSchellingSegregationModelAgent(1, 0.5, 1);
+        Agent type1Agent = factory.getSchellingSegregationModelAgent("1", 0.5, 1);
         state.addAgent(pos, type1Agent);
 
         // The agent should not move
@@ -47,11 +47,11 @@ class TestSchelling {
 
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
         Pos pos = new PosImpl(1, 1);
-        Agent type1Agent = factory.getSchellingSegregationModelAgent(1, 0.5, 1);
+        Agent type1Agent = factory.getSchellingSegregationModelAgent("1", 0.5, 1);
         state.addAgent(pos, type1Agent);
         // Let's create a Schelling agent with type 2, threshold 0.5 and vision radius 1
         Pos pos2 = new PosImpl(1, 0);
-        Agent type2Agent = factory.getSchellingSegregationModelAgent(2, 0.5, 1);
+        Agent type2Agent = factory.getSchellingSegregationModelAgent("2", 0.5, 1);
         state.addAgent(pos2, type2Agent);
 
         // The agent should move
@@ -72,15 +72,15 @@ class TestSchelling {
         // CHECKSTYLE: MagicNumber ON
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
         Pos pos = new PosImpl(1, 1);
-        Agent type1Agent = factory.getSchellingSegregationModelAgent(1, 0.5, 1);
+        Agent type1Agent = factory.getSchellingSegregationModelAgent("1", 0.5, 1);
         state.addAgent(pos, type1Agent);
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
         Pos pos2 = new PosImpl(0, 1);
-        Agent type1AgentB = factory.getSchellingSegregationModelAgent(1, 0.5, 1);
+        Agent type1AgentB = factory.getSchellingSegregationModelAgent("1", 0.5, 1);
         state.addAgent(pos2, type1AgentB);
         // Let's create a Schelling agent with type 2, threshold 0.5 and vision radius 1
         Pos pos3 = new PosImpl(1, 0);
-        Agent type2Agent = factory.getSchellingSegregationModelAgent(2, 0.5, 1);
+        Agent type2Agent = factory.getSchellingSegregationModelAgent("2", 0.5, 1);
         state.addAgent(pos3, type2Agent);
         // The agent should not move
         type1Agent.tick(state, pos);
