@@ -20,7 +20,7 @@ public class CliInitializer {
     private String selectModel() {
         Optional<String> selected = Optional.empty();
         System.out.println("Scegli un modello:");
-        var models = CalculatorSupplier.getInstance().getInitializer().getModels().stream()
+        var models = CalculatorSupplier.getInstance().getModels().stream()
                 .collect(Collectors.toList());
         List<Pair<Integer, String>> indexedModels = IntStream.range(0, models.size())
                 .mapToObj(i -> new Pair<>(i, models.get(i)))
@@ -54,11 +54,11 @@ public class CliInitializer {
             String value = System.console().readLine();
             try {
                 if (agentId.isPresent()) {
-                    CalculatorSupplier.getInstance().getInitializer()
+                    CalculatorSupplier.getInstance()
                             .setAgentParameterSimplified(initializationId, agentId.get(), param.getKey(),
                                     value);
                 } else {
-                    CalculatorSupplier.getInstance().getInitializer()
+                    CalculatorSupplier.getInstance()
                             .setModelParameter(initializationId, param.getKey(), value);
                 }
             } catch (IllegalArgumentException e) {
@@ -76,7 +76,7 @@ public class CliInitializer {
         Parameters params;
         do {
 
-            params = CalculatorSupplier.getInstance().getInitializer()
+            params = CalculatorSupplier.getInstance()
                     .getModelParametersParameters(initializationId);
             parametrizzatoreGenerico(params, Optional.empty());
         } while (!params.areAllParametersSetted());
@@ -86,7 +86,7 @@ public class CliInitializer {
         System.out.println("Parametrizzazione agente " + agent);
         Parameters params;
         do {
-            params = CalculatorSupplier.getInstance().getInitializer().getAgentParametersSimplified(initializationId,
+            params = CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId,
                     agent);
             parametrizzatoreGenerico(params, Optional.of(agent));
         } while (!params.areAllParametersSetted());
@@ -103,7 +103,7 @@ public class CliInitializer {
 
     private boolean areAgentiParametrizzati(Set<String> agents) {
         for (String agent : agents) {
-            if (!CalculatorSupplier.getInstance().getInitializer().getAgentParametersSimplified(initializationId, agent)
+            if (!CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId, agent)
                     .areAllParametersSetted()) {
                 return false;
             }
@@ -114,9 +114,9 @@ public class CliInitializer {
     public String startParametrization() {
         System.out.println("Inizio parametrizzazione");
         String model = selectModel();
-        this.initializationId = CalculatorSupplier.getInstance().getInitializer().setModel(model);
+        this.initializationId = CalculatorSupplier.getInstance().setModel(model);
         parametrizzaModello();
-        Set<String> agents = CalculatorSupplier.getInstance().getInitializer().getAgentsSimplified(initializationId);
+        Set<String> agents = CalculatorSupplier.getInstance().getAgentsSimplified(initializationId);
 
         parametrizzaAgenti(agents);
 

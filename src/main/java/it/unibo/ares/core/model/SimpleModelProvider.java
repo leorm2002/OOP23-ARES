@@ -1,6 +1,6 @@
 package it.unibo.ares.core.model;
 
-import it.unibo.ares.core.agent.MockAgentProvider;
+import it.unibo.ares.core.agent.SimpleAgentProvider;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
@@ -9,7 +9,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * Provides a mock model for testing purposes.
  * 
  */
-public final class MockModelProvider {
+public final class SimpleModelProvider {
     /**
      * Returns a mock model.
      * 
@@ -21,14 +21,14 @@ public final class MockModelProvider {
         builder.addExitFunction((state, state2) -> false);
         builder.addInitFunction(params -> {
             State state = new StateImpl(10, 10);
-            state.addAgent(new PosImpl(0, 0), MockAgentProvider.getMockAgent());
+            state.addAgent(new PosImpl(0, 0), SimpleAgentProvider.getMockAgent());
             return state;
         });
 
         return builder.build();
     }
 
-    private MockModelProvider() {
+    private SimpleModelProvider() {
         throw new IllegalStateException("Utility class");
     }
 }

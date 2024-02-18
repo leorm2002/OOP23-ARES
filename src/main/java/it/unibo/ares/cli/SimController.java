@@ -2,11 +2,13 @@ package it.unibo.ares.cli;
 
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputData;
+import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
 public class SimController extends DataReciever {
     private final String inizializationId;
+    private String simulationId;
 
     public SimController(String inizializationId) {
         this.inizializationId = inizializationId;
@@ -14,12 +16,15 @@ public class SimController extends DataReciever {
 
     public void startSimulation() {
         System.out.println("Inizio simulazione");
+        this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
+        while (true) {
+            ;
+        }
     }
 
     @Override
     public void onNext(SimulationOutputData item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onNext'");
+        printData(item);
     }
 
     private void printData(SimulationOutputData data) {

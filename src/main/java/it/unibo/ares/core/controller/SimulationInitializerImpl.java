@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
+import it.unibo.ares.core.model.SimpleModelProvider;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.Model;
@@ -35,6 +35,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         this.modelsSupplier = new HashMap<>();
         ModelFactory sf = new SchellingModelFactories();
         ModelFactory bf = new BoidsModelFactory();
+        modelsSupplier.put("SimpleModel", SimpleModelProvider::getMockModel);
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         this.intilizingModels = new ConcurrentHashMap<>();

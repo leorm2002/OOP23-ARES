@@ -63,20 +63,6 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
         }
     }
 
-    /**
-     * @return the controller
-     */
-    public SimulationControlApi getController() {
-        return controller;
-    }
-
-    /**
-     * @return the initializer
-     */
-    public InitializationApi getInitializer() {
-        return initializer;
-    }
-
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
