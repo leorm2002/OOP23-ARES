@@ -4,8 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
 
-import it.unibo.ares.core.controller.models.Identifier;
-import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.api.SimulationOutputData;
 
 final class SimulationsControllerImpl extends SimulationsController {
     private final ConcurrentMap<String, Simulation> simulations;

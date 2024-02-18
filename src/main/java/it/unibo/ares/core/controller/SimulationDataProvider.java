@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.Flow.Subscriber;
 
-import it.unibo.ares.core.controller.models.Identifier;
-
 final class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
     private Map<String, Subscriber<T>> subscribers = new HashMap<>();
 

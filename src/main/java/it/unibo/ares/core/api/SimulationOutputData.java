@@ -1,4 +1,4 @@
-package it.unibo.ares.core.controller.models;
+package it.unibo.ares.core.api;
 
 import it.unibo.ares.core.utils.pos.Pos;
 

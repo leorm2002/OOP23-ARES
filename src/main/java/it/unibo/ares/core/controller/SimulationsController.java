@@ -3,7 +3,7 @@ package it.unibo.ares.core.controller;
 import java.util.concurrent.Flow.Subscriber;
 
 import it.unibo.ares.core.api.SimulationControlApi;
-import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.api.SimulationOutputData;
 
 /**
  * A controller for all the simulations.

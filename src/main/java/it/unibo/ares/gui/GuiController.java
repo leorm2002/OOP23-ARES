@@ -6,11 +6,11 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import it.unibo.ares.core.api.DataReciever;
+import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
-import it.unibo.ares.core.controller.models.SimulationOutputData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

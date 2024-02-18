@@ -6,7 +6,7 @@ import java.util.concurrent.Flow.Subscriber;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.api.InitializationApi;
 import it.unibo.ares.core.api.SimulationControlApi;
-import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;

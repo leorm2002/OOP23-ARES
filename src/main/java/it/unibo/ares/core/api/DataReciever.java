@@ -3,8 +3,6 @@ package it.unibo.ares.core.api;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-import it.unibo.ares.core.controller.models.SimulationOutputData;
-
 /**
  * This class is a simple implementation of the Subscriber interface, it is used
  * to receive data from a Publisher.
