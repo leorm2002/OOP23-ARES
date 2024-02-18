@@ -33,7 +33,8 @@ import java.util.HashMap;
 public final class GuiController extends DataReciever implements Initializable {
 
     /**
-     * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the GUI.
+     * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
+     * GUI.
      */
     private GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
     /*
@@ -203,7 +204,7 @@ public final class GuiController extends DataReciever implements Initializable {
                                 e.getKey(),
                                 e.getValue());
                     });
-                    guiWriter.writeChoiceBox(choiceAgent,
+            guiWriter.writeChoiceBox(choiceAgent,
                     calculatorSupplier.getAgentsSimplified(configurationSessionId));
             guiWriter.disableVBox(vboxModelPar);
             btnInitialize.setDisable(true);
@@ -270,22 +271,24 @@ public final class GuiController extends DataReciever implements Initializable {
                         }
                         break;
                     case "DirectionVectorImpl":
-                    /*
-                        // cast to Direction Vector
-                        // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
-                        String[] elementi = txt.getText().split("\\s+");
-
-                        if (elementi.length < 2) {
-                            System.out.println("Inserire almeno due elementi separati da spazio!");
-                        }
-                        DirectionVectorImpl vector = new DirectionVectorImpl(Integer.parseInt(elementi[0]),
-                                Integer.parseInt(elementi[1]));
-                        if (!inDomainRange(params, txt.getId(), vector)) {
-                            showErrorAndDisable(vector + " out of domain range", btnStart);
-                            break;
-                        }
-                        map.put(txt.getId(), vector);
-                        break;*/
+                        /*
+                         * // cast to Direction Vector
+                         * // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
+                         * String[] elementi = txt.getText().split("\\s+");
+                         * 
+                         * if (elementi.length < 2) {
+                         * System.out.println("Inserire almeno due elementi separati da spazio!");
+                         * }
+                         * DirectionVectorImpl vector = new
+                         * DirectionVectorImpl(Integer.parseInt(elementi[0]),
+                         * Integer.parseInt(elementi[1]));
+                         * if (!inDomainRange(params, txt.getId(), vector)) {
+                         * showErrorAndDisable(vector + " out of domain range", btnStart);
+                         * break;
+                         * }
+                         * map.put(txt.getId(), vector);
+                         * break;
+                         */
                     default:
                         break;
                 }
