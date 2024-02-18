@@ -1,11 +1,15 @@
 package it.unibo.ares.core.controller;
 
+import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.api.InitializationApi;
+import it.unibo.ares.core.api.SimulationControlApi;
+import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.parameters.Parameters;
 
 /**
  * This class is used as an entry point for the simulation system, it is used to
@@ -15,7 +19,7 @@ import it.unibo.ares.core.utils.Pair;
         "EI_EXPOSE_REP"
 }, justification = "C'è i due campi sono final e non modificabili, espongono i metodi richiesti per gestire le simulazioni.")
 
-public final class CalculatorSupplier {
+public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 
     private final SimulationsController controller;
@@ -61,19 +65,79 @@ public final class CalculatorSupplier {
     /**
      * @return the controller
      */
-    public SimulationsController getController() {
+    public SimulationControlApi getController() {
         return controller;
     }
 
     /**
      * @return the initializer
      */
-    public SimulationInitializer getInitializer() {
+    public InitializationApi getInitializer() {
         return initializer;
     }
 
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
+    }
+
+    @Override
+    public void removeSimulation(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeSimulation'");
+    }
+
+    @Override
+    public void pauseSimulation(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pauseSimulation'");
+    }
+
+    @Override
+    public void startSimulation(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'startSimulation'");
+    }
+
+    @Override
+    public Set<String> getModels() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getModels'");
+    }
+
+    @Override
+    public String setModel(String modelId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setModel'");
+    }
+
+    @Override
+    public Parameters getModelParametersParameters(String initializationId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getModelParametersParameters'");
+    }
+
+    @Override
+    public void setModelParameter(String initializationId, String key, Object value) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setModelParameter'");
+    }
+
+    @Override
+    public Set<String> getAgentsSimplified(String initializationId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAgentsSimplified'");
+    }
+
+    @Override
+    public Parameters getAgentParametersSimplified(String initializationId, String agentId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAgentParametersSimplified'");
+    }
+
+    @Override
+    public void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setAgentParameterSimplified'");
     }
 }

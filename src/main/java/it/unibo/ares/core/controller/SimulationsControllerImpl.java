@@ -4,8 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
 
-import it.unibo.ares.core.controller.models.Identifier;
-import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.api.SimulationOutputData;
 
 final class SimulationsControllerImpl extends SimulationsController {
     private final ConcurrentMap<String, Simulation> simulations;
@@ -17,7 +16,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public void addSimulation(final String id, final Simulation simulation) {
+    void addSimulation(final String id, final Simulation simulation) {
         simulations.put(id, simulation);
     }
 
@@ -32,7 +31,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public void makeModelsTick() {
+    void makeModelsTick() {
         simulations.entrySet().stream()
                 .filter(e -> e.getValue().isRunning())
                 .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of
@@ -48,9 +47,11 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public void pauseSimulation(final String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pauseSimulation'");
+    public void pauseSimulation(String id) {
+        if (simulations.get(id).isRunning()) {
+            simulations.get(id).pause();
+        }
+        throw new IllegalStateException("The simulation is not running");
     }
 
 }

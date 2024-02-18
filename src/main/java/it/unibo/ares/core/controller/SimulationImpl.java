@@ -3,7 +3,7 @@ package it.unibo.ares.core.controller;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import it.unibo.ares.core.controller.models.SimulationOutputData;
+import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
 import java.util.HashMap;
@@ -45,6 +45,11 @@ final class SimulationImpl implements Simulation {
     @Override
     public void start() {
         this.running = true;
+    }
+
+    @Override
+    public void pause() {
+        this.running = false;
     }
 
     @Override

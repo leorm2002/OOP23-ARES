@@ -1,4 +1,4 @@
-package it.unibo.ares.core.controller.models;
+package it.unibo.ares.core.controller;
 
 /**
  * A simple class used to identify a data with a string.
