@@ -18,14 +18,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 
 /**
  * GuiController is a class that controls the GUI of the application.
@@ -236,7 +234,7 @@ public final class GuiController extends DataReciever implements Initializable {
                         .getParameters())
         .entrySet().forEach(e -> {
             calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(),
-                    Integer.parseInt(e.getValue().toString()));
+                    e.getValue());
         });
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
