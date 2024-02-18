@@ -8,57 +8,59 @@ import java.util.stream.Stream;
 
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
-import it.unibo.ares.core.utils.UniquePositionGetter;
+import it.unibo.ares.core.agent.FireSpreadAgentFactory;
+import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+import it.unibo.ares.core.utils.UniquePositionGetter;
 
 /**
- * Generate an instance of a schelling segregation model. It permits the
+ * Generate an instance of a fire spread model. It permits the
  * paramtrization of:
- * the number of agents (two types)
+ * the number of agents (two types: Fire and Tree)
  */
-public final class SchellingModelFactories implements ModelFactory {
-        private static final String MODEL_ID = "Schelling";
+public class FireSpreadModelFactory implements ModelFactory {
+        private static final String MODEL_ID = "FireSpread";
 
-        @Override
         public String getModelId() {
                 return MODEL_ID;
         }
 
-        private static String getAgentType(final int na, final int index) {
-                return index < na ? "A" : "B";
+        private static String getAgentType(final int nf, final int index) {
+                return index < nf ? "F" : "T";
         }
 
-        private static State schellingInitializer(final Parameters parameters) throws IllegalAccessException {
-                int size = parameters.getParameter("size", Integer.class)
+        private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
+                Integer size = parameters.getParameter("size", Integer.class)
                                 .orElseThrow(IllegalAccessException::new).getValue();
-                int na = parameters.getParameter("numeroAgentiTipoA", Integer.class)
+                Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class)
                                 .orElseThrow(IllegalAccessException::new).getValue();
-                int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class)
+                Integer nt = parameters.getParameter("numeroAgentiTipoT", Integer.class)
                                 .orElseThrow(IllegalAccessException::new).getValue();
-                int total = na + nb;
+                Integer total = nf + nt;
+
                 State state = new StateImpl(size, size);
                 if (size * size < total) {
                         throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
                 }
+
                 List<Pos> validPositions = IntStream.range(0, size).boxed()
                                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                                 .map(Pos.class::cast)
                                 .toList();
 
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-                AgentFactory schellingFactory = new SchellingsAgentFactory();
+                AgentFactory fireSpreadFactory = new FireSpreadAgentFactory();
                 List<Agent> agents = Stream
-                                .generate(schellingFactory::createAgent)
+                                .generate(fireSpreadFactory::createAgent)
                                 .limit(total)
                                 .collect(Collectors.toList());
                 IntStream.range(0, total)
-                                .forEach(i -> agents.get(i).setType(getAgentType(na, i)));
+                                .forEach(i -> agents.get(i).setType(getAgentType(nf, i)));
                 IntStream.range(0, total)
                                 .forEach(i -> state.addAgent(getter.next(), agents.get(i)));
 
@@ -67,13 +69,14 @@ public final class SchellingModelFactories implements ModelFactory {
 
         /**
          * Returna a schelling model, before calling initialize you should set:
-         * numeroAgentiTipoA (integer)
-         * numeroAgentiTipoB (integer)
-         * size (integer).
+         * numeroAgentiTipoF (integer)
+         * numeroAgentiTipoT (integer)
+         * size (integer)
+         * direction (2d vector)
+         * fuel consumption (double)
          * 
-         * @return a scheeling model
+         * @return
          */
-        @Override
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 // We need only one agent supplier since all agents are equal and only differs
@@ -82,11 +85,13 @@ public final class SchellingModelFactories implements ModelFactory {
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class))
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoB", Integer.class))
                                 .addParameter(new ParameterImpl<>("size", Integer.class))
+                                .addParameter(new ParameterImpl<>("direction", DirectionVectorImpl.class))
+                                .addParameter(new ParameterImpl<>("consumption", Double.class))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                                 .addInitFunction(t -> {
                                         try {
-                                                return schellingInitializer(t);
+                                                return fireSpreadInitializer(t);
                                         } catch (IllegalAccessException e) {
                                                 throw new IllegalArgumentException(
                                                                 "Missing parameters for the model initialization");

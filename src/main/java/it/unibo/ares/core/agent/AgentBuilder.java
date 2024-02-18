@@ -3,7 +3,6 @@ package it.unibo.ares.core.agent;
 import java.util.function.BiFunction;
 
 import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
