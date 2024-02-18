@@ -9,6 +9,7 @@ import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -93,7 +94,7 @@ public final class GuiController extends DataReciever implements Initializable {
         /*
          * restart simulation
          */
-        //calculatorSupplier.getController().restartSimulation(simulationId);
+        // calculatorSupplier.getController().restartSimulation(simulationId);
     }
 
     /**
@@ -219,7 +220,7 @@ public final class GuiController extends DataReciever implements Initializable {
          */
         String modelIDselected = choiceModel.getValue();
         configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
-        writer.writeVBox(vboxModelPar, 
+        writer.writeVBox(vboxModelPar,
                 calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
                         .getParameters(),
                 calculatorSupplier.getInitializer());
@@ -228,12 +229,13 @@ public final class GuiController extends DataReciever implements Initializable {
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
         readParameters(vboxModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
-                        .getParameters())
-        .entrySet().forEach(e -> {
-            calculatorSupplier.getInitializer().setModelParameter(configurationSessionId, e.getKey(),
-                    e.getValue());
-        });
+                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId))
+                .entrySet().forEach(e -> {
+                    calculatorSupplier.getInitializer().setModelParameter(configurationSessionId,
+                            e.getKey(),
+                            e.getValue());
+                });
+
         writer.writeChoiceBox(choiceAgent,
                 calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
         disableVBox(vboxModelPar);
@@ -242,26 +244,28 @@ public final class GuiController extends DataReciever implements Initializable {
         choiceAgent.setOnAction(this::writeAgentParametersList);
     }
 
-    private HashMap<String, Object> readParameters(final VBox vbox, Set<Parameter<?>> parameters) {
+    private HashMap<String, Object> readParameters(final VBox vbox, Parameters params) {
         HashMap<String, Object> map = new HashMap<>();
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField textField = (TextField) node;
-                Parameter p = parameters.stream().filter(par -> par.getKey().equals(textField.getId())).findFirst().get();
-                switch (p.getType().getSimpleName()) {
+                String type = params.getParameter(textField.getId()).map(Parameter::getType).map(Class::getSimpleName)
+                        .orElse("");
+                switch (type) {
                     case "Integer":
                         // cast to Integer
                         Integer value = Integer.parseInt(textField.getText());
-                        if(!inRange(p, value)) {
+                        params.setParameter(textField.getId(), value);
+                        if (!inRange(params, textField.getId(), value)) {
                             System.out.println("Value not in range");
-                            return null;
+                            break;
                         }
                         map.put(textField.getId(), value);
                         break;
                     case "Double":
                         // cast to Double
-                        double value = Double.parseDouble(textField.getText().replace(",", "."));
-                        map.put(textField.getId(), value);
+                        double valu = Double.parseDouble(textField.getText().replace(",", "."));
+                        map.put(textField.getId(), valu);
                         break;
                     case "Boolean":
                         // cast to Boolean
@@ -289,22 +293,26 @@ public final class GuiController extends DataReciever implements Initializable {
         }
         return map;
     }
-    
-    private <T> boolean inRange(final Parameter<?> p, final T value) {
-        if (p.getDomain().isPresent()) {
-            return p.getDomain().get().isValueValid(value);
+
+    private <T> boolean inRange(final Parameters p, final String key, final T value) {
+        try {
+            p.setParameter(key, value);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-        return true;
     }
 
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
         readParameters(vboxAgentPar, calculatorSupplier.getInitializer()
-                .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters())
-        .entrySet().forEach(e -> {
-            calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId,
-                    choiceAgent.getValue(), e.getKey(), e.getValue());
-        });
+                .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()))
+                .entrySet().forEach(e -> {
+                    calculatorSupplier.getInitializer().setAgentParameterSimplified(
+                            configurationSessionId,
+                            choiceAgent.getValue(), e.getKey(), e.getValue());
+                });
+
         btnStart.setDisable(false);
     }
 
@@ -333,7 +341,7 @@ public final class GuiController extends DataReciever implements Initializable {
                         choiceAgent
                                 .getValue())
                 .getParameters(),
-                         calculatorSupplier.getInitializer());
+                calculatorSupplier.getInitializer());
         writer.writeVBox(vboxAgentPar,
                 calculatorSupplier.getInitializer()
                         .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),

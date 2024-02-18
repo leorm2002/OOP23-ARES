@@ -83,11 +83,6 @@ public final class ParametersImpl implements Parameters {
     @Override
     public <T> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
         Optional<Map<String, Parameter<?>>> parameterMap = Optional.ofNullable(typeMap.get(type));
-        if (!parameterMap.isPresent()) {
-            // if the type is not present, try to find the a super type
-            parameterMap = typeMap.entrySet().stream().filter(e -> e.getKey().isAssignableFrom(type))
-                    .map(Map.Entry::getValue).findAny();
-        }
         if (parameterMap.isPresent()) {
             @SuppressWarnings("unchecked")
             Parameter<T> parameter = (Parameter<T>) parameterMap.get().get(key);
@@ -143,5 +138,10 @@ public final class ParametersImpl implements Parameters {
     @Override
     public boolean areAllParametersSetted() {
         return getParametersStream().allMatch(Parameter::isSetted);
+    }
+
+    @Override
+    public <T> Optional<Parameter<T>> getParameter(String key) {
+        return getParametersStream().filter(p -> p.getKey().equals(key)).map(p -> (Parameter<T>) p).findAny();
     }
 }
