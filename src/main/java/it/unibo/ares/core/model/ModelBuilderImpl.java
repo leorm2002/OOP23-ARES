@@ -78,7 +78,7 @@ class ModelBuilderImpl implements ModelBuilder {
 
             @Override
             public Parameters getParameters() {
-                return parameters.copy();
+                return parameters;
             }
 
             @Override
