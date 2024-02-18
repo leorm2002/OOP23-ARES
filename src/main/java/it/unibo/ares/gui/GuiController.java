@@ -228,20 +228,24 @@ public final class GuiController extends DataReciever implements Initializable {
 
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
-        readParameters(vboxModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId))
-                .entrySet().forEach(e -> {
-                    calculatorSupplier.setModelParameter(configurationSessionId,
-                            e.getKey(),
-                            e.getValue());
-                });
-
-        writer.writeChoiceBox(choiceAgent,
-                calculatorSupplier.getAgentsSimplified(configurationSessionId));
-        disableVBox(vboxModelPar);
-        btnInitialize.setDisable(true);
-        btnSetAgent.setDisable(false);
-        choiceAgent.setOnAction(this::writeAgentParametersList);
+        try {
+            readParameters(vboxModelPar,
+                    calculatorSupplier.getModelParametersParameters(configurationSessionId))
+                    .entrySet().forEach(e -> {
+                        calculatorSupplier.setModelParameter(configurationSessionId,
+                                e.getKey(),
+                                e.getValue());
+                    });
+                    writer.writeChoiceBox(choiceAgent,
+                    calculatorSupplier.getAgentsSimplified(configurationSessionId));
+            disableVBox(vboxModelPar);
+            btnInitialize.setDisable(true);
+            btnSetAgent.setDisable(false);
+            choiceAgent.setOnAction(this::writeAgentParametersList);
+        } catch (Exception e) {
+            showErrorAndDisable(e.getMessage(), btnStart);
+        }
+        
     }
 
     private HashMap<String, Object> readParameters(final VBox vbox, Parameters params) {
@@ -253,40 +257,40 @@ public final class GuiController extends DataReciever implements Initializable {
                         .orElse("");
                 switch (type) {
                     case "Integer":
-                        // cast to Integer
-                        if (!inDomainRange(params, txt.getId(), Integer.parseInt(txt.getText()))) {
-                            showErrorAndDisable(Integer.parseInt(txt.getText()) + " out of domain range", btnStart);
-                            break;
+                        try {
+                            params.setParameter(txt.getId(), Integer.parseInt(txt.getText()));
+                            map.put(txt.getId(), Integer.parseInt(txt.getText()));
+                        } catch (Exception e) {
+                            showErrorAndDisable(e.getMessage(), btnStart);
                         }
-                        params.setParameter(txt.getId(), Integer.parseInt(txt.getText()));
-                        map.put(txt.getId(), Integer.parseInt(txt.getText()));
                         break;
                     case "Double":
-                        // cast to Double
-                        double value = Double.parseDouble(txt.getText().replace(",", "."));
-                        if (!inDomainRange(params, txt.getId(), value)) {
-                            showErrorAndDisable(value + " out of domain range", btnStart);
-                            break;
+                        try {
+                            double value = Double.parseDouble(txt.getText().replace(",", "."));
+                            params.setParameter(txt.getId(), Double.parseDouble(txt.getText()));
+                            map.put(txt.getId(), value);
+                        } catch (Exception e) {
+                            showErrorAndDisable(e.getMessage(), btnStart);
                         }
-                        map.put(txt.getId(), value);
                         break;
                     case "Boolean":
-                        // cast to Boolean
-                        if (!inDomainRange(params, txt.getId(), Boolean.parseBoolean(txt.getText()))) {
-                            showErrorAndDisable(Boolean.parseBoolean(txt.getText()) + " out of domain range", btnStart);
-                            break;
+                        try {
+                            params.setParameter(txt.getId(), Boolean.parseBoolean(txt.getText()));
+                            map.put(txt.getId(), Boolean.parseBoolean(txt.getText()));
+                        } catch (Exception e) {
+                            showErrorAndDisable(e.getMessage(), btnStart);
                         }
-                        map.put(txt.getId(), Boolean.parseBoolean(txt.getText()));
                         break;
                     case "Float":
-                        // cast to Float
-                        if (!inDomainRange(params, txt.getId(), Float.parseFloat(txt.getText()))) {
-                            showErrorAndDisable(Float.parseFloat(txt.getText()) + " out of domain range", btnStart);
-                            break;
+                        try {
+                            params.setParameter(txt.getId(), Float.parseFloat(txt.getText()));
+                            map.put(txt.getId(), Float.parseFloat(txt.getText()));
+                        } catch (Exception e) {
+                            showErrorAndDisable(e.getMessage(), btnStart);
                         }
-                        map.put(txt.getId(), Float.parseFloat(txt.getText()));
                         break;
                     case "DirectionVectorImpl":
+                    /*
                         // cast to Direction Vector
                         // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
                         String[] elementi = txt.getText().split("\\s+");
@@ -301,7 +305,7 @@ public final class GuiController extends DataReciever implements Initializable {
                             break;
                         }
                         map.put(txt.getId(), vector);
-                        break;
+                        break;*/
                     default:
                         break;
                 }
@@ -312,15 +316,18 @@ public final class GuiController extends DataReciever implements Initializable {
 
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
-        readParameters(vboxAgentPar, calculatorSupplier
-                .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()))
-                .entrySet().forEach(e -> {
-                    calculatorSupplier.setAgentParameterSimplified(
-                            configurationSessionId,
-                            choiceAgent.getValue(), e.getKey(), e.getValue());
-                });
-
-        btnStart.setDisable(false);
+        try {
+            readParameters(vboxAgentPar, calculatorSupplier
+                    .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()))
+                    .entrySet().forEach(e -> {
+                        calculatorSupplier.setAgentParameterSimplified(
+                                configurationSessionId,
+                                choiceAgent.getValue(), e.getKey(), e.getValue());
+                    });
+            btnStart.setDisable(false);  
+        } catch (Exception e) {
+            showErrorAndDisable(e.getMessage(), btnStart);
+        }
     }
 
     private void disableVBox(final VBox vbox) {
@@ -338,15 +345,6 @@ public final class GuiController extends DataReciever implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
         btn.setDisable(true);
-    }
-
-    private <T> boolean inDomainRange(final Parameters p, final String key, final T value) {
-        try {
-            p.setParameter(key, value);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
     }
 
     /**
