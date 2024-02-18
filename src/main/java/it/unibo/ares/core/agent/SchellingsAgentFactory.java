@@ -85,7 +85,6 @@ public final class SchellingsAgentFactory implements AgentFactory {
     public Agent createAgent() {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Integer>("type", Integer.class));
         b.addParameter(new ParameterImpl<Double>("threshold", Double.class));
         b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class));
 
