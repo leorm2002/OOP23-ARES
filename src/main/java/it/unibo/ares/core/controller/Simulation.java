@@ -45,4 +45,14 @@ interface Simulation {
      * @return A future containing the output of the simulation.
      */
     CompletableFuture<SimulationOutputData> tick(String simulationSessionId);
+
+    /**
+     * Ticks the simulation.
+     * 
+     * @param simulationSessionId The user simulation session ids of the simulation
+     *                            to tick.
+     * @return A future containing the output of the simulation.
+     */
+    SimulationOutputData tickSync(String simulationSessionId);
+
 }
