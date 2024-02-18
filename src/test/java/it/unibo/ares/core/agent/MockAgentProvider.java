@@ -3,7 +3,15 @@ package it.unibo.ares.core.agent;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
+/**
+ * Provides a mock agent for testing purposes.
+ */
 public class MockAgentProvider {
+    /**
+     * Returns a mock agent that moves the agent in the top-right direction.
+     * 
+     * @return a mock agent that moves the agent in the top-right direction.
+     */
     public static Agent getMockAgent() {
         AgentBuilder builder = new AgentBuilderImpl();
         builder.addStrategy((state, pos) -> {

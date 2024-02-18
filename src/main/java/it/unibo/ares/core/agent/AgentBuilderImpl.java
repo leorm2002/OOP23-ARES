@@ -13,13 +13,14 @@ import it.unibo.ares.core.utils.state.State;
  * Implementation of the AgentBuilder interface.
  */
 class AgentBuilderImpl implements AgentBuilder {
+
     private BiFunction<State, Pos, State> strategy;
     private Parameters parameters;
 
     /**
      * Constructs a new AgentBuilderImpl object.
      */
-    public AgentBuilderImpl() {
+    AgentBuilderImpl() {
         this.strategy = null;
         this.parameters = new ParametersImpl();
     }
@@ -70,12 +71,20 @@ class AgentBuilderImpl implements AgentBuilder {
             }
 
             @Override
+            public int hashCode() {
+                final int prime = 31;
+                int result = 1;
+                result = prime * result + ((id == null) ? 0 : id.hashCode());
+                return result;
+            }
+
+            @Override
             public String getType() {
                 return type;
             }
 
             @Override
-            public void setType(String type) {
+            public void setType(final String type) {
                 this.type = type;
             }
         };

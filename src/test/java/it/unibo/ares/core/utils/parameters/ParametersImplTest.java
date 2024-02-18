@@ -158,7 +158,7 @@ class ParametersImplTest {
 
         parameters.addParameter(key, value);
 
-        Parameters clone = parameters.clone();
+        Parameters clone = parameters.copy();
 
         Optional<Parameter<Integer>> parameter = clone.getParameter(key, Integer.class);
         assertTrue(parameter.isPresent());

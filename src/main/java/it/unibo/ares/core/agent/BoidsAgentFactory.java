@@ -13,6 +13,10 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
+/**
+ * Represents a factory for creating Boids agents.
+ * 
+ */
 public final class BoidsAgentFactory implements AgentFactory {
 
         private boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
@@ -86,7 +90,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .orElse(dir);
         }
 
-        private DirectionVector centerCohesion(State s, final Pos pos, final DirectionVector dir,
+        private DirectionVector centerCohesion(final State s, final Pos pos, final DirectionVector dir,
                         final Integer distance, final Integer angle) {
                 // Compute a vector pointing to che center of the flock
                 var closeCells = computeCloseCells(pos, dir, distance, angle);
@@ -163,6 +167,20 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return currentState;
         }
 
+        /**
+         * Creates a new Boids agent.
+         * A boids Agents requires the following parameters:
+         * - distance: the distance within which to consider other agents (Integer).
+         * - angle: the angle within which to consider other agents (Integer).
+         * - direction: the direction of the agent (DirectionVectorImpl).
+         * - collisionAvoidanceWeight: the weight of the collision avoidance (Double).
+         * - alignmentWeight: the weight of the alignment (Double).
+         * - cohesionWeight: the weight of the cohesion (Double).
+         * - stepSize: the step size of the agent (Integer).
+         * 
+         * @return a new Boids agent.
+         */
+        @Override
         public Agent createAgent() {
                 AgentBuilder builder = new AgentBuilderImpl();
                 return builder

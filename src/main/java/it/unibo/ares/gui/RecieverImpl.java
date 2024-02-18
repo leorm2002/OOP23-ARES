@@ -1,6 +1,6 @@
 package it.unibo.ares.gui;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
@@ -21,6 +21,6 @@ public class RecieverImpl extends DataReciever {
      */
     @Override
     public void onNext(final SimulationOutputData item) {
-        HashMap<Pos, String> pos = item.getData();
+        Map<Pos, String> pos = item.getData();
     }
 }

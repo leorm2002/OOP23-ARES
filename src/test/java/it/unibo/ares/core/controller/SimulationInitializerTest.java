@@ -13,7 +13,7 @@ import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
 class SimulationInitializerTest {
-    ModelFactory sf;
+    private ModelFactory sf;
 
     @BeforeEach
     public void init() {

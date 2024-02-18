@@ -42,7 +42,7 @@ public class BoidsModelFactory implements ModelFactory {
                 .limit(total)
                 .forEach(a -> {
                     a.setType("B");
-                    state.addAgent(getter.get(), a);
+                    state.addAgent(getter.next(), a);
                 });
 
         return state;

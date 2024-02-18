@@ -59,7 +59,7 @@ public class SchellingModelFactories implements ModelFactory {
                 IntStream.range(0, total)
                                 .forEach(i -> agents.get(i).setType(getAgentType(na, i)));
                 IntStream.range(0, total)
-                                .forEach(i -> state.addAgent(getter.get(), agents.get(i)));
+                                .forEach(i -> state.addAgent(getter.next(), agents.get(i)));
 
                 return state;
         }

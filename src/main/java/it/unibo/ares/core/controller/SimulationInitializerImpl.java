@@ -78,7 +78,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     @Override
     public Parameters getModelParametersParameters(final String initializationId) {
-        return this.intilizingModels.get(initializationId).getParameters().clone();
+        return this.intilizingModels.get(initializationId).getParameters().copy();
     }
 
     /**

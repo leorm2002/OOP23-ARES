@@ -146,11 +146,22 @@ public interface State {
     Set<Entity> getEntitiesFromASetOfPos(Set<Pos> entities);
 
     /**
-     * Print the state for debugging purposes.
+     * Print the state.
      */
-    public void debugPrint();
+    void printState();
 
-    public State copy();
+    /**
+     * Copy the state.
+     * 
+     * @return a safe modifiable copy of the state.
+     */
+    State copy();
 
+    /**
+     * Check if a position is free.
+     * 
+     * @param pos the position to check.
+     * @return true if the position is free, false otherwise.
+     */
     public boolean isFree(Pos pos);
 }

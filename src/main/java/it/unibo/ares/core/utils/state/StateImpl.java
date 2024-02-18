@@ -167,7 +167,7 @@ public final class StateImpl implements State {
     }
 
     @Override
-    public void debugPrint() {
+    public void printState() {
         var out = IntStream.range(0, size.getFirst())
                 .boxed()
                 .map(x -> IntStream.range(0, size.getSecond())
@@ -212,7 +212,7 @@ public final class StateImpl implements State {
     }
 
     @Override
-    public boolean isFree(Pos pos) {
+    public boolean isFree(final Pos pos) {
         return entityBoard.getEntity(pos).isEmpty() && agentBoard.getEntity(pos).isEmpty();
     }
 }

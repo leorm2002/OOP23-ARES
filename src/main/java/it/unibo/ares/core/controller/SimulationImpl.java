@@ -53,13 +53,12 @@ final class SimulationImpl implements Simulation {
     }
 
     private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId) {
-        return new SimulationOutputData(
-                state.getAgents().stream()
-                        .collect(Collectors.toMap(
-                                Pair::getFirst,
-                                pair -> pair.getSecond().getType(),
-                                (existingValue, newValue) -> newValue,
-                                HashMap::new)),
+        return new SimulationOutputData(state.getAgents().stream()
+                .collect(Collectors.toMap(
+                        Pair::getFirst,
+                        pair -> pair.getSecond().getType(),
+                        (existingValue, newValue) -> newValue,
+                        HashMap::new)),
                 simulationSessionId);
     }
 
