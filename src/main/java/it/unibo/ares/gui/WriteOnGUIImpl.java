@@ -2,7 +2,7 @@ package it.unibo.ares.gui;
 
 import java.util.Set;
 
-import it.unibo.ares.core.controller.SimulationInitializer;
+import it.unibo.ares.core.api.InitializationApi;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
@@ -31,7 +31,7 @@ public class WriteOnGUIImpl implements WriteOnGUI {
      */
     @Override
     public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters,
-            final SimulationInitializer initializer) {
+            final InitializationApi initializer) {
         vbox.getChildren().clear();
         final int txtSize = 13, lblSize = 15, domainSize = 13, marginBottom = 20, marginRightLeft = 10;
         parameters.stream().forEach(p -> {
@@ -49,7 +49,7 @@ public class WriteOnGUIImpl implements WriteOnGUI {
             lbl.wrapTextProperty().setValue(true);
             if (p.getDomain().isPresent()) {
                 domain.setText(p.getDomain().get().getDescription());
-                
+
             }
             try {
                 txt.setText(p.getValue().toString());
