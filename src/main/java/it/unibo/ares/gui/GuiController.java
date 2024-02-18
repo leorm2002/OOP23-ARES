@@ -80,7 +80,7 @@ public final class GuiController extends DataReciever implements Initializable {
         /*
          * pause simulation
          */
-        calculatorSupplier.getController().pauseSimulation(simulationId);
+        calculatorSupplier.pauseSimulation(simulationId);
     }
 
     /**
@@ -222,9 +222,8 @@ public final class GuiController extends DataReciever implements Initializable {
         String modelIDselected = choiceModel.getValue();
         configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
         writer.writeVBox(vboxModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
-                        .getParameters(),
-                calculatorSupplier.getInitializer());
+                calculatorSupplier.getModelParametersParameters(configurationSessionId)
+                        .getParameters());
     }
 
     @FXML
@@ -232,13 +231,13 @@ public final class GuiController extends DataReciever implements Initializable {
         readParameters(vboxModelPar,
                 calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId))
                 .entrySet().forEach(e -> {
-                    calculatorSupplier.getInitializer().setModelParameter(configurationSessionId,
+                    calculatorSupplier.setModelParameter(configurationSessionId,
                             e.getKey(),
                             e.getValue());
                 });
 
         writer.writeChoiceBox(choiceAgent,
-                calculatorSupplier.getInitializer().getAgentsSimplified(configurationSessionId));
+                calculatorSupplier.getAgentsSimplified(configurationSessionId));
         disableVBox(vboxModelPar);
         btnInitialize.setDisable(true);
         btnSetAgent.setDisable(false);
@@ -313,10 +312,10 @@ public final class GuiController extends DataReciever implements Initializable {
 
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
-        readParameters(vboxAgentPar, calculatorSupplier.getInitializer()
+        readParameters(vboxAgentPar, calculatorSupplier
                 .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()))
                 .entrySet().forEach(e -> {
-                    calculatorSupplier.getInitializer().setAgentParameterSimplified(
+                    calculatorSupplier.setAgentParameterSimplified(
                             configurationSessionId,
                             choiceAgent.getValue(), e.getKey(), e.getValue());
                 });
@@ -362,15 +361,13 @@ public final class GuiController extends DataReciever implements Initializable {
          * write parameters of the agent and disable the model parameters
          */
         writer.writeVBox(vboxAgentPar, calculatorSupplier
-                .getInitializer().getAgentParametersSimplified(configurationSessionId,
+                .getAgentParametersSimplified(configurationSessionId,
                         choiceAgent
                                 .getValue())
-                .getParameters(),
-                calculatorSupplier.getInitializer());
+                .getParameters());
         writer.writeVBox(vboxAgentPar,
-                calculatorSupplier.getInitializer()
-                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
-                calculatorSupplier.getInitializer());
+                calculatorSupplier
+                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters());
     }
 
     @Override
