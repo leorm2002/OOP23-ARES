@@ -1,5 +1,7 @@
 package it.unibo.ares.core.api;
 
+import java.util.List;
+
 public interface SimulationControlApi {
 
     /**
@@ -22,5 +24,12 @@ public interface SimulationControlApi {
      * @param id The identifier of the simulation.
      */
     public void startSimulation(String id);
+
+    /**
+     * Returns a list of running models.
+     *
+     * @return a list of running models
+     */
+    public List<String> getRunningSimulations();
 
 }

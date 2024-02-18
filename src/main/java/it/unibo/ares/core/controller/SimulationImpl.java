@@ -34,7 +34,7 @@ final class SimulationImpl implements Simulation {
 
     @Override
     public State getState() {
-        return null;
+        return this.state;
     }
 
     @Override

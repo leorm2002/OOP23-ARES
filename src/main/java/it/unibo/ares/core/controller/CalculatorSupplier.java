@@ -2,6 +2,7 @@ package it.unibo.ares.core.controller;
 
 import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
+import java.util.List;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.api.InitializationApi;
@@ -82,62 +83,57 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
+    public List<String> getRunningSimulations() {
+        return controller.getRunningSimulations();
+    }
+
+    @Override
     public void removeSimulation(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeSimulation'");
+        controller.removeSimulation(id);
     }
 
     @Override
     public void pauseSimulation(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pauseSimulation'");
+        controller.pauseSimulation(id);
     }
 
     @Override
     public void startSimulation(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'startSimulation'");
+        controller.startSimulation(id);
     }
 
     @Override
     public Set<String> getModels() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getModels'");
+        return initializer.getModels();
     }
 
     @Override
     public String setModel(String modelId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setModel'");
+        return initializer.setModel(modelId);
     }
 
     @Override
     public Parameters getModelParametersParameters(String initializationId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getModelParametersParameters'");
+        return initializer.getModelParametersParameters(initializationId);
     }
 
     @Override
     public void setModelParameter(String initializationId, String key, Object value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setModelParameter'");
+        initializer.setModelParameter(initializationId, key, value);
     }
 
     @Override
     public Set<String> getAgentsSimplified(String initializationId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAgentsSimplified'");
+        return initializer.getAgentsSimplified(initializationId);
     }
 
     @Override
     public Parameters getAgentParametersSimplified(String initializationId, String agentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAgentParametersSimplified'");
+        return initializer.getAgentParametersSimplified(initializationId, agentId);
     }
 
     @Override
     public void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setAgentParameterSimplified'");
+        initializer.setAgentParameterSimplified(initializationId, agentId, key, value);
     }
 }

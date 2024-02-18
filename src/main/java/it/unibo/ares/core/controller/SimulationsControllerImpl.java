@@ -3,6 +3,8 @@ package it.unibo.ares.core.controller;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
+import java.util.stream.Collectors;
+import java.util.List;
 
 import it.unibo.ares.core.api.SimulationOutputData;
 
@@ -27,7 +29,11 @@ final class SimulationsControllerImpl extends SimulationsController {
 
     @Override
     public void startSimulation(final String id) {
-        simulations.get(id).start();
+        if (!simulations.get(id).isRunning()) {
+            simulations.get(id).start();
+            return;
+        }
+        throw new IllegalStateException("The simulation is already running");
     }
 
     @Override
@@ -50,8 +56,15 @@ final class SimulationsControllerImpl extends SimulationsController {
     public void pauseSimulation(String id) {
         if (simulations.get(id).isRunning()) {
             simulations.get(id).pause();
+            return;
         }
         throw new IllegalStateException("The simulation is not running");
+    }
+
+    @Override
+    public List<String> getRunningSimulations() {
+        return simulations.entrySet().stream().filter(e -> e.getValue().isRunning())
+                .map(e -> e.getKey()).collect(Collectors.toList());
     }
 
 }
