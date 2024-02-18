@@ -38,13 +38,27 @@ final class SimulationsControllerImpl extends SimulationsController {
 
     @Override
     void makeModelsTick() {
-        simulations.entrySet().stream()
-                .filter(e -> e.getValue().isRunning())
-                .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the id of
-                                                         // the simulation
-                .forEach(f -> f
-                        .thenAccept(simData -> processor.submit(
-                                new Identifier<>(simData.getSimulationId(), simData)))); // Processing
+        boolean async = false;
+        if (!async) {
+            simulations.entrySet().stream()
+                    .filter(e -> e.getValue().isRunning())
+                    .map(e -> e.getValue().tickSync(e.getKey())) // Starting the calculation and mapping the future to
+                                                                 // the
+                    // id of
+                    // the simulation
+                    .forEach(simData -> processor.submit(
+                            new Identifier<>(simData.getSimulationId(), simData))); // Processing
+        } else {
+
+            simulations.entrySet().stream()
+                    .filter(e -> e.getValue().isRunning())
+                    .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the
+                                                             // id of
+                    // the simulation
+                    .forEach(f -> f
+                            .thenAccept(simData -> processor.submit(
+                                    new Identifier<>(simData.getSimulationId(), simData)))); // Processing
+        }
     }
 
     @Override
