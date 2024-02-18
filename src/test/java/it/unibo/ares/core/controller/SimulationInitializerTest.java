@@ -8,14 +8,12 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.model.MockModelProvider;
-import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-public class SimulationInitializerTest {
-    ModelFactory sf;
+class SimulationInitializerTest {
+    private ModelFactory sf;
 
     @BeforeEach
     public void init() {
@@ -23,13 +21,13 @@ public class SimulationInitializerTest {
     }
 
     @Test
-    public void testGetModels() {
+    void testGetModels() {
         SimulationInitializerImpl simulationInitializerImpl = new SimulationInitializerImpl();
         assertTrue(simulationInitializerImpl.getModels().contains(sf.getModelId()));
     }
 
     @Test
-    public void testInitializeModelWithoutSettingParameters() {
+    void testInitializeModelWithoutSettingParameters() {
         SimulationInitializerImpl simulationInitializerImpl = new SimulationInitializerImpl();
         String modelId = sf.getModelId();
         String simId = simulationInitializerImpl.setModel(modelId);
@@ -37,7 +35,7 @@ public class SimulationInitializerTest {
     }
 
     @Test
-    public void testInitializeModel() {
+    void testInitializeModel() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
         String modelId = sf.getModelId();
         String simId = simulationInitializer.setModel(modelId);
@@ -48,11 +46,10 @@ public class SimulationInitializerTest {
     }
 
     @Test
-    public void testParametrizeAgent() {
+    void testParametrizeAgent() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
         String modelId = sf.getModelId();
         String simId = simulationInitializer.setModel(modelId);
-        Parameters params = simulationInitializer.getModelParametersParameters(simId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
         simulationInitializer.setModelParameter(simId, "size", 15);
@@ -61,14 +58,5 @@ public class SimulationInitializerTest {
         String agent = agents.stream().findAny().get();
         Parameters agentParams = simulationInitializer.getAgentParametersSimplified(simId, agent);
         assertTrue(agentParams.getParametersToset().size() > 0);
-    }
-
-    @Test
-    public void test1() {
-        Model m = MockModelProvider.getMockModel();
-        var state = m.initilize();
-        state = m.tick(state);
-        state = m.tick(state);
-        state.debugPrint();
     }
 }

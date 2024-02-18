@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import it.unibo.ares.core.agent.BoidsAgentFactory;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -13,9 +14,13 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
 
-public class BoidsModelFactory implements ModelFactory {
+/**
+ * A factory class for creating the Boids model.
+ */
+public final class BoidsModelFactory implements ModelFactory {
     private static final String MODEL_ID = "Boids";
 
+    @Override
     public String getModelId() {
         return MODEL_ID;
     }
@@ -42,19 +47,30 @@ public class BoidsModelFactory implements ModelFactory {
                 .limit(total)
                 .forEach(a -> {
                     a.setType("B");
-                    state.addAgent(getter.get(), a);
+                    state.addAgent(getter.next(), a);
                 });
 
         return state;
     }
 
+    @Override
+    /**
+     * Creates a new model.
+     * Should contain all the parameters needed for the model initialization:
+     * - size: the size of the grid
+     * - numeroUccelli: the number of agents
+     * 
+     * @return the model
+     */
     public Model getModel() {
         ModelBuilder builder = new ModelBuilderImpl();
         // We need only one agent supplier since all agents are equal and only differs
         // in the type
         return builder
-                .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class))
-                .addParameter(new ParameterImpl<>("size", Integer.class))
+                .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class,
+                        new ParameterDomainImpl<Integer>("Numero di agenti (0-n)", n -> n > 0)))
+                .addParameter(new ParameterImpl<>("size", Integer.class,
+                        new ParameterDomainImpl<Integer>("Dimensione della griglia (0-n)", n -> n > 0)))
                 .addExitFunction((o, n) -> false)
                 .addInitFunction(t -> {
                     try {

@@ -10,15 +10,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
-import it.unibo.ares.core.utils.parameters.Parameters;
-import it.unibo.ares.core.utils.parameters.ParametersImpl;
-
 /**
  * Unit test for {@link ParametersImpl}.
  */
-public class ParametersImplTest {
+class ParametersImplTest {
     private ParametersImpl parameters;
 
     /**
@@ -163,7 +158,7 @@ public class ParametersImplTest {
 
         parameters.addParameter(key, value);
 
-        Parameters clone = parameters.clone();
+        Parameters clone = parameters.copy();
 
         Optional<Parameter<Integer>> parameter = clone.getParameter(key, Integer.class);
         assertTrue(parameter.isPresent());

@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
@@ -23,22 +24,25 @@ import it.unibo.ares.core.utils.state.State;
  */
 public final class SimulationInitializerImpl extends SimulationInitializer {
 
-    private Map<String, Model> intilizingModels;
-    private Map<String, Pair<State, Model>> initializedModels;
+    private ConcurrentMap<String, Model> intilizingModels;
+    private ConcurrentMap<String, Pair<State, Model>> initializedModels;
     private Map<String, Supplier<Model>> modelsSupplier;
 
+    /**
+     * Creates a new instance of the simulation initializer.
+     */
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
         ModelFactory sf = new SchellingModelFactories();
         ModelFactory bf = new BoidsModelFactory();
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
-        this.intilizingModels = new HashMap<>();
-        this.initializedModels = new HashMap<>();
+        this.intilizingModels = new ConcurrentHashMap<>();
+        this.initializedModels = new ConcurrentHashMap<>();
     }
 
     private void setAgentParameter(final String initializationId, final String agentType, final String key,
-            final Object value, Predicate<Agent> predicate) {
+            final Object value, final Predicate<Agent> predicate) {
         this.initializedModels.get(
                 initializationId).getFirst().getAgents().stream()
                 .map(Pair::getSecond)
@@ -79,7 +83,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     @Override
     public Parameters getModelParametersParameters(final String initializationId) {
-        return this.intilizingModels.get(initializationId).getParameters().clone();
+        return this.intilizingModels.get(initializationId).getParameters().copy();
     }
 
     /**
@@ -104,7 +108,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      *         identifier of the group agent.
      */
     @Override
-    public Set<String> getAgentsSimplified(String initializationId) {
+    public Set<String> getAgentsSimplified(final String initializationId) {
         // TODO RICALCOLO SE CAMBIA MODEL
         this.initializedModels.computeIfAbsent(
                 initializationId,
@@ -122,7 +126,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     /**
-     * Sets a parameter of all the agent with the given type
+     * Sets a parameter of all the agent with the given type.
      * 
      * @param agentType The identifier of the group of agents to set the parameter
      *                  to.

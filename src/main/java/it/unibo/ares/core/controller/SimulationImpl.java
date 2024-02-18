@@ -21,7 +21,7 @@ final class SimulationImpl implements Simulation {
      * @param state The state of the simulation.
      * @param model The model of the simulation.
      */
-    public SimulationImpl(final State state, final Model model) {
+    SimulationImpl(final State state, final Model model) {
         this.state = state;
         this.model = model;
         calculating = false;
@@ -53,13 +53,12 @@ final class SimulationImpl implements Simulation {
     }
 
     private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId) {
-        return new SimulationOutputData(
-                state.getAgents().stream()
-                        .collect(Collectors.toMap(
-                                Pair::getFirst,
-                                pair -> pair.getSecond().getType(),
-                                (existingValue, newValue) -> newValue,
-                                HashMap::new)),
+        return new SimulationOutputData(state.getAgents().stream()
+                .collect(Collectors.toMap(
+                        Pair::getFirst,
+                        pair -> pair.getSecond().getType(),
+                        (existingValue, newValue) -> newValue,
+                        HashMap::new)),
                 simulationSessionId);
     }
 

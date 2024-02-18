@@ -3,6 +3,9 @@ package it.unibo.ares.core.model;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 
+/**
+ * Represents a model of a simulation.
+ */
 public interface Model {
     /**
      * Performs a tick of the model, updating the simulation enviroment state based
@@ -35,7 +38,7 @@ public interface Model {
      * 
      * @param oldState
      * @param newState
-     * @return
+     * @return true if the simulation is over, false otherwise
      */
     boolean isOver(State oldState, State newState);
 

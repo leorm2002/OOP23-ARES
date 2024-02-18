@@ -7,7 +7,7 @@ import javax.annotation.concurrent.Immutable;
  * Represents a vector with x and y components.
  */
 @Immutable
-public class DirectionVectorImpl implements DirectionVector {
+public final class DirectionVectorImpl implements DirectionVector {
     private final Double x;
     private final Double y;
 
@@ -90,9 +90,7 @@ public class DirectionVectorImpl implements DirectionVector {
      */
     @Override
     public DirectionVector getNormalized() {
-        return true
-                ? new DirectionVectorImpl(x / magnitude, y / magnitude)
-                : new DirectionVectorImpl(0.0, 0.0);
+        return new DirectionVectorImpl(x / magnitude, y / magnitude);
     }
 
     /**
@@ -113,24 +111,31 @@ public class DirectionVectorImpl implements DirectionVector {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         DirectionVectorImpl other = (DirectionVectorImpl) obj;
         if (x == null) {
-            if (other.x != null)
+            if (other.x != null) {
                 return false;
-        } else if (!x.equals(other.x))
+            }
+        } else if (!x.equals(other.x)) {
             return false;
+        }
         if (y == null) {
-            if (other.y != null)
+            if (other.y != null) {
                 return false;
-        } else if (!y.equals(other.y))
+            }
+        } else if (!y.equals(other.y)) {
             return false;
+        }
         return true;
     }
 }

@@ -6,7 +6,9 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import it.unibo.ares.core.utils.parameters.ParameterDomain;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
@@ -15,14 +17,10 @@ import it.unibo.ares.core.utils.state.State;
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
-    // private boolean isAgentOfSameType(final Agent a, final Agent b) {
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
-        Integer typeA = a.getParameters().getParameter("type", Integer.class)
-                .orElseThrow(() -> new IllegalArgumentException("Agent " + a + " has no type parameter"))
-                .getValue();
-        Integer typeB = b.getParameters().getParameter("type", Integer.class)
-                .orElseThrow(() -> new IllegalArgumentException("Agent " + b + " has no type parameter"))
-                .getValue();
+        String typeA = a.getType();
+
+        String typeB = b.getType();
         return typeA.equals(typeB);
     };
 
@@ -57,14 +55,20 @@ public final class SchellingsAgentFactory implements AgentFactory {
                 .findAny();
     }
 
-    public Agent getSchellingSegregationModelAgent(final Integer type, final Double threshold,
+    /**
+     * Creates a new agent for the Schelling Segregation Model.
+     * 
+     * @param type         The type of the agent.
+     * @param threshold    The threshold of the agent.
+     * @param visionRadius The vision radius of the agent.
+     * @return The agent.
+     */
+    public Agent getSchellingSegregationModelAgent(final String type, final Double threshold,
             final Integer visionRadius) {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Integer>("type", type));
         b.addParameter(new ParameterImpl<Double>("threshold", threshold));
         b.addParameter(new ParameterImpl<Integer>("visionRadius", visionRadius));
-
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
             if (!isThresholdSatisfied(state, pos, agent)) {
@@ -74,16 +78,19 @@ public final class SchellingsAgentFactory implements AgentFactory {
             return state;
         });
 
-        return b.build();
+        Agent a = b.build();
+        a.setType(type);
+        return a;
     }
 
     @Override
     public Agent createAgent() {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Integer>("type", Integer.class));
-        b.addParameter(new ParameterImpl<Double>("threshold", Double.class));
-        b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class));
+        b.addParameter(new ParameterImpl<Double>("threshold", Double.class, new ParameterDomainImpl<>(
+                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0)));
+        b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class,
+                new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0)));
 
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();

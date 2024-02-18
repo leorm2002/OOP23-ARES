@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * This class represents a collection of parameters and provides methods to add,
  * get, and set parameters.
  */
-public final class ParametersImpl implements Parameters, Cloneable {
+public final class ParametersImpl implements Parameters {
     private final Map<Class<?>, Map<String, Parameter<?>>> typeMap;
 
     /**
@@ -134,7 +134,7 @@ public final class ParametersImpl implements Parameters, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public Parameters clone() {
+    public Parameters copy() {
         Map<Class<?>, Map<String, Parameter<?>>> cloneMap = new HashMap<>();
         typeMap.entrySet().forEach(m -> cloneMap.put(m.getKey(), new HashMap<>(m.getValue())));
         return new ParametersImpl(cloneMap);

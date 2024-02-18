@@ -10,7 +10,7 @@ final class EntityImpl implements Entity {
     /**
      * Represents an implementation of the Entity interface.
      */
-    public EntityImpl() {
+    EntityImpl() {
     }
 
     /*

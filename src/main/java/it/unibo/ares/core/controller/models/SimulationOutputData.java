@@ -1,18 +1,26 @@
 package it.unibo.ares.core.controller.models;
 
 import it.unibo.ares.core.utils.pos.Pos;
-import java.util.HashMap;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * A simple class used to identify a data with a string.
- * 
+ *
  */
 public final class SimulationOutputData {
-    private HashMap<Pos, String> data;
-    private String simulationId;
+    private final Map<Pos, String> data;
+    private final String simulationId;
 
-    public SimulationOutputData(HashMap<Pos, String> data, String simulationId) {
-        this.data = data;
+    /**
+     * Creates a new SimulationOutputData.
+     *
+     * @param data         the data of the simulation
+     * @param simulationId the id of the simulation
+     */
+    public SimulationOutputData(final Map<Pos, String> data, final String simulationId) {
+        this.data = Collections.unmodifiableMap(data);
         this.simulationId = simulationId;
     }
 
@@ -21,7 +29,7 @@ public final class SimulationOutputData {
      *
      * @return the data of the simulation.
      */
-    public HashMap<Pos, String> getData() {
+    public Map<Pos, String> getData() {
         return data;
     }
 

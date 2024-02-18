@@ -7,12 +7,17 @@ import java.util.stream.Collectors;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
+/**
+ * Represents a factory for creating Boids agents.
+ * 
+ */
 public final class BoidsAgentFactory implements AgentFactory {
 
         private boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
@@ -46,7 +51,7 @@ public final class BoidsAgentFactory implements AgentFactory {
 
                 State a = new StateImpl(
                                 Math.abs(pos.getX() + xSign * (distance + 1)),
-                                Math.abs(pos.getY() + xSign * (distance + 1)));
+                                Math.abs(pos.getY() + ySign * (distance + 1)));
 
                 return a.getPosByPosAndRadius(pos, distance)
                                 .stream()
@@ -54,7 +59,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .collect(Collectors.toSet());
         }
 
-        public DirectionVector collisionAvoindance(
+        private DirectionVector collisionAvoindance(
                         final State s, final Pos pos, final DirectionVector dir,
                         final Integer distance, final Integer angle) {
                 Set<Pos> obstacles = getObstacles(s, computeCloseCells(pos, dir, distance, angle));
@@ -70,7 +75,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return new DirectionVectorImpl(newX, newY).getNormalized();
         }
 
-        public DirectionVector directionAlignment(
+        private DirectionVector directionAlignment(
                         final State s, final Pos pos, final DirectionVector dir, final Integer distance,
                         final Integer angle) {
                 var closeCells = computeCloseCells(pos, dir, distance, angle);
@@ -86,7 +91,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .orElse(dir);
         }
 
-        public DirectionVector centerCohesion(State s, final Pos pos, final DirectionVector dir,
+        private DirectionVector centerCohesion(final State s, final Pos pos, final DirectionVector dir,
                         final Integer distance, final Integer angle) {
                 // Compute a vector pointing to che center of the flock
                 var closeCells = computeCloseCells(pos, dir, distance, angle);
@@ -163,16 +168,43 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return currentState;
         }
 
+        /**
+         * Creates a new Boids agent.
+         * A boids Agents requires the following parameters:
+         * - distance: the distance within which to consider other agents (Integer).
+         * - angle: the angle within which to consider other agents (Integer).
+         * - direction: the direction of the agent (DirectionVectorImpl).
+         * - collisionAvoidanceWeight: the weight of the collision avoidance (Double).
+         * - alignmentWeight: the weight of the alignment (Double).
+         * - cohesionWeight: the weight of the cohesion (Double).
+         * - stepSize: the step size of the agent (Integer).
+         * 
+         * @return a new Boids agent.
+         */
+        @Override
         public Agent createAgent() {
                 AgentBuilder builder = new AgentBuilderImpl();
                 return builder
-                                .addParameter(new ParameterImpl<>("distance", Integer.class))
-                                .addParameter(new ParameterImpl<>("angle", Integer.class))
+                                .addParameter(new ParameterImpl<>("distance", Integer.class,
+                                                new ParameterDomainImpl<>("il raggio di visione in celle (1-10)",
+                                                                (Integer d) -> d > 0 && d <= 10)))
+                                .addParameter(new ParameterImpl<>("angle", Integer.class,
+                                                new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
+                                                                (Integer d) -> d > 0 && d <= 180)))
                                 .addParameter(new ParameterImpl<>("direction", DirectionVectorImpl.class))
-                                .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class))
-                                .addParameter(new ParameterImpl<>("alignmentWeight", Double.class))
-                                .addParameter(new ParameterImpl<>("cohesionWeight", Double.class))
-                                .addParameter(new ParameterImpl<>("stepSize", Integer.class))
+                                .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
+                                                new ParameterDomainImpl<>(
+                                                                "il peso dell'evitamento degli ostacoli (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("alignmentWeight", Double.class,
+                                                new ParameterDomainImpl<>("il peso dell'allineamento (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("cohesionWeight", Double.class,
+                                                new ParameterDomainImpl<>("il peso della coesione (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("stepSize", Integer.class,
+                                                new ParameterDomainImpl<>("la dimensione del passo (1-10)",
+                                                                (Integer d) -> d > 0 && d <= 10)))
                                 .addStrategy(this::tickFunction)
                                 .build();
         }

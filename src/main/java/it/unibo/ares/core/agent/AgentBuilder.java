@@ -3,6 +3,7 @@ package it.unibo.ares.core.agent;
 import java.util.function.BiFunction;
 
 import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
@@ -31,11 +32,12 @@ interface AgentBuilder {
      *
      * @throws IllegalArgumentException if the parameter is already set.
      * @throws NullPointerException     if the parameter key or type is null.
-     * @param parameter the parameter to add.
-     * @param <T>       the type of the parameter value (ex. Integer, String, ...).
+     * @param parameterImpl the parameter to add.
+     * @param <T>           the type of the parameter value (ex. Integer, String,
+     *                      ...).
      * @return the agent builder with the added parameter.
      */
-    <T> AgentBuilder addParameter(Parameter<T> parameter);
+    <T> AgentBuilder addParameter(Parameter<T> parameterImpl);
 
     /**
      * Adds a strategy to the agent.

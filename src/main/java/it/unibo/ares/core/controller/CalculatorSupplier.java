@@ -2,15 +2,24 @@ package it.unibo.ares.core.controller;
 
 import java.util.concurrent.Flow.Subscriber;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 
+/**
+ * This class is used as an entry point for the simulation system, it is used to
+ * access the initialization and the controller of the simulations.
+ */
+@SuppressFBWarnings(value = {
+        "EI_EXPOSE_REP"
+}, justification = "C'è i due campi sono final e non modificabili, espongono i metodi richiesti per gestire le simulazioni.")
+
 public final class CalculatorSupplier {
     private static volatile CalculatorSupplier instance;
 
-    private SimulationsController controller;
-    private SimulationInitializer initializer;
+    private final SimulationsController controller;
+    private final SimulationInitializer initializer;
 
     /**
      * Starts the simulation with the given initialization id.
@@ -20,7 +29,7 @@ public final class CalculatorSupplier {
      *                         simulation will be passed to.
      * @return The id of the simulation.
      */
-    public String startSimulation(final String initializationId, Subscriber<SimulationOutputData> subscriber) {
+    public String startSimulation(final String initializationId, final Subscriber<SimulationOutputData> subscriber) {
         Pair<String, Model> resp = initializer.startSimulation(initializationId);
         controller.addSimulation(resp.getFirst(),
                 new SimulationImpl(resp.getSecond().initilize(), resp.getSecond()));
@@ -32,7 +41,7 @@ public final class CalculatorSupplier {
     /**
      * Returns the singleton instance of the calculator supplier.
      *
-     * @return
+     * @return the singleton instance of the calculator supplier.
      */
     public static CalculatorSupplier getInstance() {
         CalculatorSupplier curr = instance;
