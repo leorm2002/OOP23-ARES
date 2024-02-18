@@ -16,7 +16,7 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
-import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
+import it.unibo.ares.core.utils.UniquePositionGetter;
 
 /**
  * Generate an instance of a fire spread model. It permits the
@@ -62,7 +62,7 @@ public class FireSpreadModelFactory implements ModelFactory {
                 IntStream.range(0, total)
                                 .forEach(i -> agents.get(i).setType(getAgentType(nf, i)));
                 IntStream.range(0, total)
-                                .forEach(i -> state.addAgent(getter.get(), agents.get(i)));
+                                .forEach(i -> state.addAgent(getter.next(), agents.get(i)));
 
                 return state;
         }
@@ -75,7 +75,7 @@ public class FireSpreadModelFactory implements ModelFactory {
          * direction (2d vector)
          * fuel consumption (double)
          * 
-         * @return 
+         * @return
          */
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
