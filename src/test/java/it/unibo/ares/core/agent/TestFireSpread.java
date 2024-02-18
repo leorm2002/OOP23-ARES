@@ -125,10 +125,6 @@ public class TestFireSpread {
                 PosImpl pos2 = new PosImpl(0, 1);
                 PosImpl pos3 = new PosImpl(1, 1);
                 PosImpl pos4 = new PosImpl(2, 2);
-                PosImpl pos1 = new PosImpl(1, 0);
-                PosImpl pos2 = new PosImpl(0, 1);
-                PosImpl pos3 = new PosImpl(1, 1);
-                PosImpl pos4 = new PosImpl(2, 2);
 
                 // Creates some Tree-type Agent with type 2, threshold 0.5 and vision radius 1
                 state.addAgent(pos1, factory.getTreeModelAgent(0.5, 0.1));
@@ -147,18 +143,7 @@ public class TestFireSpread {
                                                 "Agent " + state.getAgentAt(
                                                                 pos1).get() + " has no type parameter"))
                                 .getValue() == 1;
-                Boolean fire1 = state.getAgentAt(pos1).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(
-                                                                pos1).get() + " has no type parameter"))
-                                .getValue() == 1;
 
-                Boolean fire2 = state.getAgentAt(pos2).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos2).get() + " has no type parameter"))
-                                .getValue() == 1;
                 Boolean fire2 = state.getAgentAt(pos2).get()
                                 .getParameters().getParameter("type", Integer.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
@@ -170,17 +155,7 @@ public class TestFireSpread {
                                 .orElseThrow(() -> new IllegalArgumentException(
                                                 "Agent " + state.getAgentAt(pos3).get() + " has no type parameter"))
                                 .getValue() == 1;
-                Boolean fire3 = state.getAgentAt(pos3).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos3).get() + " has no type parameter"))
-                                .getValue() == 1;
 
-                Boolean fire4 = state.getAgentAt(pos4).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos4).get() + " has no type parameter"))
-                                .getValue() == 2;
                 Boolean fire4 = state.getAgentAt(pos4).get()
                                 .getParameters().getParameter("type", Integer.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
@@ -188,9 +163,6 @@ public class TestFireSpread {
                                 .getValue() == 2;
 
                 assertTrue(fire1 && fire2 && fire3 && fire4);
-        }
-
-        assertTrue(fire1 && fire2 && fire3 && fire4);
         }
 
         /**
