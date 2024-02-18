@@ -29,7 +29,7 @@ public class StringCaster {
      * @param type  The type to cast the string to.
      * @return The casted value.
      */
-    public <T> T cast(String value, Class<T> type) {
+    public static <T> T cast(String value, Class<T> type) {
         if (!castMap.containsKey(type)) {
             throw new IllegalArgumentException("Il tipo di dato non è supportato");
         }
@@ -38,5 +38,9 @@ public class StringCaster {
         } catch (Exception e) {
             throw new IllegalArgumentException("Il valore non può essere convertito al tipo richiesto");
         }
+    }
+
+    private StringCaster() {
+        throw new IllegalStateException("Utility class");
     }
 }
