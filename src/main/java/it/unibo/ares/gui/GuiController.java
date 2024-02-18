@@ -16,8 +16,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -35,9 +33,9 @@ import java.util.HashMap;
 public final class GuiController extends DataReciever implements Initializable {
 
     /**
-     * writer is an instance of WriteOnGUIImpl used to write parameters on the GUI.
+     * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the GUI.
      */
-    private WriteOnGUI writer = new WriteOnGUIImpl();
+    private GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
     /*
      * configurationSessionId is a string that holds the ID of the configuration
      * 
@@ -54,19 +52,16 @@ public final class GuiController extends DataReciever implements Initializable {
      * FXML variables
      */
     @FXML
-    private Button btnPause;
-
-    @FXML
-    private Button btnRestart;
-
-    @FXML
-    private Button btnStop;
+    private Button btnPause, btnRestart, btnStop, btnStart, btnInitialize, btnSetAgent;
 
     @FXML
     private GridPane gridPaneMap;
 
     @FXML
-    private Button btnInitialize;
+    private VBox vboxAgentPar, vboxModelPar;
+
+    @FXML
+    private ChoiceBox<String> choiceAgent, choiceModel;
 
     /**
      * The btnPauseClicked method is an event handler that is called when the
@@ -111,48 +106,14 @@ public final class GuiController extends DataReciever implements Initializable {
          * stop simulation and switch scene to scene1, where the user can select a new
          * model
          */
+        calculatorSupplier.pauseSimulation(simulationId);
+        calculatorSupplier.removeSimulation(simulationId);
         Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-
-    @FXML
-    /**
-     * VBOXAgentPar is a VBox that holds the parameters for the agent.
-     */
-    private VBox vboxAgentPar;
-
-    @FXML
-    /**
-     * VBOXModelPar is a VBox that holds the parameters for the model.
-     */
-    private VBox vboxModelPar;
-
-    @FXML
-    /**
-     * btnLoad is a Button that triggers the loading of a model when clicked.
-     */
-    private Button btnSetAgent;
-
-    @FXML
-    /**
-     * btnStart is a Button that triggers the start of the application when clicked.
-     */
-    private Button btnStart;
-
-    @FXML
-    /**
-     * choiceAgent is a ChoiceBox that allows the user to select an agent.
-     */
-    private ChoiceBox<String> choiceAgent;
-
-    @FXML
-    /**
-     * choiceModel is a ChoiceBox that allows the user to select a model.
-     */
-    private ChoiceBox<String> choiceModel;
 
     /**
      * The btnStartClicked method is an event handler that is called when the
@@ -164,13 +125,10 @@ public final class GuiController extends DataReciever implements Initializable {
     @FXML
     void btnStartClicked(final ActionEvent event) throws IOException {
         /*
-         * start simulation
+         * start simulation and switch scene to scene2, where the user can see the
+         * simulation
          */
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
-
-        /*
-         * switch scene
-         */
         Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
@@ -195,10 +153,10 @@ public final class GuiController extends DataReciever implements Initializable {
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         /*
-         * write models
+         * write models if the scene is scene1
          */
         if (arg0.toString().contains("scene1.fxml")) {
-            writer.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
+            guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
             btnSetAgent.setDisable(true);
             btnStart.setDisable(true);
             choiceModel.setOnAction(this::writeModelParametersList);
@@ -206,11 +164,10 @@ public final class GuiController extends DataReciever implements Initializable {
     }
 
     /**
-     * The writeAgentsAndModelParametersList method is called when an action event
-     * occurs.
-     * It writes the parameters of the model and agents to the GUI.
-     * It also sets an action event handler for the choiceAgent that calls the
-     * writeAgentParametersList method.
+     * This method writes the parameters of the model to the VBox.
+     * It first sets the model in the calculator supplier using the selected model
+     * from the choice box.
+     * Then it retrieves the parameters for the model and writes them to the VBox.
      *
      * @param e the ActionEvent instance representing the event that triggered this
      *          method
@@ -219,13 +176,23 @@ public final class GuiController extends DataReciever implements Initializable {
         /*
          * write parameters of the model
          */
-        String modelIDselected = choiceModel.getValue();
-        configurationSessionId = calculatorSupplier.setModel(modelIDselected);
-        writer.writeVBox(vboxModelPar,
+        configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
+        guiWriter.writeVBox(vboxModelPar,
                 calculatorSupplier.getModelParametersParameters(configurationSessionId)
                         .getParameters());
     }
 
+    /**
+     * This method is triggered when the Initialize button is clicked.
+     * It reads the parameters from the VBox, sets them in the calculator supplier,
+     * and then disables the VBox.
+     * It also sets the choice box with the agents from the calculator supplier.
+     * If any exception occurs during this process, it shows the error message and
+     * disables the Initialize button.
+     *
+     * @param event the ActionEvent instance representing the event that triggered
+     *              this method
+     */
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
         try {
@@ -236,19 +203,32 @@ public final class GuiController extends DataReciever implements Initializable {
                                 e.getKey(),
                                 e.getValue());
                     });
-                    writer.writeChoiceBox(choiceAgent,
+                    guiWriter.writeChoiceBox(choiceAgent,
                     calculatorSupplier.getAgentsSimplified(configurationSessionId));
-            disableVBox(vboxModelPar);
+            guiWriter.disableVBox(vboxModelPar);
             btnInitialize.setDisable(true);
             btnSetAgent.setDisable(false);
             choiceAgent.setOnAction(this::writeAgentParametersList);
         } catch (Exception e) {
-            showErrorAndDisable(e.getMessage(), btnStart);
+            guiWriter.showErrorAndDisable(e.getMessage(), btnInitialize);
         }
-        
     }
 
-    private HashMap<String, Object> readParameters(final VBox vbox, Parameters params) {
+    /**
+     * This method reads the parameters from the VBox and returns them as a HashMap.
+     * It iterates over the children of the VBox, and if the child is a TextField,
+     * it gets its ID and uses it to retrieve the parameter from the Parameters
+     * object.
+     * The parameter's type is then used as the key, and the TextField's text is
+     * used as the value in the HashMap.
+     *
+     * @param vbox   the VBox from which to read the parameters
+     * @param params the Parameters object from which to retrieve the parameter
+     *               types
+     * @return a HashMap with the parameter types as keys and the TextField texts as
+     *         values
+     */
+    private HashMap<String, Object> readParameters(final VBox vbox, final Parameters params) {
         HashMap<String, Object> map = new HashMap<>();
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
@@ -261,7 +241,7 @@ public final class GuiController extends DataReciever implements Initializable {
                             params.setParameter(txt.getId(), Integer.parseInt(txt.getText()));
                             map.put(txt.getId(), Integer.parseInt(txt.getText()));
                         } catch (Exception e) {
-                            showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
                         }
                         break;
                     case "Double":
@@ -270,7 +250,7 @@ public final class GuiController extends DataReciever implements Initializable {
                             params.setParameter(txt.getId(), Double.parseDouble(txt.getText()));
                             map.put(txt.getId(), value);
                         } catch (Exception e) {
-                            showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
                         }
                         break;
                     case "Boolean":
@@ -278,7 +258,7 @@ public final class GuiController extends DataReciever implements Initializable {
                             params.setParameter(txt.getId(), Boolean.parseBoolean(txt.getText()));
                             map.put(txt.getId(), Boolean.parseBoolean(txt.getText()));
                         } catch (Exception e) {
-                            showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
                         }
                         break;
                     case "Float":
@@ -286,7 +266,7 @@ public final class GuiController extends DataReciever implements Initializable {
                             params.setParameter(txt.getId(), Float.parseFloat(txt.getText()));
                             map.put(txt.getId(), Float.parseFloat(txt.getText()));
                         } catch (Exception e) {
-                            showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
                         }
                         break;
                     case "DirectionVectorImpl":
@@ -314,6 +294,16 @@ public final class GuiController extends DataReciever implements Initializable {
         return map;
     }
 
+    /**
+     * This method is triggered when the Set Agent button is clicked.
+     * It reads the parameters from the VBox, sets them in the calculator supplier,
+     * and then enables the Start button.
+     * If any exception occurs during this process, it shows the error message and
+     * disables the Start button.
+     *
+     * @param event the ActionEvent instance representing the event that triggered
+     *              this method
+     */
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
         try {
@@ -324,27 +314,10 @@ public final class GuiController extends DataReciever implements Initializable {
                                 configurationSessionId,
                                 choiceAgent.getValue(), e.getKey(), e.getValue());
                     });
-            btnStart.setDisable(false);  
+            btnStart.setDisable(false);
         } catch (Exception e) {
-            showErrorAndDisable(e.getMessage(), btnStart);
+            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
         }
-    }
-
-    private void disableVBox(final VBox vbox) {
-        for (javafx.scene.Node node : vbox.getChildren()) {
-            if (node instanceof TextField) {
-                TextField textField = (TextField) node;
-                textField.setDisable(true);
-            }
-        }
-    }
-
-    private void showErrorAndDisable(final String message, final Button btn) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Errore");
-        alert.setContentText(message);
-        alert.showAndWait();
-        btn.setDisable(true);
     }
 
     /**
@@ -358,28 +331,18 @@ public final class GuiController extends DataReciever implements Initializable {
         /*
          * write parameters of the agent and disable the model parameters
          */
-        writer.writeVBox(vboxAgentPar, calculatorSupplier
+        guiWriter.writeVBox(vboxAgentPar, calculatorSupplier
                 .getAgentParametersSimplified(configurationSessionId,
                         choiceAgent
                                 .getValue())
                 .getParameters());
-        writer.writeVBox(vboxAgentPar,
+        guiWriter.writeVBox(vboxAgentPar,
                 calculatorSupplier
                         .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters());
     }
 
     @Override
-    public void onNext(SimulationOutputData item) {
-        gridPaneMap = write2dMap(item, gridPaneMap);
-    }
-
-    private GridPane write2dMap(SimulationOutputData item, GridPane grid) {
-        grid.getChildren().clear();
-        item.getData().forEach((pos, agent) -> {
-            TextField txt = new TextField();
-            txt.setText(agent);
-            grid.add(txt, pos.getX(), pos.getY());
-        });
-        return grid;
+    public void onNext(final SimulationOutputData item) {
+        guiWriter.write2dMap(item, gridPaneMap);
     }
 }

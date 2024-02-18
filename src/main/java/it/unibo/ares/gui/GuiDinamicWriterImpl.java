@@ -2,11 +2,16 @@ package it.unibo.ares.gui;
 
 import java.util.Set;
 
+import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -14,7 +19,7 @@ import javafx.scene.text.Font;
  * WriteOnGUIImpl is a class that implements the WriteOnGUI interface.
  * It provides methods to write data to a VBox and a ChoiceBox.
  */
-public class WriteOnGUIImpl implements WriteOnGUI {
+public class GuiDinamicWriterImpl implements GuiDinamicWriter {
 
     /**
      * The writeVBox method writes a set of parameters to a VBox. It clears the
@@ -25,8 +30,6 @@ public class WriteOnGUIImpl implements WriteOnGUI {
      *
      * @param vbox        the VBox to write the parameters to
      * @param parameters  a Set containing the parameters to write to the VBox
-     * @param initializer the SimulationInitializer instance for setting the
-     *                    parameters
      */
     @Override
     public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters) {
@@ -75,5 +78,65 @@ public class WriteOnGUIImpl implements WriteOnGUI {
          */
         choiceBox.getItems().clear();
         choiceBox.getItems().addAll(set);
+    }
+
+    /**
+     * This method disables all the TextFields in the given VBox.
+     * It iterates over the children of the VBox, and if the child is a TextField,
+     * it disables it.
+     *
+     * @param vbox the VBox whose TextFields should be disabled
+     */
+    @Override
+    public void disableVBox(final VBox vbox) {
+        for (javafx.scene.Node node : vbox.getChildren()) {
+            if (node instanceof TextField) {
+                TextField textField = (TextField) node;
+                textField.setDisable(true);
+            }
+        }
+    }
+
+    /**
+     * This method writes the simulation output data to a 2D map represented by a
+     * GridPane.
+     * It first clears the GridPane, then iterates over the data in the
+     * SimulationOutputData object.
+     * For each data entry, it creates a new TextField, sets its text to the agent's
+     * name, and adds it to the GridPane at the position specified by the data
+     * entry.
+     *
+     * @param item The SimulationOutputData object containing the data to be written
+     *             to the map.
+     * @param grid The GridPane representing the 2D map.
+     */
+    @Override
+    public void write2dMap(final SimulationOutputData item, final GridPane grid) {
+        grid.getChildren().clear();
+        item.getData().forEach((pos, agent) -> {
+            TextField txt = new TextField();
+            txt.setText(agent);
+            grid.add(txt, pos.getX(), pos.getY());
+        });
+    }
+
+
+    /**
+     * This method displays an error message in a dialog box and disables a
+     * specified button.
+     * It is typically used to handle exceptions or errors in the GUI, providing
+     * feedback to the user and preventing further actions until the error is
+     * resolved.
+     *
+     * @param message The error message to be displayed in the dialog box.
+     * @param btn     The button to be disabled.
+     */
+    @Override
+    public void showErrorAndDisable(final String message, final Button btn) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Errore");
+        alert.setContentText(message);
+        alert.showAndWait();
+        btn.setDisable(true);
     }
 }
