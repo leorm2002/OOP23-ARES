@@ -3,7 +3,6 @@ package it.unibo.ares.gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.controller.CalculatorSupplier;
@@ -17,6 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -248,43 +249,59 @@ public final class GuiController extends DataReciever implements Initializable {
         HashMap<String, Object> map = new HashMap<>();
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
-                TextField textField = (TextField) node;
-                String type = params.getParameter(textField.getId()).map(Parameter::getType).map(Class::getSimpleName)
+                TextField txt = (TextField) node;
+                String type = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
                         .orElse("");
                 switch (type) {
                     case "Integer":
                         // cast to Integer
-                        Integer value = Integer.parseInt(textField.getText());
-                        params.setParameter(textField.getId(), value);
-                        if (!inRange(params, textField.getId(), value)) {
-                            System.out.println("Value not in range");
+                        if (!inDomainRange(params, txt.getId(), Integer.parseInt(txt.getText()))) {
+                            showErrorAndDisable(Integer.parseInt(txt.getText()) + " out of domain range", btnStart);
                             break;
                         }
-                        map.put(textField.getId(), value);
+                        params.setParameter(txt.getId(), Integer.parseInt(txt.getText()));
+                        map.put(txt.getId(), Integer.parseInt(txt.getText()));
                         break;
                     case "Double":
                         // cast to Double
-                        double valu = Double.parseDouble(textField.getText().replace(",", "."));
-                        map.put(textField.getId(), valu);
+                        double value = Double.parseDouble(txt.getText().replace(",", "."));
+                        if (!inDomainRange(params, txt.getId(), value)) {
+                            showErrorAndDisable(value + " out of domain range", btnStart);
+                            break;
+                        }
+                        map.put(txt.getId(), value);
                         break;
                     case "Boolean":
                         // cast to Boolean
-                        map.put(textField.getId(), Boolean.parseBoolean(textField.getText()));
+                        if (!inDomainRange(params, txt.getId(), Boolean.parseBoolean(txt.getText()))) {
+                            showErrorAndDisable(Boolean.parseBoolean(txt.getText()) + " out of domain range", btnStart);
+                            break;
+                        }
+                        map.put(txt.getId(), Boolean.parseBoolean(txt.getText()));
                         break;
                     case "Float":
                         // cast to Float
-                        map.put(textField.getId(), Float.parseFloat(textField.getText()));
+                        if (!inDomainRange(params, txt.getId(), Float.parseFloat(txt.getText()))) {
+                            showErrorAndDisable(Float.parseFloat(txt.getText()) + " out of domain range", btnStart);
+                            break;
+                        }
+                        map.put(txt.getId(), Float.parseFloat(txt.getText()));
                         break;
                     case "DirectionVectorImpl":
                         // cast to Direction Vector
                         // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
-                        String[] elementi = textField.getText().split("\\s+");
+                        String[] elementi = txt.getText().split("\\s+");
 
                         if (elementi.length < 2) {
                             System.out.println("Inserire almeno due elementi separati da spazio!");
                         }
-                        map.put(textField.getId(),
-                                new DirectionVectorImpl(Integer.parseInt(elementi[0]), Integer.parseInt(elementi[1])));
+                        DirectionVectorImpl vector = new DirectionVectorImpl(Integer.parseInt(elementi[0]),
+                                Integer.parseInt(elementi[1]));
+                        if (!inDomainRange(params, txt.getId(), vector)) {
+                            showErrorAndDisable(vector + " out of domain range", btnStart);
+                            break;
+                        }
+                        map.put(txt.getId(), vector);
                         break;
                     default:
                         break;
@@ -292,15 +309,6 @@ public final class GuiController extends DataReciever implements Initializable {
             }
         }
         return map;
-    }
-
-    private <T> boolean inRange(final Parameters p, final String key, final T value) {
-        try {
-            p.setParameter(key, value);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
     }
 
     @FXML
@@ -322,6 +330,23 @@ public final class GuiController extends DataReciever implements Initializable {
                 TextField textField = (TextField) node;
                 textField.setDisable(true);
             }
+        }
+    }
+
+    private void showErrorAndDisable(final String message, final Button btn) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Errore");
+        alert.setContentText(message);
+        alert.showAndWait();
+        btn.setDisable(true);
+    }
+
+    private <T> boolean inDomainRange(final Parameters p, final String key, final T value) {
+        try {
+            p.setParameter(key, value);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
     }
 
@@ -350,7 +375,16 @@ public final class GuiController extends DataReciever implements Initializable {
 
     @Override
     public void onNext(SimulationOutputData item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onNext'");
+        gridPaneMap = write2dMap(item, gridPaneMap);
+    }
+
+    private GridPane write2dMap(SimulationOutputData item, GridPane grid) {
+        grid.getChildren().clear();
+        item.getData().forEach((pos, agent) -> {
+            TextField txt = new TextField();
+            txt.setText(agent);
+            grid.add(txt, pos.getX(), pos.getY());
+        });
+        return grid;
     }
 }
