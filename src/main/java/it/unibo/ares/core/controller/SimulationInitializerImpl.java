@@ -9,7 +9,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;

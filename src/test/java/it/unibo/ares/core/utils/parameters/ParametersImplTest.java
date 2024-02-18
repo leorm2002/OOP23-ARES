@@ -10,15 +10,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
-import it.unibo.ares.core.utils.parameters.Parameters;
-import it.unibo.ares.core.utils.parameters.ParametersImpl;
-
 /**
  * Unit test for {@link ParametersImpl}.
  */
-public class ParametersImplTest {
+class ParametersImplTest {
     private ParametersImpl parameters;
 
     /**

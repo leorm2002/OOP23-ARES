@@ -8,11 +8,9 @@ import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.state.State;
-import javafx.scene.paint.Paint;
 
-public class runner {
+class Runnerr {
     private static Random r;
 
     private static void runSchelling() {

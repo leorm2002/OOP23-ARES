@@ -8,9 +8,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentBuilder;
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -21,7 +18,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
 /**
  * Unit test for {@link Agent}.
  */
-public class AgentTest {
+class AgentTest {
     // Disable magic number chekstyle, they're random values to
     // CHECKSTYLE: MagicNumber OFF
 
@@ -50,7 +47,7 @@ public class AgentTest {
      * Test an agent with a strategy that return the State unchanged.
      */
     @Test
-    public void simpleAgentTest() {
+    void simpleAgentTest() {
 
         State simpleTestState = getTestState();
         Pos testPos = new PosImpl(3, 3);
@@ -84,7 +81,7 @@ public class AgentTest {
      * Test an agent with a strategy that removes all the agents of different types.
      */
     @Test
-    public void agentWithStrategyAndParametersTest() {
+    void agentWithStrategyAndParametersTest() {
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));
@@ -105,7 +102,7 @@ public class AgentTest {
      * Test an agent with a strategy that removes all the agents of different types.
      */
     @Test
-    public void agentWithStrategyAndParametersTest2() {
+    void agentWithStrategyAndParametersTest2() {
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));

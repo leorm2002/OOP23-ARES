@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.board.Board;
 import it.unibo.ares.core.utils.board.BoardImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -17,12 +16,12 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 /**
  * Unit test for {@link Board}.
  */
-public class BoardTest {
+class BoardTest {
     /**
      * Test adding an entity to the board.
      */
     @Test
-    public void testAddEntity() {
+    void testAddEntity() {
         Board<String> board = new BoardImpl<>();
         Pos pos = new PosImpl(0, 0);
         String entity = "Entity";
@@ -36,7 +35,7 @@ public class BoardTest {
      * Test removing an entity from the board.
      */
     @Test
-    public void testRemoveEntity() {
+    void testRemoveEntity() {
         Board<String> board = new BoardImpl<>();
         Pos pos = new PosImpl(0, 0);
         String entity = "Entity";
@@ -50,7 +49,7 @@ public class BoardTest {
      * Test getting all the entities from the board.
      */
     @Test
-    public void testGetEntities() {
+    void testGetEntities() {
         Board<String> board = new BoardImpl<>();
         Pos pos1 = new PosImpl(0, 0);
         Pos pos2 = new PosImpl(1, 1);
@@ -69,12 +68,12 @@ public class BoardTest {
      * position already occupied.
      */
     @Test
-    public void testThrowingDuplicateAdd() {
+    void testThrowingDuplicateAdd() {
         Board<String> board = new BoardImpl<>();
         Pos pos = new PosImpl(0, 0);
         String entity = "Entity";
+        board.addEntity(pos, entity);
         assertThrows(IllegalArgumentException.class, () -> {
-            board.addEntity(pos, entity);
             board.addEntity(pos, entity);
         });
     }
@@ -84,7 +83,7 @@ public class BoardTest {
      * from a position where it is not present.
      */
     @Test
-    public void testThrowingRemoveNotPresent() {
+    void testThrowingRemoveNotPresent() {
         Board<String> board = new BoardImpl<>();
         Pos pos = new PosImpl(0, 0);
         String entity = "Entity";

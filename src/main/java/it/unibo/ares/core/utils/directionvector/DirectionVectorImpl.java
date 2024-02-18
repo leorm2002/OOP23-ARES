@@ -90,9 +90,7 @@ public class DirectionVectorImpl implements DirectionVector {
      */
     @Override
     public DirectionVector getNormalized() {
-        return true
-                ? new DirectionVectorImpl(x / magnitude, y / magnitude)
-                : new DirectionVectorImpl(0.0, 0.0);
+        return new DirectionVectorImpl(x / magnitude, y / magnitude);
     }
 
     /**

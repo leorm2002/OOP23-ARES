@@ -4,16 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.agent.BoidsAgentFactory;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -21,9 +18,9 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
-public class TestBoids {
+class TestBoids {
         @Test
-        public void testInsideCone() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
+        void testInsideCone() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
                 Pos pos = new PosImpl(0, 0);
@@ -59,7 +56,7 @@ public class TestBoids {
         }
 
         @Test
-        public void testCollisionAvoidanceNotOutOfScope()
+        void testCollisionAvoidanceNotOutOfScope()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -83,18 +80,15 @@ public class TestBoids {
                                                 Integer.class);
 
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.collisionAvoindance(state, movingAgentPos, movingAgentDir,
+
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(b, state, movingAgentPos, movingAgentDir,
                                 radius,
                                 angle);
                 assertEquals(newDir, movingAgentDir);
         }
 
         @Test
-        public void testCollisionAvoidance()
+        void testCollisionAvoidance()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -118,11 +112,8 @@ public class TestBoids {
                                                 Integer.class);
 
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.collisionAvoindance(state, movingAgentPos, movingAgentDir,
+
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(b, state, movingAgentPos, movingAgentDir,
                                 radius,
                                 angle);
                 DirectionVector expectedDir = new DirectionVectorImpl(-1.0, 0.0);
@@ -130,7 +121,7 @@ public class TestBoids {
         }
 
         @Test
-        public void testCollisionAvoidanceWithTwoObstacles()
+        void testCollisionAvoidanceWithTwoObstacles()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -156,13 +147,9 @@ public class TestBoids {
                                 .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
                                                 Integer.class,
                                                 Integer.class);
-
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.collisionAvoindance(state, movingAgentPos, movingAgentDir,
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                                b, state, movingAgentPos, movingAgentDir,
                                 radius,
                                 angle);
                 DirectionVector expectedDir = new DirectionVectorImpl(-2.0, -1.0);
@@ -170,7 +157,7 @@ public class TestBoids {
         }
 
         @Test
-        public void testDirectionCenterCohesion()
+        void testDirectionCenterCohesion()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -193,23 +180,20 @@ public class TestBoids {
                 // TEST NOT VIEWED
 
                 Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                                .getDeclaredMethod("centerCohesion", State.class, Pos.class, DirectionVector.class,
                                                 Integer.class,
                                                 Integer.class);
 
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.centerCohesion(state, movingAgentPos, movingAgentDir,
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                                b, state, movingAgentPos, movingAgentDir,
                                 radius, angle);
                 DirectionVector expectedDir = new DirectionVectorImpl(1, 1);
                 assertEquals(newDir, expectedDir.getNormalized());
         }
 
         @Test
-        public void testDirectionCenterCohesionRemainingStill()
+        void testDirectionCenterCohesionRemainingStill()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -243,18 +227,15 @@ public class TestBoids {
                                                 Integer.class);
 
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.centerCohesion(state, movingAgentPos, movingAgentDir,
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                                b, state, movingAgentPos, movingAgentDir,
                                 radius, angle);
                 DirectionVector expectedDir = new DirectionVectorImpl(0, 0);
                 assertEquals(newDir, expectedDir.getNormalized());
         }
 
         @Test
-        public void testDirectionDirectionAligment()
+        void testDirectionDirectionAligment()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -285,18 +266,14 @@ public class TestBoids {
                                                 Integer.class);
 
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.directionAlignment(state, movingAgentPos,
-                                movinAgentDir,
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                                b, state, movingAgentPos, movinAgentDir,
                                 radius, angle);
                 assertEquals(newDir, movinAgentDir.getNormalized());
         }
 
         @Test
-        public void testDirectionDirectionAligment2()
+        void testDirectionDirectionAligment2()
                         throws NoSuchMethodException, SecurityException, ClassNotFoundException,
                         IllegalAccessException, IllegalArgumentException, InvocationTargetException {
                 BoidsAgentFactory b = new BoidsAgentFactory();
@@ -322,17 +299,12 @@ public class TestBoids {
                 // TEST NOT VIEWED
 
                 Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                                .getDeclaredMethod("directionAlignment", State.class, Pos.class, DirectionVector.class,
                                                 Integer.class,
                                                 Integer.class);
-
                 method.setAccessible(true);
-                // DirectionVector newDir = (DirectionVector) method.invoke(state,
-                // movingAgentPos, movingAgentDir,
-                // radius,
-                // angle);
-                DirectionVector newDir = b.directionAlignment(state, movingAgentPos,
-                                movinAgentDir,
+                DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                                b, state, movingAgentPos, movinAgentDir,
                                 radius, angle);
                 assertEquals(newDir, obstacleAgentsDir.getNormalized());
         }

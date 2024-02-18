@@ -46,7 +46,7 @@ public final class BoidsAgentFactory implements AgentFactory {
 
                 State a = new StateImpl(
                                 Math.abs(pos.getX() + xSign * (distance + 1)),
-                                Math.abs(pos.getY() + xSign * (distance + 1)));
+                                Math.abs(pos.getY() + ySign * (distance + 1)));
 
                 return a.getPosByPosAndRadius(pos, distance)
                                 .stream()
@@ -54,7 +54,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .collect(Collectors.toSet());
         }
 
-        public DirectionVector collisionAvoindance(
+        private DirectionVector collisionAvoindance(
                         final State s, final Pos pos, final DirectionVector dir,
                         final Integer distance, final Integer angle) {
                 Set<Pos> obstacles = getObstacles(s, computeCloseCells(pos, dir, distance, angle));
@@ -70,7 +70,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return new DirectionVectorImpl(newX, newY).getNormalized();
         }
 
-        public DirectionVector directionAlignment(
+        private DirectionVector directionAlignment(
                         final State s, final Pos pos, final DirectionVector dir, final Integer distance,
                         final Integer angle) {
                 var closeCells = computeCloseCells(pos, dir, distance, angle);
@@ -86,7 +86,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .orElse(dir);
         }
 
-        public DirectionVector centerCohesion(State s, final Pos pos, final DirectionVector dir,
+        private DirectionVector centerCohesion(State s, final Pos pos, final DirectionVector dir,
                         final Integer distance, final Integer angle) {
                 // Compute a vector pointing to che center of the flock
                 var closeCells = computeCloseCells(pos, dir, distance, angle);
