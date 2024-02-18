@@ -12,6 +12,8 @@ import java.util.Map;
 public final class SimulationOutputData {
     private final Map<Pos, String> data;
     private final String simulationId;
+    private final Integer width;
+    private final Integer height;
 
     /**
      * Creates a new SimulationOutputData.
@@ -19,9 +21,12 @@ public final class SimulationOutputData {
      * @param data         the data of the simulation
      * @param simulationId the id of the simulation
      */
-    public SimulationOutputData(final Map<Pos, String> data, final String simulationId) {
+    public SimulationOutputData(final Map<Pos, String> data, final String simulationId, final Integer width,
+            final Integer height) {
         this.data = Collections.unmodifiableMap(data);
         this.simulationId = simulationId;
+        this.width = width;
+        this.height = height;
     }
 
     /**
@@ -40,5 +45,13 @@ public final class SimulationOutputData {
      */
     public String getSimulationId() {
         return simulationId;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public Integer getHeight() {
+        return height;
     }
 }

@@ -68,9 +68,9 @@ public final class BoidsModelFactory implements ModelFactory {
         // in the type
         return builder
                 .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class,
-                        new ParameterDomainImpl<Integer>("Numero di agenti (0-n)", n -> n > 0)))
+                        new ParameterDomainImpl<Integer>("Numero di agenti (1-n)", n -> n > 0)))
                 .addParameter(new ParameterImpl<>("size", Integer.class,
-                        new ParameterDomainImpl<Integer>("Dimensione della griglia (0-n)", n -> n > 0)))
+                        new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)", n -> n > 0)))
                 .addExitFunction((o, n) -> false)
                 .addInitFunction(t -> {
                     try {

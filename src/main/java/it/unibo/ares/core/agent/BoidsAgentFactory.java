@@ -168,6 +168,11 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return currentState;
         }
 
+        private DirectionVectorImpl getRandomDirection() {
+                Random r = new Random();
+                return new DirectionVectorImpl(r.nextInt(20), r.nextInt(20));
+        }
+
         /**
          * Creates a new Boids agent.
          * A boids Agents requires the following parameters:
@@ -191,7 +196,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .addParameter(new ParameterImpl<>("angle", Integer.class,
                                                 new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
                                                                 (Integer d) -> d > 0 && d <= 180)))
-                                .addParameter(new ParameterImpl<>("direction", DirectionVectorImpl.class))
+                                .addParameter(new ParameterImpl<>("direction", getRandomDirection()))
                                 .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "il peso dell'evitamento degli ostacoli (0.0-1.0)",

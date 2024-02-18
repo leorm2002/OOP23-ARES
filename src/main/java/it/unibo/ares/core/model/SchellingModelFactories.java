@@ -10,6 +10,7 @@ import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -79,9 +80,18 @@ public final class SchellingModelFactories implements ModelFactory {
                 // We need only one agent supplier since all agents are equal and only differs
                 // in the type
                 return builder
-                                .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class))
-                                .addParameter(new ParameterImpl<>("numeroAgentiTipoB", Integer.class))
-                                .addParameter(new ParameterImpl<>("size", Integer.class))
+                                .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class,
+                                                new ParameterDomainImpl<Integer>(
+                                                                "Numero di agenti del primo tipo (0-n)",
+                                                                i -> i >= 0)))
+                                .addParameter(new ParameterImpl<>("numeroAgentiTipoB", Integer.class,
+                                                new ParameterDomainImpl<Integer>(
+                                                                "Numero di agenti del secondo tipo (0-n)",
+                                                                i -> i >= 0)))
+                                .addParameter(new ParameterImpl<>("size", Integer.class,
+                                                new ParameterDomainImpl<Integer>(
+                                                                "Dimensione della griglia (1-n)",
+                                                                i -> i > 0)))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                                 .addInitFunction(t -> {

@@ -64,7 +64,7 @@ final class SimulationImpl implements Simulation {
                         pair -> pair.getSecond().getType(),
                         (existingValue, newValue) -> newValue,
                         HashMap::new)),
-                simulationSessionId);
+                simulationSessionId, state.getDimensions().getFirst(), state.getDimensions().getSecond());
     }
 
     private void tickSim() {
