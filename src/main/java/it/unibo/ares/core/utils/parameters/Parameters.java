@@ -55,6 +55,16 @@ public interface Parameters {
     <T> Optional<Parameter<T>> getParameter(String key, Class<T> type);
 
     /**
+     * Retrieves a parameter with the specified key, if present
+     * 
+     * @param key the key of the parameter
+     * @param <T> the type of the parameter
+     * @return an Optional containing the parameter, or an empty Optional if not
+     *         found
+     */
+    <T> Optional<Parameter<T>> getParameter(String key);
+
+    /**
      * Sets the value of a parameter with the specified key.
      * 
      * @param key   the key of the parameter
