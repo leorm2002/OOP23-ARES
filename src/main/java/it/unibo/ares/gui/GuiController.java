@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -234,12 +235,13 @@ public final class GuiController extends DataReciever implements Initializable {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField txt = (TextField) node;
-                String type = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
+                String typeToString = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
                         .orElse("");
-                switch (type) {
+                Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
+                switch (typeToString) {
                     case "Integer":
                         try {
-                            params.setParameter(txt.getId(), Integer.parseInt(txt.getText()));
+                            params.setParameter(txt.getId(), StringCaster.cast(txt.getText(), type));
                             map.put(txt.getId(), Integer.parseInt(txt.getText()));
                         } catch (Exception e) {
                             guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
@@ -248,7 +250,7 @@ public final class GuiController extends DataReciever implements Initializable {
                     case "Double":
                         try {
                             double value = Double.parseDouble(txt.getText().replace(",", "."));
-                            params.setParameter(txt.getId(), Double.parseDouble(txt.getText()));
+                            params.setParameter(txt.getId(), value);
                             map.put(txt.getId(), value);
                         } catch (Exception e) {
                             guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
@@ -256,16 +258,16 @@ public final class GuiController extends DataReciever implements Initializable {
                         break;
                     case "Boolean":
                         try {
-                            params.setParameter(txt.getId(), Boolean.parseBoolean(txt.getText()));
-                            map.put(txt.getId(), Boolean.parseBoolean(txt.getText()));
+                            params.setParameter(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            map.put(txt.getId(), StringCaster.cast(txt.getText(), type));
                         } catch (Exception e) {
                             guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
                         }
                         break;
                     case "Float":
                         try {
-                            params.setParameter(txt.getId(), Float.parseFloat(txt.getText()));
-                            map.put(txt.getId(), Float.parseFloat(txt.getText()));
+                            params.setParameter(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            map.put(txt.getId(), StringCaster.cast(txt.getText(), type));
                         } catch (Exception e) {
                             guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
                         }
