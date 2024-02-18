@@ -219,8 +219,6 @@ public final class GuiController extends DataReciever implements Initializable {
          */
         String modelIDselected = choiceModel.getValue();
         configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
-        writer.setModelId(modelIDselected);
-        writer.setAgentOrModel('m');
         writer.writeVBox(vboxModelPar, 
                 calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId)
                         .getParameters(),
@@ -249,11 +247,16 @@ public final class GuiController extends DataReciever implements Initializable {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField textField = (TextField) node;
-                switch (parameters.stream().filter(p -> p.getKey().equals(textField.getId())).findFirst().get()
-                        .getType().getSimpleName()) {
+                Parameter p = parameters.stream().filter(par -> par.getKey().equals(textField.getId())).findFirst().get();
+                switch (p.getType().getSimpleName()) {
                     case "Integer":
                         // cast to Integer
-                        map.put(textField.getId(), Integer.parseInt(textField.getText()));
+                        Integer value = Integer.parseInt(textField.getText());
+                        if(!inRange(p, value)) {
+                            System.out.println("Value not in range");
+                            return null;
+                        }
+                        map.put(textField.getId(), value);
                         break;
                     case "Double":
                         // cast to Double
@@ -285,6 +288,13 @@ public final class GuiController extends DataReciever implements Initializable {
             }
         }
         return map;
+    }
+    
+    private <T> boolean inRange(final Parameter<?> p, final T value) {
+        if (p.getDomain().isPresent()) {
+            return p.getDomain().get().isValueValid(value);
+        }
+        return true;
     }
 
     @FXML
@@ -318,7 +328,6 @@ public final class GuiController extends DataReciever implements Initializable {
         /*
          * write parameters of the agent and disable the model parameters
          */
-        writer.setAgentOrModel('a');
         writer.writeVBox(vboxAgentPar, calculatorSupplier
                 .getInitializer().getAgentParametersSimplified(configurationSessionId,
                         choiceAgent

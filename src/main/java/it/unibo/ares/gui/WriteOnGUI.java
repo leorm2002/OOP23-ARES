@@ -29,19 +29,4 @@ public interface WriteOnGUI {
      * @param initializer the SimulationInitializer instance for setting the parameters
      */
     void writeVBox(VBox vBox, Set<Parameter<?>> parameters, SimulationInitializer initializer);
-
-    /**
-     * Sets the agent or model.
-     *
-     * @param c the character representing the agent or model
-     */
-    void setAgentOrModel(char c);
-
-    /**
-     * The setModelId method sets the ID of the model, it's useful for setting the right modelId
-     * when we setting parameters for the model and his agents.
-     *
-     * @param modelId the ID of the model
-     */
-    void setModelId(String modelId);
 }

@@ -16,15 +16,6 @@ import javafx.scene.text.Font;
  * It provides methods to write data to a VBox and a ChoiceBox.
  */
 public class WriteOnGUIImpl implements WriteOnGUI {
-    /*
-     * The agentOrModel attribute is a string that specifies whether the data is for
-     * an agent or a model.
-     */
-    private String agentOrModel;
-    /*
-     * The modelId attribute is a string that holds the ID of the model.
-     */
-    private String modelId;
 
     /**
      * The writeVBox method writes a set of parameters to a VBox. It clears the
@@ -42,18 +33,24 @@ public class WriteOnGUIImpl implements WriteOnGUI {
     public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters,
             final SimulationInitializer initializer) {
         vbox.getChildren().clear();
-        final int txtSize = 13, lblSize = 15, marginBottom = 20, marginRightLeft = 10;
+        final int txtSize = 13, lblSize = 15, domainSize = 13, marginBottom = 20, marginRightLeft = 10;
         parameters.stream().forEach(p -> {
             /*
              * creating a label and a textfield for each parameter and setting his style
              */
             Label lbl = new Label(p.getKey());
+            Label domain = new Label();
             TextField txt = new TextField();
-            VBox.setMargin(txt, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
+            VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
             txt.setId(p.getKey());
+            domain.setFont(Font.font(domainSize));
             txt.setFont(Font.font(txtSize));
             lbl.setFont(Font.font(lblSize));
             lbl.wrapTextProperty().setValue(true);
+            if (p.getDomain().isPresent()) {
+                domain.setText(p.getDomain().get().getDescription());
+                
+            }
             try {
                 txt.setText(p.getValue().toString());
             } catch (Exception e) {
@@ -62,31 +59,7 @@ public class WriteOnGUIImpl implements WriteOnGUI {
             }
             vbox.getChildren().add(lbl);
             vbox.getChildren().add(txt);
-            /*
-             * adding an event listener to the textfield to update the parameter value when
-             * the textfield loses focus
-             * 2 cases: agent or model texfield, the event listener is different because the
-             * method to call is different
-             */
-
-             /*
-            switch (agentOrModel) {
-                case "agent":
-                    txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
-                        if (!newVal) {
-                            initializer.setAgentParameterSimplified(this.modelId, txt.getId(), p.getKey(), txt.getText());
-                        }
-                    });
-                    break;
-                case "model":
-                    txt.focusedProperty().addListener((obs, oldVal, newVal) -> {
-                        if (newVal && oldVal) {
-                            initializer.setModelParameter(this.modelId, p.getKey(), txt.getText());
-                        }
-                    });
-                default:
-                    break;
-            }*/
+            vbox.getChildren().add(domain);
         });
     }
 
@@ -104,26 +77,5 @@ public class WriteOnGUIImpl implements WriteOnGUI {
          */
         choiceBox.getItems().clear();
         choiceBox.getItems().addAll(set);
-    }
-
-    /**
-     * The setAgentOrModel method sets whether the current context is for an agent
-     * or a model.
-     * If the input character is 'a', the context is set to "agent". Otherwise, it
-     * is set to "model".
-     *
-     * @param c the character indicating the context (either 'a' or 'm')
-     */
-    public void setAgentOrModel(final char c) {
-        this.agentOrModel = c == 'a' ? "agent" : "model";
-    }
-
-    /**
-     * The setModelId method sets the ID of the model to be displayed on the GUI.
-     *
-     * @param modelId the ID of the model
-     */
-    public void setModelId(final String modelId) {
-        this.modelId = modelId;
     }
 }
