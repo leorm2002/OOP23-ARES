@@ -6,7 +6,9 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import it.unibo.ares.core.utils.parameters.ParameterDomain;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
@@ -85,7 +87,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
     public Agent createAgent() {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Double>("threshold", Double.class));
+        b.addParameter(new ParameterImpl<Double>("threshold", Double.class, new ParameterDomainImpl<>(
+                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0)));
         b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class));
 
         b.addStrategy((state, pos) -> {
