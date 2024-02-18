@@ -3,8 +3,11 @@ package it.unibo.ares.gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 /**
  * GuiController is a class that controls the GUI of the application.
@@ -27,6 +31,11 @@ import java.util.HashMap;
  * the user and the GUI.
  */
 public class GuiController implements Initializable {
+
+    /*
+     * parameters is an instance of Parameters used to hold the parameters
+     */
+    Set<Parameter<?>> parameters = new LinkedHashSet<>();
 
     /**
      * writer is an instance of WriteOnGUIImpl used to write parameters on the GUI.
@@ -230,9 +239,9 @@ public class GuiController implements Initializable {
         String modelIDselected = choiceModel.getValue();
         configurationSessionId = calculatorSupplier.getInitializer().setModel(modelIDselected);
         writer.setModelId(modelIDselected);
+        parameters = calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId).getParameters();
         writer.setAgentOrModel('m');
-        writer.writeVBox(VBOXModelPar,
-                calculatorSupplier.getInitializer().getModelParametersParameters(configurationSessionId).getParameters(),
+        writer.writeVBox(VBOXModelPar, parameters,
                 calculatorSupplier.getInitializer());
     }
     
@@ -254,7 +263,37 @@ public class GuiController implements Initializable {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField textField = (TextField) node;
-                map.put(textField.getId(), textField.getText());
+                switch (parameters.stream().filter(p -> p.getKey().equals(textField.getId())).findFirst().get().getType().getSimpleName()) {
+                    case "Integer":
+                        //cast to Integer
+                        map.put(textField.getId(), Integer.parseInt(textField.getText()));
+                        break;
+                    case "Double":
+                        //cast to Double
+                        double value = Double.parseDouble(textField.getText().replace(",", "."));
+                        map.put(textField.getId(), value);
+                        break;
+                    case "Boolean":
+                        //cast to Boolean
+                        map.put(textField.getId(), Boolean.parseBoolean(textField.getText()));
+                        break;
+                    case "Float":
+                        //cast to Float
+                        map.put(textField.getId(), Float.parseFloat(textField.getText()));
+                        break;
+                    case "DirectionVectorImpl":
+                        //cast to Direction Vector
+                        // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
+                        String[] elementi = textField.getText().split("\\s+");
+
+                        if (elementi.length < 2) {
+                            System.out.println("Inserire almeno due elementi separati da spazio!");
+                        }
+                        map.put(textField.getId(), new DirectionVectorImpl(Integer.parseInt(elementi[0]), Integer.parseInt(elementi[1])));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         return map;
@@ -264,7 +303,7 @@ public class GuiController implements Initializable {
     void btnSetAgentClicked(final ActionEvent event) {
         readParameters(VBOXAgentPar).entrySet().forEach(e -> {
             calculatorSupplier.getInitializer().setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), e.getKey(),
-                    Integer.parseInt(e.getValue().toString()));
+                    e.getValue());
         });
     }
 
@@ -289,9 +328,11 @@ public class GuiController implements Initializable {
          * write parameters of the agent and disable the model parameters
          */
         writer.setAgentOrModel('a');
-        writer.writeVBox(VBOXAgentPar,
-                calculatorSupplier.getInitializer()
-                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters(),
+        parameters = calculatorSupplier.getInitializer().getAgentParametersSimplified(configurationSessionId, 
+                choiceAgent
+                        .getValue())
+                .getParameters();
+        writer.writeVBox(VBOXAgentPar, parameters,
                          calculatorSupplier.getInitializer());
     }
 }

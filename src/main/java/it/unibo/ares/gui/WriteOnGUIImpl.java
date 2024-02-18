@@ -42,7 +42,7 @@ public class WriteOnGUIImpl implements WriteOnGUI {
     public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters,
             final SimulationInitializer initializer) {
         vbox.getChildren().clear();
-        final int txtSize = 15, lblSize = 18, marginBottom = 20, marginRightLeft = 10;
+        final int txtSize = 13, lblSize = 15, marginBottom = 20, marginRightLeft = 10;
         parameters.stream().forEach(p -> {
             /*
              * creating a label and a textfield for each parameter and setting his style
