@@ -28,6 +28,11 @@ interface Simulation {
     void start();
 
     /**
+     * Pause the simulation.
+     */
+    void pause();
+
+    /**
      * @return true if the simulation is running, false otherwise.
      */
     boolean isRunning();

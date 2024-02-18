@@ -48,6 +48,11 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
+    public void pause() {
+        this.running = false;
+    }
+
+    @Override
     public boolean isRunning() {
         return this.running;
     }

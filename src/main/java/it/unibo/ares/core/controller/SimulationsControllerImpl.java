@@ -48,9 +48,11 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public void pauseSimulation(final String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pauseSimulation'");
+    public void pauseSimulation(String id) {
+        if (simulations.get(id).isRunning()) {
+            simulations.get(id).pause();
+        }
+        throw new IllegalStateException("The simulation is not running");
     }
 
 }
