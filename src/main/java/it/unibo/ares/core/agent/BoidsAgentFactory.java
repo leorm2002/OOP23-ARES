@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
@@ -184,13 +185,26 @@ public final class BoidsAgentFactory implements AgentFactory {
         public Agent createAgent() {
                 AgentBuilder builder = new AgentBuilderImpl();
                 return builder
-                                .addParameter(new ParameterImpl<>("distance", Integer.class))
-                                .addParameter(new ParameterImpl<>("angle", Integer.class))
+                                .addParameter(new ParameterImpl<>("distance", Integer.class,
+                                                new ParameterDomainImpl<>("il raggio di visione in celle (1-10)",
+                                                                (Integer d) -> d > 0 && d <= 10)))
+                                .addParameter(new ParameterImpl<>("angle", Integer.class,
+                                                new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
+                                                                (Integer d) -> d > 0 && d <= 180)))
                                 .addParameter(new ParameterImpl<>("direction", DirectionVectorImpl.class))
-                                .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class))
-                                .addParameter(new ParameterImpl<>("alignmentWeight", Double.class))
-                                .addParameter(new ParameterImpl<>("cohesionWeight", Double.class))
-                                .addParameter(new ParameterImpl<>("stepSize", Integer.class))
+                                .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
+                                                new ParameterDomainImpl<>(
+                                                                "il peso dell'evitamento degli ostacoli (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("alignmentWeight", Double.class,
+                                                new ParameterDomainImpl<>("il peso dell'allineamento (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("cohesionWeight", Double.class,
+                                                new ParameterDomainImpl<>("il peso della coesione (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("stepSize", Integer.class,
+                                                new ParameterDomainImpl<>("la dimensione del passo (1-10)",
+                                                                (Integer d) -> d > 0 && d <= 10)))
                                 .addStrategy(this::tickFunction)
                                 .build();
         }

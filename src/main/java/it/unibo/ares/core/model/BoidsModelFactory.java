@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import it.unibo.ares.core.agent.BoidsAgentFactory;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -66,8 +67,10 @@ public final class BoidsModelFactory implements ModelFactory {
         // We need only one agent supplier since all agents are equal and only differs
         // in the type
         return builder
-                .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class))
-                .addParameter(new ParameterImpl<>("size", Integer.class))
+                .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class,
+                        new ParameterDomainImpl<Integer>("Numero di agenti (0-n)", n -> n > 0)))
+                .addParameter(new ParameterImpl<>("size", Integer.class,
+                        new ParameterDomainImpl<Integer>("Dimensione della griglia (0-n)", n -> n > 0)))
                 .addExitFunction((o, n) -> false)
                 .addInitFunction(t -> {
                     try {
