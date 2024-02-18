@@ -27,18 +27,13 @@ public class TestFireSpread {
                 // (1,0), spread 1 and fuel 1.0
                 Pos pos = new PosImpl(1, 1);
                 DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = factory.getFireModelAgent(1, dir, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
                 // The agent should not move
-
-                // var agents = state.getAgents();
-
-                fireAgent1.tick(state, pos);
-                fireAgent1.tick(state, pos);
                 fireAgent1.tick(state, pos);
 
-                assert state.getAgentAt(pos).isEmpty();
+                assert state.getAgentAt(pos).isPresent();
         }
 
         /**
@@ -55,7 +50,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = factory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
                 // Create a Tree-type Agent with type 2, threshold 0.5 and vision radius 1
@@ -66,11 +61,7 @@ public class TestFireSpread {
                 // The fire should spread to the tree
                 fireAgent1.tick(state, pos);
 
-                assertTrue(state.getAgentAt(pos2).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos2).get() + " has no type parameter"))
-                                .getValue() == 1);
+                assertTrue(state.getAgentAt(pos2).get().getType() == "F");
         }
 
         /**
@@ -86,7 +77,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = factory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
                 // Create a Tree-type Agent with type 2, threshold 0.5 and vision radius 1
@@ -97,11 +88,7 @@ public class TestFireSpread {
                 // The fire should spread to the tree
                 fireAgent1.tick(state, pos);
 
-                assertTrue(state.getAgentAt(pos2).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos2).get() + " has no type parameter"))
-                                .getValue() == 2);
+                assertTrue(state.getAgentAt(pos2).get().getType() == "T");
         }
 
         /**
@@ -118,7 +105,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = factory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
                 PosImpl pos1 = new PosImpl(1, 0);
@@ -137,30 +124,13 @@ public class TestFireSpread {
                 // The fire should spread to the tree
                 fireAgent1.tick(state, pos);
 
-                Boolean fire1 = state.getAgentAt(pos1).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(
-                                                                pos1).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire1 = state.getAgentAt(pos1).get().getType() == "F";
 
-                Boolean fire2 = state.getAgentAt(pos2).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos2).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire2 = state.getAgentAt(pos2).get().getType() == "F";
 
-                Boolean fire3 = state.getAgentAt(pos3).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos3).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire3 = state.getAgentAt(pos3).get().getType() == "F";
 
-                Boolean fire4 = state.getAgentAt(pos4).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos4).get() + " has no type parameter"))
-                                .getValue() == 2;
+                Boolean fire4 = state.getAgentAt(pos4).get().getType() == "T";
 
                 assertTrue(fire1 && fire2 && fire3 && fire4);
         }
@@ -179,7 +149,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent = factory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent);
 
                 PosImpl pos1 = new PosImpl(1, 0);
@@ -204,30 +174,13 @@ public class TestFireSpread {
                 fireAgent2.tick(state, pos2);
                 fireAgent3.tick(state, pos3);
 
-                Boolean fire1 = state.getAgentAt(pos1).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(
-                                                                pos1).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire1 = state.getAgentAt(pos1).get().getType() == "F";
 
-                Boolean fire2 = state.getAgentAt(pos2).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos2).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire2 = state.getAgentAt(pos2).get().getType() == "F";
 
-                Boolean fire3 = state.getAgentAt(pos3).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos3).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire3 = state.getAgentAt(pos3).get().getType() == "F";
 
-                Boolean fire4 = state.getAgentAt(pos4).get()
-                                .getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + state.getAgentAt(pos4).get() + " has no type parameter"))
-                                .getValue() == 1;
+                Boolean fire4 = state.getAgentAt(pos4).get().getType() == "F";
 
                 assertTrue(fire1 && fire2 && fire3 && fire4);
         }

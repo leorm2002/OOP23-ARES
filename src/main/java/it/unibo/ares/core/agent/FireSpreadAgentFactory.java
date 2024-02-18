@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
@@ -15,18 +16,11 @@ import it.unibo.ares.core.utils.state.State;
  * A factory class for creating agents for the Fire Spread Model.
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
-        private static Integer typeFIRE = 1;
-        private static Integer typeTREE = 2;
 
         private static BiPredicate<Agent, Agent> isAgentOfDiffType = (a, b) -> {
-                Integer typeA = a.getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + a + " has no type parameter"))
-                                .getValue();
-                Integer typeB = b.getParameters().getParameter("type", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + b + " has no type parameter"))
-                                .getValue();
+                String typeA = a.getType();
+                String typeB = b.getType();
+
                 return !typeA.equals(typeB);
         };
 
@@ -125,7 +119,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 fireAgent.setParameter("fuel", (fuel - flammability < 0.0) ? 0.0 : fuel - flammability);
 
                 /* Starts a new fire */
-                Agent newAgent = getFireModelAgent();
+                Agent newAgent = getFireModelAgent(visionRadius, dir, spread, newFuel);
                 newAgent.setParameter("spread", spread);
                 newAgent.setParameter("direction", dir);
                 newAgent.setParameter("visionRadius", visionRadius);
@@ -162,7 +156,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .collect(Collectors.toSet());
         }
 
-        private State tickFunction(final State currentState, final Pos agentPosition) {
+        private static State tickFunction(final State currentState, final Pos agentPosition) {
                 Agent agent = currentState.getAgentAt(agentPosition).get();
 
                 if (!isExtinguished(currentState, agentPosition, agent)) {
@@ -183,18 +177,21 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @param fuel         starting fuel of the agent
          * @return An instance of the Fire-type Agent
          */
-        public Agent getFireModelAgent(final Integer visionRadius, final DirectionVector dir, final Integer spread,
-                        final Double fuel) {
+        public static Agent getFireModelAgent(final Integer visionRadius, final DirectionVector dir,
+                        final Integer spread, final Double fuel) {
                 AgentBuilder b = new AgentBuilderImpl();
-
-                return b
-                                .addParameter(new ParameterImpl<>("type", typeFIRE))
+                b
+                                .addParameter(new ParameterImpl<>("type", "F"))
                                 .addParameter(new ParameterImpl<>("visionRadius", visionRadius))
                                 .addParameter(new ParameterImpl<>("direction", dir))
                                 .addParameter(new ParameterImpl<>("spread", spread))
                                 .addParameter(new ParameterImpl<>("fuel", fuel))
-                                .addStrategy(this::tickFunction)
+                                .addStrategy((state, pos) -> tickFunction(state, pos))
                                 .build();
+
+                Agent a = b.build();
+                a.setType("F");
+                return a;
         }
 
         /**
@@ -202,15 +199,24 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * 
          * @return An instance of the Fire-type Agent
          */
-        public static Agent getFireModelAgent() {
+        public Agent getFireModelAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
 
-                return b
-                                .addParameter(new ParameterImpl<>("type", typeFIRE))
-                                .addParameter(new ParameterImpl<>("visionRadius", Integer.class))
+                b
+                                .addParameter(new ParameterImpl<>("type", "F"))
+                                .addParameter(new ParameterImpl<>("visionRadius", Integer.class,
+                                                new ParameterDomainImpl<>(
+                                                                "Range of vision of the agent (0 - n)",
+                                                                (Integer i) -> i > 0)))
+                                .addParameter(new ParameterImpl<>("spread", Integer.class,
+                                                new ParameterDomainImpl<>(
+                                                                "Range of spread (RoS) of the agent (0 - n)",
+                                                                (Integer i) -> i > 0)))
+                                .addParameter(new ParameterImpl<>("fuel", Double.class,
+                                                new ParameterDomainImpl<>(
+                                                                "Amount of fuel available for combustion (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
                                 .addParameter(new ParameterImpl<>("direction", DirectionVectorImpl.class))
-                                .addParameter(new ParameterImpl<>("spread", Integer.class))
-                                .addParameter(new ParameterImpl<>("fuel", Double.class))
                                 .addStrategy((state, pos) -> {
                                         Agent agent = state.getAgentAt(pos).get();
 
@@ -223,6 +229,10 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                         return state;
                                 })
                                 .build();
+
+                Agent a = b.build();
+                a.setType("F");
+                return a;
         }
 
         /**
@@ -235,14 +245,18 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         public Agent getTreeModelAgent(final Double fuel, final Double flammability) {
                 AgentBuilder b = new AgentBuilderImpl();
 
-                return b
-                                .addParameter(new ParameterImpl<>("type", typeTREE))
+                b
+                                .addParameter(new ParameterImpl<>("type", "T"))
                                 .addParameter(new ParameterImpl<>("fuel", fuel))
                                 .addParameter(new ParameterImpl<>("flammability", flammability))
                                 .addStrategy((state, pos) -> {
                                         return state;
                                 })
                                 .build();
+
+                Agent a = b.build();
+                a.setType("T");
+                return a;
         }
 
         /**
@@ -250,17 +264,27 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * 
          * @return An instance of the Tree-type Agent
          */
-        public static Agent getTreeModelAgent() {
+        public Agent getTreeModelAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
 
-                return b
-                                .addParameter(new ParameterImpl<>("type", typeTREE))
-                                .addParameter(new ParameterImpl<>("fuel", Double.class))
-                                .addParameter(new ParameterImpl<>("flammability", Double.class))
+                b
+                                .addParameter(new ParameterImpl<>("type", "T"))
+                                .addParameter(new ParameterImpl<>("fuel", Double.class,
+                                                new ParameterDomainImpl<>(
+                                                                "Amount of fuel available for combustion (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                .addParameter(new ParameterImpl<>("flammability", Double.class,
+                                                new ParameterDomainImpl<>(
+                                                                "Measure of how quick can burn (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
                                 .addStrategy((state, pos) -> {
                                         return state;
                                 })
                                 .build();
+
+                Agent a = b.build();
+                a.setType("T");
+                return a;
         }
 
         @Override
@@ -269,11 +293,10 @@ public final class FireSpreadAgentFactory implements AgentFactory {
 
                 return b
                                 .addParameter(new ParameterImpl<Integer>("type", Integer.class))
-                                .addParameter(new ParameterImpl<Double>("threshold", Double.class))
-                                .addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class))
-                                .addStrategy((state, pos) -> {
-                                        return state;
-                                })
+                                .addParameter(new ParameterImpl<Double>("fuel", Double.class))
+                                // .addStrategy((state, pos) -> {
+                                // return state;
+                                // })
                                 .build();
         }
 }
