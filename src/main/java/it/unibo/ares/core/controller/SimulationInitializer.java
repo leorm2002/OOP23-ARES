@@ -19,5 +19,5 @@ public abstract class SimulationInitializer implements InitializationApi {
      * @throws IllegalArgumentException if the model has not been initialized or if
      *                                  some agent parameters are not set.
      */
-    abstract Pair<String, Model> startSimulation(String initializationId);
+    abstract Pair<String, Simulation> startSimulation(String initializationId);
 }

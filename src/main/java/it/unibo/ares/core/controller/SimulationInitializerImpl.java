@@ -152,7 +152,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     }
 
     @Override
-    Pair<String, Model> startSimulation(final String initializationId) {
+    Pair<String, Simulation> startSimulation(final String initializationId) {
         if (!this.initializedModels.containsKey(initializationId)) {
             throw new IllegalArgumentException("The model has not been initialized");
         }
@@ -161,11 +161,12 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
                 .map(Pair::getSecond)
                 .map(Agent::getParameters)
                 .map(Parameters::getParametersToset)
-                .anyMatch(s -> s.isEmpty())) {
+                .anyMatch(s -> !s.isEmpty())) {
             throw new IllegalArgumentException("Some agent parameters are not set");
         }
         Model model = intilizingModels.get(initializationId);
-
-        return new Pair<String, Model>(initializationId, model);
+        return new Pair<String, Simulation>(initializationId,
+                new SimulationImpl(initializedModels.get(initializationId).getFirst(),
+                        initializedModels.get(initializationId).getSecond()));
     }
 }

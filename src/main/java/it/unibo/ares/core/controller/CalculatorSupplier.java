@@ -36,9 +36,8 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
      * @return The id of the simulation.
      */
     public String startSimulation(final String initializationId, final Subscriber<SimulationOutputData> subscriber) {
-        Pair<String, Model> resp = initializer.startSimulation(initializationId);
-        controller.addSimulation(resp.getFirst(),
-                new SimulationImpl(resp.getSecond().initilize(), resp.getSecond()));
+        Pair<String, Simulation> resp = initializer.startSimulation(initializationId);
+        controller.addSimulation(resp.getFirst(), resp.getSecond());
         controller.startSimulation(initializationId);
         controller.subscribe(initializationId, subscriber);
         return initializationId;
