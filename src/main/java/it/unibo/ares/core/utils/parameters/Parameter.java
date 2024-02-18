@@ -1,5 +1,7 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.util.Optional;
+
 /**
  * Represents a parameter with a generic type.
  *
@@ -41,4 +43,11 @@ public interface Parameter<T> {
      * @return the key of the parameter
      */
     String getKey();
+
+    /**
+     * Gets the domain of the parameter.
+     *
+     * @return the domain of the parameter
+     */
+    Optional<ParameterDomain<T>> getDomain();
 }
