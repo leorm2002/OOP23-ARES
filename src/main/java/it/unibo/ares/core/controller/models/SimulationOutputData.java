@@ -1,6 +1,8 @@
 package it.unibo.ares.core.controller.models;
 
 import it.unibo.ares.core.utils.pos.Pos;
+
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -18,7 +20,7 @@ public final class SimulationOutputData {
      * @param simulationId the id of the simulation
      */
     public SimulationOutputData(final Map<Pos, String> data, final String simulationId) {
-        this.data = data;
+        this.data = Collections.unmodifiableMap(data);
         this.simulationId = simulationId;
     }
 

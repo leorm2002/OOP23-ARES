@@ -21,7 +21,7 @@ final class SimulationImpl implements Simulation {
      * @param state The state of the simulation.
      * @param model The model of the simulation.
      */
-    public SimulationImpl(final State state, final Model model) {
+    SimulationImpl(final State state, final Model model) {
         this.state = state;
         this.model = model;
         calculating = false;

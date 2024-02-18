@@ -10,7 +10,7 @@ import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.state.State;
 
-class Runner {
+final class Runner {
     private static Random r;
 
     private static void runSchelling() {

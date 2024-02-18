@@ -13,7 +13,10 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import it.unibo.ares.core.utils.uniquepositiongetter.UniquePositionGetter;
 
-public class BoidsModelFactory implements ModelFactory {
+/**
+ * A factory class for creating the Boids model.
+ */
+public final class BoidsModelFactory implements ModelFactory {
     private static final String MODEL_ID = "Boids";
 
     @Override

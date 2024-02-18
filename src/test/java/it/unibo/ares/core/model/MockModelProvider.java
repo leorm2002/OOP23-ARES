@@ -9,7 +9,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * Provides a mock model for testing purposes.
  * 
  */
-public class MockModelProvider {
+public final class MockModelProvider {
     /**
      * Returns a mock model.
      * 

@@ -1,5 +1,7 @@
 package it.unibo.ares.core.utils.uniquepositiongetter;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +28,7 @@ public class UniquePositionGetter implements Iterator<Pos> {
      */
     public UniquePositionGetter(final List<Pos> positions) {
         r = new Random();
-        this.positions = positions;
+        this.positions = Collections.unmodifiableList(positions);
         this.extracted = new HashSet<>();
     }
 
