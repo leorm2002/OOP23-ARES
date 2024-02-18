@@ -4,7 +4,7 @@ import java.util.Set;
 
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-public interface SimulationInitializerApi {
+public interface InitializationApi {
 
     /**
      * Gets the models available for the simulation.

@@ -2,13 +2,13 @@ package it.unibo.ares.core.controller;
 
 import java.util.concurrent.Flow.Subscriber;
 
-import it.unibo.ares.core.api.SimulationsControllerApi;
+import it.unibo.ares.core.api.SimulationControlApi;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 
 /**
  * A controller for all the simulations.
  */
-public abstract class SimulationsController implements SimulationsControllerApi {
+public abstract class SimulationsController implements SimulationControlApi {
 
     /**
      * Adds a new simulation to the current session.

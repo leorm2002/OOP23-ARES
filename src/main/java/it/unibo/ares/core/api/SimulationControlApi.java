@@ -1,6 +1,6 @@
 package it.unibo.ares.core.api;
 
-public interface SimulationsControllerApi {
+public interface SimulationControlApi {
 
     /**
      * remove the simulation from the current session.

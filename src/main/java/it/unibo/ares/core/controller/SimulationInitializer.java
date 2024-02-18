@@ -1,6 +1,6 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.api.SimulationInitializerApi;
+import it.unibo.ares.core.api.InitializationApi;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 
@@ -8,7 +8,7 @@ import it.unibo.ares.core.utils.Pair;
  * Used to creare and parametrize an istance of a simulation to be runned on the
  * system.
  */
-public abstract class SimulationInitializer implements SimulationInitializerApi {
+public abstract class SimulationInitializer implements InitializationApi {
     /**
      * Starts the simulation.
      * 

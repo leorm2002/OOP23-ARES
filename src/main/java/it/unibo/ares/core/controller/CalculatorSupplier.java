@@ -4,8 +4,8 @@ import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.ares.core.api.SimulationInitializerApi;
-import it.unibo.ares.core.api.SimulationsControllerApi;
+import it.unibo.ares.core.api.InitializationApi;
+import it.unibo.ares.core.api.SimulationControlApi;
 import it.unibo.ares.core.controller.models.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
@@ -19,7 +19,7 @@ import it.unibo.ares.core.utils.parameters.Parameters;
         "EI_EXPOSE_REP"
 }, justification = "C'è i due campi sono final e non modificabili, espongono i metodi richiesti per gestire le simulazioni.")
 
-public final class CalculatorSupplier implements SimulationInitializerApi, SimulationsControllerApi {
+public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 
     private final SimulationsController controller;
@@ -65,14 +65,14 @@ public final class CalculatorSupplier implements SimulationInitializerApi, Simul
     /**
      * @return the controller
      */
-    public SimulationsControllerApi getController() {
+    public SimulationControlApi getController() {
         return controller;
     }
 
     /**
      * @return the initializer
      */
-    public SimulationInitializerApi getInitializer() {
+    public InitializationApi getInitializer() {
         return initializer;
     }
 
