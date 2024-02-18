@@ -2,7 +2,6 @@ package it.unibo.ares.gui;
 
 import java.util.Set;
 
-import it.unibo.ares.core.api.InitializationApi;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
@@ -30,5 +29,5 @@ public interface WriteOnGUI {
      * @param initializer the SimulationInitializer instance for setting the
      *                    parameters
      */
-    void writeVBox(VBox vBox, Set<Parameter<?>> parameters, InitializationApi initializer);
+    void writeVBox(VBox vBox, Set<Parameter<?>> parameters);
 }
