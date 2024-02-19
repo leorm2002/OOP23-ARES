@@ -91,6 +91,7 @@ public final class GuiSecondController extends DataReciever implements Initializ
     public static void setConfigurationSessionId(String configurationSessionId) {
         GuiSecondController.configurationSessionId = configurationSessionId;
     }
+    
     /**
      * The btnStopClicked method is an event handler that is called when the "Stop"
      * button is clicked.
@@ -98,43 +99,19 @@ public final class GuiSecondController extends DataReciever implements Initializ
      *
      * @param event the ActionEvent instance representing the button click event
      */
+    
     @FXML
     void btnStoplicked(final ActionEvent event) throws IOException {
         /*
          * stop simulation and switch scene to scene1, where the user can select a new
          * model
          */
-        calculatorSupplier.pauseSimulation(simulationId);
         calculatorSupplier.removeSimulation(simulationId);
         Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-    /**
-     * The btnStartClicked method is an event handler that is called when the
-     * "Start" button is clicked.
-     * It starts the simulation and updates the GUI accordingly.
-     *
-     * @param event the ActionEvent instance representing the button click event
-     */
-    @FXML
-    void btnStartClicked(final ActionEvent event) throws IOException {
-        /*
-         * start simulation and switch scene to scene2, where the user can see the
-         * simulation
-         */
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        // initialize(new
-        // URL("file:/C:/Users/loren/Desktop/ARES/ARES/build/resources/main/scene2.fxml"),
-        // null);
-
     }
 
     /**
@@ -161,8 +138,7 @@ public final class GuiSecondController extends DataReciever implements Initializ
     public void onNext(final SimulationOutputData item) {
         int size = item.getHeight();
         Platform.runLater(() -> {
-            writer.write2dMap(item, hboxGrid, size);
-        
+            writer.write2dMap(item, grid, size);
         });
         //grid.getChildren().add(new Label("ciao"));
         //guiWriter.write2dMap(item, grid, 10);

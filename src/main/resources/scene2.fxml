@@ -9,9 +9,6 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unibo.ares.gui.GuiSecondController">
-   <top>
-      <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1200.0" BorderPane.alignment="CENTER" />
-   </top>
    <bottom>
       <HBox alignment="CENTER" prefHeight="110.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <children>
@@ -43,9 +40,9 @@
       </HBox>
    </bottom>
    <center>
-      <HBox fx:id="hboxGrid" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray;" BorderPane.alignment="CENTER">
+      <HBox fx:id="hboxGrid" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane fx:id="grid">
+            <GridPane fx:id="grid" maxHeight="550.0" maxWidth="550.0" minHeight="550.0" minWidth="550.0" prefHeight="550.0" prefWidth="550.0">
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>

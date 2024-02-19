@@ -51,7 +51,7 @@ public interface GuiDinamicWriter {
      * @param item the SimulationOutputData to be written to the map
      * @param grid the GridPane representing the 2D map
      */
-    void write2dMap(SimulationOutputData item, HBox container, int size);
+    void write2dMap(SimulationOutputData item, GridPane container, int size);
 
     /**
      * This method displays an error message in a dialog box and disables a
