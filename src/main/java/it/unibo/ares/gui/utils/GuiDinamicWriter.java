@@ -1,14 +1,14 @@
-package it.unibo.ares.gui;
+package it.unibo.ares.gui.utils;
 
 import java.util.Set;
+import java.util.Map;
 
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import it.unibo.ares.core.utils.pos.Pos;
 
 /**
  * WriteOnGUI is an interface for writing parameters on a specific projected
@@ -48,10 +48,11 @@ public interface GuiDinamicWriter {
      * The specific implementation of how the data is written to the map is not
      * provided here.
      *
-     * @param item the SimulationOutputData to be written to the map
-     * @param grid the GridPane representing the 2D map
+     * @param items the map containing the positions and the agents to be written 
+     * to the map
+     * @param container the GridPane representing the 2D map
      */
-    void write2dMap(SimulationOutputData item, GridPane container, int size);
+    void write2dMap(Map<Pos, String> items, GridPane container);
 
     /**
      * This method displays an error message in a dialog box and disables a

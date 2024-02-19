@@ -1,16 +1,15 @@
-package it.unibo.ares.gui;
+package it.unibo.ares.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import it.unibo.ares.core.api.DataReciever;
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.StringCaster;
-import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.gui.utils.GuiDinamicWriter;
+import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,13 +18,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import java.util.HashMap;
 
 /**
@@ -33,7 +30,7 @@ import java.util.HashMap;
  * It implements the Initializable interface and manages the interaction between
  * the user and the GUI.
  */
-public final class GuiController implements Initializable {
+public final class FirstGuiController implements Initializable {
 
     /**
      * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
@@ -79,10 +76,6 @@ public final class GuiController implements Initializable {
      */
     @FXML
     void btnStartClicked(final ActionEvent event) throws IOException {
-        /*
-         * start simulation and switch scene to scene2, where the user can see the
-         * simulation
-         */
         startSecondGui();
 
     }
@@ -102,9 +95,6 @@ public final class GuiController implements Initializable {
      */
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
-        /*
-         * write models if the scene is scene1
-         */
         guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
         btnSetAgent.setDisable(true);
         btnStart.setDisable(true);
@@ -121,9 +111,6 @@ public final class GuiController implements Initializable {
      *          method
      */
     private void writeModelParametersList(final ActionEvent e) {
-        /*
-         * write parameters of the model
-         */
         configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
         guiWriter.writeVBox(vboxModelPar,
                 calculatorSupplier.getModelParametersParameters(configurationSessionId)
@@ -167,7 +154,7 @@ public final class GuiController implements Initializable {
      * It iterates over the children of the VBox, and if the child is a TextField,
      * it gets its ID and uses it to retrieve the parameter from the Parameters
      * object.
-     * The parameter's type is then used as the key, and the TextField's text is
+     * The TextField's ID is then used as the key, and the TextField's text is
      * used as the value in the HashMap.
      *
      * @param vbox   the VBox from which to read the parameters
@@ -248,9 +235,10 @@ public final class GuiController implements Initializable {
     /**
      * This method is triggered when the Set Agent button is clicked.
      * It reads the parameters from the VBox, sets them in the calculator supplier,
-     * and then enables the Start button.
+     * and then disables the VBox and the Set Agent button.
+     * It also enables the Start button.
      * If any exception occurs during this process, it shows the error message and
-     * disables the Start button.
+     * disables the Set Agent button.
      *
      * @param event the ActionEvent instance representing the event that triggered
      *              this method
@@ -292,11 +280,17 @@ public final class GuiController implements Initializable {
                         .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters());
     }
 
+    /**
+     * This method is used to start the second GUI. It loads the scene from
+     * "scene2.fxml",
+     * sets the scene to the stage, and shows the stage.
+     * If there is an error loading the scene, it prints the stack trace of the
+     * exception.
+     */
     private void startSecondGui() {
         Parent root;
         Stage stage = (Stage) btnStart.getScene().getWindow();
         try {
-            GuiSecondController.setConfigurationSessionId(configurationSessionId);
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
             Scene scene = new Scene(root);
             stage.setTitle("ARES");

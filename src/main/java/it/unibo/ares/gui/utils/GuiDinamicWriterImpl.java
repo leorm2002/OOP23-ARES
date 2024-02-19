@@ -1,8 +1,8 @@
-package it.unibo.ares.gui;
+package it.unibo.ares.gui.utils;
 
 import java.util.Set;
+import java.util.Map;
 
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -12,9 +12,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import it.unibo.ares.core.utils.pos.Pos;
 
 /**
  * WriteOnGUIImpl is a class that implements the WriteOnGUI interface.
@@ -109,16 +109,15 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      *
      * @param item The SimulationOutputData object containing the data to be written
      *             to the map.
-     * @param grid The GridPane representing the 2D map.
+     * @param container The GridPane representing the 2D map.
      */
     @Override
-    public void write2dMap(final SimulationOutputData item, final GridPane container, final int size) {
-        container.setVgap(10);
-        container.setHgap(10);
+    public void write2dMap(final Map<Pos, String> items, final GridPane container) {
+        int lblFontSize = 20;
         container.getChildren().clear();
-        item.getData().forEach((pos, agent) -> {
+        items.forEach((pos, agent) -> {
             Label txt = new Label(agent);
-            txt.setFont(Font.font(20));
+            txt.setFont(Font.font(lblFontSize));
             container.add(txt, pos.getX(), pos.getY());
         });
         container.setGridLinesVisible(true);

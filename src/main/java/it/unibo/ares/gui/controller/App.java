@@ -1,4 +1,4 @@
-package it.unibo.ares.gui;
+package it.unibo.ares.gui.controller;
 
 import javafx.application.Application;
 

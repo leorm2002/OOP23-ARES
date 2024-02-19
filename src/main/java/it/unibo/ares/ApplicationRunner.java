@@ -20,7 +20,7 @@ public class ApplicationRunner {
         } else if (mode.equals("1")) {
             System.out.println("Avvio in modalità grafica");
             Thread thread = new Thread(() -> {
-                it.unibo.ares.gui.App.main(args);
+                it.unibo.ares.gui.controller.App.main(args);
             });
             thread.start();
         } else if (mode.equals("2")) {
@@ -29,7 +29,7 @@ public class ApplicationRunner {
                 it.unibo.ares.cli.App.main(args);
             });
             Thread thread2 = new Thread(() -> {
-                it.unibo.ares.gui.App.main(args);
+                it.unibo.ares.gui.controller.App.main(args);
             });
             thread.start();
             thread2.start();
