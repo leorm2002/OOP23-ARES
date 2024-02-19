@@ -16,7 +16,8 @@ import it.unibo.ares.core.utils.state.State;
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
-
+    public static final String VISIONRADIUS = "visionRadius";
+    public static final String THRESHOLD = "threshold";
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         String typeA = a.getType();
 
@@ -24,25 +25,38 @@ public final class SchellingsAgentFactory implements AgentFactory {
         return typeA.equals(typeB);
     };
 
-    private static boolean isThresholdSatisfied(final State state, final Pos pos, final Agent agent) {
-        Integer visionRadius = agent.getParameters().getParameter("visionRadius", Integer.class)
-                .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no visionRadius parameter"))
-                .getValue();
-        Double threshold = agent.getParameters().getParameter("threshold", Double.class)
-                .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no threshold parameter"))
-                .getValue();
-
-        Set<Agent> neighBors = state.getAgentsByPosAndRadius(pos, visionRadius)
+    private static Set<Agent> getNeighborgs(State state, Integer visionRadius, Pos pos, Agent agent) {
+        return state.getAgentsByPosAndRadius(pos, visionRadius)
                 .stream()
                 .filter(a -> !a.equals(agent))
                 .collect(Collectors.toSet());
-        if (neighBors.size() == 0) {
-            return true;
-        }
-        Double ratio = (double) neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent)).count()
+
+    }
+
+    private static double getRatio(State state, Integer visioRadius, Pos pos, Agent agent) {
+        Set<Agent> neighBors = getNeighborgs(state, visioRadius, pos, agent);
+        return neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent))
+                .count()
                 / neighBors.size();
 
-        return ratio >= threshold;
+    }
+
+    private static boolean isThresholdSatisfied(final State state, final Pos pos, final Agent agent) {
+        Integer visionRadius = agent.getParameters().getParameter(
+                VISIONRADIUS, Integer.class)
+                .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no visionRadius parameter"))
+                .getValue();
+        Double threshold = agent.getParameters().getParameter(
+                THRESHOLD, Double.class)
+                .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no threshold parameter"))
+                .getValue();
+
+        Set<Agent> neighBors = getNeighborgs(state, visionRadius, pos, agent);
+
+        if (neighBors.isEmpty() || getRatio(state, visionRadius, pos, agent) >= threshold) {
+            return true;
+        }
+        return false;
     }
 
     private static Optional<PosImpl> getFreePositionIfAvailable(final State state, final Agent agent) {
@@ -50,7 +64,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
                 .boxed()
                 .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
                         .mapToObj(y -> new PosImpl(x, y)))
-                .filter(p -> state.getAgentAt(p).isEmpty())
+                .filter(p -> state.isFree(p))
                 .filter(p -> isThresholdSatisfied(state, p, agent))
                 .findAny();
     }
@@ -67,8 +81,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
             final Integer visionRadius) {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Double>("threshold", threshold));
-        b.addParameter(new ParameterImpl<Integer>("visionRadius", visionRadius));
+        b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold));
+        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
             if (!isThresholdSatisfied(state, pos, agent)) {
