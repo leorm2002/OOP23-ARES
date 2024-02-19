@@ -12,6 +12,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -111,12 +112,21 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param grid The GridPane representing the 2D map.
      */
     @Override
-    public void write2dMap(final SimulationOutputData item, final GridPane grid) {
+    public void write2dMap(final SimulationOutputData item, final GridPane container, final int size) {
+        GridPane grid = new GridPane();
         grid.getChildren().clear();
+
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                Label label = new Label();
+                grid.add(label, col, row); // Aggiunge il nodo alla cella corrispondente
+                grid.setVgap(10);
+                grid.setHgap(10);
+            }
+        }
         item.getData().forEach((pos, agent) -> {
-            TextField txt = new TextField();
-            txt.setText(agent);
-            grid.add(txt, pos.getX(), pos.getY());
+            Label txt = new Label(agent);
+            GridPane.setConstraints(txt, pos.getX(), pos.getY());
         });
     }
 

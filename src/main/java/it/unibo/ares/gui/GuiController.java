@@ -19,8 +19,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -31,7 +33,7 @@ import java.util.HashMap;
  * It implements the Initializable interface and manages the interaction between
  * the user and the GUI.
  */
-public final class GuiController extends DataReciever implements Initializable {
+public final class GuiController implements Initializable {
 
     /**
      * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
@@ -42,7 +44,7 @@ public final class GuiController extends DataReciever implements Initializable {
      * configurationSessionId is a string that holds the ID of the configuration
      * 
      */
-    private String configurationSessionId, simulationId;
+    private String configurationSessionId;
 
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
@@ -57,65 +59,16 @@ public final class GuiController extends DataReciever implements Initializable {
     private Button btnPause, btnRestart, btnStop, btnStart, btnInitialize, btnSetAgent;
 
     @FXML
-    private GridPane gridPaneMap;
+    private HBox hboxGrid;
+
+    @FXML
+    private GridPane grid;
 
     @FXML
     private VBox vboxAgentPar, vboxModelPar;
 
     @FXML
     private ChoiceBox<String> choiceAgent, choiceModel;
-
-    /**
-     * The btnPauseClicked method is an event handler that is called when the
-     * "Pause" button is clicked.
-     * It pauses the simulation and updates the GUI accordingly.
-     *
-     * @param event the ActionEvent instance representing the button click event
-     */
-    @FXML
-    void btnPauseClicked(final ActionEvent event) {
-        /*
-         * pause simulation
-         */
-        calculatorSupplier.pauseSimulation(simulationId);
-    }
-
-    /**
-     * The btnRestartClicked method is an event handler that is called when the
-     * "Restart" button is clicked.
-     * It restarts the simulation and updates the GUI accordingly.
-     *
-     * @param event the ActionEvent instance representing the button click event
-     */
-    @FXML
-    void btnRestartClicked(final ActionEvent event) {
-        /*
-         * restart simulation
-         */
-        // calculatorSupplier.getController().restartSimulation(simulationId);
-    }
-
-    /**
-     * The btnStopClicked method is an event handler that is called when the "Stop"
-     * button is clicked.
-     * It stops the simulation and updates the GUI accordingly.
-     *
-     * @param event the ActionEvent instance representing the button click event
-     */
-    @FXML
-    void btnStoplicked(final ActionEvent event) throws IOException {
-        /*
-         * stop simulation and switch scene to scene1, where the user can select a new
-         * model
-         */
-        calculatorSupplier.pauseSimulation(simulationId);
-        calculatorSupplier.removeSimulation(simulationId);
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
 
     /**
      * The btnStartClicked method is an event handler that is called when the
@@ -130,12 +83,7 @@ public final class GuiController extends DataReciever implements Initializable {
          * start simulation and switch scene to scene2, where the user can see the
          * simulation
          */
-        simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        startSecondGui();
 
     }
 
@@ -157,12 +105,10 @@ public final class GuiController extends DataReciever implements Initializable {
         /*
          * write models if the scene is scene1
          */
-        if (arg0.toString().contains("scene1.fxml")) {
-            guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
-            btnSetAgent.setDisable(true);
-            btnStart.setDisable(true);
-            choiceModel.setOnAction(this::writeModelParametersList);
-        }
+        guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
+        btnSetAgent.setDisable(true);
+        btnStart.setDisable(true);
+        choiceModel.setOnAction(this::writeModelParametersList);
     }
 
     /**
@@ -346,8 +292,18 @@ public final class GuiController extends DataReciever implements Initializable {
                         .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters());
     }
 
-    @Override
-    public void onNext(final SimulationOutputData item) {
-        guiWriter.write2dMap(item, gridPaneMap);
+    private void startSecondGui() {
+        Parent root;
+        Stage stage = (Stage) btnStart.getScene().getWindow();
+        try {
+            GuiSecondController.setConfigurationSessionId(configurationSessionId);
+            root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
+            Scene scene = new Scene(root);
+            stage.setTitle("ARES");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
