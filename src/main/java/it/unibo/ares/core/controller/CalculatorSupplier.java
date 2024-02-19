@@ -16,10 +16,6 @@ import it.unibo.ares.core.utils.parameters.Parameters;
  * This class is used as an entry point for the simulation system, it is used to
  * access the initialization and the controller of the simulations.
  */
-@SuppressFBWarnings(value = {
-        "EI_EXPOSE_REP"
-}, justification = "C'è i due campi sono final e non modificabili, espongono i metodi richiesti per gestire le simulazioni.")
-
 public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 

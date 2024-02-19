@@ -1,10 +1,12 @@
 package it.unibo.ares.core.agent;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
@@ -37,7 +39,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
         Set<Agent> neighBors = getNeighborgs(state, visioRadius, pos, agent);
         return neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent))
                 .count()
-                / neighBors.size();
+                / (double) neighBors.size();
 
     }
 
@@ -61,12 +63,21 @@ public final class SchellingsAgentFactory implements AgentFactory {
 
     private static Optional<PosImpl> getFreePositionIfAvailable(final State state, final Agent agent) {
         return IntStream.range(0, state.getDimensions().getFirst())
+                .parallel()
                 .boxed()
                 .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
                         .mapToObj(y -> new PosImpl(x, y)))
                 .filter(p -> state.isFree(p))
                 .filter(p -> isThresholdSatisfied(state, p, agent))
-                .findAny();
+                .findAny()
+                .or(() -> {
+                    Random r = new Random();
+                    return Stream
+                            .generate(() -> new PosImpl(r.nextInt(state.getDimensions().getFirst()),
+                                    r.nextInt(state.getDimensions().getSecond())))
+                            .filter(state::isFree)
+                            .findAny();
+                });
     }
 
     /**
@@ -85,7 +96,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (!isThresholdSatisfied(state, pos, agent)) {
+            if (true || !isThresholdSatisfied(state, pos, agent)) {
                 Optional<PosImpl> newPos = getFreePositionIfAvailable(state, agent);
                 newPos.ifPresent(p -> state.moveAgent(pos, newPos.get()));
             }

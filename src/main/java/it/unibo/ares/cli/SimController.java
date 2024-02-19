@@ -9,6 +9,9 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
 public class SimController extends DataReciever {
+    private static final String START = "s";
+    private static final String PAUSE = "p";
+    private static final String STOP = "e";
     private final String inizializationId;
     private String simulationId;
     Thread reader;
@@ -18,8 +21,17 @@ public class SimController extends DataReciever {
     }
 
     private void readChar(String ch) {
-        if (ch.equals('s')) {
-            CalculatorSupplier.getInstance().pauseSimulation(this.simulationId);
+        switch (ch) {
+            case START:
+                CalculatorSupplier.getInstance().startSimulation(simulationId);
+                break;
+            case STOP:
+                CalculatorSupplier.getInstance().pauseSimulation(simulationId);
+                break;
+            case PAUSE:
+                break;
+            default:
+                break;
         }
     }
 
@@ -39,26 +51,28 @@ public class SimController extends DataReciever {
     }
 
     private Optional<String> getBorder(final Integer x, final Integer y, final Integer size) {
-        if (y == 0 || y == size - 1) {
+        if (y == -1 || y == size - 2) {
             return Optional.of("--");
         }
-        if (y == 1 || y == size - 2) {
-            return Optional.of("  ");
+        if (x == -1) {
+            return Optional.of("| ");
         }
-        if (x == 0 || x == size - 1) {
-            return Optional.of("|");
+        if (x == size - 2) {
+            return Optional.of(" |");
         }
-        if (x == 1 || x == size - 2) {
-            return Optional.of(" ");
-        }
+
         return Optional.empty();
     }
 
+    private void printInfo() {
+        System.out.println("Premi p per mettere in pausa, s per uscire");
+    }
+
     private void printData(final SimulationOutputData data) {
-        Integer newWidth = data.getWidth() + 4;
-        Integer newWHeigth = data.getHeight() + 4;
-        for (int y = 0; y <= data.getHeight() + 4; y++) {
-            for (int x = 0; x <= data.getWidth() + 4; x++) {
+        Integer newWidth = data.getWidth() + 1;
+        Integer newWHeigth = data.getHeight() + 1;
+        for (int y = -1; y < data.getHeight() + 1; y++) {
+            for (int x = -1; x < data.getWidth() + 1; x++) {
                 Pos pos = new PosImpl(x, y);
                 if (getBorder(x, y, newWidth).isPresent()) {
                     System.out.print(getBorder(x, y, newWidth).get());

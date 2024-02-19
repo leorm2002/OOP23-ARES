@@ -6,7 +6,6 @@ public class ApplicationRunner {
     public static void main(String[] args) {
         CalculatorSupplier.getInstance();
         System.out.println("Benvenuto in ARES!");
-        System.out.println("Premi 0 per avviare l'applicazione in modalità cli, 1 per grafica 2 per entrambe");
         System.out.println("Premi 1 per avviare l'applicazione in modalità grafica");
         System.out.println("Premi 2 per avviare l'applicazione in modalità entrambe");
         System.out.println("Premi 0 per avviare l'applicazione in modalità cli");
