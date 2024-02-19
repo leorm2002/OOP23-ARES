@@ -22,6 +22,9 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * 
  */
 public final class BoidsAgentFactory implements AgentFactory {
+        // PARAMETRI FINE TUNTING
+        private static final Double USERCORRECTIONWEIGHT = 0.4;
+        private static final Double WALLAVOIDANCEWEIGHT = 0.2;
 
         private boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
                         final Integer angle) {
@@ -111,7 +114,6 @@ public final class BoidsAgentFactory implements AgentFactory {
                         final DirectionVector a, final DirectionVector b,
                         final DirectionVector c,
                         final double w1, final double w2, final double w3) {
-                double factor = 0.1;
                 double i = 0;
                 double j = 0;
                 List<DirectionVector> vectors = List.of(a, b, c);
@@ -120,12 +122,12 @@ public final class BoidsAgentFactory implements AgentFactory {
                         i += v.getNormalizedX() * weights.get(vectors.indexOf(v));
                         j += v.getNormalizedY() * weights.get(vectors.indexOf(v));
                 }
-                i *= factor;
-                j *= factor;
-                i += original.getNormalizedX() * (1 - factor);
-                j += original.getNormalizedY() * (1 - factor);
-                i += steerAway.getNormalizedX() * 0.5;
-                j += steerAway.getNormalizedY() * 0.5;
+                i *= USERCORRECTIONWEIGHT;
+                j *= USERCORRECTIONWEIGHT;
+                i += original.getNormalizedX() * (1 - USERCORRECTIONWEIGHT);
+                j += original.getNormalizedY() * (1 - USERCORRECTIONWEIGHT);
+                i += steerAway.getNormalizedX() * WALLAVOIDANCEWEIGHT;
+                j += steerAway.getNormalizedY() * WALLAVOIDANCEWEIGHT;
                 return new DirectionVectorImpl(i, j).getNormalized();
         }
 
@@ -159,7 +161,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return newPos.get();
         }
 
-        DirectionVector steerAwayFromBorder(Pos currentPos, int width, int height) {
+        DirectionVector steerAwayFromBorder(final Pos currentPos, final int width, final int height) {
                 return new DirectionVectorImpl(
                                 width / 2 - currentPos.getX(),
                                 height / 2 - currentPos.getY());
@@ -224,7 +226,6 @@ public final class BoidsAgentFactory implements AgentFactory {
          * A boids Agents requires the following parameters:
          * - distance: the distance within which to consider other agents (Integer).
          * - angle: the angle within which to consider other agents (Integer).
-         * - direction: the direction of the agent (DirectionVectorImpl).
          * - collisionAvoidanceWeight: the weight of the collision avoidance (Double).
          * - alignmentWeight: the weight of the alignment (Double).
          * - cohesionWeight: the weight of the cohesion (Double).
