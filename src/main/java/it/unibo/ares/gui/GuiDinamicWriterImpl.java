@@ -112,22 +112,25 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param grid The GridPane representing the 2D map.
      */
     @Override
-    public void write2dMap(final SimulationOutputData item, final GridPane container, final int size) {
+    public void write2dMap(final SimulationOutputData item, final HBox container, final int size) {
+        container.getChildren().clear();
         GridPane grid = new GridPane();
-        grid.getChildren().clear();
-
+        grid.setVgap(10);
+        grid.setHgap(10);
+        grid.setMinHeight(300);
+        grid.setMinWidth(300);
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 Label label = new Label();
                 grid.add(label, col, row); // Aggiunge il nodo alla cella corrispondente
-                grid.setVgap(10);
-                grid.setHgap(10);
             }
         }
+        grid.getChildren().clear();
         item.getData().forEach((pos, agent) -> {
-            Label txt = new Label(agent);
-            GridPane.setConstraints(txt, pos.getX(), pos.getY());
+            grid.add(new Label(agent), pos.getX(), pos.getY());
         });
+        grid.setGridLinesVisible(true);
+        container.getChildren().add(grid);
     }
 
 

@@ -7,6 +7,7 @@ import it.unibo.ares.core.utils.parameters.Parameter;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -50,7 +51,7 @@ public interface GuiDinamicWriter {
      * @param item the SimulationOutputData to be written to the map
      * @param grid the GridPane representing the 2D map
      */
-    void write2dMap(SimulationOutputData item, GridPane container, int size);
+    void write2dMap(SimulationOutputData item, HBox container, int size);
 
     /**
      * This method displays an error message in a dialog box and disables a

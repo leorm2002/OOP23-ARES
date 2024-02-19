@@ -7,10 +7,7 @@ import java.util.ResourceBundle;
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.controller.CalculatorSupplier;
-import it.unibo.ares.core.utils.StringCaster;
-import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.Parameters;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,15 +15,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
-import java.util.HashMap;
 
 /**
  * GuiController is a class that controls the GUI of the application.
@@ -162,27 +155,30 @@ public final class GuiSecondController extends DataReciever implements Initializ
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
     }
 
+    private GuiDinamicWriter writer = new GuiDinamicWriterImpl();
+
     @Override
     public void onNext(final SimulationOutputData item) {
-        System.out.println("a");
         int size = item.getHeight();
-        grid.getChildren().add(new Label("ciao"));
-        guiWriter.write2dMap(item, grid, 10);
-        /*
-         * for (int row = 0; row < size; row++) {
-         * for (int col = 0; col < size; col++) {
-         * Label label = new Label();
-         * grid.add(label, col, row); // Aggiunge il nodo alla cella corrispondente
-         * grid.setVgap(10);
-         * grid.setHgap(10);
-         * }
-         * }
-         * item.getData().forEach((pos, agent) -> {
-         * Label txt = new Label(agent);
-         * GridPane.setConstraints(txt, pos.getX(), pos.getY());
-         * });
-         * //hboxGrid.getChildren().add(grid);
-         */
+        Platform.runLater(() -> {
+            writer.write2dMap(item, hboxGrid, size);
+        
+        });
+        //grid.getChildren().add(new Label("ciao"));
+        //guiWriter.write2dMap(item, grid, 10);
+        /*for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                Label label = new Label();
+                grid.add(label, col, row); // Aggiunge il nodo alla cella corrispondente
+                grid.setVgap(10);
+                grid.setHgap(10);
+            }
+        }
+        item.getData().forEach((pos, agent) -> {
+        Label txt = new Label(agent);
+        GridPane.setConstraints(txt, pos.getX(), pos.getY());
+        });
+        //hboxGrid.getChildren().add(grid);*/
     }
 
     public void startFirstGui(Stage stage) {
