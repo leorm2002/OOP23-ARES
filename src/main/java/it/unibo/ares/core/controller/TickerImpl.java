@@ -36,7 +36,7 @@ public class TickerImpl implements Ticker {
      */
     @Override
     public void start() {
-        scheduler.scheduleAtFixedRate(tickTask, initialDelay, period, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(tickTask, initialDelay, period, TimeUnit.MILLISECONDS);
     }
 
     /**

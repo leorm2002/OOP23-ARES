@@ -23,7 +23,7 @@ public final class DirectionVectorImpl implements DirectionVector {
     public DirectionVectorImpl(final Double x, final Double y) {
         this.x = x;
         this.y = y;
-        this.magnitude = Math.sqrt(x * x + y * y);
+        this.magnitude = x == 0 && y == 0 ? 1 : Math.sqrt(x * x + y * y);
     }
 
     /**

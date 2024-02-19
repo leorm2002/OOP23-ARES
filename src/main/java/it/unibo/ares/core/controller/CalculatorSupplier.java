@@ -66,7 +66,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
-        this.ticker = new TickerImpl(controller::makeModelsTick, 0, 1);
+        this.ticker = new TickerImpl(controller::makeModelsTick, 0, 250);
         ticker.start();
     }
 

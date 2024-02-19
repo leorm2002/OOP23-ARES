@@ -1,5 +1,6 @@
 package it.unibo.ares.core.agent;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -106,16 +107,31 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return new DirectionVectorImpl(center.getX() - pos.getX(), center.getY() - pos.getY()).getNormalized();
         }
 
-        private DirectionVector mixer(final DirectionVector a, final DirectionVector b, final DirectionVector c,
+        private DirectionVector mixer(final DirectionVector original, final DirectionVector steerAway,
+                        final DirectionVector a, final DirectionVector b,
+                        final DirectionVector c,
                         final double w1, final double w2, final double w3) {
-                return new DirectionVectorImpl(
-                                a.getX() * w1 + b.getX() * w2 + c.getX() * w3,
-                                a.getY() * w1 + b.getY() * w2 + c.getY() * w3).getNormalized();
+                double factor = 0.1;
+                double i = 0;
+                double j = 0;
+                List<DirectionVector> vectors = List.of(a, b, c);
+                List<Double> weights = List.of(w1, w2, w3);
+                for (DirectionVector v : vectors) {
+                        i += v.getNormalizedX() * weights.get(vectors.indexOf(v));
+                        j += v.getNormalizedY() * weights.get(vectors.indexOf(v));
+                }
+                i *= factor;
+                j *= factor;
+                i += original.getNormalizedX() * (1 - factor);
+                j += original.getNormalizedY() * (1 - factor);
+                i += steerAway.getNormalizedX() * 0.5;
+                j += steerAway.getNormalizedY() * 0.5;
+                return new DirectionVectorImpl(i, j).getNormalized();
         }
 
         private Pos move(final Pos initialPos, final DirectionVector dir, final Integer stepSize) {
-                return new PosImpl(initialPos.getX() + dir.getX() * stepSize,
-                                initialPos.getY() + dir.getY() * stepSize);
+                return new PosImpl(initialPos.getX() + dir.getNormalizedX() * stepSize,
+                                initialPos.getY() + dir.getNormalizedY() * stepSize);
         }
 
         private int limit(final int curr, final int max) {
@@ -126,23 +142,30 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return new PosImpl(limit(pos.getX(), size.getFirst()), limit(pos.getY(), size.getSecond()));
         }
 
-        private Pos getPosNear(final Pos pos, final State state, final int distance) {
-                Optional<Pos> newPos = IntStream.rangeClosed(-distance, distance).boxed()
-                                .flatMap(y -> IntStream.rangeClosed(-distance, distance)
-                                                .mapToObj(x -> new PosImpl(x, y)))
+        private Pos getPosNear(final Pos pos, final State state, final int distance, final DirectionVector dir,
+                        final int angle) {
+                if (distance > state.getDimensions().getFirst() && distance > state.getDimensions().getSecond()) {
+                        return pos;
+                }
+                Optional<Pos> newPos = computeCloseCells(pos, dir, distance, 180).stream()
                                 .filter(state::isInside)
                                 .filter(state::isFree)
                                 .findAny()
                                 .map(Pos.class::cast);
                 if (newPos.isEmpty()) {
-                        return getPosNear(pos, state, distance + 1);
+                        return getPosNear(pos, state, distance + 1, dir, angle);
                 }
 
                 return newPos.get();
         }
 
+        DirectionVector steerAwayFromBorder(Pos currentPos, int width, int height) {
+                return new DirectionVectorImpl(
+                                width / 2 - currentPos.getX(),
+                                height / 2 - currentPos.getY());
+        }
+
         private State tickFunction(final State currentState, final Pos agentPosition) {
-                Random r = new Random();
                 if (!currentState.getAgentAt(agentPosition).isPresent()) {
                         return currentState;
                 }
@@ -159,6 +182,9 @@ public final class BoidsAgentFactory implements AgentFactory {
                                 .getParameter("distance", Integer.class).get().getValue();
 
                 DirectionVector newDir = mixer(
+                                dir,
+                                steerAwayFromBorder(agentPosition, currentState.getDimensions().getFirst(),
+                                                currentState.getDimensions().getSecond()),
                                 collisionAvoindance(currentState, agentPosition, dir, distance, angle),
                                 directionAlignment(currentState, agentPosition, dir, distance, angle),
                                 centerCohesion(currentState, agentPosition, dir, distance, angle),
@@ -170,13 +196,17 @@ public final class BoidsAgentFactory implements AgentFactory {
                                                 .get().getValue());
 
                 agent.setParameter("direction", newDir);
-                Pos newPos = limit(move(agentPosition, newDir,
+                int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
+                                .get().getValue();
+                Pos newPos = move(agentPosition, newDir,
                                 agent.getParameters().getParameter("stepSize", Integer.class)
-                                                .get().getValue()),
-                                currentState.getDimensions());
-
+                                                .get().getValue());
+                if (!currentState.isInside(newPos)) {
+                        newDir = new DirectionVectorImpl(-newDir.getX(), -newDir.getY());
+                        newPos = limit(move(agentPosition, newDir, stepSize), currentState.getDimensions());
+                }
                 if (!currentState.isFree(newPos)) {
-                        newPos = getPosNear(newPos, currentState, 1);
+                        newPos = getPosNear(newPos, currentState, stepSize * 2, newDir, angle);
                 }
                 if (currentState.isFree(newPos)) {
                         currentState.moveAgent(agentPosition, newPos);
@@ -186,7 +216,7 @@ public final class BoidsAgentFactory implements AgentFactory {
 
         private DirectionVectorImpl getRandomDirection() {
                 Random r = new Random();
-                return new DirectionVectorImpl(r.nextInt(20), r.nextInt(20));
+                return new DirectionVectorImpl(r.nextInt(20) + 1, r.nextInt(20) + 1);
         }
 
         /**
