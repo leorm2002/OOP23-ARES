@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import it.unibo.ares.core.model.SimpleModelProvider;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.BoidsModelFactory;
+import it.unibo.ares.core.model.FireSpreadModelFactory;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
@@ -35,9 +36,11 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         this.modelsSupplier = new HashMap<>();
         ModelFactory sf = new SchellingModelFactories();
         ModelFactory bf = new BoidsModelFactory();
+        ModelFactory ff = new FireSpreadModelFactory();
         modelsSupplier.put("SimpleModel", SimpleModelProvider::getMockModel);
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
+        modelsSupplier.put(ff.getModelId(), ff::getModel);
         this.intilizingModels = new ConcurrentHashMap<>();
         this.initializedModels = new ConcurrentHashMap<>();
     }
