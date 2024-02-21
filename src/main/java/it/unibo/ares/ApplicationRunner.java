@@ -22,12 +22,14 @@ public class ApplicationRunner {
     public static void main(String[] args) {
         List<String> modes = List.of(TERMINAL, GRAFIC, COMBINED);
         List<Thread> threads = new ArrayList<>();
-        CalculatorSupplier.getInstance();
         System.out.println("Benvenuto in ARES!");
         System.out.println("Premi 0 per avviare l'applicazione in modalità cli");
         System.out.println("Premi 1 per avviare l'applicazione in modalità grafica");
         System.out.println("Premi 2 per avviare l'applicazione in modalità entrambe");
         System.out.println("Premi 3 per uscire");
+
+        threads.add(
+                new Thread(() -> CalculatorSupplier.getInstance()));
         String mode;
         do {
             mode = System.console().readLine();
@@ -36,7 +38,7 @@ public class ApplicationRunner {
             case TERMINAL:
                 System.out.println("Avvio in modalità cli");
                 threads.add(
-                        new Thread(() -> it.unibo.ares.cli.App.main(args)));
+                        new Thread(() -> it.unibo.ares.cli.App.mainLib(args)));
                 break;
             case GRAFIC:
                 System.out.println("Avvio in modalità grafica");
@@ -58,11 +60,14 @@ public class ApplicationRunner {
         threads.forEach(Thread::start);
         threads.forEach(t -> {
             try {
-                t.wait();
+                t.join();
             } catch (InterruptedException e) {
                 System.out.println("Errore nell'esecuzione");
             }
         });
+
+        System.out.println("Arrivederci");
+        System.exit(0);
     }
 
     private ApplicationRunner() {

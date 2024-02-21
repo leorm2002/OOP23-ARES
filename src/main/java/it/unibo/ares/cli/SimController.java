@@ -27,6 +27,8 @@ public final class SimController extends DataReciever {
                 CalculatorSupplier.getInstance().startSimulation(simulationId);
                 break;
             case STOP:
+                CalculatorSupplier.getInstance().pauseSimulation(simulationId);
+                this.isOver = true;
                 break;
             case PAUSE:
                 CalculatorSupplier.getInstance().pauseSimulation(simulationId);
@@ -45,8 +47,10 @@ public final class SimController extends DataReciever {
         this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
         Thread reader = new Thread(new AsyncReader(this::readChar, this::isOver));
         reader.start();
-        while (!isOver()) {
-            ;
+        try {
+            reader.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

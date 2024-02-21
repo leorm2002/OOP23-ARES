@@ -25,7 +25,25 @@ public class App {
         });
 
         t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
+    }
+
+    public static void mainLib(final String[] args) {
+        CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
+        System.out.println("Benvenuto in ARES!");
+        CliInitializer cliController = new CliInitializer();
+        String inizializationId = cliController.startParametrization();
+        SimController simController = new SimController(inizializationId);
+        System.out.println("Premi invio per iniziare la simulazione");
+        System.console().readLine();
+        simController.startSimulation();
+        System.out.println("Simulazione terminata");
     }
 
     private App() {

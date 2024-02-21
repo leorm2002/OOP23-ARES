@@ -298,6 +298,8 @@ public final class FirstGuiController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
+
         }
     }
 }
