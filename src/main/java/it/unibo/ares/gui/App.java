@@ -1,5 +1,6 @@
-package it.unibo.ares.gui.controller;
+package it.unibo.ares.gui;
 
+import it.unibo.ares.gui.controller.GuiStarter;
 import javafx.application.Application;
 
 /** Main application entry-point's class. */

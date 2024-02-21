@@ -4,11 +4,9 @@ import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.List;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.api.InitializationApi;
 import it.unibo.ares.core.api.SimulationControlApi;
 import it.unibo.ares.core.api.SimulationOutputData;
-import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
@@ -72,17 +70,17 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
-    public void removeSimulation(String id) {
+    public void removeSimulation(final String id) {
         controller.removeSimulation(id);
     }
 
     @Override
-    public void pauseSimulation(String id) {
+    public void pauseSimulation(final String id) {
         controller.pauseSimulation(id);
     }
 
     @Override
-    public void startSimulation(String id) {
+    public void startSimulation(final String id) {
         controller.startSimulation(id);
     }
 
@@ -92,32 +90,33 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
-    public String setModel(String modelId) {
+    public String setModel(final String modelId) {
         return initializer.setModel(modelId);
     }
 
     @Override
-    public Parameters getModelParametersParameters(String initializationId) {
+    public Parameters getModelParametersParameters(final String initializationId) {
         return initializer.getModelParametersParameters(initializationId);
     }
 
     @Override
-    public void setModelParameter(String initializationId, String key, Object value) {
+    public void setModelParameter(final String initializationId, final String key, final Object value) {
         initializer.setModelParameter(initializationId, key, value);
     }
 
     @Override
-    public Set<String> getAgentsSimplified(String initializationId) {
+    public Set<String> getAgentsSimplified(final String initializationId) {
         return initializer.getAgentsSimplified(initializationId);
     }
 
     @Override
-    public Parameters getAgentParametersSimplified(String initializationId, String agentId) {
+    public Parameters getAgentParametersSimplified(final String initializationId, final String agentId) {
         return initializer.getAgentParametersSimplified(initializationId, agentId);
     }
 
     @Override
-    public void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value) {
+    public void setAgentParameterSimplified(final String initializationId, final String agentId, final String key,
+            final Object value) {
         initializer.setAgentParameterSimplified(initializationId, agentId, key, value);
     }
 }

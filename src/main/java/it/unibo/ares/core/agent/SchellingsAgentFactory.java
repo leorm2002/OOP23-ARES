@@ -27,7 +27,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
         return typeA.equals(typeB);
     };
 
-    private static Set<Agent> getNeighborgs(State state, Integer visionRadius, Pos pos, Agent agent) {
+    private static Set<Agent> getNeighborgs(final State state, final Integer visionRadius, final Pos pos,
+            final Agent agent) {
         return state.getAgentsByPosAndRadius(pos, visionRadius)
                 .stream()
                 .filter(a -> !a.equals(agent))
@@ -35,7 +36,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
 
     }
 
-    private static double getRatio(State state, Integer visioRadius, Pos pos, Agent agent) {
+    private static double getRatio(final State state, final Integer visioRadius, final Pos pos, final Agent agent) {
         Set<Agent> neighBors = getNeighborgs(state, visioRadius, pos, agent);
         return neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent))
                 .count()

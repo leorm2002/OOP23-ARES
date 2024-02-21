@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
@@ -25,6 +24,11 @@ public final class BoidsAgentFactory implements AgentFactory {
         // PARAMETRI FINE TUNTING
         private static final Double USERCORRECTIONWEIGHT = 0.4;
         private static final Double WALLAVOIDANCEWEIGHT = 0.2;
+        Random r;
+
+        public BoidsAgentFactory() {
+                this.r = new Random();
+        }
 
         private boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
                         final Integer angle) {
@@ -217,7 +221,6 @@ public final class BoidsAgentFactory implements AgentFactory {
         }
 
         private DirectionVectorImpl getRandomDirection() {
-                Random r = new Random();
                 return new DirectionVectorImpl(r.nextInt(20) + 1, r.nextInt(20) + 1);
         }
 

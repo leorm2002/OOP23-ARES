@@ -9,7 +9,7 @@ import java.util.Map;
  * A simple class used to identify a data with a string.
  *
  */
-public final class SimulationOutputData {
+public final class SimulationOutputData implements SimulationOutputDataApi {
     private final Map<Pos, String> data;
     private final String simulationId;
     private final Integer width;
@@ -34,6 +34,7 @@ public final class SimulationOutputData {
      *
      * @return the data of the simulation.
      */
+    @Override
     public Map<Pos, String> getData() {
         return data;
     }
@@ -43,14 +44,17 @@ public final class SimulationOutputData {
      *
      * @return the id of the simulation.
      */
+    @Override
     public String getSimulationId() {
         return simulationId;
     }
 
+    @Override
     public Integer getWidth() {
         return width;
     }
 
+    @Override
     public Integer getHeight() {
         return height;
     }

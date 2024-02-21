@@ -167,7 +167,6 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
                 .anyMatch(s -> !s.isEmpty())) {
             throw new IllegalArgumentException("Some agent parameters are not set");
         }
-        Model model = intilizingModels.get(initializationId);
         return new Pair<String, Simulation>(initializationId,
                 new SimulationImpl(initializedModels.get(initializationId).getFirst(),
                         initializedModels.get(initializationId).getSecond()));

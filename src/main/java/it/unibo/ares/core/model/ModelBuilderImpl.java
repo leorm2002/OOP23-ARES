@@ -17,7 +17,7 @@ import it.unibo.ares.core.utils.state.State;
         "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"
 }, justification = "C'è un controllo esplicito che la init function "
         + "la exit function e i parameters siano stati inizializzati.")
-class ModelBuilderImpl implements ModelBuilder {
+final class ModelBuilderImpl implements ModelBuilder {
     private Parameters parameters;
     private BiPredicate<State, State> exitfFunction;
     private Function<Parameters, State> initFunction;

@@ -9,27 +9,27 @@ public interface SimulationControlApi {
      *
      * @param id The identifier of the simulation.
      */
-    public void removeSimulation(String id);
+    void removeSimulation(String id);
 
     /**
      * pause the simulation of the given id.
      *
      * @param id The identifier of the simulation.
      */
-    public void pauseSimulation(String id);
+    void pauseSimulation(String id);
 
     /**
      * start the simulation of the given id.
      *
      * @param id The identifier of the simulation.
      */
-    public void startSimulation(String id);
+    void startSimulation(String id);
 
     /**
      * Returns a list of running models.
      *
      * @return a list of running models
      */
-    public List<String> getRunningSimulations();
+    List<String> getRunningSimulations();
 
 }

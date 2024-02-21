@@ -93,7 +93,7 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
-    public SimulationOutputData tickSync(String simulationSessionId) {
+    public SimulationOutputData tickSync(final String simulationSessionId) {
         if (!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }

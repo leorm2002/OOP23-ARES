@@ -1,5 +1,6 @@
 package it.unibo.ares.cli;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,7 +13,10 @@ import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-public class CliInitializer {
+/**
+ * Class used to initialize simulation by using a CLI
+ */
+public final class CliInitializer {
     private String initializationId;
 
     private String selectModel() {
@@ -43,31 +47,33 @@ public class CliInitializer {
         return selected.get();
     }
 
-    private void parametrizzatoreGenerico(Parameters params, Optional<String> agentId) {
-        for (Parameter<?> param : params.getParametersToset()) {
-            System.out.println("\nInserisci il valore per il parametro " + param.getKey());
-            param.getDomain().ifPresent(d -> System.out.println("Il parametro ha dominio: " + d.getDescription()));
-            System.out.println("Il parametro ha tipo " + param.getType().getSimpleName());
-            System.out.print("Inserisci il valore:");
-            String value = System.console().readLine();
-            try {
-                if (agentId.isPresent()) {
-                    CalculatorSupplier.getInstance()
-                            .setAgentParameterSimplified(initializationId, agentId.get(), param.getKey(),
-                                    StringCaster.cast(value, param.getType()));
-                } else {
-                    CalculatorSupplier.getInstance()
-                            .setModelParameter(initializationId, param.getKey(),
-                                    StringCaster.cast(value, param.getType()));
-                }
-            } catch (IllegalArgumentException e) {
-                System.out.println("*********** Parametro non valido ***********");
+    private void parametrizzatoreGenerico(final Parameters params, final Optional<String> agentId) {
+        params.getParametersToset().stream().sorted(Comparator.comparing(p -> ((Parameter<?>) p).getKey()))
+                .forEachOrdered(param -> {
+                    System.out.println("\nInserisci il valore per il parametro " + param.getKey());
+                    param.getDomain()
+                            .ifPresent(d -> System.out.println("Il parametro ha dominio: " + d.getDescription()));
+                    System.out.println("Il parametro ha tipo " + param.getType().getSimpleName());
+                    System.out.print("Inserisci il valore:");
+                    String value = System.console().readLine();
+                    try {
+                        if (agentId.isPresent()) {
+                            CalculatorSupplier.getInstance()
+                                    .setAgentParameterSimplified(initializationId, agentId.get(), param.getKey(),
+                                            StringCaster.cast(value, param.getType()));
+                        } else {
+                            CalculatorSupplier.getInstance()
+                                    .setModelParameter(initializationId, param.getKey(),
+                                            StringCaster.cast(value, param.getType()));
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("*********** Parametro non valido ***********");
 
-                System.out.println(e.getMessage());
-                System.out.println("*********** Parametro non valido ***********\n");
+                        System.out.println(e.getMessage());
+                        System.out.println("*********** Parametro non valido ***********\n");
 
-            }
-        }
+                    }
+                });
     }
 
     private void parametrizzaModello() {
@@ -81,7 +87,7 @@ public class CliInitializer {
         } while (!params.areAllParametersSetted());
     }
 
-    private void parametrizzaAgente(String agent) {
+    private void parametrizzaAgente(final String agent) {
         System.out.println("Parametrizzazione agente " + agent);
         Parameters params;
         do {
@@ -91,7 +97,7 @@ public class CliInitializer {
         } while (!params.areAllParametersSetted());
     }
 
-    private void parametrizzaAgenti(Set<String> agents) {
+    private void parametrizzaAgenti(final Set<String> agents) {
         System.out.println("Parametrizzazione agenti");
         do {
             for (String agent : agents) {
@@ -100,7 +106,7 @@ public class CliInitializer {
         } while (!areAgentiParametrizzati(agents));
     }
 
-    private boolean areAgentiParametrizzati(Set<String> agents) {
+    private boolean areAgentiParametrizzati(final Set<String> agents) {
         for (String agent : agents) {
             if (!CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId, agent)
                     .areAllParametersSetted()) {
@@ -110,6 +116,11 @@ public class CliInitializer {
         return true;
     }
 
+    /**
+     * Questo metodo è l'entry point per il processo di parametrizzazione
+     * 
+     * @return ritorna l'i'd con cui accedere alla simulazione
+     */
     public String startParametrization() {
         System.out.println("Inizio parametrizzazione");
         String model = selectModel();

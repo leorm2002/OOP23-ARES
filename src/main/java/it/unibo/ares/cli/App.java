@@ -2,10 +2,17 @@ package it.unibo.ares.cli;
 
 import it.unibo.ares.core.controller.CalculatorSupplier;
 
+/**
+ * Permette di lanciare l'app in modalità cli
+ */
 public class App {
-
-    public static void main(String[] args) {
-        CalculatorSupplier.getInstance();
+    /**
+     * Avvia cli
+     * 
+     * @param args
+     */
+    public static void main(final String[] args) {
+        CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         Thread t = new Thread(() -> {
             System.out.println("Benvenuto in ARES!");
             CliInitializer cliController = new CliInitializer();
@@ -19,5 +26,9 @@ public class App {
 
         t.start();
 
+    }
+
+    private App() {
+        throw new IllegalAccessError("This is an utility class");
     }
 }
