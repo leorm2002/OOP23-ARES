@@ -6,7 +6,10 @@ import java.util.Map;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import it.unibo.ares.core.utils.pos.Pos;
 
@@ -50,9 +53,11 @@ public interface GuiDinamicWriter {
      *
      * @param items the map containing the positions and the agents to be written 
      * to the map
-     * @param container the GridPane representing the 2D map
+     * @param container the AnchorPane that contains the GridPane representing the 2D map
+     * @param width the width of the map
+     * @param height the height of the map
      */
-    void write2dMap(Map<Pos, String> items, GridPane container);
+    void write2dMap(Map<Pos, String> items, AnchorPane container, int width, int height);
 
     /**
      * This method displays an error message in a dialog box and disables a

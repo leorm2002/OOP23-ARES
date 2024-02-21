@@ -11,7 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -29,8 +32,8 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * as the ID and the parameter's value as the text,
      * and adds the TextField to the VBox's children.
      *
-     * @param vbox        the VBox to write the parameters to
-     * @param parameters  a Set containing the parameters to write to the VBox
+     * @param vbox       the VBox to write the parameters to
+     * @param parameters a Set containing the parameters to write to the VBox
      */
     @Override
     public void writeVBox(final VBox vbox, final Parameters parameters) {
@@ -106,22 +109,35 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * name, and adds it to the GridPane at the position specified by the data
      * entry.
      *
-     * @param items The SimulationOutputData object containing the data to be written
-     *             to the map.
-     * @param container The GridPane representing the 2D map.
+     * @param items     The SimulationOutputData object containing the data to be
+     *                  written
+     *                  to the map.
+     * @param container The AnchorPane containing the 2D map.
      */
     @Override
-    public void write2dMap(final Map<Pos, String> items, final GridPane container) {
+    public void write2dMap(final Map<Pos, String> items, final AnchorPane container, final int width,
+            final int height) {
         final int lblFontSize = 20;
         container.getChildren().clear();
-        items.forEach((pos, agent) -> {
-            Label txt = new Label(agent);
-            txt.setFont(Font.font(lblFontSize));
-            container.add(txt, pos.getX(), pos.getY());
-        });
-        container.setGridLinesVisible(true);
-    }
+        GridPane grid = new GridPane();
+        grid.setMaxSize(600, 600);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Label lbl = new Label();
+                lbl.setMinSize(20, 20);
+                lbl.setMaxSize(30, 30);
+                grid.add(lbl, i, j);
+            }
+        }
 
+        items.forEach((pos, agent) -> {
+            Label txt = new Label(agent);  
+            txt.setFont(Font.font(lblFontSize));
+            grid.add(txt, pos.getX(), pos.getY());
+        });
+        grid.setGridLinesVisible(true);
+        container.getChildren().add(grid);
+    }
 
     /**
      * This method displays an error message in a dialog box and disables a

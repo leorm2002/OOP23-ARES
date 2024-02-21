@@ -17,10 +17,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * GuiController is a class that controls the GUI of the application.
@@ -28,6 +32,8 @@ import javafx.scene.Node;
  * the user and the GUI.
  */
 public final class SecondGuiController extends DataReciever implements Initializable {
+
+    private BlockingQueue<SimulationOutputData> messageQueue = new LinkedBlockingQueue<>();
 
     /**
      * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
@@ -54,10 +60,9 @@ public final class SecondGuiController extends DataReciever implements Initializ
     private Button btnPause, btnRestart, btnStop;
 
     @FXML
-    private HBox hboxGrid;
-
+    private BorderPane borderPane;
     @FXML
-    private GridPane grid;
+    private AnchorPane anchorPane;
 
     /**
      * The btnPauseClicked method is an event handler that is called when the
@@ -127,7 +132,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
     }
-
+    
 
     /**
      * This method is called when the next item in the simulation is available.
@@ -139,7 +144,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     @Override
     public void onNext(final SimulationOutputData item) {
         Platform.runLater(() -> {
-            guiWriter.write2dMap(item.getData(), grid);
+            guiWriter.write2dMap(item.getData(), anchorPane, item.getWidth(), item.getHeight());
         });
     }
 
