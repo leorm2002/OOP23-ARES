@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.Map;
 
 import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -33,10 +34,9 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param parameters  a Set containing the parameters to write to the VBox
      */
     @Override
-    public void writeVBox(final VBox vbox, final Set<Parameter<?>> parameters) {
-        vbox.getChildren().clear();
+    public void writeVBox(final VBox vbox, final Parameters parameters) {
         final int txtSize = 13, lblSize = 15, domainSize = 13, marginBottom = 20, marginRightLeft = 10;
-        parameters.stream().forEach(p -> {
+        parameters.getParameters().stream().forEach(p -> {
             /*
              * creating a label and a textfield for each parameter and setting his style
              */
@@ -135,11 +135,38 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param btn     The button to be disabled.
      */
     @Override
-    public void showErrorAndDisable(final String message, final Button btn) {
+    public void showError(final String message) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Errore");
         alert.setContentText(message);
         alert.showAndWait();
-        btn.setDisable(true);
+    }
+
+    @Override
+    public void disableButtonIfEnabled(Button button) {
+        if (!button.isDisable()) {
+            button.setDisable(true);
+        }
+    }
+
+    @Override
+    public void enableButtonIfDisabled(Button button) {
+        if (button.isDisable()) {
+            button.setDisable(false);
+        }
+    }
+
+    @Override
+    public void cleanVBox(VBox vBox) {
+        vBox.getChildren().clear();
+    }
+
+    @Override
+    public void disableChoiceBox(ChoiceBox<String> choiceBox) {
+        choiceBox.setDisable(true);
+    }
+
+    public void enableChoiceBox(ChoiceBox<String> choiceBox) {
+        choiceBox.setDisable(false);
     }
 }

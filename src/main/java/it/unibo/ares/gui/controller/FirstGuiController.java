@@ -3,6 +3,8 @@ package it.unibo.ares.gui.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.StringCaster;
@@ -19,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -75,9 +78,8 @@ public final class FirstGuiController implements Initializable {
      * @param event the ActionEvent instance representing the button click event
      */
     @FXML
-    void btnStartClicked(final ActionEvent event) throws IOException {
+    void btnStartClicked(final ActionEvent event) {
         startSecondGui();
-
     }
 
     /**
@@ -96,25 +98,11 @@ public final class FirstGuiController implements Initializable {
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
-        btnSetAgent.setDisable(true);
-        btnStart.setDisable(true);
+        guiWriter.disableButtonIfEnabled(btnStart);
+        guiWriter.disableButtonIfEnabled(btnSetAgent);
+        guiWriter.disableButtonIfEnabled(btnInitialize);
+        guiWriter.disableChoiceBox(choiceAgent);
         choiceModel.setOnAction(this::writeModelParametersList);
-    }
-
-    /**
-     * This method writes the parameters of the model to the VBox.
-     * It first sets the model in the calculator supplier using the selected model
-     * from the choice box.
-     * Then it retrieves the parameters for the model and writes them to the VBox.
-     *
-     * @param e the ActionEvent instance representing the event that triggered this
-     *          method
-     */
-    private void writeModelParametersList(final ActionEvent e) {
-        configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
-        guiWriter.writeVBox(vboxModelPar,
-                calculatorSupplier.getModelParametersParameters(configurationSessionId)
-                        .getParameters());
     }
 
     /**
@@ -131,21 +119,20 @@ public final class FirstGuiController implements Initializable {
     @FXML
     void btnInitializeClicked(final ActionEvent event) {
         try {
-            readParameters(vboxModelPar,
-                    calculatorSupplier.getModelParametersParameters(configurationSessionId))
-                    .entrySet().forEach(e -> {
-                        calculatorSupplier.setModelParameter(configurationSessionId,
-                                e.getKey(),
-                                e.getValue());
-                    });
+            BiConsumer<String, Object> parameterSetter = (key, value) -> {
+                calculatorSupplier.setModelParameter(configurationSessionId, key, value);
+            };
+            Parameters modelParameters = calculatorSupplier.getModelParametersParameters(configurationSessionId);
+            readParamatersValueAndSet(vboxModelPar, modelParameters, parameterSetter);
             guiWriter.writeChoiceBox(choiceAgent,
                     calculatorSupplier.getAgentsSimplified(configurationSessionId));
             guiWriter.disableVBox(vboxModelPar);
-            btnInitialize.setDisable(true);
-            btnSetAgent.setDisable(false);
+            guiWriter.disableButtonIfEnabled(btnInitialize);
+            guiWriter.enableButtonIfDisabled(btnSetAgent);
+            guiWriter.enableChoiceBox(choiceAgent);
             choiceAgent.setOnAction(this::writeAgentParametersList);
         } catch (Exception e) {
-            guiWriter.showErrorAndDisable(e.getMessage(), btnInitialize);
+            guiWriter.showError(e.getMessage());
         }
     }
 
@@ -163,8 +150,7 @@ public final class FirstGuiController implements Initializable {
      * @return a HashMap with the parameter types as keys and the TextField texts as
      *         values
      */
-    private HashMap<String, Object> readParameters(final VBox vbox, final Parameters params) {
-        HashMap<String, Object> map = new HashMap<>();
+    private void readParamatersValueAndSet(final VBox vbox, final Parameters params, final BiConsumer<String, Object> parameterSetter) {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField txt = (TextField) node;
@@ -174,35 +160,31 @@ public final class FirstGuiController implements Initializable {
                 switch (typeToString) {
                     case "Integer":
                         try {
-                            params.setParameter(txt.getId(), StringCaster.cast(txt.getText(), type));
-                            map.put(txt.getId(), Integer.parseInt(txt.getText()));
+                            parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                         } catch (Exception e) {
-                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showError(e.getMessage());
                         }
                         break;
                     case "Double":
                         try {
                             double value = Double.parseDouble(txt.getText().replace(",", "."));
-                            params.setParameter(txt.getId(), value);
-                            map.put(txt.getId(), value);
+                            parameterSetter.accept(txt.getId(), value);
                         } catch (Exception e) {
-                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showError(e.getMessage());
                         }
                         break;
                     case "Boolean":
                         try {
-                            params.setParameter(txt.getId(), StringCaster.cast(txt.getText(), type));
-                            map.put(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                         } catch (Exception e) {
-                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showError(e.getMessage());
                         }
                         break;
                     case "Float":
                         try {
-                            params.setParameter(txt.getId(), StringCaster.cast(txt.getText(), type));
-                            map.put(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                         } catch (Exception e) {
-                            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
+                            guiWriter.showError(e.getMessage());
                         }
                         break;
                     case "DirectionVectorImpl":
@@ -229,7 +211,6 @@ public final class FirstGuiController implements Initializable {
                 }
             }
         }
-        return map;
     }
 
     /**
@@ -246,17 +227,29 @@ public final class FirstGuiController implements Initializable {
     @FXML
     void btnSetAgentClicked(final ActionEvent event) {
         try {
-            readParameters(vboxAgentPar, calculatorSupplier
-                    .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()))
-                    .entrySet().forEach(e -> {
-                        calculatorSupplier.setAgentParameterSimplified(
-                                configurationSessionId,
-                                choiceAgent.getValue(), e.getKey(), e.getValue());
-                    });
-            btnStart.setDisable(false);
+            BiConsumer<String, Object> parameterSetter = (key, value) -> {
+                calculatorSupplier.setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), key,
+                        value);
+            };
+            Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
+                    choiceAgent.getValue());
+            readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
+            if (everythingIsSet()) {
+                guiWriter.enableButtonIfDisabled(btnStart);
+            }
         } catch (Exception e) {
-            guiWriter.showErrorAndDisable(e.getMessage(), btnStart);
+            guiWriter.showError(e.getMessage());
         }
+    }
+    
+    private boolean everythingIsSet() {
+        for (String agentID : calculatorSupplier.getAgentsSimplified(configurationSessionId)) {
+            if (!calculatorSupplier.getAgentParametersSimplified(configurationSessionId, agentID)
+                    .areAllParametersSetted()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -270,14 +263,33 @@ public final class FirstGuiController implements Initializable {
         /*
          * write parameters of the agent and disable the model parameters
          */
-        guiWriter.writeVBox(vboxAgentPar, calculatorSupplier
-                .getAgentParametersSimplified(configurationSessionId,
-                        choiceAgent
-                                .getValue())
-                .getParameters());
-        guiWriter.writeVBox(vboxAgentPar,
-                calculatorSupplier
-                        .getAgentParametersSimplified(configurationSessionId, choiceAgent.getValue()).getParameters());
+        Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
+                choiceAgent.getValue());
+        guiWriter.cleanVBox(vboxAgentPar);
+        guiWriter.writeVBox(vboxAgentPar, agentParameters);
+    }
+
+    /**
+     * This method writes the parameters of the model to the VBox.
+     * It first sets the model in the calculator supplier using the selected model
+     * from the choice box.
+     * Then it retrieves the parameters for the model and writes them to the VBox.
+     *
+     * @param e the ActionEvent instance representing the event that triggered this
+     *          method
+     */
+    private void writeModelParametersList(final ActionEvent e) {
+        choiceAgent.setOnAction(null);
+        guiWriter.disableChoiceBox(choiceAgent);
+        guiWriter.disableButtonIfEnabled(btnStart);
+        guiWriter.cleanVBox(vboxModelPar);
+        guiWriter.cleanVBox(vboxAgentPar);
+        configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
+        Parameters modelParameters = calculatorSupplier
+                .getModelParametersParameters(configurationSessionId);
+        guiWriter.writeVBox(vboxModelPar, modelParameters);
+        guiWriter.enableButtonIfDisabled(btnInitialize);
+        guiWriter.disableButtonIfEnabled(btnSetAgent);
     }
 
     /**
@@ -299,7 +311,6 @@ public final class FirstGuiController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
 
         }
     }

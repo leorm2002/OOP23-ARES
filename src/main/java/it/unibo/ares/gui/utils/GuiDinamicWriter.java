@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.Map;
 
 import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
@@ -31,7 +32,7 @@ public interface GuiDinamicWriter {
      * @param vBox        the VBox to be written to
      * @param parameters  the parameters to be written to the VBox
      */
-    void writeVBox(VBox vBox, Set<Parameter<?>> parameters);
+    void writeVBox(VBox vBox, Parameters parameters);
 
     /**
      * This method disables all the TextFields in the given VBox.
@@ -64,5 +65,40 @@ public interface GuiDinamicWriter {
      * @param message The error message to be displayed in the dialog box.
      * @param btn     The button to be disabled.
      */
-    void showErrorAndDisable(String message, Button btn);
+    void showError(String message);
+
+    /**
+     * This method disables the specified button.
+     *
+     * @param button the button to be disabled
+     */
+    void disableButtonIfEnabled(Button button);
+
+    /**
+     * This method enables the specified button.
+     *
+     * @param button the button to be enabled
+     */
+    void enableButtonIfDisabled(Button button);
+
+    /**
+     * This method cleans the specified VBox.
+     *
+     * @param vBox the VBox to be cleaned
+     */
+    void cleanVBox(VBox vBox);
+
+    /**
+     * This method cleans the specified ChoiceBox.
+     *
+     * @param choiceBox the ChoiceBox to be cleaned
+     */
+    void disableChoiceBox(ChoiceBox<String> choiceBox);
+
+    /**
+     * This method enables the specified ChoiceBox.
+     *
+     * @param choiceBox the ChoiceBox to be enabled
+     */
+    void enableChoiceBox(ChoiceBox<String> choiceBox);
 }
