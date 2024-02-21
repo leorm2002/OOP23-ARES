@@ -3,7 +3,6 @@ package it.unibo.ares.gui.utils;
 import java.util.Set;
 import java.util.Map;
 
-import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -132,7 +131,6 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * resolved.
      *
      * @param message The error message to be displayed in the dialog box.
-     * @param btn     The button to be disabled.
      */
     @Override
     public void showError(final String message) {
@@ -142,31 +140,57 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
         alert.showAndWait();
     }
 
+    /**
+     * This method disables the given button if it is not already disabled.
+     *
+     * @param button the Button instance to be disabled
+     */
     @Override
-    public void disableButtonIfEnabled(Button button) {
+    public void disableButtonIfEnabled(final Button button) {
         if (!button.isDisable()) {
             button.setDisable(true);
         }
     }
 
+    /**
+     * This method enables the given button if it is not already enabled.
+     *
+     * @param button the Button instance to be enabled
+     */
     @Override
-    public void enableButtonIfDisabled(Button button) {
+    public void enableButtonIfDisabled(final Button button) {
         if (button.isDisable()) {
             button.setDisable(false);
         }
     }
 
+    /**
+     * This method clears all the children of the given VBox.
+     *
+     * @param vBox the VBox instance to be cleared
+     */
     @Override
-    public void cleanVBox(VBox vBox) {
+    public void clearVBox(final VBox vBox) {
         vBox.getChildren().clear();
     }
 
+    /**
+     * This method disables the given ChoiceBox.
+     *
+     * @param choiceBox the ChoiceBox instance to be disabled
+     */
     @Override
-    public void disableChoiceBox(ChoiceBox<String> choiceBox) {
+    public void disableChoiceBox(final ChoiceBox<String> choiceBox) {
         choiceBox.setDisable(true);
     }
 
-    public void enableChoiceBox(ChoiceBox<String> choiceBox) {
+    /**
+     * This method enables the given ChoiceBox.
+     *
+     * @param choiceBox the ChoiceBox instance to be enabled
+     */
+    @Override
+    public void enableChoiceBox(final ChoiceBox<String> choiceBox) {
         choiceBox.setDisable(false);
     }
 }

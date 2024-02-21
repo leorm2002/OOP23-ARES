@@ -3,7 +3,6 @@ package it.unibo.ares.gui.utils;
 import java.util.Set;
 import java.util.Map;
 
-import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -63,7 +62,6 @@ public interface GuiDinamicWriter {
      * resolved.
      *
      * @param message The error message to be displayed in the dialog box.
-     * @param btn     The button to be disabled.
      */
     void showError(String message);
 
@@ -86,7 +84,7 @@ public interface GuiDinamicWriter {
      *
      * @param vBox the VBox to be cleaned
      */
-    void cleanVBox(VBox vBox);
+    void clearVBox(VBox vBox);
 
     /**
      * This method cleans the specified ChoiceBox.

@@ -3,7 +3,6 @@ package it.unibo.ares.gui.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
 import it.unibo.ares.core.controller.CalculatorSupplier;
@@ -21,13 +20,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.HashMap;
-
 /**
  * GuiController is a class that controls the GUI of the application.
  * It implements the Initializable interface and manages the interaction between
@@ -147,10 +143,10 @@ public final class FirstGuiController implements Initializable {
      * @param vbox   the VBox from which to read the parameters
      * @param params the Parameters object from which to retrieve the parameter
      *               types
-     * @return a HashMap with the parameter types as keys and the TextField texts as
-     *         values
+     * @param parameterSetter the BiConsumer that sets the parameter in the calculator
      */
-    private void readParamatersValueAndSet(final VBox vbox, final Parameters params, final BiConsumer<String, Object> parameterSetter) {
+    private void readParamatersValueAndSet(final VBox vbox, final Parameters params,
+        final BiConsumer<String, Object> parameterSetter) {
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField txt = (TextField) node;
@@ -241,7 +237,7 @@ public final class FirstGuiController implements Initializable {
             guiWriter.showError(e.getMessage());
         }
     }
-    
+
     private boolean everythingIsSet() {
         for (String agentID : calculatorSupplier.getAgentsSimplified(configurationSessionId)) {
             if (!calculatorSupplier.getAgentParametersSimplified(configurationSessionId, agentID)
@@ -265,7 +261,7 @@ public final class FirstGuiController implements Initializable {
          */
         Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
                 choiceAgent.getValue());
-        guiWriter.cleanVBox(vboxAgentPar);
+        guiWriter.clearVBox(vboxAgentPar);
         guiWriter.writeVBox(vboxAgentPar, agentParameters);
     }
 
@@ -282,8 +278,8 @@ public final class FirstGuiController implements Initializable {
         choiceAgent.setOnAction(null);
         guiWriter.disableChoiceBox(choiceAgent);
         guiWriter.disableButtonIfEnabled(btnStart);
-        guiWriter.cleanVBox(vboxModelPar);
-        guiWriter.cleanVBox(vboxAgentPar);
+        guiWriter.clearVBox(vboxModelPar);
+        guiWriter.clearVBox(vboxAgentPar);
         configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
         Parameters modelParameters = calculatorSupplier
                 .getModelParametersParameters(configurationSessionId);
@@ -311,7 +307,6 @@ public final class FirstGuiController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 }
