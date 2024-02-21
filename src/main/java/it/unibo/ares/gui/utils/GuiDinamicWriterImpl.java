@@ -107,13 +107,13 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * name, and adds it to the GridPane at the position specified by the data
      * entry.
      *
-     * @param item The SimulationOutputData object containing the data to be written
+     * @param items The SimulationOutputData object containing the data to be written
      *             to the map.
      * @param container The GridPane representing the 2D map.
      */
     @Override
     public void write2dMap(final Map<Pos, String> items, final GridPane container) {
-        int lblFontSize = 20;
+        final int lblFontSize = 20;
         container.getChildren().clear();
         items.forEach((pos, agent) -> {
             Label txt = new Label(agent);

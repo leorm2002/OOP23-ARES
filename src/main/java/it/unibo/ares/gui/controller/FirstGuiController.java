@@ -291,6 +291,7 @@ public final class FirstGuiController implements Initializable {
         Parent root;
         Stage stage = (Stage) btnStart.getScene().getWindow();
         try {
+            SecondGuiController.setSecondGuiController(configurationSessionId);
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
             Scene scene = new Scene(root);
             stage.setTitle("ARES");
