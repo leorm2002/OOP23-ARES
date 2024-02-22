@@ -20,19 +20,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 /**
- * GuiController is a class that controls the GUI of the application.
+ * GuiController is a class that controls the first GUI of the application.
  * It implements the Initializable interface and manages the interaction between
  * the user and the GUI.
  */
 public final class FirstGuiController implements Initializable {
 
     /**
-     * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
+     * GuiWriter is an instance of WriteOnGUIImpl used to manage the
      * GUI.
      */
     private GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
@@ -44,7 +42,7 @@ public final class FirstGuiController implements Initializable {
 
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
-     * calculator instances.
+     * calculator instances, models, and agents.
      */
     private CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
 
@@ -52,26 +50,25 @@ public final class FirstGuiController implements Initializable {
      * FXML variables
      */
     @FXML
-    private Button btnPause, btnRestart, btnStop, btnStart, btnInitialize, btnSetAgent;
+    private Button btnStart, btnInitialize, btnSetAgent;
 
-    @FXML
-    private HBox hboxGrid;
-
-    @FXML
-    private GridPane grid;
-
+    /*
+     * The VBox that holds the parameters of the agent and the model
+     */
     @FXML
     private VBox vboxAgentPar, vboxModelPar;
 
+    /*
+     * The choice boxes that hold the agents and the models
+     */
     @FXML
     private ChoiceBox<String> choiceAgent, choiceModel;
 
     /**
-     * The btnStartClicked method is an event handler that is called when the
-     * "Start" button is clicked.
-     * It starts the simulation and updates the GUI accordingly.
+     * This method is triggered when the 'Start' button is clicked.
+     * It starts the second GUI.
      *
-     * @param event the ActionEvent instance representing the button click event
+     * @param event the ActionEvent associated with the button click
      */
     @FXML
     void btnStartClicked(final ActionEvent event) {
@@ -84,7 +81,8 @@ public final class FirstGuiController implements Initializable {
      * This method initializes the choiceModel with the model names from the
      * calculator initializer.
      * It also sets an action event handler for the choiceModel that writes the
-     * agents and model parameters list.
+     * agents and model parameters list, and disables all the rest of the GUI
+     * for preventing the user to interact with it before the model is selected.
      *
      * @param arg0 The location used to resolve relative paths for the root object,
      *             or null if the location is not known.
@@ -94,9 +92,9 @@ public final class FirstGuiController implements Initializable {
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
-        guiWriter.disableButtonIfEnabled(btnStart);
-        guiWriter.disableButtonIfEnabled(btnSetAgent);
-        guiWriter.disableButtonIfEnabled(btnInitialize);
+        guiWriter.disableButton(btnStart);
+        guiWriter.disableButton(btnSetAgent);
+        guiWriter.disableButton(btnInitialize);
         guiWriter.disableChoiceBox(choiceAgent);
         choiceModel.setOnAction(this::writeModelParametersList);
     }
@@ -104,8 +102,8 @@ public final class FirstGuiController implements Initializable {
     /**
      * This method is triggered when the Initialize button is clicked.
      * It reads the parameters from the VBox, sets them in the calculator supplier,
-     * and then disables the VBox.
-     * It also sets the choice box with the agents from the calculator supplier.
+     * and then disables the VBox and the Initialize button.
+     * It also enables the Set Agent button and the ChoiceBox for the agents.
      * If any exception occurs during this process, it shows the error message and
      * disables the Initialize button.
      *
@@ -123,8 +121,8 @@ public final class FirstGuiController implements Initializable {
             guiWriter.writeChoiceBox(choiceAgent,
                     calculatorSupplier.getAgentsSimplified(configurationSessionId));
             guiWriter.disableVBox(vboxModelPar);
-            guiWriter.disableButtonIfEnabled(btnInitialize);
-            guiWriter.enableButtonIfDisabled(btnSetAgent);
+            guiWriter.disableButton(btnInitialize);
+            guiWriter.enableButton(btnSetAgent);
             guiWriter.enableChoiceBox(choiceAgent);
             choiceAgent.setOnAction(this::writeAgentParametersList);
         } catch (Exception e) {
@@ -146,14 +144,37 @@ public final class FirstGuiController implements Initializable {
      * @param parameterSetter the BiConsumer that sets the parameter in the calculator
      */
     private void readParamatersValueAndSet(final VBox vbox, final Parameters params,
-        final BiConsumer<String, Object> parameterSetter) {
+            final BiConsumer<String, Object> parameterSetter) {
+        /*
+         * iterate over the children of the vbox and if the child is a TextField, get its
+         * ID and use it to retrieve the parameter from the Parameters object. The
+         * TextField's ID is then used as the key, and the TextField's text is used as
+         * the value.
+         */
         for (javafx.scene.Node node : vbox.getChildren()) {
             if (node instanceof TextField) {
                 TextField txt = (TextField) node;
                 String typeToString = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
                         .orElse("");
                 Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
+                /*
+                 * switch on the type of the parameter and cast the text of the TextField to the
+                 * correct type for setting it in the calculator
+                 * switch on simpleName instead of the class because we can also have not built-in
+                 * types, like DirectionVectorImpl
+                 */
                 switch (typeToString) {
+                    /*
+                     * try to set the parameter in the calculator, if an exception occurs, show the
+                     * error message
+                     */
+                    case "String":
+                        try {
+                            parameterSetter.accept(txt.getId(), txt.getText());
+                        } catch (Exception e) {
+                            guiWriter.showError(e.getMessage());
+                        }
+                        break;
                     case "Integer":
                         try {
                             parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
@@ -231,13 +252,20 @@ public final class FirstGuiController implements Initializable {
                     choiceAgent.getValue());
             readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
             if (everythingIsSet()) {
-                guiWriter.enableButtonIfDisabled(btnStart);
+                guiWriter.enableButton(btnStart);
             }
         } catch (Exception e) {
             guiWriter.showError(e.getMessage());
         }
     }
 
+    /**
+     * This method is used to check if all the parameters are set.
+     * It iterates over the agents and checks if all the parameters are set.
+     * If all the parameters are set, it returns true, otherwise it returns false.
+     * Helpfull to enable the start button.
+     * @return true if all the parameters are set, false otherwise
+     */
     private boolean everythingIsSet() {
         for (String agentID : calculatorSupplier.getAgentsSimplified(configurationSessionId)) {
             if (!calculatorSupplier.getAgentParametersSimplified(configurationSessionId, agentID)
@@ -249,16 +277,14 @@ public final class FirstGuiController implements Initializable {
     }
 
     /**
-     * The writeAgentParametersList method is called when an action event occurs.
-     * It writes the parameters of the selected agent to the GUI.
-     *
+     * This method is used to write the agent parameters to the VBox.
+     * It first gets the agent parameters from the calculator supplier, then clears
+     * the VBox,
+     * and finally writes the parameters to the VBox.
      * @param e the ActionEvent instance representing the event that triggered this
-     *          method
+     *         method
      */
     private void writeAgentParametersList(final ActionEvent e) {
-        /*
-         * write parameters of the agent and disable the model parameters
-         */
         Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
                 choiceAgent.getValue());
         guiWriter.clearVBox(vboxAgentPar);
@@ -266,26 +292,34 @@ public final class FirstGuiController implements Initializable {
     }
 
     /**
-     * This method writes the parameters of the model to the VBox.
-     * It first sets the model in the calculator supplier using the selected model
-     * from the choice box.
-     * Then it retrieves the parameters for the model and writes them to the VBox.
+     * This method is used to write the model parameters to the VBox.
+     * It first disables the agent choice box and the start button, then clears the
+     * VBoxes,
+     * sets the model in the calculator supplier, gets the model parameters from the
+     * calculator supplier,
+     * writes the parameters to the VBox, enables the initialize button, and finally
+     * disables the set agent button.
      *
-     * @param e the ActionEvent instance representing the event that triggered this
-     *          method
+     * @param e the ActionEvent associated with the button click
      */
     private void writeModelParametersList(final ActionEvent e) {
         choiceAgent.setOnAction(null);
         guiWriter.disableChoiceBox(choiceAgent);
-        guiWriter.disableButtonIfEnabled(btnStart);
+        guiWriter.disableButton(btnSetAgent);
+        guiWriter.disableButton(btnStart);
+        /*
+         * detach the event handler from the choiceAgent and disable the choiceAgent
+         * and the setAgent button to prevent the user to interact with them before the
+         * model is selected, helpfull when the user changes the model after he has
+         * already selected one
+         */
         guiWriter.clearVBox(vboxModelPar);
         guiWriter.clearVBox(vboxAgentPar);
         configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
         Parameters modelParameters = calculatorSupplier
                 .getModelParametersParameters(configurationSessionId);
         guiWriter.writeVBox(vboxModelPar, modelParameters);
-        guiWriter.enableButtonIfDisabled(btnInitialize);
-        guiWriter.disableButtonIfEnabled(btnSetAgent);
+        guiWriter.enableButton(btnInitialize);
     }
 
     /**

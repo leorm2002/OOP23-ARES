@@ -7,16 +7,13 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import it.unibo.ares.core.utils.pos.Pos;
 
 /**
  * WriteOnGUI is an interface for writing parameters on a specific projected
  * GUI.
- * It provides methods to write data to a ChoiceBox and a VBox.
+ * It provides methods to manage a GUI.
  */
 public interface GuiDinamicWriter {
 
@@ -26,10 +23,10 @@ public interface GuiDinamicWriter {
      * @param choiceBox the ChoiceBox<String> to be written to
      * @param list      the list of strings to be written to the ChoiceBox
      */
-    void writeChoiceBox(ChoiceBox<String> choiceBox, Set<String> list);
+    <T> void writeChoiceBox(ChoiceBox<T> choiceBox, Set<T> list);
 
     /**
-     * Writes the specified map to a VBox.
+     * Writes the specified Parameters to a VBox.
      *
      * @param vBox        the VBox to be written to
      * @param parameters  the parameters to be written to the VBox
@@ -46,16 +43,12 @@ public interface GuiDinamicWriter {
     void disableVBox(VBox vbox);
 
     /**
-     * This method writes the simulation output data to a 2D map represented by a
-     * GridPane.
-     * The specific implementation of how the data is written to the map is not
-     * provided here.
+     * Writes a 2D map of items to a specified container.
      *
-     * @param items the map containing the positions and the agents to be written 
-     * to the map
-     * @param container the AnchorPane that contains the GridPane representing the 2D map
-     * @param width the width of the map
-     * @param height the height of the map
+     * @param items     the map of items to be written
+     * @param container the container where the items should be written
+     * @param width     the width of the container
+     * @param height    the height of the container
      */
     void write2dMap(Map<Pos, String> items, AnchorPane container, int width, int height);
 
@@ -63,8 +56,7 @@ public interface GuiDinamicWriter {
      * This method displays an error message in a dialog box and disables a
      * specified button.
      * It is typically used to handle exceptions or errors in the GUI, providing
-     * feedback to the user and preventing further actions until the error is
-     * resolved.
+     * feedback to the user.
      *
      * @param message The error message to be displayed in the dialog box.
      */
@@ -75,14 +67,14 @@ public interface GuiDinamicWriter {
      *
      * @param button the button to be disabled
      */
-    void disableButtonIfEnabled(Button button);
+    void disableButton(Button button);
 
     /**
      * This method enables the specified button.
      *
      * @param button the button to be enabled
      */
-    void enableButtonIfDisabled(Button button);
+    void enableButton(Button button);
 
     /**
      * This method cleans the specified VBox.
@@ -96,12 +88,12 @@ public interface GuiDinamicWriter {
      *
      * @param choiceBox the ChoiceBox to be cleaned
      */
-    void disableChoiceBox(ChoiceBox<String> choiceBox);
+    void disableChoiceBox(ChoiceBox<?> choiceBox);
 
     /**
      * This method enables the specified ChoiceBox.
      *
      * @param choiceBox the ChoiceBox to be enabled
      */
-    void enableChoiceBox(ChoiceBox<String> choiceBox);
+    void enableChoiceBox(ChoiceBox<?> choiceBox);
 }

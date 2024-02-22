@@ -12,16 +12,14 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import it.unibo.ares.core.utils.pos.Pos;
 
 /**
  * WriteOnGUIImpl is a class that implements the WriteOnGUI interface.
- * It provides methods to write data to a VBox and a ChoiceBox.
+ * It provides methods to write data on a GUI.
  */
 public class GuiDinamicWriterImpl implements GuiDinamicWriter {
 
@@ -33,15 +31,18 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * and adds the TextField to the VBox's children.
      *
      * @param vbox       the VBox to write the parameters to
-     * @param parameters a Set containing the parameters to write to the VBox
+     * @param parameters the Parameters to write to the VBox
      */
     @Override
     public void writeVBox(final VBox vbox, final Parameters parameters) {
+        // setting the style of the textfields and labels
         final int txtSize = 13, lblSize = 15, domainSize = 13, marginBottom = 20, marginRightLeft = 10;
+        /*
+         * creating a label and a textfield for each parameter and setting his style,
+         * then adding them to the vbox and if the parameter has a domain, adding a label
+         * with the domain description
+         */
         parameters.getParameters().stream().forEach(p -> {
-            /*
-             * creating a label and a textfield for each parameter and setting his style
-             */
             Label lbl = new Label(p.getKey());
             Label domain = new Label();
             TextField txt = new TextField();
@@ -55,6 +56,10 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
                 domain.setText(p.getDomain().get().getDescription());
 
             }
+            /*
+             * setting the text of the textfield with the value of the parameter, if the
+             * value is not present, setting the prompt text with the type of the parameter
+             */
             try {
                 txt.setText(p.getValue().toString());
             } catch (Exception e) {
@@ -68,17 +73,16 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     }
 
     /**
-     * Writes the specified set of strings to a ChoiceBox.
-     * It clears the ChoiceBox and then adds the new set of strings.
+     * This method writes a set of items to a ChoiceBox.
+     * It first clears the ChoiceBox, then adds all items from the set to the
+     * ChoiceBox.
      *
-     * @param choiceBox the ChoiceBox<String> to be written to
-     * @param set       the set of strings to be written to the ChoiceBox
+     * @param choiceBox the ChoiceBox to which the items should be written
+     * @param set       the set of items to be written to the ChoiceBox
+     * @param <T>       the type of the items in the set and the ChoiceBox
      */
     @Override
-    public void writeChoiceBox(final ChoiceBox<String> choiceBox, final Set<String> set) {
-        /*
-         * clearing the choicebox and adding the new set of strings
-         */
+    public <T> void writeChoiceBox(final ChoiceBox<T> choiceBox, final Set<T> set) {
         choiceBox.getItems().clear();
         choiceBox.getItems().addAll(set);
     }
@@ -101,18 +105,20 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     }
 
     /**
-     * This method writes the simulation output data to a 2D map represented by a
+     * This method writes a map of positions and its relatives strings to a 2D map represented by a
      * GridPane.
-     * It first clears the GridPane, then iterates over the data in the
-     * SimulationOutputData object.
+     * It first clears the AnchorPane that will contain the new GridPane, then iterates over the data in the
+     * given Map.
      * For each data entry, it creates a new TextField, sets its text to the agent's
      * name, and adds it to the GridPane at the position specified by the data
      * entry.
      *
-     * @param items     The SimulationOutputData object containing the data to be
+     * @param items     The Map containing the data to be
      *                  written
      *                  to the map.
-     * @param container The AnchorPane containing the 2D map.
+     * @param container The AnchorPane that will contain the 2D map.
+     * @param width     The width of the map.
+     * @param height    The height of the map.
      */
     @Override
     public void write2dMap(final Map<Pos, String> items, final AnchorPane container, final int width,
@@ -121,6 +127,9 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
         container.getChildren().clear();
         GridPane grid = new GridPane();
         grid.setMaxSize(600, 600);
+        /*
+         * creating a label for each position in the map and setting his min and max size
+         */
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Label lbl = new Label();
@@ -129,7 +138,9 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
                 grid.add(lbl, i, j);
             }
         }
-
+        /*
+         * setting the text of the textfield for each agent in the map
+         */
         items.forEach((pos, agent) -> {
             Label txt = new Label(agent);  
             txt.setFont(Font.font(lblFontSize));
@@ -140,8 +151,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     }
 
     /**
-     * This method displays an error message in a dialog box and disables a
-     * specified button.
+     * This method displays an error message in a dialog box.
      * It is typically used to handle exceptions or errors in the GUI, providing
      * feedback to the user and preventing further actions until the error is
      * resolved.
@@ -162,7 +172,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param button the Button instance to be disabled
      */
     @Override
-    public void disableButtonIfEnabled(final Button button) {
+    public void disableButton(final Button button) {
         if (!button.isDisable()) {
             button.setDisable(true);
         }
@@ -174,7 +184,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param button the Button instance to be enabled
      */
     @Override
-    public void enableButtonIfDisabled(final Button button) {
+    public void enableButton(final Button button) {
         if (button.isDisable()) {
             button.setDisable(false);
         }
@@ -196,7 +206,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param choiceBox the ChoiceBox instance to be disabled
      */
     @Override
-    public void disableChoiceBox(final ChoiceBox<String> choiceBox) {
+    public void disableChoiceBox(final ChoiceBox<?> choiceBox) {
         choiceBox.setDisable(true);
     }
 
@@ -206,7 +216,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param choiceBox the ChoiceBox instance to be enabled
      */
     @Override
-    public void enableChoiceBox(final ChoiceBox<String> choiceBox) {
+    public void enableChoiceBox(final ChoiceBox<?> choiceBox) {
         choiceBox.setDisable(false);
     }
 }

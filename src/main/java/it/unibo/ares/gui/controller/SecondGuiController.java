@@ -19,8 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.util.concurrent.BlockingQueue;
@@ -32,8 +30,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  * the user and the GUI.
  */
 public final class SecondGuiController extends DataReciever implements Initializable {
-
-    private BlockingQueue<SimulationOutputData> messageQueue = new LinkedBlockingQueue<>();
 
     /**
      * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
@@ -58,9 +54,6 @@ public final class SecondGuiController extends DataReciever implements Initializ
      */
     @FXML
     private Button btnPause, btnRestart, btnStop;
-
-    @FXML
-    private BorderPane borderPane;
     @FXML
     private AnchorPane anchorPane;
 
@@ -85,7 +78,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
      */
     @FXML
     void btnRestartClicked(final ActionEvent event) {
-        // calculatorSupplier.getController().restartSimulation(simulationId);
+        // calculatorSupplier.restartSimulation(simulationId);
     }
 
     /**
