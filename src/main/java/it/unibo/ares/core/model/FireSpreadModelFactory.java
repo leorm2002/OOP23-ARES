@@ -35,12 +35,10 @@ public class FireSpreadModelFactory implements ModelFactory {
         }
 
         private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
-                Integer size = parameters.getParameter("size", Integer.class)
-                                .orElseThrow(IllegalAccessException::new).getValue();
-                Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class)
-                                .orElseThrow(IllegalAccessException::new).getValue();
-                Integer nt = parameters.getParameter("numeroAgentiTipoT", Integer.class)
-                                .orElseThrow(IllegalAccessException::new).getValue();
+                Integer size = parameters.getParameter("size", Integer.class).orElseThrow().getValue();
+                Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class).get().getValue();
+                Integer nt = parameters.getParameter("numeroAgentiTipoT", Integer.class).get().getValue();
+
                 Integer total = nf + nt;
 
                 State state = new StateImpl(size, size);
@@ -59,23 +57,27 @@ public class FireSpreadModelFactory implements ModelFactory {
                                 .generate(fireSpreadFactory::createAgent)
                                 .limit(total)
                                 .collect(Collectors.toList());
-                IntStream.range(0, total)
-                                .forEach(i -> agents.get(i).setType(getAgentType(nf, i)));
+
+                IntStream.range(0, nf)
+                                .forEach(i -> agents.get(i).setType("F"));
+                IntStream.range(nf + 1, nt)
+                                .forEach(i -> agents.get(i).setType("T"));
+
                 IntStream.range(0, total)
                                 .forEach(i -> state.addAgent(getter.next(), agents.get(i)));
-
                 return state;
         }
 
         /**
-         * Returna a schelling model, before calling initialize you should set:
+         * Returna a schelling model,
+         * before calling initialize you should set:
          * numeroAgentiTipoF (integer)
          * numeroAgentiTipoT (integer)
          * size (integer)
          * direction (2d vector)
          * fuel consumption (double)
          * 
-         * @return
+         * @return an instance of the Fire Spread model.
          */
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();

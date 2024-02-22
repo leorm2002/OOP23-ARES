@@ -11,6 +11,7 @@ import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.state.StateImpl;
 
 /**
  * A factory class for creating agents for the Fire Spread Model.
@@ -129,6 +130,34 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 state.addAgent(pos, newAgent);
         }
 
+        private static boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir,
+                        final Integer distance,
+                        final Integer angle) {
+                double radAng = Math.toRadians(angle);
+
+                DirectionVector vectorToNewPoint = new DirectionVectorImpl(pos.diff(center).getX(),
+                                pos.diff(center).getY());
+                double dotProduct = dir.getNormalized().pointProduct(vectorToNewPoint.getNormalized());
+                double radAngleBetween = Math.acos(dotProduct);
+
+                return radAngleBetween <= radAng && vectorToNewPoint.getMagnitude() <= distance;
+        }
+
+        private static Set<Pos> computeCloseCells(final Pos pos, final DirectionVector dir, final Integer distance,
+                        final Integer angle) {
+                int xSign = dir.getX() > 0 ? 1 : -1;
+                int ySign = dir.getY() > 0 ? 1 : -1;
+
+                State a = new StateImpl(
+                                Math.abs(pos.getX() + xSign * (distance + 1)),
+                                Math.abs(pos.getY() + ySign * (distance + 1)));
+
+                return a.getPosByPosAndRadius(pos, distance)
+                                .stream()
+                                .filter(p -> insideCone(p, pos, dir, distance, angle))
+                                .collect(Collectors.toSet());
+        }
+
         /**
          * Gets the spread of the Fire-type Agent.
          * 
@@ -143,12 +172,17 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .orElseThrow(() -> new IllegalArgumentException(
                                                 "Agent " + agent + " has no visionRadius parameter"))
                                 .getValue();
+                DirectionVector dir = agent.getParameters()
+                                .getParameter("direction", DirectionVector.class)
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Agent " + agent + " has no direction parameter"))
+                                .getValue();
 
                 return IntStream.range(0, state.getDimensions().getFirst())
                                 .boxed()
                                 .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
                                                 .mapToObj(y -> new PosImpl(x, y)))
-                                .filter(p -> state.getPosByPosAndRadius(pos, visionRadius).contains(p))
+                                .filter(p -> computeCloseCells(pos, dir, visionRadius, 0).contains(p))
                                 .filter(p -> state.getAgentAt(p).isPresent())
                                 .filter(p -> isAgentOfDiffType.test(agent, state.getAgentAt(p).get()))
                                 .filter(p -> isFlammable(state.getAgentAt(p).get()))

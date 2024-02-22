@@ -20,7 +20,6 @@ public class TestFireSpread {
          */
         @Test
         public void testFireSpreadModelAgent1() {
-                FireSpreadAgentFactory factory = new FireSpreadAgentFactory();
                 State state = new StateImpl(5, 5);
 
                 // Creates a Fire-type Agent with type 1, vision radius 1, direction
