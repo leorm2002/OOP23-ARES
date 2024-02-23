@@ -151,83 +151,81 @@ public final class FirstGuiController implements Initializable {
          * TextField's ID is then used as the key, and the TextField's text is used as
          * the value.
          */
-        for (javafx.scene.Node node : vbox.getChildren()) {
-            if (node instanceof TextField) {
-                TextField txt = (TextField) node;
-                String typeToString = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
-                        .orElse("");
-                Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
-                /*
-                 * switch on the type of the parameter and cast the text of the TextField to the
-                 * correct type for setting it in the calculator
-                 * switch on simpleName instead of the class because we can also have not built-in
-                 * types, like DirectionVectorImpl
-                 */
-                switch (typeToString) {
+        vbox.getChildren().stream().filter(node -> node instanceof TextField).map(node -> (TextField) node)
+                .forEach(txt -> {
+                    String typeToString = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
+                            .orElse("");
+                    Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
                     /*
-                     * try to set the parameter in the calculator, if an exception occurs, show the
-                     * error message
+                     * switch on the type of the parameter and cast the text of the TextField to the
+                     * correct type for setting it in the calculator
+                     * switch on simpleName instead of the class because we can also have not built-in
+                     * types, like DirectionVectorImpl
                      */
-                    case "String":
-                        try {
-                            parameterSetter.accept(txt.getId(), txt.getText());
-                        } catch (Exception e) {
-                            guiWriter.showError(e.getMessage());
-                        }
-                        break;
-                    case "Integer":
-                        try {
-                            parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
-                        } catch (Exception e) {
-                            guiWriter.showError(e.getMessage());
-                        }
-                        break;
-                    case "Double":
-                        try {
-                            double value = Double.parseDouble(txt.getText().replace(",", "."));
-                            parameterSetter.accept(txt.getId(), value);
-                        } catch (Exception e) {
-                            guiWriter.showError(e.getMessage());
-                        }
-                        break;
-                    case "Boolean":
-                        try {
-                            parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
-                        } catch (Exception e) {
-                            guiWriter.showError(e.getMessage());
-                        }
-                        break;
-                    case "Float":
-                        try {
-                            parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
-                        } catch (Exception e) {
-                            guiWriter.showError(e.getMessage());
-                        }
-                        break;
-                    case "DirectionVectorImpl":
+                    switch (typeToString) {
                         /*
-                         * // cast to Direction Vector
-                         * // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
-                         * String[] elementi = txt.getText().split("\\s+");
-                         * 
-                         * if (elementi.length < 2) {
-                         * System.out.println("Inserire almeno due elementi separati da spazio!");
-                         * }
-                         * DirectionVectorImpl vector = new
-                         * DirectionVectorImpl(Integer.parseInt(elementi[0]),
-                         * Integer.parseInt(elementi[1]));
-                         * if (!inDomainRange(params, txt.getId(), vector)) {
-                         * showErrorAndDisable(vector + " out of domain range", btnStart);
-                         * break;
-                         * }
-                         * map.put(txt.getId(), vector);
-                         * break;
+                         * try to set the parameter in the calculator, if an exception occurs, show the
+                         * error message
                          */
-                    default:
-                        break;
-                }
-            }
-        }
+                        case "String":
+                            try {
+                                parameterSetter.accept(txt.getId(), txt.getText());
+                            } catch (Exception e) {
+                                guiWriter.showError(e.getMessage());
+                            }
+                            break;
+                        case "Integer":
+                            try {
+                                parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            } catch (Exception e) {
+                                guiWriter.showError(e.getMessage());
+                            }
+                            break;
+                        case "Double":
+                            try {
+                                double value = Double.parseDouble(txt.getText().replace(",", "."));
+                                parameterSetter.accept(txt.getId(), value);
+                            } catch (Exception e) {
+                                guiWriter.showError(e.getMessage());
+                            }
+                            break;
+                        case "Boolean":
+                            try {
+                                parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            } catch (Exception e) {
+                                guiWriter.showError(e.getMessage());
+                            }
+                            break;
+                        case "Float":
+                            try {
+                                parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
+                            } catch (Exception e) {
+                                guiWriter.showError(e.getMessage());
+                            }
+                            break;
+                        case "DirectionVectorImpl":
+                            /*
+                             * // cast to Direction Vector
+                             * // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
+                             * String[] elementi = txt.getText().split("\\s+");
+                             * 
+                             * if (elementi.length < 2) {
+                             * System.out.println("Inserire almeno due elementi separati da spazio!");
+                             * }
+                             * DirectionVectorImpl vector = new
+                             * DirectionVectorImpl(Integer.parseInt(elementi[0]),
+                             * Integer.parseInt(elementi[1]));
+                             * if (!inDomainRange(params, txt.getId(), vector)) {
+                             *      showErrorAndDisable(vector + " out of domain range", btnStart);
+                             *      break;
+                             * }
+                             * map.put(txt.getId(), vector);
+                             * break;
+                             */  
+                        default:
+                            break;
+                    }
+                });
     }
 
     /**

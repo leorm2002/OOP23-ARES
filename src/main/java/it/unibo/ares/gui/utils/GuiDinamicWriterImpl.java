@@ -54,7 +54,6 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
             lbl.wrapTextProperty().setValue(true);
             if (p.getDomain().isPresent()) {
                 domain.setText(p.getDomain().get().getDescription());
-
             }
             /*
              * setting the text of the textfield with the value of the parameter, if the
