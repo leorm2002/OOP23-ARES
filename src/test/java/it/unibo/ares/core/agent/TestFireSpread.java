@@ -20,8 +20,10 @@ public class TestFireSpread {
          */
         @Test
         public void testFireSpreadModelAgent1() {
+                // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
                 State state = new StateImpl(5, 5);
 
+                // CHECKSTYLE: MagicNumber ON
                 // Creates a Fire-type Agent with type 1, vision radius 1, direction
                 // (1,0), spread 1 and fuel 1.0
                 Pos pos = new PosImpl(1, 1);
@@ -43,8 +45,10 @@ public class TestFireSpread {
         @Test
         public void testFireSpreadModelAgent2() {
                 FireSpreadAgentFactory factory = new FireSpreadAgentFactory();
+                // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
                 State state = new StateImpl(5, 5);
 
+                // CHECKSTYLE: MagicNumber ON
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
@@ -70,7 +74,9 @@ public class TestFireSpread {
         @Test
         public void testFireSpreadModelAgent3() {
                 FireSpreadAgentFactory factory = new FireSpreadAgentFactory();
+                // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
                 State state = new StateImpl(5, 5);
+                // CHECKSTYLE: MagicNumber ON
 
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1 and fuel 1.0
@@ -98,7 +104,9 @@ public class TestFireSpread {
         @Test
         public void testFireSpreadModelAgent4() {
                 FireSpreadAgentFactory factory = new FireSpreadAgentFactory();
+                // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
                 State state = new StateImpl(5, 5);
+                // CHECKSTYLE: MagicNumber ON
 
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1 and fuel 1.0
@@ -124,11 +132,8 @@ public class TestFireSpread {
                 fireAgent1.tick(state, pos);
 
                 Boolean fire1 = state.getAgentAt(pos1).get().getType() == "F";
-
-                Boolean fire2 = state.getAgentAt(pos2).get().getType() == "F";
-
-                Boolean fire3 = state.getAgentAt(pos3).get().getType() == "F";
-
+                Boolean fire2 = state.getAgentAt(pos2).get().getType() == "T";
+                Boolean fire3 = state.getAgentAt(pos3).get().getType() == "T";
                 Boolean fire4 = state.getAgentAt(pos4).get().getType() == "T";
 
                 assertTrue(fire1 && fire2 && fire3 && fire4);
@@ -142,7 +147,9 @@ public class TestFireSpread {
         @Test
         public void testFireSpreadModelAgent5() {
                 FireSpreadAgentFactory factory = new FireSpreadAgentFactory();
+                // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
                 State state = new StateImpl(5, 5);
+                // CHECKSTYLE: MagicNumber ON
 
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1 and fuel 1.0
@@ -152,8 +159,8 @@ public class TestFireSpread {
                 state.addAgent(pos, fireAgent);
 
                 PosImpl pos1 = new PosImpl(1, 0);
-                PosImpl pos2 = new PosImpl(0, 1);
-                PosImpl pos3 = new PosImpl(1, 1);
+                PosImpl pos2 = new PosImpl(2, 0);
+                PosImpl pos3 = new PosImpl(3, 0);
                 PosImpl pos4 = new PosImpl(2, 2);
 
                 // Creates some Tree-type Agent with type 2, threshold 0.5 and vision radius 1
@@ -165,21 +172,25 @@ public class TestFireSpread {
                 fireAgent.tick(state, pos);
 
                 Agent fireAgent1 = state.getAgentAt(pos1).get();
-                Agent fireAgent2 = state.getAgentAt(pos2).get();
-                Agent fireAgent3 = state.getAgentAt(pos3).get();
 
+                fireAgent.tick(state, pos);
+                fireAgent1.tick(state, pos1);
+
+                Agent fireAgent2 = state.getAgentAt(pos2).get();
+                fireAgent.tick(state, pos);
+                fireAgent1.tick(state, pos1);
+                fireAgent2.tick(state, pos2);
+
+                Agent fireAgent3 = state.getAgentAt(pos3).get();
                 fireAgent.tick(state, pos);
                 fireAgent1.tick(state, pos1);
                 fireAgent2.tick(state, pos2);
                 fireAgent3.tick(state, pos3);
 
                 Boolean fire1 = state.getAgentAt(pos1).get().getType() == "F";
-
                 Boolean fire2 = state.getAgentAt(pos2).get().getType() == "F";
-
                 Boolean fire3 = state.getAgentAt(pos3).get().getType() == "F";
-
-                Boolean fire4 = state.getAgentAt(pos4).get().getType() == "F";
+                Boolean fire4 = state.getAgentAt(pos4).get().getType() == "T";
 
                 assertTrue(fire1 && fire2 && fire3 && fire4);
         }
