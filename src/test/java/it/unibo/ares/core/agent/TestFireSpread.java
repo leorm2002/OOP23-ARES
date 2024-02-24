@@ -1,6 +1,8 @@
 package it.unibo.ares.core.agent;
 
-import static org.junit.jupiter.api.Assertions.*;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -56,10 +58,12 @@ public class TestFireSpread {
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
-                // Create a Tree-type Agent with type 2, threshold 0.5 and vision radius 1
+                // CHECKSTYLE: MagicNumber OFF
+                // Create a Tree-type Agent, fuel 0.5 and flammability 0.3
                 Pos pos2 = new PosImpl(1, 0);
                 Agent treeAgent1 = factory.getTreeModelAgent(0.5, 0.3);
                 state.addAgent(pos2, treeAgent1);
+                // CHECKSTYLE: MagicNumber ON
 
                 // The fire should spread to the tree
                 fireAgent1.tick(state, pos);
@@ -85,10 +89,12 @@ public class TestFireSpread {
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
-                // Create a Tree-type Agent with type 2, threshold 0.5 and vision radius 1
+                // CHECKSTYLE: MagicNumber OFF
+                // Create a Tree-type Agent, fuel 0.5 and flammability 0.3
                 Pos pos2 = new PosImpl(2, 2);
                 Agent treeAgent1 = factory.getTreeModelAgent(0.5, 0.3);
                 state.addAgent(pos2, treeAgent1);
+                // CHECKSTYLE: MagicNumber ON
 
                 // The fire should spread to the tree
                 fireAgent1.tick(state, pos);
@@ -115,16 +121,18 @@ public class TestFireSpread {
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent1);
 
+                // CHECKSTYLE: MagicNumber OFF
                 PosImpl pos1 = new PosImpl(1, 0);
                 PosImpl pos2 = new PosImpl(0, 1);
                 PosImpl pos3 = new PosImpl(1, 1);
                 PosImpl pos4 = new PosImpl(2, 2);
 
-                // Creates some Tree-type Agent with type 2, threshold 0.5 and vision radius 1
+                // Creates some Tree-type Agent with fuel 0.5 and flammability 0.3
                 state.addAgent(pos1, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos2, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos3, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos4, factory.getTreeModelAgent(0.5, 0.1));
+                // CHECKSTYLE: MagicNumber ON
 
                 // The fire should spread to the tree
                 fireAgent1.tick(state, pos);
@@ -158,16 +166,18 @@ public class TestFireSpread {
                 Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
                 state.addAgent(pos, fireAgent);
 
+                // CHECKSTYLE: MagicNumber OFF
                 PosImpl pos1 = new PosImpl(1, 0);
                 PosImpl pos2 = new PosImpl(2, 0);
                 PosImpl pos3 = new PosImpl(3, 0);
                 PosImpl pos4 = new PosImpl(2, 2);
 
-                // Creates some Tree-type Agent with type 2, threshold 0.5 and vision radius 1
+                // Creates some Tree-type Agent with fuel 0.5 and flammability 0.3
                 state.addAgent(pos1, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos2, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos3, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos4, factory.getTreeModelAgent(0.5, 0.1));
+                // CHECKSTYLE: MagicNumber ON
 
                 fireAgent.tick(state, pos);
 

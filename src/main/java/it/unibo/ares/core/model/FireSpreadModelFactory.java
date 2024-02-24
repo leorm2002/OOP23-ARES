@@ -26,6 +26,9 @@ import it.unibo.ares.core.utils.UniquePositionGetter;
 public class FireSpreadModelFactory implements ModelFactory {
         private static final String MODEL_ID = "FireSpread";
 
+        /**
+         * @return the model id
+         */
         public String getModelId() {
                 return MODEL_ID;
         }
@@ -69,7 +72,7 @@ public class FireSpreadModelFactory implements ModelFactory {
         }
 
         /**
-         * Returna a schelling model,
+         * Returns a Fire Spread model,
          * before calling initialize you should set:
          * numeroAgentiTipoF (integer)
          * numeroAgentiTipoT (integer)
