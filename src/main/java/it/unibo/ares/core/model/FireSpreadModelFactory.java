@@ -100,6 +100,5 @@ public class FireSpreadModelFactory implements ModelFactory {
                                         }
                                 })
                                 .build();
-
         }
 }
