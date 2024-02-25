@@ -34,16 +34,14 @@ public class FireSpreadModelFactory implements ModelFactory {
                 return MODEL_ID;
         }
 
-        private static String getAgentType(final int nf, final int index) {
-                return index < nf ? "F" : "T";
-        }
-
         private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
                 Integer size = parameters.getParameter("size", Integer.class).orElseThrow().getValue();
                 Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class).get().getValue();
                 Integer nt = parameters.getParameter("numeroAgentiTipoT", Integer.class).get().getValue();
                 DirectionVector dir = parameters
                                 .getParameter("direction", DirectionVectorImpl.class).get().getValue();
+                Double cons = parameters
+                                .getParameter("consumption", Double.class).get().getValue();
 
                 Integer total = nf + nt;
 
@@ -68,6 +66,7 @@ public class FireSpreadModelFactory implements ModelFactory {
                 IntStream.range(0, nf)
                                 .forEach(i -> {
                                         agents.get(i).setParameter("direction", dir);
+                                        agents.get(i).setParameter("consumption", cons);
                                         agents.get(i).setType("F");
                                 });
                 IntStream.range(nf + 1, nt)
