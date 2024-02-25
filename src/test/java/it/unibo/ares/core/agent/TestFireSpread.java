@@ -30,7 +30,7 @@ public class TestFireSpread {
                 // (1,0), spread 1 and fuel 1.0
                 Pos pos = new PosImpl(1, 1);
                 DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir, 1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
 
                 // The agent should not move
@@ -55,7 +55,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
 
                 // CHECKSTYLE: MagicNumber OFF
@@ -86,7 +86,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
 
                 // CHECKSTYLE: MagicNumber OFF
@@ -118,7 +118,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
 
                 // CHECKSTYLE: MagicNumber OFF
@@ -163,7 +163,7 @@ public class TestFireSpread {
                 // spread 1 and fuel 1.0
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
-                Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0);
+                Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent);
 
                 // CHECKSTYLE: MagicNumber OFF

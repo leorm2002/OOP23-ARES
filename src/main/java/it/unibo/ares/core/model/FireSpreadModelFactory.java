@@ -59,6 +59,7 @@ public class FireSpreadModelFactory implements ModelFactory {
 
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
                 AgentFactory fireSpreadFactory = new FireSpreadAgentFactory();
+
                 List<Agent> agents = Stream
                                 .generate(fireSpreadFactory::createAgent)
                                 .limit(total)

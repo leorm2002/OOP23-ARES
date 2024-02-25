@@ -71,6 +71,22 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 return cannotSpread && notFueled;
         }
 
+        private static void consumeFuel(final Agent agent) {
+                Double fuel = agent.getParameters()
+                                .getParameter("fuel", Double.class)
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Agent " + agent + " has no fuel parameter"))
+                                .getValue();
+
+                Double cons = agent.getParameters()
+                                .getParameter("consumption", Double.class)
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Agent " + agent + " has no consumption parameter"))
+                                .getValue();
+
+                agent.setParameter("fuel", (fuel - cons <= 0.0) ? 0.0 : fuel - cons);
+        }
+
         /**
          * Creates a new Fire-type Agent replacing the Tree-type Agent at pos.
          * 
@@ -79,18 +95,18 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @param fireAgent current fire agent
          */
         public static void spreadFire(final State state, final Pos pos, final Agent fireAgent) {
-                Agent oldAgent = state.getAgentAt(pos).get(); // old tree
+                Agent treeAgent = state.getAgentAt(pos).get(); // old tree
 
-                Double flammability = oldAgent.getParameters()
+                Double flammability = treeAgent.getParameters()
                                 .getParameter("flammability", Double.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + oldAgent + " has no flammability parameter"))
+                                                "Agent " + treeAgent + " has no flammability parameter"))
                                 .getValue();
 
-                Double fuel = fireAgent.getParameters()
+                Double newFuel = treeAgent.getParameters()
                                 .getParameter("fuel", Double.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + fireAgent + " has no fuel parameter"))
+                                                "Agent " + treeAgent + " has no fuel parameter"))
                                 .getValue();
 
                 Integer spread = fireAgent.getParameters()
@@ -111,22 +127,10 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                                 "Agent " + fireAgent + " has no direction parameter"))
                                 .getValue();
 
-                Double newFuel = oldAgent.getParameters()
-                                .getParameter("fuel", Double.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + oldAgent + " has no fuel parameter"))
-                                .getValue();
-
-                fireAgent.setParameter("fuel", (fuel - flammability < 0.0) ? 0.0 : fuel - flammability);
-
                 /* Starts a new fire */
-                Agent newAgent = getFireModelAgent(visionRadius, dir, spread, newFuel);
-                newAgent.setParameter("spread", spread);
-                newAgent.setParameter("direction", dir);
-                newAgent.setParameter("visionRadius", visionRadius);
-                newAgent.setParameter("fuel", newFuel);
+                Agent newAgent = getFireModelAgent(visionRadius, dir, spread, newFuel, flammability);
 
-                state.removeAgent(pos, oldAgent);
+                state.removeAgent(pos, treeAgent);
                 state.addAgent(pos, newAgent);
         }
 
@@ -187,12 +191,12 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .filter(p -> state.getAgentAt(p).isPresent())
                                 .filter(p -> isAgentOfDiffType.test(agent, state.getAgentAt(p).get()))
                                 .filter(p -> isFlammable(state.getAgentAt(p).get()))
-                                // .filter(p -> isExtinguished(state, p, agent))
                                 .collect(Collectors.toSet());
         }
 
         private static State tickFunction(final State currentState, final Pos agentPosition) {
                 Agent agent = currentState.getAgentAt(agentPosition).get();
+                consumeFuel(agent);
 
                 if (!isExtinguished(currentState, agentPosition, agent)) {
                         Set<Pos> spreadPos = getSpreadPositionIfAvailable(currentState, agentPosition, agent);
@@ -206,14 +210,15 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         /**
          * Builds the Fire-type Agent.
          * 
-         * @param visionRadius vision radius of the agent
-         * @param dir          direction of the agent
-         * @param spread       spread radius of the agent
-         * @param fuel         starting fuel of the agent
+         * @param visionRadius vision radius
+         * @param dir          direction
+         * @param spread       spread radius
+         * @param fuel         starting fuel
+         * @param cons         starting consumption of the fuel
          * @return An instance of the Fire-type Agent
          */
         public static Agent getFireModelAgent(final Integer visionRadius, final DirectionVector dir,
-                        final Integer spread, final Double fuel) {
+                        final Integer spread, final Double fuel, final Double cons) {
                 AgentBuilder b = new AgentBuilderImpl();
                 b
                                 .addParameter(new ParameterImpl<>("type", "F"))
@@ -221,6 +226,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .addParameter(new ParameterImpl<>("direction", dir))
                                 .addParameter(new ParameterImpl<>("spread", spread))
                                 .addParameter(new ParameterImpl<>("fuel", fuel))
+                                .addParameter(new ParameterImpl<>("consumption", cons))
                                 .addStrategy((state, pos) -> tickFunction(state, pos))
                                 .build();
 
@@ -273,8 +279,8 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         /**
          * Builds the Tree-type Agent.
          * 
-         * @param fuel         starting fuel of the agent
-         * @param flammability flammability of the agent
+         * @param fuel         starting fuel
+         * @param flammability flammability
          * @return An instance of the Tree-type Agent
          */
         public Agent getTreeModelAgent(final Double fuel, final Double flammability) {
