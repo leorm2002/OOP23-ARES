@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.FireSpreadAgentFactory;
+import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -41,6 +42,8 @@ public class FireSpreadModelFactory implements ModelFactory {
                 Integer size = parameters.getParameter("size", Integer.class).orElseThrow().getValue();
                 Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class).get().getValue();
                 Integer nt = parameters.getParameter("numeroAgentiTipoT", Integer.class).get().getValue();
+                DirectionVector dir = parameters
+                                .getParameter("direction", DirectionVectorImpl.class).get().getValue();
 
                 Integer total = nf + nt;
 
@@ -62,7 +65,10 @@ public class FireSpreadModelFactory implements ModelFactory {
                                 .collect(Collectors.toList());
 
                 IntStream.range(0, nf)
-                                .forEach(i -> agents.get(i).setType("F"));
+                                .forEach(i -> {
+                                        agents.get(i).setParameter("direction", dir);
+                                        agents.get(i).setType("F");
+                                });
                 IntStream.range(nf + 1, nt)
                                 .forEach(i -> agents.get(i).setType("T"));
 
