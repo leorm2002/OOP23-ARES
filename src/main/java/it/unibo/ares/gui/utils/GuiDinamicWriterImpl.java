@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import it.unibo.ares.core.utils.pos.Pos;
 
 /**
@@ -49,7 +48,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
             TextField txt = new TextField();
             txt.setId(p.getKey());
             VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
-            domain.setFont(Font.font(domainSize));
+            setElementStyle(domain, domainSize);
             setElementStyle(txt, txtSize);
             setElementStyle(lbl, lblSize);
             if (p.getDomain().isPresent()) {
@@ -129,18 +128,17 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     @Override
     public void write2dMap(final Map<Pos, String> items, final AnchorPane container, final int width,
             final int height) {
-        final int lblFontSize = 20, maxWGrid = 655, maxHGrid = 655, maxLblW = 30, maxLblH = 30;
+        final int maxSizeGrid = 655, prefLblSize = 40;
         container.getChildren().clear();
         GridPane grid = new GridPane();
-        grid.setMaxSize(maxWGrid, maxHGrid);
+        grid.setMaxSize(maxSizeGrid, maxSizeGrid);
         /*
          * creating a label for each position in the map and setting his min and max size
          */
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Label lbl = new Label();
-                lbl.setPrefSize(40, 40);
-                lbl.setMaxSize(40, 40);
+                lbl.setPrefSize(prefLblSize, prefLblSize);
                 grid.add(lbl, i, j);
             }
         }
