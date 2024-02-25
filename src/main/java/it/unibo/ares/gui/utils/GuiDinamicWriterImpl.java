@@ -5,6 +5,7 @@ import java.util.Map;
 
 import it.unibo.ares.core.utils.parameters.Parameters;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -46,12 +47,11 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
             Label lbl = new Label(p.getKey());
             Label domain = new Label();
             TextField txt = new TextField();
-            VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
             txt.setId(p.getKey());
+            VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
             domain.setFont(Font.font(domainSize));
-            txt.setFont(Font.font(txtSize));
-            lbl.setFont(Font.font(lblSize));
-            lbl.wrapTextProperty().setValue(true);
+            setElementStyle(txt, txtSize);
+            setElementStyle(lbl, lblSize);
             if (p.getDomain().isPresent()) {
                 domain.setText(p.getDomain().get().getDescription());
             }
@@ -65,10 +65,19 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
                 txt.setText("");
                 txt.setPromptText(p.getType().getSimpleName());
             }
-            vbox.getChildren().add(lbl);
-            vbox.getChildren().add(txt);
-            vbox.getChildren().add(domain);
+            vbox.getChildren().addAll(lbl, txt, domain);
         });
+    }
+
+    /**
+     * This method sets the style of the given Node to the given size.
+     *
+     * @param node the Node whose style should be set
+     * @param size the size to set the style to
+     * @param <T>  the type of the Node
+     */
+    private <T extends Node> void setElementStyle(final T node, final int size) {
+        node.setStyle("-fx-font-size: " + size + ";");
     }
 
     /**
@@ -95,12 +104,10 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      */
     @Override
     public void disableVBox(final VBox vbox) {
-        for (javafx.scene.Node node : vbox.getChildren()) {
-            if (node instanceof TextField) {
-                TextField textField = (TextField) node;
+        vbox.getChildren().stream().filter(node -> node instanceof TextField).map(node -> (TextField) node)
+            .forEach(textField -> {
                 textField.setDisable(true);
-            }
-        }
+        });
     }
 
     /**
