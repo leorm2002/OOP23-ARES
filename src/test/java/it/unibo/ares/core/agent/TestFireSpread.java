@@ -26,8 +26,8 @@ public class TestFireSpread {
                 State state = new StateImpl(5, 5);
 
                 // CHECKSTYLE: MagicNumber ON
-                // Creates a Fire-type Agent with type 1, vision radius 1, direction
-                // (1,0), spread 1 and fuel 1.0
+                // Creates a Fire-type Agent with type 1, vision radius 1, direction (1,0),
+                // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(1, 1);
                 DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir, 1, 1.0, 0.3);
@@ -52,7 +52,7 @@ public class TestFireSpread {
 
                 // CHECKSTYLE: MagicNumber ON
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
-                // spread 1 and fuel 1.0
+                // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
@@ -83,7 +83,7 @@ public class TestFireSpread {
                 // CHECKSTYLE: MagicNumber ON
 
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
-                // spread 1 and fuel 1.0
+                // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
@@ -115,7 +115,7 @@ public class TestFireSpread {
                 // CHECKSTYLE: MagicNumber ON
 
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
-                // spread 1 and fuel 1.0
+                // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
@@ -160,7 +160,7 @@ public class TestFireSpread {
                 // CHECKSTYLE: MagicNumber ON
 
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
-                // spread 1 and fuel 1.0
+                // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 DirectionVector dir1 = new DirectionVectorImpl(1.0, 0.0);
                 Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, dir1, 1, 1.0, 0.3);
@@ -172,7 +172,7 @@ public class TestFireSpread {
                 PosImpl pos3 = new PosImpl(3, 0);
                 PosImpl pos4 = new PosImpl(2, 2);
 
-                // Creates some Tree-type Agent with fuel 0.5 and flammability 0.3
+                // Creates some Tree-type Agent with fuel 0.5 and flammability 0.1
                 state.addAgent(pos1, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos2, factory.getTreeModelAgent(0.5, 0.1));
                 state.addAgent(pos3, factory.getTreeModelAgent(0.5, 0.1));
