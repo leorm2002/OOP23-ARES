@@ -173,7 +173,8 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                                 "Agent " + agent + " has no visionRadius parameter"))
                                 .getValue();
                 DirectionVector dir = agent.getParameters()
-                                .getParameter("direction", DirectionVector.class)
+                                .getParameter("direction",
+                                                DirectionVectorImpl.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
                                                 "Agent " + agent + " has no direction parameter"))
                                 .getValue();
