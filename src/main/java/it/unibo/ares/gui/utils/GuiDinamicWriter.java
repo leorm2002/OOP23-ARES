@@ -22,6 +22,7 @@ public interface GuiDinamicWriter {
      *
      * @param choiceBox the ChoiceBox<String> to be written to
      * @param list      the list of strings to be written to the ChoiceBox
+     * @param <T>       the type of the elements in the list
      */
     <T> void writeChoiceBox(ChoiceBox<T> choiceBox, Set<T> list);
 

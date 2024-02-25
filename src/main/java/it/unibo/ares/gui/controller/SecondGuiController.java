@@ -122,7 +122,6 @@ public final class SecondGuiController extends DataReciever implements Initializ
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
     }
-    
 
     /**
      * This method is called when the next item in the simulation is available.

@@ -129,18 +129,18 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     @Override
     public void write2dMap(final Map<Pos, String> items, final AnchorPane container, final int width,
             final int height) {
-        final int lblFontSize = 20;
+        final int lblFontSize = 20, maxWGrid = 655, maxHGrid = 655, maxLblW = 30, maxLblH = 30;
         container.getChildren().clear();
         GridPane grid = new GridPane();
-        grid.setMaxSize(600, 600);
+        grid.setMaxSize(maxWGrid, maxHGrid);
         /*
          * creating a label for each position in the map and setting his min and max size
          */
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Label lbl = new Label();
-                lbl.setMinSize(20, 20);
-                lbl.setMaxSize(30, 30);
+                lbl.setPrefSize(40, 40);
+                lbl.setMaxSize(40, 40);
                 grid.add(lbl, i, j);
             }
         }
@@ -148,8 +148,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          * setting the text of the textfield for each agent in the map
          */
         items.forEach((pos, agent) -> {
-            Label txt = new Label(agent);  
-            txt.setFont(Font.font(lblFontSize));
+            Label txt = new Label(agent);
             grid.add(txt, pos.getX(), pos.getY());
         });
         grid.setGridLinesVisible(true);

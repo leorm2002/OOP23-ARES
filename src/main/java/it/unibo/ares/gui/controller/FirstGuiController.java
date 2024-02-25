@@ -221,7 +221,7 @@ public final class FirstGuiController implements Initializable {
                              * }
                              * map.put(txt.getId(), vector);
                              * break;
-                             */  
+                             */
                         default:
                             break;
                     }
