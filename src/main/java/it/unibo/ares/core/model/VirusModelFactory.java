@@ -1,10 +1,18 @@
 package it.unibo.ares.core.model;
 
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import it.unibo.ares.core.agent.VirusAgentFactory;
+import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.state.StateImpl;
 
 /**
  * A factory class for implementing the virus on a network model.
@@ -23,8 +31,33 @@ public final class VirusModelFactory implements ModelFactory {
      *                                  size of the grid.
      */
     private State virusInitializer(final Parameters parameters) throws IllegalAccessException {
-        //todo
-        return null;
+        int size = parameters.getParameter("size", Integer.class)
+                .orElseThrow(IllegalAccessException::new).getValue();
+        int total = parameters.getParameter("numeroPersone", Integer.class)
+                .orElseThrow(IllegalAccessException::new).getValue();
+        State state = new StateImpl(size, size);
+        //check if the number of agents is greater than the size of the grid
+        if (size * size < total) {
+            throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
+        }
+        //create a list of valid positions
+        List<Pos> validPositions = IntStream.range(0, size).boxed()
+                .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
+                .map(Pos.class::cast)
+                .toList();
+        /*
+         * create a UniquePositionGetter for having an unique position for each agent
+         * and a VirusAgentFactory for creating n agents of the model, then add the 
+         * agents to the state
+         */
+        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        VirusAgentFactory virusAgentFactory = new VirusAgentFactory();
+        Stream.generate(virusAgentFactory::createAgent)
+            .limit(total).forEach(a -> {
+                a.setType("P");
+                state.addAgent(getter.next(), a);
+            });
+        return state;
     }
 
     /**

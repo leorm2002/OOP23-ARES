@@ -11,5 +11,4 @@ public final class VirusAgentFactory implements AgentFactory {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createAgent'");
     }
-    
 }
