@@ -1,9 +1,13 @@
+
 package it.unibo.ares.core.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import it.unibo.ares.core.agent.Agent;
+import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.VirusAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
@@ -15,79 +19,110 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
 /**
- * A factory class for implementing the virus on a network model.
+ * This class generates an instance of a virus diffusion model.
+ * It allows the parameterization of the number of agents (two types: "Person"
+ * and "Infected").
  */
 public final class VirusModelFactory implements ModelFactory {
-    private static final String MODEL_ID = "Virus";
+    private static final String MODEL_ID = "VirusDiffusion";
 
-    /**
-     * Initializes the state of the virus model.
-     *
-     * @param parameters The parameters required to initialize the model. It should
-     *                   contain "size" and "numeroPersone".
-     * @return The initialized state of the virus model.
-     * @throws IllegalAccessException   If the required parameters are not provided.
-     * @throws IllegalArgumentException If the number of agents is greater than the
-     *                                  size of the grid.
-     */
-    private State virusInitializer(final Parameters parameters) throws IllegalAccessException {
-        int size = parameters.getParameter("size", Integer.class)
-                .orElseThrow(IllegalAccessException::new).getValue();
-        int total = parameters.getParameter("numeroPersone", Integer.class)
-                .orElseThrow(IllegalAccessException::new).getValue();
-        State state = new StateImpl(size, size);
-        //check if the number of agents is greater than the size of the grid
-        if (size * size < total) {
-            throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
-        }
-        //create a list of valid positions
-        List<Pos> validPositions = IntStream.range(0, size).boxed()
-                .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
-                .map(Pos.class::cast)
-                .toList();
-        /*
-         * create a UniquePositionGetter for having an unique position for each agent
-         * and a VirusAgentFactory for creating n agents of the model, then add the 
-         * agents to the state
-         */
-        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        VirusAgentFactory virusAgentFactory = new VirusAgentFactory();
-        Stream.generate(virusAgentFactory::createAgent)
-            .limit(total).forEach(a -> {
-                a.setType("P");
-                state.addAgent(getter.next(), a);
-            });
-        return state;
-    }
-
-    /**
-     * This method returns the model ID.
-     *
-     * @return The model ID.
-     */
     @Override
     public String getModelId() {
         return MODEL_ID;
     }
 
+    /**
+     * This method determines the type of the agent based on its index.
+     *
+     * @param na    The number of agents of type "Person".
+     * @param index The index of the agent.
+     * @return The type of the agent ("Person" or "Infected").
+     */
+    private static String getAgentType(final int na, final int index) {
+        return index < na ? "Person" : "Infected";
+    }
 
     /**
-     * This method builds and returns the model.
+     * This method initializes the state of the virus model.
+     *
+     * It retrieves the size of the grid, the number of healthy people, and the
+     * number of infected people from the parameters.
+     * It then checks if the total number of people is less than or equal to the
+     * total number of cells in the grid.
+     * If so, it creates a new state and populates it with agents at valid
+     * positions.
+     *
+     * @param parameters The parameters required to initialize the model. It should
+     *                   contain "size", "numeroPersoneSane", and
+     *                   "numeroPersoneInfette".
+     * @return The initialized state of the virus model.
+     * @throws IllegalAccessException   If the required parameters are not provided.
+     * @throws IllegalArgumentException If the total number of people is greater
+     *                                  than the total number of cells in the grid.
+     */
+    private static State virusInitializer(final Parameters parameters) throws IllegalAccessException {
+        int size = parameters.getParameter("size", Integer.class)
+                .orElseThrow(IllegalAccessException::new).getValue();
+        int p = parameters.getParameter("numeroPersoneSane", Integer.class)
+                .orElseThrow(IllegalAccessException::new).getValue();
+        int pInfected = parameters.getParameter("numeroPersoneInfette", Integer.class)
+                .orElseThrow(IllegalAccessException::new).getValue();
+        int total = p + pInfected;
+        State state = new StateImpl(size, size);
+        if (size * size < total) {
+            throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
+        }
+        List<Pos> validPositions = IntStream.range(0, size).boxed()
+                .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
+                .map(Pos.class::cast)
+                .toList();
+
+        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        AgentFactory virusFactory = new VirusAgentFactory();
+        List<Agent> agents = Stream
+                .generate(virusFactory::createAgent)
+                .limit(total)
+                .collect(Collectors.toList());
+        IntStream.range(0, total)
+                .forEach(i -> agents.get(i).setType(getAgentType(p, i)));
+        IntStream.range(0, total)
+                .forEach(i -> state.addAgent(getter.next(), agents.get(i)));
+
+        return state;
+    }
+
+    /**
+     * This method builds and returns the virus on a network model.
+     *
+     * It adds parameters for the number of healthy people, the number of infected
+     * people, and the grid size.
+     * It also adds an exit function that checks if all agents in the old state are
+     * present in the new state.
+     * Finally, it adds an initialization function that initializes the virus model
+     * with the provided parameters (if they are valid).
      *
      * @return The built model.
+     * @throws IllegalArgumentException If the required parameters for the model
+     *                                  initialization are not provided.
      */
     @Override
     public Model getModel() {
         ModelBuilder builder = new ModelBuilderImpl();
-        /*
-         * adding the parameters needed for the model initialization, only one agent
-         */
         return builder
-                .addParameter(new ParameterImpl<>("numeroPersone", Integer.class,
-                        new ParameterDomainImpl<Integer>("Numero di agenti (1-n)", n -> n > 0)))
+                .addParameter(new ParameterImpl<>("numeroPersoneSane", Integer.class,
+                        new ParameterDomainImpl<Integer>(
+                                "Numero di persone sane (0-n)",
+                                i -> i >= 0)))
+                .addParameter(new ParameterImpl<>("numeroInfetti", Integer.class,
+                        new ParameterDomainImpl<Integer>(
+                                "Numero di persone infette (0-n)",
+                                i -> i >= 0)))
                 .addParameter(new ParameterImpl<>("size", Integer.class,
-                        new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)", n -> n > 0)))
-                .addExitFunction((o, n) -> false)
+                        new ParameterDomainImpl<Integer>(
+                                "Dimensione della griglia (1-n)",
+                                i -> i > 0)))
+                .addExitFunction((o, n) -> o.getAgents().stream()
+                        .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                 .addInitFunction(t -> {
                     try {
                         return virusInitializer(t);
@@ -97,7 +132,5 @@ public final class VirusModelFactory implements ModelFactory {
                     }
                 })
                 .build();
-
     }
-
 }
