@@ -39,7 +39,7 @@ public final class VirusModelFactory implements ModelFactory {
      * @return The type of the agent ("Person" or "Infected").
      */
     private static String getAgentType(final int na, final int index) {
-        return index < na ? "Person" : "Infected";
+        return index < na ? "P" : "I";
     }
 
     /**
@@ -79,15 +79,16 @@ public final class VirusModelFactory implements ModelFactory {
 
         UniquePositionGetter getter = new UniquePositionGetter(validPositions);
         AgentFactory virusFactory = new VirusAgentFactory();
-        List<Agent> agents = Stream
-                .generate(virusFactory::createAgent)
-                .limit(total)
-                .collect(Collectors.toList());
-        IntStream.range(0, total)
-                .forEach(i -> agents.get(i).setType(getAgentType(p, i)));
-        IntStream.range(0, total)
-                .forEach(i -> state.addAgent(getter.next(), agents.get(i)));
-
+        for (int i = 0; i < p; i++) {
+                Agent agent = virusFactory.createAgent();
+                agent.setType("P");
+                state.addAgent(getter.next(), agent);
+        }
+        for (int i = 0; i < pInfected; i++) {
+                Agent agent = virusFactory.createAgent();
+                agent.setType("I");
+                state.addAgent(getter.next(), agent);
+        }
         return state;
     }
 
