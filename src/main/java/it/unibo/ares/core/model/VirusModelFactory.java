@@ -2,9 +2,7 @@
 package it.unibo.ares.core.model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
@@ -26,20 +24,14 @@ import it.unibo.ares.core.utils.state.StateImpl;
 public final class VirusModelFactory implements ModelFactory {
     private static final String MODEL_ID = "VirusDiffusion";
 
+    /**
+     * Returns the model ID of the VirusModelFactory.
+     *
+     * @return The model ID.
+     */
     @Override
     public String getModelId() {
-        return MODEL_ID;
-    }
-
-    /**
-     * This method determines the type of the agent based on its index.
-     *
-     * @param na    The number of agents of type "Person".
-     * @param index The index of the agent.
-     * @return The type of the agent ("Person" or "Infected").
-     */
-    private static String getAgentType(final int na, final int index) {
-        return index < na ? "P" : "I";
+            return MODEL_ID;
     }
 
     /**
