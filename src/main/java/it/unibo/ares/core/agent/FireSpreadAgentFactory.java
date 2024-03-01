@@ -370,7 +370,6 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 AgentBuilder b = new AgentBuilderImpl();
 
                 return b
-                                .addParameter(new ParameterImpl<Integer>("type", Integer.class))
                                 .addParameter(new ParameterImpl<Double>("fuel", Double.class))
                                 // .addStrategy((state, pos) -> {
                                 // return state;

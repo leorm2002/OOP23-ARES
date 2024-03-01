@@ -32,17 +32,15 @@ public class FireSpreadModelFactory implements ModelFactory {
         /**
          * This method initializes the state of the fire spread model.
          * 
-         * It retrieves the size of the grid, the number of Fire-type agents, the
-         * number of Tree-type agents, the direction of the Fire-type agents, and the
-         * fuel consumption from the parameters.
+         * It retrieves the size of the grid and the number of Fire-type agentsfrom the
+         * parameters.
          * It then checks if the total number of agents is less than or equal to the
          * total number of cells in the grid.
          * If so, it creates a new state and populates it with agents at valid
          * positions.
          * 
          * @param parameters The parameters required to initialize the model. It should
-         *                   contain "size", "numeroAgentiTipoF", "numeroAgentiTipoT",
-         *                   "direction", and "consumption".
+         *                   contain "size" and numeroAgentiTipoF".
          * @return The initialized state of the fire spread model.
          * @throws IllegalAccessException   If the required parameters are not provided.
          * @throws IllegalArgumentException If the total number of agents is greater
@@ -51,12 +49,11 @@ public class FireSpreadModelFactory implements ModelFactory {
         private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
                 Integer size = parameters.getParameter("size", Integer.class).orElseThrow().getValue();
                 Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class).get().getValue();
-                Integer nt = parameters.getParameter("numeroAgentiTipoT", Integer.class).get().getValue();
 
-                Integer total = nf + nt;
+                Integer total = size * size;
 
                 State state = new StateImpl(size, size);
-                if (size * size < total) {
+                if (total < nf) {
                         throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
                 }
 
@@ -73,7 +70,7 @@ public class FireSpreadModelFactory implements ModelFactory {
                         agent.setType("F");
                         state.addAgent(getter.next(), agent);
                 }
-                for (int i = 0; i < nt; i++) {
+                for (int i = 0; i < total - nf; i++) {
                         Agent agent = ((FireSpreadAgentFactory) fireSpreadFactory).getTreeModelAgent();
                         agent.setType("T");
                         state.addAgent(getter.next(), agent);
@@ -96,7 +93,6 @@ public class FireSpreadModelFactory implements ModelFactory {
                 // in the type
                 return builder
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoF", Integer.class))
-                                .addParameter(new ParameterImpl<>("numeroAgentiTipoT", Integer.class))
                                 .addParameter(new ParameterImpl<>("size", Integer.class))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
