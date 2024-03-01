@@ -50,11 +50,13 @@ public class TestFireSpread {
                 State state = new StateImpl(5, 5);
                 // CHECKSTYLE: MagicNumber ON
 
+                // CHECKSTYLE: MagicNumber OFF
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
+                // CHECKSTYLE: MagicNumber ON
 
                 // CHECKSTYLE: MagicNumber OFF
                 // Create a Tree-type Agent, fuel 0.5 and flammability 0.3
@@ -81,11 +83,13 @@ public class TestFireSpread {
                 State state = new StateImpl(5, 5);
                 // CHECKSTYLE: MagicNumber ON
 
+                // CHECKSTYLE: MagicNumber OFF
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
+                // CHECKSTYLE: MagicNumber ON
 
                 // CHECKSTYLE: MagicNumber OFF
                 PosImpl pos1 = new PosImpl(1, 0);
@@ -123,11 +127,13 @@ public class TestFireSpread {
                 State state = new StateImpl(5, 5);
                 // CHECKSTYLE: MagicNumber ON
 
+                // CHECKSTYLE: MagicNumber OFF
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
                 Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent);
+                // CHECKSTYLE: MagicNumber ON
 
                 // CHECKSTYLE: MagicNumber OFF
                 PosImpl pos1 = new PosImpl(1, 0);
