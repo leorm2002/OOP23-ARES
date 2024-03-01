@@ -60,7 +60,6 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
         String type = random.nextBoolean() ? PREDATOR : PREY;
         int visionRadius = random.nextInt(5) + 1; // Vision radius between 1 and 5
 
-        builder.addParameter(new ParameterImpl<>(AGENT_TYPE, type));
         builder.addParameter(new ParameterImpl<>("visionRadius", visionRadius));
 
         if (PREY.equals(type)) {
@@ -86,6 +85,8 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
             });
         }
 
-        return builder.build();
+        var agent = builder.build();
+        agent.setType(type);
+        return agent;
     }
 }
