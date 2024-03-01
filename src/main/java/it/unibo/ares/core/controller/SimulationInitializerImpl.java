@@ -15,6 +15,7 @@ import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.FireSpreadModelFactory;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
+import it.unibo.ares.core.model.PredatorPreyModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -37,10 +38,12 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         ModelFactory sf = new SchellingModelFactories();
         ModelFactory bf = new BoidsModelFactory();
         ModelFactory ff = new FireSpreadModelFactory();
+        ModelFactory pp = new PredatorPreyModelFactory();
         modelsSupplier.put("SimpleModel", SimpleModelProvider::getMockModel);
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         modelsSupplier.put(ff.getModelId(), ff::getModel);
+        modelsSupplier.put(pp.getModelId(), pp::getModel);
         this.intilizingModels = new ConcurrentHashMap<>();
         this.initializedModels = new ConcurrentHashMap<>();
     }
