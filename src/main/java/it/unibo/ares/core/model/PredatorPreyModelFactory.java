@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.PredatorPreyAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -54,6 +54,22 @@ public final class PredatorPreyModelFactory implements ModelFactory {
 
     @Override
     public Model getModel() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        ModelBuilder builder = new ModelBuilderImpl();
+        return builder
+                .addParameter(new ParameterImpl<>("numeroAgenti", Integer.class,
+                        new ParameterDomainImpl<Integer>("Numero di agenti", n -> n >= 0)))
+                .addParameter(new ParameterImpl<>("size", Integer.class,
+                        new ParameterDomainImpl<Integer>("Dimensione della griglia", n -> n >= 0)))
+                .addExitFunction(
+                        (o, n) -> n.getAgents().stream().map(a -> a.getSecond().getType()).distinct().count() < 2)
+                .addInitFunction(t -> {
+                    try {
+                        return predatorPreyInitializer(t);
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalArgumentException(
+                                "Missing parameters for the model initialization");
+                    }
+                })
+                .build();
     }
 }
