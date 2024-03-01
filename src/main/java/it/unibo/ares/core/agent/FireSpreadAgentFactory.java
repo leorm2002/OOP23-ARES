@@ -1,5 +1,6 @@
 package it.unibo.ares.core.agent;
 
+import java.util.Random;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -17,6 +18,14 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * A factory class for creating agents for the Fire Spread Model.
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
+        static Random r;
+
+        /**
+         * Constructor for the FireSpreadAgentFactory.
+         */
+        public FireSpreadAgentFactory() {
+                r = new Random();
+        }
 
         private static BiPredicate<Agent, Agent> isAgentOfDiffType = (a, b) -> {
                 String typeA = a.getType();
@@ -24,6 +33,26 @@ public final class FireSpreadAgentFactory implements AgentFactory {
 
                 return !typeA.equals(typeB);
         };
+
+        /**
+         * @return a random direction vector for the fire spread model agents.
+         */
+        private static DirectionVectorImpl getRandomDirection() {
+                r = new Random();
+                Integer wn = r.nextInt(4);
+                switch (wn) {
+                        case 0:
+                                return new DirectionVectorImpl(1, 0);
+                        case 1:
+                                return new DirectionVectorImpl(0, 1);
+                        case 2:
+                                return new DirectionVectorImpl(-1, 0);
+                        case 3:
+                                return new DirectionVectorImpl(0, -1);
+                        default:
+                                return new DirectionVectorImpl(1, 0);
+                }
+        }
 
         /**
          * Verify if a Tree-type Agent nearby can be burnt.
@@ -50,9 +79,9 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @return True if extinguished, false either way.
          */
         private static boolean isExtinguished(final State state, final Pos pos, final Agent agent) {
-                Integer visionRadius = agent.getParameters().getParameter("visionRadius", Integer.class)
+                Integer spread = agent.getParameters().getParameter("spread", Integer.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + agent + " has no visionRadius parameter"))
+                                                "Agent " + agent + " has no spread parameter"))
                                 .getValue();
 
                 // Verify if at current position the Tree Agent can sustain the Fire Agent.
@@ -62,7 +91,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .getValue() <= 0;
 
                 // Verify if there are near trees that can spread the fire.
-                Boolean cannotSpread = state.getAgentsByPosAndRadius(pos, visionRadius)
+                Boolean cannotSpread = state.getAgentsByPosAndRadius(pos, spread)
                                 .stream()
                                 .filter(a -> isAgentOfDiffType.test(a, agent))
                                 .filter(a -> isFlammable(a))
@@ -71,6 +100,11 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 return cannotSpread && notFueled;
         }
 
+        /**
+         * Consumes the fuel of the Fire-type Agent.
+         * 
+         * @param agent current fire agent.
+         */
         private static void consumeFuel(final Agent agent) {
                 Double fuel = agent.getParameters()
                                 .getParameter("fuel", Double.class)
@@ -88,14 +122,14 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Creates a new Fire-type Agent replacing the Tree-type Agent at pos.
+         * Creates a new Fire-type Agent replacing the Tree-type Agent at position pos.
          * 
          * @param state     current state
          * @param pos       current position
-         * @param fireAgent current fire agent
+         * @param fireAgent spreading fire agent
          */
         public static void spreadFire(final State state, final Pos pos, final Agent fireAgent) {
-                Agent treeAgent = state.getAgentAt(pos).get(); // old tree
+                Agent treeAgent = state.getAgentAt(pos).get(); // tree agent to be replaced
 
                 Double flammability = treeAgent.getParameters()
                                 .getParameter("flammability", Double.class)
@@ -115,28 +149,25 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                                 "Agent " + fireAgent + " has no spread parameter"))
                                 .getValue();
 
-                Integer visionRadius = fireAgent.getParameters()
-                                .getParameter("visionRadius", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + fireAgent + " has no visionRadius parameter"))
-                                .getValue();
-
-                DirectionVector dir = fireAgent.getParameters()
-                                .getParameter("direction", DirectionVectorImpl.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + fireAgent + " has no direction parameter"))
-                                .getValue();
-
                 /* Starts a new fire */
-                Agent newAgent = getFireModelAgent(visionRadius, dir, spread, newFuel, flammability);
+                Agent newAgent = getFireModelAgent(spread, newFuel, flammability);
 
                 state.removeAgent(pos, treeAgent);
                 state.addAgent(pos, newAgent);
         }
 
+        /**
+         * Verify if a position is inside the cone of the Fire-type Agent.
+         * 
+         * @param pos      position to test
+         * @param center   center of the cone
+         * @param dir      direction of the cone
+         * @param distance distance of the cone
+         * @param angle    angle of the cone
+         * @return True if inside the cone, false either way.
+         */
         private static boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir,
-                        final Integer distance,
-                        final Integer angle) {
+                        final Integer distance, final Integer angle) {
                 double radAng = Math.toRadians(angle);
 
                 DirectionVector vectorToNewPoint = new DirectionVectorImpl(pos.diff(center).getX(),
@@ -147,6 +178,15 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 return radAngleBetween <= radAng && vectorToNewPoint.getMagnitude() <= distance;
         }
 
+        /**
+         * Compute the positions inside the cone of the Fire-type Agent.
+         * 
+         * @param pos      position to test
+         * @param dir      direction of the cone
+         * @param distance distance of the cone
+         * @param angle    angle of the cone
+         * @return the positions inside the cone
+         */
         private static Set<Pos> computeCloseCells(final Pos pos, final DirectionVector dir, final Integer distance,
                         final Integer angle) {
                 int xSign = dir.getX() > 0 ? 1 : -1;
@@ -163,37 +203,39 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Gets the spread of the Fire-type Agent.
+         * Get the positions where fire will spread.
          * 
          * @param state current state
-         * @param pos   current position
+         * @param pos   current position of fire agent
          * @param agent current fire agent
-         * @return the positions where fire will spread
+         * @return the positions where fire will spread if available (Tree-type Agents).
          */
         private static Set<Pos> getSpreadPositionIfAvailable(final State state, final Pos pos, final Agent agent) {
-                Integer visionRadius = agent.getParameters()
-                                .getParameter("visionRadius", Integer.class)
+                DirectionVector dir = getRandomDirection();
+                Integer spread = agent.getParameters()
+                                .getParameter("spread", Integer.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + agent + " has no visionRadius parameter"))
-                                .getValue();
-                DirectionVector dir = agent.getParameters()
-                                .getParameter("direction",
-                                                DirectionVectorImpl.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + agent + " has no direction parameter"))
+                                                "Agent " + agent + " has no spread parameter"))
                                 .getValue();
 
                 return IntStream.range(0, state.getDimensions().getFirst())
                                 .boxed()
                                 .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
                                                 .mapToObj(y -> new PosImpl(x, y)))
-                                .filter(p -> computeCloseCells(pos, dir, visionRadius, 0).contains(p))
+                                .filter(p -> computeCloseCells(pos, dir, spread, 0).contains(p))
                                 .filter(p -> state.getAgentAt(p).isPresent())
                                 .filter(p -> isAgentOfDiffType.test(agent, state.getAgentAt(p).get()))
                                 .filter(p -> isFlammable(state.getAgentAt(p).get()))
                                 .collect(Collectors.toSet());
         }
 
+        /**
+         * The tick function for the Fire-type Agent.
+         * 
+         * @param currentState  current state
+         * @param agentPosition current position of the fire agent
+         * @return the new state after the tick
+         */
         private static State tickFunction(final State currentState, final Pos agentPosition) {
                 Agent agent = currentState.getAgentAt(agentPosition).get();
                 consumeFuel(agent);
@@ -208,22 +250,16 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Fire-type Agent.
+         * Builds the Fire-type Agent (only for tests).
          * 
-         * @param visionRadius vision radius
-         * @param dir          direction
-         * @param spread       spread radius
-         * @param fuel         starting fuel
-         * @param cons         starting consumption of the fuel
+         * @param spread spread radius
+         * @param fuel   starting fuel
+         * @param cons   starting consumption of the fuel
          * @return An instance of the Fire-type Agent
          */
-        public static Agent getFireModelAgent(final Integer visionRadius, final DirectionVector dir,
-                        final Integer spread, final Double fuel, final Double cons) {
+        public static Agent getFireModelAgent(final Integer spread, final Double fuel, final Double cons) {
                 AgentBuilder b = new AgentBuilderImpl();
                 b
-                                .addParameter(new ParameterImpl<>("type", "F"))
-                                .addParameter(new ParameterImpl<>("visionRadius", visionRadius))
-                                .addParameter(new ParameterImpl<>("direction", dir))
                                 .addParameter(new ParameterImpl<>("spread", spread))
                                 .addParameter(new ParameterImpl<>("fuel", fuel))
                                 .addParameter(new ParameterImpl<>("consumption", cons))
@@ -238,17 +274,12 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         /**
          * Builds the Fire-type Agent.
          * 
-         * @return An instance of the Fire-type Agent
+         * @return An instance of the Fire-type Agent (with default parameters).
          */
         public Agent getFireModelAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
 
                 b
-                                .addParameter(new ParameterImpl<>("type", "F"))
-                                .addParameter(new ParameterImpl<>("visionRadius", Integer.class,
-                                                new ParameterDomainImpl<>(
-                                                                "Range of vision of the agent (0 - n)",
-                                                                (Integer i) -> i > 0)))
                                 .addParameter(new ParameterImpl<>("spread", Integer.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Range of spread (RoS) of the agent (0 - n)",
@@ -257,7 +288,10 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel available for combustion (0.0-1.0)",
                                                                 (Double d) -> d >= 0.0 && d <= 1.0)))
-                                .addParameter(new ParameterImpl<>("direction", DirectionVectorImpl.class))
+                                .addParameter(new ParameterImpl<>("consumption", Double.class,
+                                                new ParameterDomainImpl<>(
+                                                                "Amount of fuel consumption every tick (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
                                 .addStrategy((state, pos) -> {
                                         Agent agent = state.getAgentAt(pos).get();
 
@@ -277,7 +311,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Tree-type Agent.
+         * Builds the Tree-type Agent (only for tests).
          * 
          * @param fuel         starting fuel
          * @param flammability flammability
@@ -287,7 +321,6 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 AgentBuilder b = new AgentBuilderImpl();
 
                 b
-                                .addParameter(new ParameterImpl<>("type", "T"))
                                 .addParameter(new ParameterImpl<>("fuel", fuel))
                                 .addParameter(new ParameterImpl<>("flammability", flammability))
                                 .addStrategy((state, pos) -> {
@@ -303,13 +336,12 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         /**
          * Builds the Tree-type Agent.
          * 
-         * @return An instance of the Tree-type Agent
+         * @return An instance of the Tree-type Agent (with default parameters).
          */
         public Agent getTreeModelAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
 
                 b
-                                .addParameter(new ParameterImpl<>("type", "T"))
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel available for combustion (0.0-1.0)",
@@ -328,6 +360,11 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 return a;
         }
 
+        /**
+         * Builds the Fire Spread Agent.
+         * 
+         * @return An instance of the Fire Spread Agent.
+         */
         @Override
         public Agent createAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
