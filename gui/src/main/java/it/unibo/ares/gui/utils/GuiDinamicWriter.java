@@ -1,14 +1,14 @@
 package it.unibo.ares.gui.utils;
 
-import java.util.Set;
-import java.util.Map;
-
 import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.core.utils.pos.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import it.unibo.ares.core.utils.pos.Pos;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * WriteOnGUI is an interface for writing parameters on a specific projected

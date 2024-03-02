@@ -1,12 +1,10 @@
 package it.unibo.ares.core.utils.directionvector;
 
-import javax.annotation.concurrent.Immutable;
 
 /**
  * Implementation of the DirectionVector interface.
  * Represents a vector with x and y components.
  */
-@Immutable
 public final class DirectionVectorImpl implements DirectionVector {
     private final Double x;
     private final Double y;

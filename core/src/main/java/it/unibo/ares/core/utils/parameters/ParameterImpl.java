@@ -2,8 +2,6 @@ package it.unibo.ares.core.utils.parameters;
 
 import java.util.Optional;
 
-import javax.annotation.concurrent.Immutable;
-
 /**
  * Represents an implementation of the Parameter interface.
  * This class provides methods to get and set the value of a parameter,
@@ -11,7 +9,6 @@ import javax.annotation.concurrent.Immutable;
  *
  * @param <T> the type of the parameter value
  */
-@Immutable
 public class ParameterImpl<T> implements Parameter<T> {
 
     private final Optional<ParameterDomain<T>> domain;

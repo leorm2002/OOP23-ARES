@@ -1,8 +1,8 @@
 package it.unibo.ares.core.api;
 
-import java.util.Set;
-
 import it.unibo.ares.core.utils.parameters.Parameters;
+
+import java.util.Set;
 
 public interface InitializationApi {
 

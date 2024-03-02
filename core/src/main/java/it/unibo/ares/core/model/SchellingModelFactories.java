@@ -1,11 +1,6 @@
 
 package it.unibo.ares.core.model;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.SchellingsAgentFactory;
@@ -17,6 +12,11 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Generate an instance of a schelling segregation model. It permits the

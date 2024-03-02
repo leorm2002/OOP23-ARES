@@ -1,9 +1,5 @@
 package it.unibo.ares.core.model;
 
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import it.unibo.ares.core.agent.BoidsAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
@@ -13,6 +9,10 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * A factory class for creating the Boids model.

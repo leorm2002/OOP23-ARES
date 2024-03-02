@@ -1,10 +1,10 @@
 package it.unibo.ares.core.utils.board;
 
-import java.util.Optional;
-import java.util.Set;
-
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.pos.Pos;
+
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * A board is a 2D grid, we associate a generica entity of type V  to a position Pos.

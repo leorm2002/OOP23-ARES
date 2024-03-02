@@ -1,10 +1,11 @@
 package it.unibo.ares.core.model;
 
-import java.util.function.BiPredicate;
-import java.util.function.Function;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 /**
  * Represents a builder for creating models.

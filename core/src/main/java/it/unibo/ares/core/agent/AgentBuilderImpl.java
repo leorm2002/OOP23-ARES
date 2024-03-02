@@ -1,13 +1,13 @@
 package it.unibo.ares.core.agent;
 
-import java.util.UUID;
-import java.util.function.BiFunction;
-
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.UUID;
+import java.util.function.BiFunction;
 
 /**
  * Implementation of the AgentBuilder interface.

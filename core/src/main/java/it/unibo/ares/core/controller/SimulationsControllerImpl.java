@@ -1,12 +1,12 @@
 package it.unibo.ares.core.controller;
 
+import it.unibo.ares.core.api.SimulationOutputData;
+
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.stream.Collectors;
-import java.util.List;
-
-import it.unibo.ares.core.api.SimulationOutputData;
 
 final class SimulationsControllerImpl extends SimulationsController {
     private final ConcurrentMap<String, Simulation> simulations;

@@ -1,13 +1,13 @@
 package it.unibo.ares.cli;
 
-import java.util.Optional;
-
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.api.SimulationOutputDataApi;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
+
+import java.util.Optional;
 
 public final class SimController extends DataReciever {
     private static final String START = "s";

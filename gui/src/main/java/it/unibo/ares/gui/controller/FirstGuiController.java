@@ -1,10 +1,5 @@
 package it.unibo.ares.gui.controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.BiConsumer;
-
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.parameters.Parameter;
@@ -22,6 +17,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
 /**
  * GuiController is a class that controls the first GUI of the application.
  * It implements the Initializable interface and manages the interaction between

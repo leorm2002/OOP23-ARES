@@ -1,12 +1,12 @@
 package it.unibo.ares.core.utils.state;
 
-import java.util.Optional;
-import java.util.Set;
-
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.Entity;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.pos.Pos;
+
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Represents the state of a system.

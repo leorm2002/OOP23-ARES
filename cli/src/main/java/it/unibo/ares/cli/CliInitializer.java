@@ -1,17 +1,17 @@
 package it.unibo.ares.cli;
 
+import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.StringCaster;
+import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.Parameters;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import it.unibo.ares.core.controller.CalculatorSupplier;
-import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.StringCaster;
-import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.Parameters;
 
 /**
  * Class used to initialize simulation by using a CLI

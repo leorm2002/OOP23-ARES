@@ -1,9 +1,5 @@
 package it.unibo.ares.core.model;
 
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
@@ -12,6 +8,10 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 @SuppressFBWarnings(value = {
         "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"

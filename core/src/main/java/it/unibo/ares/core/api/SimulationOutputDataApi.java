@@ -1,8 +1,8 @@
 package it.unibo.ares.core.api;
 
-import java.util.Map;
-
 import it.unibo.ares.core.utils.pos.Pos;
+
+import java.util.Map;
 
 public interface SimulationOutputDataApi {
 

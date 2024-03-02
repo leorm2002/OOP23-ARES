@@ -1,11 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
@@ -15,6 +9,12 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents a factory for creating Boids agents.

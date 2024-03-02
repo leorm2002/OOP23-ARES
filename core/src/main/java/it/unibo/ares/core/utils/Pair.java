@@ -1,6 +1,5 @@
 package it.unibo.ares.core.utils;
 
-import javax.annotation.concurrent.Immutable;
 
 /**
  * Represents an immutable pair of generic values.
@@ -8,7 +7,6 @@ import javax.annotation.concurrent.Immutable;
  * @param <T> the type of the first value
  * @param <U> the type of the second value
  */
-@Immutable
 public class Pair<T, U> {
     private final T first;
     private final U second;

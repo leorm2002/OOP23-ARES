@@ -1,14 +1,14 @@
 package it.unibo.ares.core.agent;
 
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.Optional;
-
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A factory class for creating predator and prey agents for the Predator-Prey

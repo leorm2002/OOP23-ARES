@@ -1,9 +1,5 @@
 package it.unibo.ares.gui.controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.controller.CalculatorSupplier;
@@ -14,12 +10,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.scene.Node;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * GuiController is a class that controls the GUI of the application.

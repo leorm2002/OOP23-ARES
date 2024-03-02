@@ -1,10 +1,10 @@
 package it.unibo.ares.core.agent;
 
-import java.util.function.BiFunction;
-
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.function.BiFunction;
 
 /**
  * The AgentBuilder interface represents a builder for creating instances of the

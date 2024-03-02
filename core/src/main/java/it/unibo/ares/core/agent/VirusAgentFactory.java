@@ -1,16 +1,16 @@
 package it.unibo.ares.core.agent;
 
-import java.util.Random;
-import java.util.function.BiPredicate;
-
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.Random;
+import java.util.function.BiPredicate;
 
 /**
  * A factory class for creating agents for the Schelling Segregation Model.

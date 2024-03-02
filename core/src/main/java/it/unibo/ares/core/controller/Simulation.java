@@ -1,10 +1,10 @@
 package it.unibo.ares.core.controller;
 
-import java.util.concurrent.CompletableFuture;
-
 import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A simulation is a class that contains the state of the simulation and the
