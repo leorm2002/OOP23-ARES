@@ -2,7 +2,6 @@
 package it.unibo.ares.core.model;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.VirusAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
@@ -57,8 +56,8 @@ public final class VirusModelFactory implements ModelFactory {
                 .orElseThrow(IllegalAccessException::new).getValue();
         int p = parameters.getParameter("numeroPersoneSane", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int pInfected = parameters.getParameter("numeroPersoneInfette", Integer.class)
-                .orElseThrow(IllegalAccessException::new).getValue();
+        int pInfected = parameters.getParameter("numeroInfetti", Integer.class)
+                        .orElseThrow(IllegalAccessException::new).getValue();
         int total = p + pInfected;
         State state = new StateImpl(size, size);
         if (size * size < total) {
@@ -70,13 +69,15 @@ public final class VirusModelFactory implements ModelFactory {
                 .toList();
 
         UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        AgentFactory virusFactory = new VirusAgentFactory();
+        VirusAgentFactory virusFactory = new VirusAgentFactory();
         for (int i = 0; i < p; i++) {
+                virusFactory.setTypeOfAgent('P');
                 Agent agent = virusFactory.createAgent();
                 agent.setType("P");
                 state.addAgent(getter.next(), agent);
         }
         for (int i = 0; i < pInfected; i++) {
+                virusFactory.setTypeOfAgent('I');
                 Agent agent = virusFactory.createAgent();
                 agent.setType("I");
                 state.addAgent(getter.next(), agent);
@@ -104,16 +105,16 @@ public final class VirusModelFactory implements ModelFactory {
         return builder
                 .addParameter(new ParameterImpl<>("numeroPersoneSane", Integer.class,
                         new ParameterDomainImpl<Integer>(
-                                "Numero di persone sane (0-n)",
-                                i -> i >= 0)))
+                                "Numero di persone sane (1-n)",
+                                i -> i >= 1)))
                 .addParameter(new ParameterImpl<>("numeroInfetti", Integer.class,
                         new ParameterDomainImpl<Integer>(
-                                "Numero di persone infette (0-n)",
-                                i -> i >= 0)))
+                                "Numero di persone infette (1-n)",
+                                i -> i >= 1)))
                 .addParameter(new ParameterImpl<>("size", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Dimensione della griglia (1-n)",
-                                i -> i > 0)))
+                                                        i -> i > 0)))
                 .addExitFunction((o, n) -> o.getAgents().stream()
                         .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                 .addInitFunction(t -> {

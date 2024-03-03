@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,27 +54,55 @@ public class TestVirus {
     }
 
     @Test
-    void testInfection() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-     NoSuchMethodException, SecurityException, ClassNotFoundException {
+    public void testInfection() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            NoSuchMethodException, SecurityException, ClassNotFoundException {
         factory = new VirusAgentFactory();
         initialPos = new PosImpl(0, 0);
-        dir = new DirectionVectorImpl(1, 1);
-        stepSize = 1;
         Method method = Class.forName("it.unibo.ares.core.agent.VirusAgentFactory")
-                .getDeclaredMethod("tickFunction", State.class, Pos.class);
+                .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
 
         method.setAccessible(true);
-        Agent agentP = factory.createAgent(), agentI = factory.createAgent();
+        factory.setTypeOfAgent('P');
+        Agent agentP = factory.createAgent();
+        factory.setTypeOfAgent('I');
+        Agent agentI = factory.createAgent();
         agentP.setType("P");
+        agentP.setParameter("infectionRate", 100);
+        agentI.setParameter("direction", new DirectionVectorImpl(0, 0));
         agentI.setType("I");
         agentI.setParameter("stepSize", 1);
-        agentI.setParameter("direction", new DirectionVectorImpl(1, 1));
+        agentI.setParameter("recoveryRate", 0);
         agentP.setParameter("stepSize", 1);
-        agentP.setParameter("direction", new DirectionVectorImpl(1, 1));
-        state = new StateImpl(10, 10);
-        state.addAgent(new PosImpl(0, 0), agentP);
-        state.addAgent(new PosImpl(1, 1), agentI);
-        state = (State) method.invoke(factory, state, new PosImpl(0, 0));
-        assertTrue(state.getAgentAt(initialPos).get().getType().equals("I"));
+        agentP.setParameter("direction", new DirectionVectorImpl(0, 0));
+        @SuppressWarnings("unchecked")
+        Optional<Agent> a = (Optional<Agent>) method.invoke(factory, agentP, initialPos);
+        assertTrue(a.get().getType().equals("I"));
+    }
+    
+    
+    @Test
+    public void testRecovery() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            NoSuchMethodException, SecurityException, ClassNotFoundException {
+        factory = new VirusAgentFactory();
+        initialPos = new PosImpl(0, 0);
+        Method method = Class.forName("it.unibo.ares.core.agent.VirusAgentFactory")
+                .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
+
+        method.setAccessible(true);
+        factory.setTypeOfAgent('P');
+        Agent agentP = factory.createAgent();
+        factory.setTypeOfAgent('I');
+        Agent agentI = factory.createAgent();
+        agentP.setType("P");
+        agentP.setParameter("infectionRate", 0);
+        agentI.setParameter("direction", new DirectionVectorImpl(0, 0));
+        agentI.setType("I");
+        agentI.setParameter("stepSize", 1);
+        agentI.setParameter("recoveryRate", 100);
+        agentP.setParameter("stepSize", 1);
+        agentP.setParameter("direction", new DirectionVectorImpl(0, 0));
+        @SuppressWarnings("unchecked")
+        Optional<Agent> a = (Optional<Agent>) method.invoke(factory, agentI, initialPos);
+        assertTrue(a.get().getType().equals("P"));
     }
 }
