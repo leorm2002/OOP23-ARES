@@ -1,7 +1,6 @@
 package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.model.*;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
@@ -15,9 +14,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-<<<<<<< HEAD:src/main/java/it/unibo/ares/core/controller/SimulationInitializerImpl.java
 import it.unibo.ares.core.model.SimpleModelProvider;
-import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.FireSpreadModelFactory;
 import it.unibo.ares.core.model.VirusModelFactory;
@@ -25,11 +22,6 @@ import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.PredatorPreyModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
-import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.parameters.Parameters;
-import it.unibo.ares.core.utils.state.State;
-=======
->>>>>>> 2707bc0d238bc97a6a77e98196686a108698e1a8:core/src/main/java/it/unibo/ares/core/controller/SimulationInitializerImpl.java
 
 /**
  * A class that initializes the simulation.

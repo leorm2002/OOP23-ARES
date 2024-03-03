@@ -1,24 +1,18 @@
 package it.unibo.ares.core.agent;
 
-<<<<<<< HEAD:src/main/java/it/unibo/ares/core/agent/VirusAgentFactory.java
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.BiPredicate;
 
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
-=======
->>>>>>> 2707bc0d238bc97a6a77e98196686a108698e1a8:core/src/main/java/it/unibo/ares/core/agent/VirusAgentFactory.java
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 
-import java.util.Random;
-import java.util.function.BiPredicate;
 
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
