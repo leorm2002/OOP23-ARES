@@ -71,45 +71,37 @@ public final class SimController extends DataReciever {
         printData(item);
     }
 
-    private Optional<String> getBorder(final Integer x, final Integer y, final Integer width, final Integer height) {
-        if (y == -1 || y == width - 2) {
-            return Optional.of("--");
-        }
-        if (x == -1) {
-            return Optional.of("| ");
-        }
-        if (x == width - 2) {
-            return Optional.of(" |");
-        }
-
-        return Optional.empty();
-    }
-
     private void printInfo() {
         System.out.println("Premi " + PAUSE + " per mettere in pausa, " + START + " per far ricominciare e " + STOP
                 + " per uscire");
         System.out.println("");
     }
 
+    private String getHorizontalBar(final Integer width, final Integer cellWidth) {
+        return "\n" + "-".repeat(width * (cellWidth + 2) + 1) + "\n";
+    }
+
     private void printData(final SimulationOutputDataApi data) {
-        Integer offset = 1;
-        Integer width = data.getWidth() + offset;
-        Integer height = data.getHeight() + offset;
-        for (int y = -1; y < height; y++) {
-            for (int x = -1; x < width; x++) {
+        Integer width = data.getWidth();
+        Integer height = data.getHeight();
+        Integer cellWidth = data.getData().values().stream().mapToInt(String::length).max().orElse(0) + 1;
+        var str = new StringBuilder();
+
+        str.append(getHorizontalBar(width, cellWidth));
+
+        for (int y = 0; y < height; y++) {
+            str.append("|");
+            for (int x = 0; x < width; x++) {
                 Pos pos = new PosImpl(x, y);
-                if (getBorder(x, y, width, height).isPresent()) {
-                    System.out.print(getBorder(x, y, width, height).get());
+                if (data.getData().containsKey(pos)) {
+                    str.append(String.format("%-" + cellWidth + "s |", data.getData().get(pos)));
                 } else {
-                    if (data.getData().containsKey(pos)) {
-                        System.out.print(data.getData().get(pos) + " ");
-                    } else {
-                        System.out.print("  ");
-                    }
+                    str.append(" ".repeat(cellWidth) + " |");
                 }
             }
-            System.out.println();
+            str.append(getHorizontalBar(width, cellWidth));
         }
+        System.out.println(str.toString());
         printInfo();
     }
 }
