@@ -5,6 +5,7 @@ import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.FireSpreadAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -18,7 +19,7 @@ import java.util.stream.IntStream;
 /**
  * Generate an instance of a fire spread model. It permits the
  * paramtrization of:
- * the number of agents (two types: Fire and Tree)
+ * the number of the Fire agents and the size of the grid.
  */
 public class FireSpreadModelFactory implements ModelFactory {
         private static final String MODEL_ID = "FireSpread";
@@ -82,21 +83,22 @@ public class FireSpreadModelFactory implements ModelFactory {
 
         /**
          * Returns a fire spread model, before calling initialize you should set:
-         * numeroAgentiTipoF (integer), numeroAgentiTipoT (integer), size (integer),
-         * direction (DirectionVector), and consumption (double).
+         * numeroAgentiTipoF (integer) and size (integer).
          * 
          * @return an instance of the Fire Spread model.
          * @throws IllegalAccessException If the required parameters are not provided.
          */
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
-                // We need only one agent supplier since all agents are equal and only differs
-                // in the type
                 return builder
-                                .addParameter(new ParameterImpl<>("numeroAgentiTipoF", Integer.class, true))
-                                .addParameter(new ParameterImpl<>("size", Integer.class, true))
-                                .addExitFunction((o, n) -> o.getAgents().stream()
-                                                .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
+                                .addParameter(new ParameterImpl<>("numeroAgentiTipoF", Integer.class,
+                                                new ParameterDomainImpl<Integer>("Numero di agenti (1-n)", n -> n > 0),
+                                                true))
+                                .addParameter(new ParameterImpl<>("size", Integer.class,
+                                                new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)",
+                                                                n -> n > 0),
+                                                true))
+                                .addExitFunction((o, n) -> n.getAgents().isEmpty())
                                 .addInitFunction(t -> {
                                         try {
                                                 return fireSpreadInitializer(t);

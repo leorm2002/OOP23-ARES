@@ -1,11 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import java.util.Random;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
@@ -15,10 +9,17 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
+import java.util.Random;
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * A factory class for creating agents for the Fire Spread Model.
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
+        private static Integer VISION_ANGLE = 360;
         private Random r;
 
         /**
@@ -43,7 +44,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Verify if a Tree-type Agent nearby can be burnt.
+         * Verify if a Tree Agent nearby can be burnt.
          * 
          * @param a Tree agent to test flammability
          * @return True if flammable, false either way.
@@ -59,7 +60,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         };
 
         /**
-         * Verify if a Fire-type Agent is extinguished.
+         * Verify if a Fire Agent is extinguished.
          * 
          * @param state current state
          * @param pos   current position
@@ -89,7 +90,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Consumes the fuel of the Fire-type Agent.
+         * Consumes the fuel of the Fire Agent.
          * 
          * @param agent current fire agent.
          */
@@ -110,7 +111,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Creates a new Fire-type Agent replacing the Tree-type Agent at position pos.
+         * Creates a new Fire Agent replacing the Tree Agent at position pos.
          * 
          * @param state     current state
          * @param pos       current position
@@ -156,7 +157,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Verify if a position is inside the cone of the Fire-type Agent.
+         * Verify if a position is inside the cone of the Fire Agent.
          * 
          * @param pos      position to test
          * @param center   center of the cone
@@ -178,7 +179,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Compute the positions inside the cone of the Fire-type Agent.
+         * Compute the positions inside the cone of the Fire Agent.
          * 
          * @param pos      position to test
          * @param dir      direction of the cone
@@ -207,7 +208,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @param state current state
          * @param pos   current position of fire agent
          * @param agent current fire agent
-         * @return the positions where fire will spread if available (Tree-type Agents).
+         * @return the positions where fire will spread if available (Tree Agents).
          */
         private Set<Pos> getSpreadPositionIfAvailable(final State state, final Pos pos, final Agent agent) {
                 DirectionVector dir = getRandomDirection();
@@ -222,7 +223,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .boxed()
                                 .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
                                                 .mapToObj(y -> new PosImpl(x, y)))
-                                .filter(p -> computeCloseCells(pos, dir, spread, 360).contains(p))
+                                .filter(p -> computeCloseCells(pos, dir, spread, VISION_ANGLE).contains(p))
                                 .filter(p -> state.getAgentAt(p).isPresent())
                                 .filter(p -> isAgentOfDiffType.test(agent, state.getAgentAt(p).get()))
                                 .filter(p -> isFlammable(state.getAgentAt(p).get()))
@@ -230,7 +231,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * The tick function for the Fire-type Agent.
+         * The tick function for the Fire Agent.
          * 
          * @param currentState  current state
          * @param agentPosition current position of the fire agent
@@ -250,12 +251,12 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Fire-type Agent (only for tests).
+         * Builds the Fire Agent (only for tests).
          * 
          * @param spread spread radius
          * @param fuel   starting fuel
          * @param cons   starting consumption of the fuel
-         * @return An instance of the Fire-type Agent
+         * @return An instance of the Fire Agent
          */
         public Agent getFireModelAgent(final Integer spread, final Double fuel, final Double cons) {
                 AgentBuilder b = new AgentBuilderImpl();
@@ -272,9 +273,9 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Fire-type Agent.
+         * Builds the Fire Agent.
          * 
-         * @return An instance of the Fire-type Agent (with default parameters).
+         * @return An instance of the Fire Agent (with default parameters).
          */
         public Agent getFireModelAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
@@ -305,11 +306,11 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Tree-type Agent (only for tests).
+         * Builds the Tree Agent (only for tests).
          * 
          * @param fuel         starting fuel
          * @param flammability flammability
-         * @return An instance of the Tree-type Agent
+         * @return An instance of the Tree Agent
          */
         public Agent getTreeModelAgent(final Double fuel, final Double flammability) {
                 AgentBuilder b = new AgentBuilderImpl();
@@ -328,9 +329,9 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Tree-type Agent.
+         * Builds the Tree Agent.
          * 
-         * @return An instance of the Tree-type Agent (with default parameters).
+         * @return An instance of the Tree Agent (with default parameters).
          */
         public Agent getTreeModelAgent() {
                 AgentBuilder b = new AgentBuilderImpl();
@@ -367,9 +368,6 @@ public final class FireSpreadAgentFactory implements AgentFactory {
 
                 return b
                                 .addParameter(new ParameterImpl<Double>("fuel", Double.class, true))
-                                // .addStrategy((state, pos) -> {
-                                // return state;
-                                // })
                                 .build();
         }
 }
