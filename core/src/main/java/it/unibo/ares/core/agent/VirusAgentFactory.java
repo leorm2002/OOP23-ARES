@@ -29,6 +29,9 @@ public final class VirusAgentFactory implements AgentFactory {
         private static boolean paramSected = false;
 
 
+        /**
+         * Constructor for the VirusAgentFactory.
+         */
         public VirusAgentFactory() {
                 r = new Random();
         }
@@ -83,9 +86,11 @@ public final class VirusAgentFactory implements AgentFactory {
          * @return The random direction.
          */
         private DirectionVectorImpl getRandomDirection() {
-                int x = r.nextInt(-5, 5), y = r.nextInt(-5, 5);
-                if(x == 0 && y == 0)
+                final int negBound = -5, posBound = 5;
+                int x = r.nextInt(negBound, posBound), y = r.nextInt(negBound, posBound);
+                if (x == 0 && y == 0) {
                         return getRandomDirection();
+                }
                 return new DirectionVectorImpl(x, y);
         }
 
@@ -102,7 +107,7 @@ public final class VirusAgentFactory implements AgentFactory {
          * @return The updated state of the agent.
          */
         private State tickFunction(final State currentState, final Pos agentPosition) {
-                if(!paramSected) {
+                if (!paramSected) {
                         Set<Pair<Pos, Agent>> agents = currentState.getAgents();
                         boolean infSected = false;
                         boolean persSected = false;
@@ -127,8 +132,10 @@ public final class VirusAgentFactory implements AgentFactory {
                                                                 .get().getValue();
                                                 infSected = true;
                                                 break;
+                                        default:
+                                                break;
                                 }
-                                if(persSected && infSected) {
+                                if (persSected && infSected) {
                                         paramSected = true;
                                         break;
                                 }
@@ -157,7 +164,8 @@ public final class VirusAgentFactory implements AgentFactory {
                                 return currentState;
                         }
                 }
-                DirectionVector dir = agent.getParameters().getParameter("direction", DirectionVectorImpl.class).get().getValue();
+                DirectionVector dir = agent.getParameters().getParameter("direction", DirectionVectorImpl.class)
+                        .get().getValue();
                 Pos newPos = move(agentPosition, dir, stepSize);
                 if (!currentState.isInside(newPos)) {
                         //se l'agente è fuori dallo spazio, cambio direzione
@@ -199,7 +207,7 @@ public final class VirusAgentFactory implements AgentFactory {
                 }
                 return currentState;
         }
-        
+
 
         /**
          * This method is used to infect a person. It uses the infection rate parameter
