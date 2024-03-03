@@ -1,9 +1,11 @@
 package it.unibo.ares.core.utils.parameters;
 
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class for {@link ParameterImpl}.

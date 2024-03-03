@@ -1,18 +1,9 @@
 plugins {
-    // Apply the java plugin to add support for Java
     java
-
-    // Apply the application plugin to add support for building a CLI application
-    // You can run your app via task "run": ./gradlew run
     application
-
-    /*
-     * Adds tasks to export a runnable jar.
-     * In order to create it, launch the "shadowJar" task.
-     * The runnable jar will be found in build/libs/projectname-all.jar
-     */
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.29.0"
+    id("lifecycle-base")
 
 }
 
@@ -25,10 +16,6 @@ dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.3")
 
-    // Example library: Guava. Add what you need (and remove Guava if you don't use it)
-    // implementation("com.google.guava:guava:28.1-jre")
-
-    // JavaFX: comment out if you do not need them
 
     val jUnitVersion = "5.10.1"
     // JUnit API and testing engine

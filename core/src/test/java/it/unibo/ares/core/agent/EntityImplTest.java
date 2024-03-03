@@ -1,6 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.EntityImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Unit test for {@link EntityImpl}.
  */
+@SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 final class EntityImplTest {
 
     private EntityImpl entity;

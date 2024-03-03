@@ -9,7 +9,7 @@ import java.util.Optional;
  *
  * @param <T> the type of the parameter value
  */
-public class ParameterImpl<T> implements Parameter<T> {
+public final class ParameterImpl<T> implements Parameter<T> {
 
     private final Optional<ParameterDomain<T>> domain;
     private final Optional<T> value;
@@ -121,6 +121,9 @@ public class ParameterImpl<T> implements Parameter<T> {
         return this.key;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<ParameterDomain<T>> getDomain() {
         return this.domain;

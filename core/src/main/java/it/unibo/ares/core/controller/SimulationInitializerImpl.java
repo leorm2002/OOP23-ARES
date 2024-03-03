@@ -1,7 +1,6 @@
 package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.model.*;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
@@ -15,6 +14,14 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import it.unibo.ares.core.model.SimpleModelProvider;
+import it.unibo.ares.core.model.BoidsModelFactory;
+import it.unibo.ares.core.model.FireSpreadModelFactory;
+import it.unibo.ares.core.model.VirusModelFactory;
+import it.unibo.ares.core.model.Model;
+import it.unibo.ares.core.model.ModelFactory;
+import it.unibo.ares.core.model.PredatorPreyModelFactory;
+import it.unibo.ares.core.model.SchellingModelFactories;
 
 /**
  * A class that initializes the simulation.
@@ -34,11 +41,13 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         ModelFactory bf = new BoidsModelFactory();
         ModelFactory ff = new FireSpreadModelFactory();
         ModelFactory pp = new PredatorPreyModelFactory();
+        ModelFactory vf = new VirusModelFactory();
         modelsSupplier.put("SimpleModel", SimpleModelProvider::getMockModel);
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         modelsSupplier.put(ff.getModelId(), ff::getModel);
         modelsSupplier.put(pp.getModelId(), pp::getModel);
+        modelsSupplier.put(vf.getModelId(), vf::getModel);
         this.intilizingModels = new ConcurrentHashMap<>();
         this.initializedModels = new ConcurrentHashMap<>();
     }

@@ -55,7 +55,7 @@ public interface Parameters {
     <T> Optional<Parameter<T>> getParameter(String key, Class<T> type);
 
     /**
-     * Retrieves a parameter with the specified key, if present
+     * Retrieves a parameter with the specified key, if present.
      * 
      * @param key the key of the parameter
      * @param <T> the type of the parameter

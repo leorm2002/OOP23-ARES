@@ -20,6 +20,9 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
     private static final String PREY = "Prey";
     private Random random;
 
+    /**
+     * Create a new instance of the factory.
+     */
     public PredatorPreyAgentFactory() {
         this.random = new Random();
     }

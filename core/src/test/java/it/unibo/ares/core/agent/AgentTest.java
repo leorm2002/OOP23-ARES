@@ -1,8 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentBuilder;
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;

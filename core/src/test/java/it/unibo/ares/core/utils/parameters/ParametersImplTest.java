@@ -1,17 +1,16 @@
 package it.unibo.ares.core.utils.parameters;
 
-import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
-import it.unibo.ares.core.utils.parameters.Parameters;
-import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Unit test for {@link ParametersImpl}.
  */

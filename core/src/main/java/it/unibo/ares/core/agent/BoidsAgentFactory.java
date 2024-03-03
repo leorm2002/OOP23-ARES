@@ -24,8 +24,12 @@ public final class BoidsAgentFactory implements AgentFactory {
         // PARAMETRI FINE TUNTING
         private static final Double USERCORRECTIONWEIGHT = 0.4;
         private static final Double WALLAVOIDANCEWEIGHT = 0.2;
-        Random r;
+        private static final Integer DIRRANDOMNUMBERCEIL = 20;
+        private final Random r;
 
+        /**
+         * Creates a new Boids agent factory.
+         */
         public BoidsAgentFactory() {
                 this.r = new Random();
         }
@@ -221,7 +225,8 @@ public final class BoidsAgentFactory implements AgentFactory {
         }
 
         private DirectionVectorImpl getRandomDirection() {
-                return new DirectionVectorImpl(r.nextInt(20) + 1, r.nextInt(20) + 1);
+                
+                return new DirectionVectorImpl(r.nextInt(DIRRANDOMNUMBERCEIL) + 1, r.nextInt(DIRRANDOMNUMBERCEIL) + 1);
         }
 
         /**

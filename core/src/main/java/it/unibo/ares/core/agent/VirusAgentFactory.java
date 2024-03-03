@@ -1,16 +1,18 @@
 package it.unibo.ares.core.agent;
 
+import java.util.Optional;
+import java.util.Random;
+import java.util.function.BiPredicate;
+
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 
-import java.util.Random;
-import java.util.function.BiPredicate;
 
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
@@ -18,6 +20,12 @@ import java.util.function.BiPredicate;
 public final class VirusAgentFactory implements AgentFactory {
 
         private Random r;
+        private char type;
+        // PARAMETRI DA SETTARE, INIZIALIZZATI A VALORI DI DEFAULT PER SVOLGERE TEST
+        private static int stepSizeP = 1;
+        private static int stepSizeI = 1;
+        private static int infectionRate = 100;
+        private static int recoveryRate = 100;
 
 
         public VirusAgentFactory() {
@@ -74,7 +82,10 @@ public final class VirusAgentFactory implements AgentFactory {
          * @return The random direction.
          */
         private DirectionVectorImpl getRandomDirection() {
-                return new DirectionVectorImpl(r.nextInt(20) + 1, r.nextInt(20) + 1);
+                int x = r.nextInt(-5, 5), y = r.nextInt(-5, 5);
+                if(x == 0 && y == 0)
+                        return getRandomDirection();
+                return new DirectionVectorImpl(x, y);
         }
 
         /**
@@ -92,12 +103,37 @@ public final class VirusAgentFactory implements AgentFactory {
                 if (!agent.getParameters().getParametersToset().isEmpty()) {
                         throw new RuntimeException("Parameters not set");
                 }
+                switch (agent.getType()) {
+                        case "P":
+                                stepSizeP = agent.getParameters().getParameter("stepSize", Integer.class)
+                                                .get().getValue();
+                                infectionRate = agent.getParameters().getParameter("infectionRate", Integer.class)
+                                                .get().getValue();
+                                break;
+
+                        case "I":
+                                stepSizeI = agent.getParameters().getParameter("stepSize", Integer.class)
+                                                .get().getValue();
+                                recoveryRate = agent.getParameters().getParameter("recoveryRate", Integer.class)
+                                                .get().getValue();
+                                break;
+                }
 
                 DirectionVector dir = agent.getParameters()
                                 .getParameter("direction", DirectionVectorImpl.class).get().getValue();
-
                 int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
                                 .get().getValue();
+                currentState.getAgentAt(agentPosition).get().setParameter("direction", getRandomDirection());
+
+                if (agent.getType().equals("I")) {
+                        Optional<Agent> newAgent = recoveryInfected(agent, agentPosition);
+                        if (newAgent.isPresent()) {
+                                currentState.removeAgent(agentPosition, agent);
+                                currentState.addAgent(agentPosition, newAgent.get());
+                                return currentState;
+                        }
+                }
+                dir = agent.getParameters().getParameter("direction", DirectionVectorImpl.class).get().getValue();
                 Pos newPos = move(agentPosition, dir, stepSize);
                 if (!currentState.isInside(newPos)) {
                         dir = new DirectionVectorImpl(-dir.getX(), -dir.getY());
@@ -106,13 +142,68 @@ public final class VirusAgentFactory implements AgentFactory {
                 if (!currentState.isFree(newPos)) {
                         if (!isAgentOfSameType.test(currentState.getAgentAt(newPos).get(),
                                         currentState.getAgentAt(agentPosition).get())) {
-                                currentState.getAgentAt(agentPosition).get().setType("I");
+                                if (currentState.getAgentAt(newPos).get().getType().equals("I")) {
+                                        infectionRate = agent.getParameters()
+                                                        .getParameter("infectionRate", Integer.class)
+                                                        .get().getValue();
+                                        //new pos è infetto quindi agent pos è p
+                                        Optional<Agent> newAgent = infectPerson(agent, agentPosition);
+                                        if (newAgent.isPresent()) {
+                                                currentState.removeAgent(agentPosition, agent);
+                                                currentState.addAgent(agentPosition, newAgent.get());
+                                                return currentState;
+                                        }
+                                } else {
+                                        //agent pos è infetto, new pos è p
+                                        infectionRate = currentState.getAgentAt(newPos).get().getParameters()
+                                                        .getParameter("infectionRate", Integer.class)
+                                                        .get().getValue();
+                                        Optional<Agent> newAgent = infectPerson(currentState.getAgentAt(newPos).get(),
+                                                        newPos);
+                                        if (newAgent.isPresent()) {
+                                                currentState.removeAgent(newPos, currentState.getAgentAt(newPos).get());
+                                                currentState.addAgent(newPos, newAgent.get());
+                                                return currentState;
+                                        }
+                                }
                         }
+                        currentState.getAgentAt(agentPosition).get().setParameter("direction", getRandomDirection());
+                        dir = agent.getParameters().getParameter("direction", DirectionVectorImpl.class).get()
+                                        .getValue();
+                        newPos = limit(move(agentPosition, dir, stepSize), currentState.getDimensions());
                 }
                 if (currentState.isFree(newPos)) {
                         currentState.moveAgent(agentPosition, newPos);
                 }
                 return currentState;
+        }
+        
+        private Optional<Agent> infectPerson(final Agent agent, final Pos agentPosition) {
+                if (r.nextInt(100) < infectionRate) {
+                        setTypeOfAgent('I');
+                        Agent a = createAgent();
+                        a.setType("I");
+                        a.setParameter("stepSize", stepSizeI);
+                        a.setParameter("direction", getRandomDirection());
+                        a.setParameter("recoveryRate", recoveryRate);
+                        return Optional.of(a);
+                }
+                return Optional.empty();
+        }
+        
+        private Optional<Agent> recoveryInfected(final Agent agent, final Pos agentPosition) {
+                recoveryRate = agent.getParameters().getParameter("recoveryRate", Integer.class)
+                                .get().getValue();
+                if (r.nextInt(100) < recoveryRate) {
+                        setTypeOfAgent('P');
+                        Agent a = createAgent();
+                        a.setType("P");
+                        a.setParameter("stepSize", stepSizeP);
+                        a.setParameter("direction", getRandomDirection());
+                        a.setParameter("infectionRate", infectionRate);
+                        return Optional.of(a);
+                }
+                return Optional.empty();
         }
 
         @Override
@@ -122,7 +213,23 @@ public final class VirusAgentFactory implements AgentFactory {
                                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
                                                 (Integer d) -> d > 0 && d <= 10)));
                 b.addParameter(new ParameterImpl<>("direction", getRandomDirection()));
+                if (type == 'P') {
+                        b.addParameter(new ParameterImpl<>("infectionRate", Integer.class,
+                        new ParameterDomainImpl<Integer>(
+                                "Probabilità di infenzione da contatto (0-100)",
+                                                        i -> i >= 0 && i <= 100)));
+                }
+                else if (type == 'I') {
+                        b.addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
+                        new ParameterDomainImpl<Integer>(
+                                "Probabilità di guarigione a ogni step (0-100)",
+                                                        i -> i >= 0 && i <= 100)));
+                }
                 b.addStrategy(this::tickFunction);
                 return b.build();
+        }
+
+        public void setTypeOfAgent(final char c) {
+                type = c;
         }
 }
