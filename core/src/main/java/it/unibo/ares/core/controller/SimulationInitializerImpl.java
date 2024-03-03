@@ -121,6 +121,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     @Override
     public Set<String> getAgentsSimplified(final String initializationId) {
         // TODO RICALCOLO SE CAMBIA MODEL
+        // TODO RIMUOVERE MODELLO INIZIALIZZATO da INITIALIZING
         this.initializedModels.computeIfAbsent(
                 initializationId,
                 id -> new Pair<>(intilizingModels.get(
@@ -163,6 +164,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
 
     @Override
     Pair<String, Simulation> startSimulation(final String initializationId) {
+        //TODO rimuoere modello inizializzato
         if (!this.initializedModels.containsKey(initializationId)) {
             throw new IllegalArgumentException("The model has not been initialized");
         }
