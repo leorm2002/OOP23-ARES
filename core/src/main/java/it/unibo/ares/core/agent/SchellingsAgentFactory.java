@@ -18,8 +18,8 @@ import java.util.stream.Stream;
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
-    public static final String VISIONRADIUS = "visionRadius";
-    public static final String THRESHOLD = "threshold";
+    private static final String VISIONRADIUS = "visionRadius";
+    private static final String THRESHOLD = "threshold";
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         String typeA = a.getType();
 
@@ -87,7 +87,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
      * @param type         The type of the agent.
      * @param threshold    The threshold of the agent.
      * @param visionRadius The vision radius of the agent.
-     * @return The agent.
+     * @return the agent.
      */
     public Agent getSchellingSegregationModelAgent(final String type, final Double threshold,
             final Integer visionRadius) {
@@ -97,7 +97,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (true || !isThresholdSatisfied(state, pos, agent)) {
+            if (true || !isThresholdSatisfied(state, pos, agent)) { //TODO
                 Optional<PosImpl> newPos = getFreePositionIfAvailable(state, agent);
                 newPos.ifPresent(p -> state.moveAgent(pos, newPos.get()));
             }

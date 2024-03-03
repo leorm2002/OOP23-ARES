@@ -140,8 +140,9 @@ public final class ParametersImpl implements Parameters {
         return getParametersStream().allMatch(Parameter::isSetted);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<Parameter<T>> getParameter(String key) {
+    public <T> Optional<Parameter<T>> getParameter(final String key) {
         return getParametersStream().filter(p -> p.getKey().equals(key)).map(p -> (Parameter<T>) p).findAny();
     }
 }

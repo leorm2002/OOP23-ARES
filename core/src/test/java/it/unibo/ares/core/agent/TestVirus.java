@@ -1,7 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.VirusAgentFactory;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
@@ -25,7 +23,7 @@ public class TestVirus {
     private int stepSize;
 
     @Test
-    public void testMove() throws NoSuchMethodException, SecurityException,
+    void testMove() throws NoSuchMethodException, SecurityException,
             ClassNotFoundException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
         factory = new VirusAgentFactory();
@@ -42,7 +40,7 @@ public class TestVirus {
     }
 
     @Test
-    public void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
+    void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
      IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         factory = new VirusAgentFactory();
         Method method = Class.forName("it.unibo.ares.core.agent.VirusAgentFactory")
@@ -54,7 +52,7 @@ public class TestVirus {
     }
 
     @Test
-    public void testInfection() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    void testInfection() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
      NoSuchMethodException, SecurityException, ClassNotFoundException {
         factory = new VirusAgentFactory();
         initialPos = new PosImpl(0, 0);

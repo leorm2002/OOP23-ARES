@@ -1,6 +1,5 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.controller.TickerImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class TickerTest {
     }
 
     @Test
-    void start_ShouldExecuteTaskAtFixedRate() throws InterruptedException {
+    void startShouldExecuteTaskAtFixedRate() throws InterruptedException {
         ticker.start();
         // Wait for the task to be executed at least twice
         Thread.sleep(TimeUnit.SECONDS.toMillis(2 * period + 1));
@@ -41,7 +40,7 @@ class TickerTest {
     }
 
     @Test
-    void stop_ShouldStopTaskExecution() throws InterruptedException {
+    void stopShouldStopTaskExecution() throws InterruptedException {
         ticker.start();
         // Wait for the task to be executed at least once
         Thread.sleep(TimeUnit.SECONDS.toMillis(period + 1));
@@ -52,5 +51,4 @@ class TickerTest {
         // Check that the task did not run after stop
         assertEquals(countAfterStop, counter.get(), "Task executed after stop");
     }
-
 }

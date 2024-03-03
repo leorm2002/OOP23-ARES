@@ -1,5 +1,10 @@
 package it.unibo.ares.core.utils.state;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.Entity;
 import it.unibo.ares.core.utils.Pair;
@@ -7,11 +12,6 @@ import it.unibo.ares.core.utils.board.Board;
 import it.unibo.ares.core.utils.board.BoardImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
-
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Implementation of the State interface that represents the state of a
@@ -217,7 +217,7 @@ public final class StateImpl implements State {
     }
 
     @Override
-    public boolean isInside(Pos pos) {
+    public boolean isInside(final Pos pos) {
         return isValidPosition(pos);
     }
 }

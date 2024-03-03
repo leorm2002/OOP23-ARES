@@ -1,10 +1,4 @@
 package it.unibo.ares.core.agent;
-
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.FireSpreadAgentFactory;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;

@@ -1,6 +1,5 @@
 package it.unibo.ares.core.utils;
 
-import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.board.Board;
 import it.unibo.ares.core.utils.board.BoardImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -10,7 +9,10 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit test for {@link Board}.

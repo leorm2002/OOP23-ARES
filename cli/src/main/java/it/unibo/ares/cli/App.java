@@ -3,11 +3,11 @@ package it.unibo.ares.cli;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 
 /**
- * Permette di lanciare l'app in modalità cli
+ * Permette di lanciare l'app in modalità cli.
  */
-public class App {
+public final class App {
     /**
-     * Avvia cli
+     * Avvia cli.
      * 
      * @param args
      */
@@ -33,7 +33,10 @@ public class App {
         }
 
     }
-
+    /**
+     * Avvia cli, utilizzato quando cli è lanciata come libreria.
+     * @param args
+     */
     public static void mainLib(final String[] args) {
         CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         System.out.println("Benvenuto in ARES!");
