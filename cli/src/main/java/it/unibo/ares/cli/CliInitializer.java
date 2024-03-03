@@ -48,7 +48,9 @@ public final class CliInitializer {
     }
 
     private void parametrizzatoreGenerico(final Parameters params, final Optional<String> agentId) {
-        params.getParametersToset().stream().filter(Parameter::userSettable).sorted(Comparator.comparing(p -> ((Parameter<?>) p).getKey()))
+        params.getParametersToset().stream()
+                .filter(Parameter::userSettable)
+                .sorted(Comparator.comparing(p -> ((Parameter<?>) p).getKey()))
                 .forEachOrdered(param -> {
                     System.out.println("\nInserisci il valore per il parametro " + param.getKey());
                     param.getDomain()

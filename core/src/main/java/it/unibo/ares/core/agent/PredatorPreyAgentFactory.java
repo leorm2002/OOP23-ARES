@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
  * Model.
  */
 public final class PredatorPreyAgentFactory implements AgentFactory {
-    private static final String AGENT_TYPE = "agentType";
     private static final String PREDATOR = "Predator";
     private static final String PREY = "Prey";
+    private static final Integer DEFAULT_MAX_RADIUS = 5;
     private Random random;
 
     /**
@@ -61,7 +61,7 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
     public Agent createAgent() {
         AgentBuilder builder = new AgentBuilderImpl();
         String type = random.nextBoolean() ? PREDATOR : PREY;
-        int visionRadius = random.nextInt(5) + 1; // Vision radius between 1 and 5
+        int visionRadius = random.nextInt(DEFAULT_MAX_RADIUS) + 1; // Vision radius between 1 and 5
 
         builder.addParameter(new ParameterImpl<>("visionRadius", visionRadius, true));
 

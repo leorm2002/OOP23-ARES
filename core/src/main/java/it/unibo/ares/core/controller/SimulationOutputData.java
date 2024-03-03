@@ -21,6 +21,8 @@ public final class SimulationOutputData implements SimulationOutputDataApi {
      *
      * @param data         the data of the simulation
      * @param simulationId the id of the simulation
+     * @param width        the width of the simulation output
+     * @param height       the height of the simulation output
      */
     public SimulationOutputData(final Map<Pos, String> data, final String simulationId, final Integer width,
             final Integer height) {
@@ -50,11 +52,21 @@ public final class SimulationOutputData implements SimulationOutputDataApi {
         return simulationId;
     }
 
+    /**
+     * Gets the width of the simulation output.
+     *
+     * @return the width of the simulation output.
+     */
     @Override
     public Integer getWidth() {
         return width;
     }
 
+    /**
+     * Gets the height of the simulation output.
+     *
+     * @return the height of the simulation output.
+     */
     @Override
     public Integer getHeight() {
         return height;

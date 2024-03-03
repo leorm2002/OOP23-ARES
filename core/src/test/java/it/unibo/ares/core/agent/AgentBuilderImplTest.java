@@ -1,11 +1,11 @@
 package it.unibo.ares.core.agent;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.function.BiFunction;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.function.BiFunction;
 
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;

@@ -19,7 +19,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
  * A factory class for creating agents for the Fire Spread Model.
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
-        Random r;
+        private Random r;
 
         /**
          * Constructor for the FireSpreadAgentFactory.
@@ -282,15 +282,18 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 b
                                 .addParameter(new ParameterImpl<>("spread", Integer.class,
                                                 new ParameterDomainImpl<>("Range of spread (RoS) of the agent (0 - n)",
-                                                                (Integer i) -> i > 0), true))
+                                                                (Integer i) -> i > 0),
+                                                true))
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel available for combustion (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0),
+                                                true))
                                 .addParameter(new ParameterImpl<>("consumption", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel consumption every tick (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0),
+                                                true))
                                 .addStrategy((state, pos) -> {
                                         return tickFunction(state, pos);
                                 })
@@ -336,11 +339,13 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel available for combustion (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0),
+                                                true))
                                 .addParameter(new ParameterImpl<>("flammability", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Measure of how quick can burn (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0),
+                                                true))
                                 .addStrategy((state, pos) -> {
                                         return state;
                                 })

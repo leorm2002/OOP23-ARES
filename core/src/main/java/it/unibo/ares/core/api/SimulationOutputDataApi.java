@@ -20,8 +20,18 @@ public interface SimulationOutputDataApi {
      */
     String getSimulationId();
 
+    /**
+     * Gets the width of the simulation.
+     *
+     * @return the width of the simulation.
+     */
     Integer getWidth();
 
+    /**
+     * Gets the height of the simulation.
+     *
+     * @return the height of the simulation.
+     */
     Integer getHeight();
 
 }

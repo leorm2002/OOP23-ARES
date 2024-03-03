@@ -65,7 +65,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public void pauseSimulation(String id) {
+    public void pauseSimulation(final String id) {
         if (simulations.get(id).isRunning()) {
             simulations.get(id).pause();
             return;

@@ -16,6 +16,7 @@ public final class ParameterImpl<T> implements Parameter<T> {
     private final Class<T> type;
     private final String key;
     private final Boolean userSettable;
+
     @SuppressWarnings("unchecked")
     private ParameterImpl(final String key, final T value,
             final Optional<ParameterDomain<T>> domain, final Boolean userSettable) {
@@ -37,10 +38,13 @@ public final class ParameterImpl<T> implements Parameter<T> {
     }
 
     /**
-     * Creates a new parameter with the specified key and value.
-     * 
-     * @param key   the key of the parameter
-     * @param value the value of the parameter
+     * Constructs a new ParameterImpl object with the specified key, value, and
+     * userSettable flag.
+     *
+     * @param key          the key associated with the parameter
+     * @param value        the value of the parameter
+     * @param userSettable a flag indicating whether the parameter can be set by the
+     *                     user
      */
     public ParameterImpl(final String key, final T value, final Boolean userSettable) {
         this(key, value, Optional.empty(), userSettable);
@@ -52,6 +56,15 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * @param key  the key of the parameter
      * @param type the type of the parameter
      */
+    /**
+     * Constructs a new instance of the ParameterImpl class with the specified key,
+     * type, and userSettable flag.
+     *
+     * @param key          The key of the parameter.
+     * @param type         The type of the parameter.
+     * @param userSettable A boolean flag indicating whether the parameter is user
+     *                     settable or not.
+     */
     public ParameterImpl(final String key, final Class<T> type, final Boolean userSettable) {
         this(key, type, Optional.empty(), userSettable);
     }
@@ -59,9 +72,9 @@ public final class ParameterImpl<T> implements Parameter<T> {
     /**
      * Creates a new parameter with the specified key and value.
      * 
-     * @param key    the key of the parameter
-     * @param value  the value of the parameter
-     * @param domain the domain of the parameter
+     * @param key          the key of the parameter
+     * @param value        the value of the parameter
+     * @param domain       the domain of the parameter
      * @param userSettable if the parameter is user settable
      */
     public ParameterImpl(final String key, final T value, final ParameterDomain<T> domain, final Boolean userSettable) {
@@ -71,12 +84,13 @@ public final class ParameterImpl<T> implements Parameter<T> {
     /**
      * Creates a new parameter with the specified key and type.
      * 
-     * @param key    the key of the parameter
-     * @param type   the type of the parameter
-     * @param domain the domain of the parameter
+     * @param key          the key of the parameter
+     * @param type         the type of the parameter
+     * @param domain       the domain of the parameter
      * @param userSettable if the parameter is user settable
      */
-    public ParameterImpl(final String key, final Class<T> type, final ParameterDomain<T> domain, final Boolean userSettable) {
+    public ParameterImpl(final String key, final Class<T> type, final ParameterDomain<T> domain,
+            final Boolean userSettable) {
         this(key, type, Optional.of(domain), userSettable);
     }
 
