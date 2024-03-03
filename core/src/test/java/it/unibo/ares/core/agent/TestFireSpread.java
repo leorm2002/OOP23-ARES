@@ -1,4 +1,5 @@
 package it.unibo.ares.core.agent;
+
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
@@ -25,7 +26,7 @@ public class TestFireSpread {
                 // Creates a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(3, 3);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.5);
+                Agent fireAgent1 = factory.getFireModelAgent(1, 1.0, 0.5);
                 state.addAgent(pos, fireAgent1);
 
                 // The agent should not move
@@ -50,7 +51,7 @@ public class TestFireSpread {
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.3);
+                Agent fireAgent1 = factory.getFireModelAgent(1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
                 // CHECKSTYLE: MagicNumber ON
 
@@ -83,7 +84,7 @@ public class TestFireSpread {
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
-                Agent fireAgent1 = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.3);
+                Agent fireAgent1 = factory.getFireModelAgent(1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent1);
                 // CHECKSTYLE: MagicNumber ON
 
@@ -127,7 +128,7 @@ public class TestFireSpread {
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
-                Agent fireAgent = FireSpreadAgentFactory.getFireModelAgent(1, 1.0, 0.3);
+                Agent fireAgent = factory.getFireModelAgent(1, 1.0, 0.3);
                 state.addAgent(pos, fireAgent);
                 // CHECKSTYLE: MagicNumber ON
 
