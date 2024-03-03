@@ -1,20 +1,15 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.VirusAgentFactory;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
-import it.unibo.ares.core.utils.state.State;
-import it.unibo.ares.core.utils.state.StateImpl;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,7 +18,6 @@ public class TestVirus {
     private VirusAgentFactory factory;
     private Pos initialPos;
     private DirectionVector dir;
-    private State state;
     private int stepSize;
 
     @Test
@@ -45,7 +39,8 @@ public class TestVirus {
 
     @Test
     public void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
-     IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        int stateSize = 10, agentSize = 5;
         factory = new VirusAgentFactory();
         Method method = Class.forName("it.unibo.ares.core.agent.VirusAgentFactory")
                 .getDeclaredMethod("limit", Pos.class, Pair.class);
