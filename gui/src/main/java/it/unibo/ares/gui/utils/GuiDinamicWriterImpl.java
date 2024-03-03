@@ -1,6 +1,7 @@
 package it.unibo.ares.gui.utils;
 
 import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.pos.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -38,7 +39,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          * then adding them to the vbox and if the parameter has a domain, adding a label
          * with the domain description
          */
-        parameters.getParameters().stream().forEach(p -> {
+        parameters.getParameters().stream().filter(Parameter::userSettable) .forEach(p -> {
             Label lbl = new Label(p.getKey());
             Label domain = new Label();
             TextField txt = new TextField();

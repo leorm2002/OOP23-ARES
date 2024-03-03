@@ -21,7 +21,7 @@ public class TestVirus {
     private int stepSize;
 
     @Test
-    public void testMove() throws NoSuchMethodException, SecurityException,
+    void testMove() throws NoSuchMethodException, SecurityException,
             ClassNotFoundException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
         factory = new VirusAgentFactory();
@@ -38,9 +38,8 @@ public class TestVirus {
     }
 
     @Test
-    public void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
-            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        int stateSize = 10, agentSize = 5;
+    void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
+     IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         factory = new VirusAgentFactory();
         Method method = Class.forName("it.unibo.ares.core.agent.VirusAgentFactory")
                 .getDeclaredMethod("limit", Pos.class, Pair.class);

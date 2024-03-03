@@ -1,5 +1,6 @@
-package it.unibo.ares.core.api;
+package it.unibo.ares.core.controller;
 
+import it.unibo.ares.core.api.SimulationOutputDataApi;
 import it.unibo.ares.core.utils.pos.Pos;
 
 import java.util.Collections;

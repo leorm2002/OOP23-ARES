@@ -20,6 +20,9 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
     private static final String PREY = "Prey";
     private Random random;
 
+    /**
+     * Create a new instance of the factory.
+     */
     public PredatorPreyAgentFactory() {
         this.random = new Random();
     }
@@ -60,7 +63,7 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
         String type = random.nextBoolean() ? PREDATOR : PREY;
         int visionRadius = random.nextInt(5) + 1; // Vision radius between 1 and 5
 
-        builder.addParameter(new ParameterImpl<>("visionRadius", visionRadius));
+        builder.addParameter(new ParameterImpl<>("visionRadius", visionRadius, true));
 
         if (PREY.equals(type)) {
             builder.addStrategy((state, pos) -> {

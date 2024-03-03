@@ -1,8 +1,8 @@
 package it.unibo.ares.gui.controller;
 
 import it.unibo.ares.core.api.DataReciever;
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import javafx.application.Platform;
@@ -75,7 +75,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
      */
     @FXML
     void btnRestartClicked(final ActionEvent event) {
-        // calculatorSupplier.restartSimulation(simulationId);
+        calculatorSupplier.startSimulation(simulationId);
     }
 
     /**

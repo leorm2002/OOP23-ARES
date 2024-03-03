@@ -1,14 +1,18 @@
 package it.unibo.ares.cli;
 
+import java.util.Optional;
+
 import it.unibo.ares.core.api.DataReciever;
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.api.SimulationOutputDataApi;
 import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
-import java.util.Optional;
-
+/**
+ * The SimController class is responsible for controlling the simulation and
+ * displaying the simulation output data.
+ */
 public final class SimController extends DataReciever {
     private static final String START = "s";
     private static final String PAUSE = "p";
@@ -17,11 +21,16 @@ public final class SimController extends DataReciever {
     private String simulationId;
     private boolean isOver = false;
 
-    public SimController(String inizializationId) {
+    /**
+     * Constructs a SimController object with the specified initialization ID.
+     *
+     * @param inizializationId the initialization ID for the simulation
+     */
+    public SimController(final String inizializationId) {
         this.inizializationId = inizializationId;
     }
 
-    private void readChar(String ch) {
+    private void readChar(final String ch) {
         switch (ch) {
             case START:
                 CalculatorSupplier.getInstance().startSimulation(simulationId);
@@ -42,6 +51,9 @@ public final class SimController extends DataReciever {
         return this.isOver;
     }
 
+    /**
+     * Starts the simulation and waits for user input to control the simulation.
+     */
     public void startSimulation() {
         System.out.println("Inizio simulazione");
         this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
@@ -55,7 +67,7 @@ public final class SimController extends DataReciever {
     }
 
     @Override
-    public void onNext(SimulationOutputData item) {
+    public void onNext(final SimulationOutputData item) {
         printData(item);
     }
 

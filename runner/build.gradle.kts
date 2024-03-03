@@ -1,9 +1,10 @@
 plugins {
     id("java")
+    application
 }
 
 group = "it.unibo.ares"
-version = "unspecified"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -19,4 +20,9 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+
+application {
+    mainClass.set("it.unibo.ares.runner.ApplicationRunner")
 }

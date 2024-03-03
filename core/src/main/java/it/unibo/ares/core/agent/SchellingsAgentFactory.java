@@ -18,8 +18,8 @@ import java.util.stream.Stream;
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
-    public static final String VISIONRADIUS = "visionRadius";
-    public static final String THRESHOLD = "threshold";
+    private static final String VISIONRADIUS = "visionRadius";
+    private static final String THRESHOLD = "threshold";
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         String typeA = a.getType();
 
@@ -87,17 +87,17 @@ public final class SchellingsAgentFactory implements AgentFactory {
      * @param type         The type of the agent.
      * @param threshold    The threshold of the agent.
      * @param visionRadius The vision radius of the agent.
-     * @return The agent.
+     * @return the agent.
      */
     public Agent getSchellingSegregationModelAgent(final String type, final Double threshold,
             final Integer visionRadius) {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold));
-        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius));
+        b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold, true));
+        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (true || !isThresholdSatisfied(state, pos, agent)) {
+            if (true || !isThresholdSatisfied(state, pos, agent)) { //TODO
                 Optional<PosImpl> newPos = getFreePositionIfAvailable(state, agent);
                 newPos.ifPresent(p -> state.moveAgent(pos, newPos.get()));
             }
@@ -114,9 +114,9 @@ public final class SchellingsAgentFactory implements AgentFactory {
         AgentBuilder b = new AgentBuilderImpl();
 
         b.addParameter(new ParameterImpl<Double>("threshold", Double.class, new ParameterDomainImpl<>(
-                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0)));
+                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0), true));
         b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class,
-                new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0)));
+                new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0), true));
 
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();

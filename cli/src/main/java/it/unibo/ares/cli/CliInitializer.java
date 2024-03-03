@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Class used to initialize simulation by using a CLI
+ * Class used to initialize simulation by using a CLI.
  */
 public final class CliInitializer {
     private String initializationId;
@@ -48,7 +48,7 @@ public final class CliInitializer {
     }
 
     private void parametrizzatoreGenerico(final Parameters params, final Optional<String> agentId) {
-        params.getParametersToset().stream().sorted(Comparator.comparing(p -> ((Parameter<?>) p).getKey()))
+        params.getParametersToset().stream().filter(Parameter::userSettable).sorted(Comparator.comparing(p -> ((Parameter<?>) p).getKey()))
                 .forEachOrdered(param -> {
                     System.out.println("\nInserisci il valore per il parametro " + param.getKey());
                     param.getDomain()
@@ -117,7 +117,7 @@ public final class CliInitializer {
     }
 
     /**
-     * Questo metodo è l'entry point per il processo di parametrizzazione
+     * Questo metodo è l'entry point per il processo di parametrizzazione.
      * 
      * @return ritorna l'i'd con cui accedere alla simulazione
      */

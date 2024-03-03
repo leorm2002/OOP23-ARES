@@ -24,8 +24,12 @@ public final class BoidsAgentFactory implements AgentFactory {
         // PARAMETRI FINE TUNTING
         private static final Double USERCORRECTIONWEIGHT = 0.4;
         private static final Double WALLAVOIDANCEWEIGHT = 0.2;
-        Random r;
+        private static final Integer DIRRANDOMNUMBERCEIL = 20;
+        private final Random r;
 
+        /**
+         * Creates a new Boids agent factory.
+         */
         public BoidsAgentFactory() {
                 this.r = new Random();
         }
@@ -221,7 +225,8 @@ public final class BoidsAgentFactory implements AgentFactory {
         }
 
         private DirectionVectorImpl getRandomDirection() {
-                return new DirectionVectorImpl(r.nextInt(20) + 1, r.nextInt(20) + 1);
+                
+                return new DirectionVectorImpl(r.nextInt(DIRRANDOMNUMBERCEIL) + 1, r.nextInt(DIRRANDOMNUMBERCEIL) + 1);
         }
 
         /**
@@ -242,24 +247,24 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return builder
                                 .addParameter(new ParameterImpl<>("distance", Integer.class,
                                                 new ParameterDomainImpl<>("il raggio di visione in celle (1-10)",
-                                                                (Integer d) -> d > 0 && d <= 10)))
+                                                                (Integer d) -> d > 0 && d <= 10), true))
                                 .addParameter(new ParameterImpl<>("angle", Integer.class,
                                                 new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
-                                                                (Integer d) -> d > 0 && d <= 180)))
-                                .addParameter(new ParameterImpl<>("direction", getRandomDirection()))
+                                                                (Integer d) -> d > 0 && d <= 180), true))
+                                .addParameter(new ParameterImpl<>("direction", getRandomDirection(), false))
                                 .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "il peso dell'evitamento degli ostacoli (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("alignmentWeight", Double.class,
                                                 new ParameterDomainImpl<>("il peso dell'allineamento (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("cohesionWeight", Double.class,
                                                 new ParameterDomainImpl<>("il peso della coesione (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("stepSize", Integer.class,
                                                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
-                                                                (Integer d) -> d > 0 && d <= 10)))
+                                                                (Integer d) -> d > 0 && d <= 10), true))
                                 .addStrategy(this::tickFunction)
                                 .build();
         }

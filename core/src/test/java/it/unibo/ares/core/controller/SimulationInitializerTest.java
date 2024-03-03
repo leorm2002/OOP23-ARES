@@ -1,6 +1,5 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.controller.SimulationInitializerImpl;
 import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.SchellingModelFactories;
 import it.unibo.ares.core.utils.parameters.Parameters;

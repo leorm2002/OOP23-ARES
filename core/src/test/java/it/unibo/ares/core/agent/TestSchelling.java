@@ -1,7 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.SchellingsAgentFactory;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;

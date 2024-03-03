@@ -106,15 +106,15 @@ public final class VirusModelFactory implements ModelFactory {
                 .addParameter(new ParameterImpl<>("numeroPersoneSane", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Numero di persone sane (1-n)",
-                                i -> i >= 1)))
+                                i -> i >= 1), true))
                 .addParameter(new ParameterImpl<>("numeroInfetti", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Numero di persone infette (1-n)",
-                                i -> i >= 1)))
+                                i -> i >= 1), true))
                 .addParameter(new ParameterImpl<>("size", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Dimensione della griglia (1-n)",
-                                                        i -> i > 0)))
+                                                        i -> i > 0), true))
                 .addExitFunction((o, n) -> o.getAgents().stream()
                         .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                 .addInitFunction(t -> {

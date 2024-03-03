@@ -1,14 +1,6 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.BoidsAgentFactory;
-import it.unibo.ares.core.utils.directionvector.DirectionVector;
-import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.core.utils.pos.Pos;
-import it.unibo.ares.core.utils.pos.PosImpl;
-import it.unibo.ares.core.utils.state.State;
-import it.unibo.ares.core.utils.state.StateImpl;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,7 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import it.unibo.ares.core.utils.directionvector.DirectionVector;
+import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
+import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.state.StateImpl;
 
 class TestBoids {
         @Test
@@ -28,6 +27,9 @@ class TestBoids {
                 DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
                 Integer radius = 3;
                 Integer angle = 90;
+                // CHECKSTYLE: MagicNumber OFF sono numeri messi in modo da poter coprire un
+                // raggio sufficiente intorno al punto da testare
+
                 Set<PosImpl> inside = Stream.concat(
                                 Stream.concat(
                                                 IntStream.rangeClosed(-3, 3).mapToObj(y -> new PosImpl(0, y)),
@@ -42,6 +44,7 @@ class TestBoids {
                                 .flatMap(x -> IntStream.range(-10, 10).mapToObj(y -> new PosImpl(x, y)))
                                 .filter(p -> !inside.contains(p))
                                 .collect(Collectors.toSet());
+                // CHECKSTYLE: MagicNumber ON
                 Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
                                 .getDeclaredMethod("insideCone", Pos.class, Pos.class, DirectionVector.class,
                                                 Integer.class,
@@ -153,7 +156,9 @@ class TestBoids {
                                 b, state, movingAgentPos, movingAgentDir,
                                 radius,
                                 angle);
+                // CHECKSTYLE: MagicNumber OFF sono i risultati attesi
                 DirectionVector expectedDir = new DirectionVectorImpl(-2.0, -1.0);
+                // CHECKSTYLE: MagicNumber ON
                 assertEquals(newDir, expectedDir.getNormalized());
         }
 
@@ -243,7 +248,10 @@ class TestBoids {
                 Agent movingAgent = b.createAgent();
                 Pos movingAgentPos = new PosImpl(0, 0);
                 Integer radius = 3;
+                // CHECKSTYLE: MagicNumber OFF angolo per testare, in base a questo valore si
+                // calcola la direzione
                 Integer angle = 30;
+                // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
 
                 DirectionVector movinAgentDir = new DirectionVectorImpl(-1.0, 0.0);
                 DirectionVector obstacleAgentsDir = new DirectionVectorImpl(1.0, 0.0);

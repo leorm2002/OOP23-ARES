@@ -1,8 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentBuilder;
-import it.unibo.ares.core.agent.AgentBuilderImpl;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -84,9 +81,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest() {
-        Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
-        Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
-        Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));
+        Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
         State state = getTestState();
         Pos agent1aPos = new PosImpl(1, 1);
         state.addAgent(agent1aPos, agent1a);
@@ -105,9 +102,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest2() {
-        Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
-        Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1));
-        Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2));
+        Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
 
         State state = getTestState();
         state.addAgent(new PosImpl(1, 1), agent1a);

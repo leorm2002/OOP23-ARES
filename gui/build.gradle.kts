@@ -1,14 +1,15 @@
 plugins {
-    id("java")
+    java
     application
 
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.29.0"
+    id("lifecycle-base")
 
 }
 
 group = "it.unibo.ares"
-version = "unspecified"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -42,4 +43,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+application {
+        mainClass.set("it.unibo.ares.gui.App")
 }

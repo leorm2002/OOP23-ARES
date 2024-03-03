@@ -1,6 +1,5 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
 

@@ -57,9 +57,9 @@ public final class PredatorPreyModelFactory implements ModelFactory {
         ModelBuilder builder = new ModelBuilderImpl();
         return builder
                 .addParameter(new ParameterImpl<>("numeroAgenti", Integer.class,
-                        new ParameterDomainImpl<Integer>("Numero di agenti", n -> n >= 0)))
+                        new ParameterDomainImpl<Integer>("Numero di agenti", n -> n >= 0), true))
                 .addParameter(new ParameterImpl<>("size", Integer.class,
-                        new ParameterDomainImpl<Integer>("Dimensione della griglia", n -> n >= 0)))
+                        new ParameterDomainImpl<Integer>("Dimensione della griglia", n -> n >= 0), true))
                 .addExitFunction(
                         (o, n) -> n.getAgents().stream().map(a -> a.getSecond().getType()).distinct().count() < 2)
                 .addInitFunction(t -> {

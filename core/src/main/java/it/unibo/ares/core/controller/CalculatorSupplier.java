@@ -2,7 +2,6 @@ package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.api.InitializationApi;
 import it.unibo.ares.core.api.SimulationControlApi;
-import it.unibo.ares.core.api.SimulationOutputData;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 

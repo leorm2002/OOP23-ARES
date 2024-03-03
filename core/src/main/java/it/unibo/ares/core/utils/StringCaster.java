@@ -27,6 +27,7 @@ public final class StringCaster {
      *
      * @param value The string to cast.
      * @param type  The type to cast the string to.
+     * @param <T>   The type to cast the string to.
      * @return The casted value.
      */
     public static <T> T cast(final String value, final Class<T> type) {

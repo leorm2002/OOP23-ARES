@@ -83,15 +83,15 @@ public final class SchellingModelFactories implements ModelFactory {
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class,
                                                 new ParameterDomainImpl<Integer>(
                                                                 "Numero di agenti del primo tipo (0-n)",
-                                                                i -> i >= 0)))
+                                                                i -> i >= 0), true))
                                 .addParameter(new ParameterImpl<>("numeroAgentiTipoB", Integer.class,
                                                 new ParameterDomainImpl<Integer>(
                                                                 "Numero di agenti del secondo tipo (0-n)",
-                                                                i -> i >= 0)))
+                                                                i -> i >= 0), true))
                                 .addParameter(new ParameterImpl<>("size", Integer.class,
                                                 new ParameterDomainImpl<Integer>(
                                                                 "Dimensione della griglia (1-n)",
-                                                                i -> i > 0)))
+                                                                i -> i > 0), true))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                                 .addInitFunction(t -> {

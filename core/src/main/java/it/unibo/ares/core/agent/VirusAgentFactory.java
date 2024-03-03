@@ -1,17 +1,18 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.directionvector.DirectionVector;
-import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
-import it.unibo.ares.core.utils.pos.Pos;
-import it.unibo.ares.core.utils.pos.PosImpl;
-import it.unibo.ares.core.utils.state.State;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiPredicate;
+
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.directionvector.DirectionVector;
+import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.pos.PosImpl;
+import it.unibo.ares.core.utils.state.State;
 
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
@@ -261,19 +262,19 @@ public final class VirusAgentFactory implements AgentFactory {
                 AgentBuilder b = new AgentBuilderImpl();
                 b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
                                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
-                                                (Integer d) -> d > 0 && d <= 10)));
-                b.addParameter(new ParameterImpl<>("direction", getRandomDirection()));
+                                                (Integer d) -> d > 0 && d <= 10), true));
+                b.addParameter(new ParameterImpl<>("direction", getRandomDirection(), false));
                 if (type == 'P') {
                         b.addParameter(new ParameterImpl<>("infectionRate", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Probabilità di infenzione da contatto (0-100)",
-                                                        i -> i >= 0 && i <= 100)));
+                                                        i -> i >= 0 && i <= 100),true));
                 }
                 else if (type == 'I') {
                         b.addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Probabilità di guarigione a ogni step (0-100)",
-                                                        i -> i >= 0 && i <= 100)));
+                                                        i -> i >= 0 && i <= 100), true));
                 }
                 b.addStrategy(this::tickFunction);
                 return b.build();
