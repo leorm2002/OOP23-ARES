@@ -15,11 +15,12 @@ public interface Parameters {
      * 
      * @param key  the key of the parameter
      * @param type the type of the parameter
+     * @param userSettable if the parameter can be set by the user
      * @throws IllegalArgumentException if a parameter with the specified key
      *                                  already exists
      * @throws NullPointerException     if the key or the type is null
      */
-    void addParameter(String key, Class<?> type);
+    void addParameter(String key, Class<?> type, Boolean userSettable);
 
     /**
      * Adds a parameter with the specified key and value.
@@ -27,11 +28,12 @@ public interface Parameters {
      * @param key   the key of the parameter
      * @param value the value of the parameter
      * @param <T>   the type of the value
+     * @param userSettable if the parameter can be set by the user
      * @throws IllegalArgumentException if a parameter with the specified key
      *                                  already exists
      * @throws NullPointerException     if the key is null
      */
-    <T> void addParameter(String key, T value);
+    <T> void addParameter(String key, T value, Boolean userSettable);
 
     /**
      * Adds a parameter.

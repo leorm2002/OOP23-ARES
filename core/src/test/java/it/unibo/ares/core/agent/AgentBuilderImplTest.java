@@ -46,9 +46,9 @@ final class AgentBuilderImplTest {
         BiFunction<State, Pos, State> strategy = (state, pos) -> state;
         assertDoesNotThrow(() -> {
             agentBuilder.addStrategy(strategy)
-                    .addParameter(new ParameterImpl<>("testKey", 10))
-                    .addParameter(new ParameterImpl<>("testKey2", "testValue"))
-                    .addParameter(new ParameterImpl<>("testKey3", true));
+                    .addParameter(new ParameterImpl<>("testKey", 10, true))
+                    .addParameter(new ParameterImpl<>("testKey2", "testValue", true))
+                    .addParameter(new ParameterImpl<>("testKey3", true, true));
         });
     }
 }

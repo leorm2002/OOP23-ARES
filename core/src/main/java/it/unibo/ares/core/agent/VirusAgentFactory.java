@@ -211,19 +211,19 @@ public final class VirusAgentFactory implements AgentFactory {
                 AgentBuilder b = new AgentBuilderImpl();
                 b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
                                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
-                                                (Integer d) -> d > 0 && d <= 10)));
-                b.addParameter(new ParameterImpl<>("direction", getRandomDirection()));
+                                                (Integer d) -> d > 0 && d <= 10), true));
+                b.addParameter(new ParameterImpl<>("direction", getRandomDirection(), false));
                 if (type == 'P') {
                         b.addParameter(new ParameterImpl<>("infectionRate", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Probabilità di infenzione da contatto (0-100)",
-                                                        i -> i >= 0 && i <= 100)));
+                                                        i -> i >= 0 && i <= 100),true));
                 }
                 else if (type == 'I') {
                         b.addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Probabilità di guarigione a ogni step (0-100)",
-                                                        i -> i >= 0 && i <= 100)));
+                                                        i -> i >= 0 && i <= 100), true));
                 }
                 b.addStrategy(this::tickFunction);
                 return b.build();

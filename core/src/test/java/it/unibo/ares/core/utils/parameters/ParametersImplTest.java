@@ -33,7 +33,7 @@ class ParametersImplTest {
         String key = "testKey";
         Class<Integer> type = Integer.class;
 
-        parameters.addParameter(key, type);
+        parameters.addParameter(key, type, true);
 
         Optional<Parameter<Integer>> parameter = parameters.getParameter(key, type);
         assertTrue(parameter.isPresent());
@@ -48,7 +48,7 @@ class ParametersImplTest {
         String key = "testKey";
         Integer value = 10;
 
-        parameters.addParameter(key, value);
+        parameters.addParameter(key, value, true);
 
         Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
         assertTrue(parameter.isPresent());
@@ -64,7 +64,7 @@ class ParametersImplTest {
         String key = "testKey";
         Integer value = 10;
 
-        parameters.addParameter(key, value);
+        parameters.addParameter(key, value, true);
 
         Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
         assertTrue(parameter.isPresent());
@@ -81,7 +81,7 @@ class ParametersImplTest {
         Integer value = 10;
         Integer newValue = 20;
         // CHECKSTYLE: MagicNumber ON
-        parameters.addParameter(key, value);
+        parameters.addParameter(key, value, true);
         parameters.setParameter(key, newValue);
         Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
         assertTrue(parameter.isPresent());
@@ -101,8 +101,8 @@ class ParametersImplTest {
         Integer value2 = 20;
         // CHECKSTYLE: MagicNumber ON
 
-        parameters.addParameter(key1, value1);
-        parameters.addParameter(key2, value2);
+        parameters.addParameter(key1, value1, true);
+        parameters.addParameter(key2, value2, true);
 
         Set<Parameter<?>> parameterSet = parameters.getParameters();
         assertEquals(2, parameterSet.size());
@@ -121,8 +121,8 @@ class ParametersImplTest {
         String key2 = "key2";
         Integer value1 = 10;
 
-        parameters.addParameter(key1, value1);
-        parameters.addParameter(key2, Integer.class);
+        parameters.addParameter(key1, value1, true);
+        parameters.addParameter(key2, Integer.class, true);
 
         Set<Parameter<?>> parameterSet = parameters.getParametersToset();
         assertEquals(1, parameterSet.size());
@@ -139,7 +139,7 @@ class ParametersImplTest {
     void testAddParameterWithParameter() {
         String key = "testKey";
         Integer value = 10;
-        Parameter<Integer> parameter = new ParameterImpl<>(key, value);
+        Parameter<Integer> parameter = new ParameterImpl<>(key, value, true);
 
         parameters.addParameter(parameter);
 
@@ -157,7 +157,7 @@ class ParametersImplTest {
         String key = "testKey";
         Integer value = 10;
 
-        parameters.addParameter(key, value);
+        parameters.addParameter(key, value, true);
 
         Parameters clone = parameters.copy();
 
@@ -175,7 +175,7 @@ class ParametersImplTest {
     @Test
     void testAddParameterWithNullKey() {
         assertThrows(NullPointerException.class, () -> {
-            parameters.addParameter(null, Integer.class);
+            parameters.addParameter(null, Integer.class, true);
         });
     }
 
@@ -187,11 +187,11 @@ class ParametersImplTest {
     void testAddParameterWithDuplicateKey() {
         String key = "testKey";
         Integer value1 = 10;
-        parameters.addParameter(key, value1);
+        parameters.addParameter(key, value1, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
             // CHECKSTYLE: MagicNumber OFF just a casual different value to test
-            parameters.addParameter(key, 20);
+            parameters.addParameter(key, 20, true);
             // CHECKSTYLE: MagicNumber ON
         });
     }
@@ -206,10 +206,10 @@ class ParametersImplTest {
         Integer value1 = 10;
         String value2 = "prova";
 
-        parameters.addParameter(key, value1);
+        parameters.addParameter(key, value1, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            parameters.addParameter(key, value2);
+            parameters.addParameter(key, value2, true);
         });
     }
 
@@ -237,7 +237,7 @@ class ParametersImplTest {
         String key = "testKey";
         Integer value = 10;
 
-        parameters.addParameter(key, value);
+        parameters.addParameter(key, value, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
             parameters.setParameter(key, "test");
@@ -254,7 +254,7 @@ class ParametersImplTest {
         String key = "testKey";
         Class<Integer> type = Integer.class;
 
-        parameters.addParameter(key, type);
+        parameters.addParameter(key, type, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
             parameters.setParameter(key, "test");

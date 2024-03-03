@@ -15,22 +15,25 @@ public final class ParameterImpl<T> implements Parameter<T> {
     private final Optional<T> value;
     private final Class<T> type;
     private final String key;
-
+    private final Boolean userSettable;
     @SuppressWarnings("unchecked")
     private ParameterImpl(final String key, final T value,
-            final Optional<ParameterDomain<T>> domain) {
+            final Optional<ParameterDomain<T>> domain, final Boolean userSettable) {
         this.value = Optional.of(value);
         this.key = key;
         this.type = (Class<T>) value.getClass();
         this.domain = domain;
+        this.userSettable = userSettable;
     }
 
     private ParameterImpl(final String key, final Class<T> type,
-            final Optional<ParameterDomain<T>> domain) {
+            final Optional<ParameterDomain<T>> domain, final Boolean userSettable) {
         this.key = key;
         this.type = type;
         this.domain = domain;
         this.value = Optional.empty();
+        this.userSettable = userSettable;
+
     }
 
     /**
@@ -39,8 +42,8 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * @param key   the key of the parameter
      * @param value the value of the parameter
      */
-    public ParameterImpl(final String key, final T value) {
-        this(key, value, Optional.empty());
+    public ParameterImpl(final String key, final T value, final Boolean userSettable) {
+        this(key, value, Optional.empty(), userSettable);
     }
 
     /**
@@ -49,8 +52,8 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * @param key  the key of the parameter
      * @param type the type of the parameter
      */
-    public ParameterImpl(final String key, final Class<T> type) {
-        this(key, type, Optional.empty());
+    public ParameterImpl(final String key, final Class<T> type, final Boolean userSettable) {
+        this(key, type, Optional.empty(), userSettable);
     }
 
     /**
@@ -59,9 +62,10 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * @param key    the key of the parameter
      * @param value  the value of the parameter
      * @param domain the domain of the parameter
+     * @param userSettable if the parameter is user settable
      */
-    public ParameterImpl(final String key, final T value, final ParameterDomain<T> domain) {
-        this(key, value, Optional.of(domain));
+    public ParameterImpl(final String key, final T value, final ParameterDomain<T> domain, final Boolean userSettable) {
+        this(key, value, Optional.of(domain), userSettable);
     }
 
     /**
@@ -70,9 +74,10 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * @param key    the key of the parameter
      * @param type   the type of the parameter
      * @param domain the domain of the parameter
+     * @param userSettable if the parameter is user settable
      */
-    public ParameterImpl(final String key, final Class<T> type, final ParameterDomain<T> domain) {
-        this(key, type, Optional.of(domain));
+    public ParameterImpl(final String key, final Class<T> type, final ParameterDomain<T> domain, final Boolean userSettable) {
+        this(key, type, Optional.of(domain), userSettable);
     }
 
     /**
@@ -102,7 +107,7 @@ public final class ParameterImpl<T> implements Parameter<T> {
         if (this.domain.isPresent() && !this.domain.get().isValueValid(value)) {
             throw new IllegalArgumentException("Value is not inside the domain: " + this.key);
         }
-        return new ParameterImpl<>(key, value, domain);
+        return new ParameterImpl<>(key, value, domain, userSettable);
     }
 
     /**
@@ -127,5 +132,10 @@ public final class ParameterImpl<T> implements Parameter<T> {
     @Override
     public Optional<ParameterDomain<T>> getDomain() {
         return this.domain;
+    }
+
+    @Override
+    public Boolean userSettable() {
+        return this.userSettable;
     }
 }

@@ -50,4 +50,10 @@ public interface Parameter<T> {
      * @return the domain of the parameter
      */
     Optional<ParameterDomain<T>> getDomain();
+
+    /**
+     * If the user can view thus set the parameter.
+     * @return true if the parameter is user settable, false otherwise
+     */
+    Boolean userSettable();
 }

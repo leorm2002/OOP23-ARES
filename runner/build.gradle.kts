@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    application
 }
 
 group = "it.unibo.ares"
@@ -19,4 +20,9 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+
+application {
+    mainClass.set("it.unibo.ares.runner.ApplicationRunner")
 }

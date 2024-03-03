@@ -51,22 +51,22 @@ public final class ParametersImpl implements Parameters {
      * {@inheritDoc}
      */
     @Override
-    public void addParameter(final String key, final Class<?> type) {
+    public void addParameter(final String key, final Class<?> type, final Boolean userSettable) {
         if (this.getParameter(key, type).isPresent()) {
             throw new IllegalArgumentException("Parameter " + key + " already exists");
         }
         if (key == null || type == null) {
             throw new NullPointerException("Parameter key or type is null");
         }
-        addParameter(key, new ParameterImpl<>(key, type));
+        addParameter(key, new ParameterImpl<>(key, type, userSettable));
     }
 
     /*
      * {@inheritDoc}
      */
     @Override
-    public <T> void addParameter(final String key, final T value) {
-        addParameter(key, new ParameterImpl<>(key, value));
+    public <T> void addParameter(final String key, final T value, final Boolean userSettable) {
+        addParameter(key, new ParameterImpl<>(key, value, userSettable));
     }
 
     /*

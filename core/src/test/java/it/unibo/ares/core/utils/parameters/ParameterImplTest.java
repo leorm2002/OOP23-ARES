@@ -18,7 +18,7 @@ public class ParameterImplTest {
     void testConstructorWithValue() {
         String key = "testKey";
         Integer value = 10;
-        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, value);
+        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, value, true);
 
         assertEquals(key, parameter.getKey());
         assertEquals(value, parameter.getValue());
@@ -33,7 +33,7 @@ public class ParameterImplTest {
     void testConstructorWithType() {
         String key = "testKey";
         Class<Integer> type = Integer.class;
-        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, type);
+        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, type, true);
 
         assertEquals(key, parameter.getKey());
         assertThrows(IllegalStateException.class,
@@ -51,7 +51,7 @@ public class ParameterImplTest {
     void testSetValue() {
         String key = "testKey";
         Integer value = 10;
-        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, Integer.class);
+        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, Integer.class, true);
 
         assertFalse(parameter.isSetted());
         assertThrows(IllegalStateException.class,

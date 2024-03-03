@@ -93,8 +93,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
             final Integer visionRadius) {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold));
-        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius));
+        b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold, true));
+        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
             if (true || !isThresholdSatisfied(state, pos, agent)) { //TODO
@@ -114,9 +114,9 @@ public final class SchellingsAgentFactory implements AgentFactory {
         AgentBuilder b = new AgentBuilderImpl();
 
         b.addParameter(new ParameterImpl<Double>("threshold", Double.class, new ParameterDomainImpl<>(
-                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0)));
+                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0), true));
         b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class,
-                new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0)));
+                new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0), true));
 
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();

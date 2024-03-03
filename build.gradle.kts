@@ -28,5 +28,5 @@ tasks.withType<Test> {
 }
 
 application {
-    mainClass.set("it.unibo.ares.ApplicationRunner")
+    mainClass.set("it.unibo.ares.runner.ApplicationRunner")
 }

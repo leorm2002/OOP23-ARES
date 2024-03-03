@@ -247,24 +247,24 @@ public final class BoidsAgentFactory implements AgentFactory {
                 return builder
                                 .addParameter(new ParameterImpl<>("distance", Integer.class,
                                                 new ParameterDomainImpl<>("il raggio di visione in celle (1-10)",
-                                                                (Integer d) -> d > 0 && d <= 10)))
+                                                                (Integer d) -> d > 0 && d <= 10), true))
                                 .addParameter(new ParameterImpl<>("angle", Integer.class,
                                                 new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
-                                                                (Integer d) -> d > 0 && d <= 180)))
-                                .addParameter(new ParameterImpl<>("direction", getRandomDirection()))
+                                                                (Integer d) -> d > 0 && d <= 180), true))
+                                .addParameter(new ParameterImpl<>("direction", getRandomDirection(), false))
                                 .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "il peso dell'evitamento degli ostacoli (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("alignmentWeight", Double.class,
                                                 new ParameterDomainImpl<>("il peso dell'allineamento (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("cohesionWeight", Double.class,
                                                 new ParameterDomainImpl<>("il peso della coesione (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("stepSize", Integer.class,
                                                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
-                                                                (Integer d) -> d > 0 && d <= 10)))
+                                                                (Integer d) -> d > 0 && d <= 10), true))
                                 .addStrategy(this::tickFunction)
                                 .build();
         }

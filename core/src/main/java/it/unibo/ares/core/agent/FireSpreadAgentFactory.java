@@ -260,9 +260,9 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         public Agent getFireModelAgent(final Integer spread, final Double fuel, final Double cons) {
                 AgentBuilder b = new AgentBuilderImpl();
                 b
-                                .addParameter(new ParameterImpl<>("spread", spread))
-                                .addParameter(new ParameterImpl<>("fuel", fuel))
-                                .addParameter(new ParameterImpl<>("consumption", cons))
+                                .addParameter(new ParameterImpl<>("spread", spread, true))
+                                .addParameter(new ParameterImpl<>("fuel", fuel, true))
+                                .addParameter(new ParameterImpl<>("consumption", cons, true))
                                 .addStrategy((state, pos) -> tickFunction(state, pos))
                                 .build();
 
@@ -282,15 +282,15 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 b
                                 .addParameter(new ParameterImpl<>("spread", Integer.class,
                                                 new ParameterDomainImpl<>("Range of spread (RoS) of the agent (0 - n)",
-                                                                (Integer i) -> i > 0)))
+                                                                (Integer i) -> i > 0), true))
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel available for combustion (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("consumption", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel consumption every tick (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addStrategy((state, pos) -> {
                                         return tickFunction(state, pos);
                                 })
@@ -312,8 +312,8 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 AgentBuilder b = new AgentBuilderImpl();
 
                 b
-                                .addParameter(new ParameterImpl<>("fuel", fuel))
-                                .addParameter(new ParameterImpl<>("flammability", flammability))
+                                .addParameter(new ParameterImpl<>("fuel", fuel, true))
+                                .addParameter(new ParameterImpl<>("flammability", flammability, true))
                                 .addStrategy((state, pos) -> {
                                         return state;
                                 })
@@ -336,11 +336,11 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Amount of fuel available for combustion (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addParameter(new ParameterImpl<>("flammability", Double.class,
                                                 new ParameterDomainImpl<>(
                                                                 "Measure of how quick can burn (0.0-1.0)",
-                                                                (Double d) -> d >= 0.0 && d <= 1.0)))
+                                                                (Double d) -> d >= 0.0 && d <= 1.0), true))
                                 .addStrategy((state, pos) -> {
                                         return state;
                                 })
@@ -361,7 +361,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 AgentBuilder b = new AgentBuilderImpl();
 
                 return b
-                                .addParameter(new ParameterImpl<Double>("fuel", Double.class))
+                                .addParameter(new ParameterImpl<Double>("fuel", Double.class, true))
                                 // .addStrategy((state, pos) -> {
                                 // return state;
                                 // })

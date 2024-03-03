@@ -93,8 +93,8 @@ public class FireSpreadModelFactory implements ModelFactory {
                 // We need only one agent supplier since all agents are equal and only differs
                 // in the type
                 return builder
-                                .addParameter(new ParameterImpl<>("numeroAgentiTipoF", Integer.class))
-                                .addParameter(new ParameterImpl<>("size", Integer.class))
+                                .addParameter(new ParameterImpl<>("numeroAgentiTipoF", Integer.class, true))
+                                .addParameter(new ParameterImpl<>("size", Integer.class, true))
                                 .addExitFunction((o, n) -> o.getAgents().stream()
                                                 .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
                                 .addInitFunction(t -> {
