@@ -29,6 +29,9 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 this.r = new Random();
         }
 
+        /**
+         * A predicate to verify if two agents are of different types.
+         */
         private static BiPredicate<Agent, Agent> isAgentOfDiffType = (a, b) -> {
                 String typeA = a.getType();
                 String typeB = b.getType();
@@ -94,7 +97,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * 
          * @param agent current fire agent.
          */
-        private static void consumeFuel(final Agent agent) {
+        private void consumeFuel(final Agent agent) {
                 Double fuel = agent.getParameters()
                                 .getParameter("fuel", Double.class)
                                 .orElseThrow(() -> new IllegalArgumentException(

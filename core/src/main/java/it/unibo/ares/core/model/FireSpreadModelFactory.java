@@ -67,16 +67,12 @@ public class FireSpreadModelFactory implements ModelFactory {
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
                 AgentFactory fireSpreadFactory = new FireSpreadAgentFactory();
 
-                for (int i = 0; i < nf; i++) {
-                        Agent agent = ((FireSpreadAgentFactory) fireSpreadFactory).getFireModelAgent();
-                        agent.setType("F");
+                IntStream.range(0, total).forEach(i -> {
+                        Agent agent = (i < nf ? ((FireSpreadAgentFactory) fireSpreadFactory).getFireModelAgent()
+                                        : ((FireSpreadAgentFactory) fireSpreadFactory).getTreeModelAgent());
+                        agent.setType(i < nf ? "F" : "T");
                         state.addAgent(getter.next(), agent);
-                }
-                for (int i = 0; i < total - nf; i++) {
-                        Agent agent = ((FireSpreadAgentFactory) fireSpreadFactory).getTreeModelAgent();
-                        agent.setType("T");
-                        state.addAgent(getter.next(), agent);
-                }
+                });
 
                 return state;
         }
