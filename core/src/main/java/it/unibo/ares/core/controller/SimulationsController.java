@@ -1,7 +1,6 @@
 package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.api.SimulationControlApi;
-import it.unibo.ares.core.api.SimulationOutputData;
 
 import java.util.concurrent.Flow.Subscriber;
 

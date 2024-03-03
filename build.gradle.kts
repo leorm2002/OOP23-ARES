@@ -7,28 +7,26 @@ plugins {
 
 }
 
+group = "it.unibo.ares"
+version = "1.0.0"
+
 repositories {
     mavenCentral()
 }
 
 
 dependencies {
-    // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.3")
 
-
     val jUnitVersion = "5.10.1"
-    // JUnit API and testing engine
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
 }
 
 tasks.withType<Test> {
-    // Enables JUnit 5 Jupiter module
     useJUnitPlatform()
 }
 
 application {
-    // Define the main class for the application
     mainClass.set("it.unibo.ares.ApplicationRunner")
 }

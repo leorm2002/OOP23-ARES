@@ -1,7 +1,5 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.api.SimulationOutputData;
-
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
