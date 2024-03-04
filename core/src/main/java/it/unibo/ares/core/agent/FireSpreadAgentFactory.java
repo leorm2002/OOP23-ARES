@@ -19,7 +19,9 @@ import java.util.stream.IntStream;
  * A factory class for creating agents for the Fire Spread Model.
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
-        private static Integer VISION_ANGLE = 180;
+        private static final Integer DIRRANDOMNUMBERCEIL = 20;
+        private static final Integer VISION_ANGLE = 180;
+        private static final Double WINDCHANGEBASEPROB = 0.2;
         private DirectionVector windDirection;
         private Double windChange;
         private Random r;
@@ -47,7 +49,9 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @return a random direction vector for the fire spread model agents.
          */
         private DirectionVectorImpl getRandomDirection() {
-                return new DirectionVectorImpl(r.nextInt(-20, 20) + 1, r.nextInt(-20, 20) + 1);
+                return new DirectionVectorImpl(
+                                r.nextInt(-DIRRANDOMNUMBERCEIL, DIRRANDOMNUMBERCEIL) + 1,
+                                r.nextInt(-DIRRANDOMNUMBERCEIL, DIRRANDOMNUMBERCEIL) + 1);
         }
 
         /**
@@ -69,8 +73,6 @@ public final class FireSpreadAgentFactory implements AgentFactory {
         /**
          * Verify if a Fire Agent is extinguished.
          * 
-         * @param state current state
-         * @param pos   current position
          * @param agent current fire agent
          * @return True if extinguished, false either way.
          */
@@ -115,7 +117,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                         this.windDirection = getRandomDirection();
                         windChange = 0.0;
                 } else {
-                        windChange += 0.2 / nf;
+                        windChange += WINDCHANGEBASEPROB / nf;
                 }
         }
 
