@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 public final class FireSpreadAgentFactory implements AgentFactory {
         private static final Integer DIRRANDOMNUMBERCEIL = 20;
         private static final Integer VISION_ANGLE = 360;
+        private static final Integer DOUBLEDIGITCONS = 3;
         private static final Double WINDCHANGEBASEPROB = 0.2;
         private DirectionVector windDirection;
         private Double windChange;
@@ -156,7 +157,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .getValue();
 
                 Double newCons = cons * flammability;
-                if (newCons.toString().split("\\.")[1].length() > 2) {
+                if (newCons.toString().split("\\.")[1].length() > DOUBLEDIGITCONS) {
                         newCons = cons;
                 }
 
