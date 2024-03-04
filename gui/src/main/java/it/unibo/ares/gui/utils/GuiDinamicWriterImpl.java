@@ -36,10 +36,11 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
         final int txtSize = 13, lblSize = 15, domainSize = 13, marginBottom = 20, marginRightLeft = 10;
         /*
          * creating a label and a textfield for each parameter and setting his style,
-         * then adding them to the vbox and if the parameter has a domain, adding a label
+         * then adding them to the vbox and if the parameter has a domain, adding a
+         * label
          * with the domain description
          */
-        parameters.getParameters().stream().filter(Parameter::userSettable) .forEach(p -> {
+        parameters.getParameters().stream().filter(Parameter::userSettable).forEach(p -> {
             Label lbl = new Label(p.getKey());
             Label domain = new Label();
             TextField txt = new TextField();
@@ -101,15 +102,17 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     @Override
     public void disableVBox(final VBox vbox) {
         vbox.getChildren().stream().filter(node -> node instanceof TextField).map(node -> (TextField) node)
-            .forEach(textField -> {
-                textField.setDisable(true);
-        });
+                .forEach(textField -> {
+                    textField.setDisable(true);
+                });
     }
 
     /**
-     * This method writes a map of positions and its relatives strings to a 2D map represented by a
+     * This method writes a map of positions and its relatives strings to a 2D map
+     * represented by a
      * GridPane.
-     * It first clears the AnchorPane that will contain the new GridPane, then iterates over the data in the
+     * It first clears the AnchorPane that will contain the new GridPane, then
+     * iterates over the data in the
      * given Map.
      * For each data entry, it creates a new TextField, sets its text to the agent's
      * name, and adds it to the GridPane at the position specified by the data
@@ -130,7 +133,8 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
         GridPane grid = new GridPane();
         grid.setMaxSize(maxSizeGrid, maxSizeGrid);
         /*
-         * creating a label for each position in the map and setting his min and max size
+         * creating a label for each position in the map and setting his min and max
+         * size
          */
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -144,6 +148,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          */
         items.forEach((pos, agent) -> {
             Label txt = new Label(agent);
+            setElementStyle(txt, prefLblSize/2);
             grid.add(txt, pos.getX(), pos.getY());
         });
         grid.setGridLinesVisible(true);
