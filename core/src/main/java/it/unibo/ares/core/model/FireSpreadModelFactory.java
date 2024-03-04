@@ -51,7 +51,6 @@ public class FireSpreadModelFactory implements ModelFactory {
         private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
                 Integer size = parameters.getParameter("size", Integer.class).orElseThrow().getValue();
                 Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class).get().getValue();
-
                 Integer total = size * size;
 
                 State state = new StateImpl(size, size);
@@ -94,6 +93,7 @@ public class FireSpreadModelFactory implements ModelFactory {
                                                 new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)",
                                                                 n -> n > 0),
                                                 true))
+                                .addParameter(new ParameterImpl<>("windChange", Double.class, false))
                                 .addExitFunction((o, n) -> n.getAgents().isEmpty())
                                 .addInitFunction(t -> {
                                         try {

@@ -19,7 +19,9 @@ import java.util.stream.IntStream;
  * A factory class for creating agents for the Fire Spread Model.
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
-        private static Integer VISION_ANGLE = 360;
+        private static Integer VISION_ANGLE = 180;
+        private DirectionVector windDirection;
+        private Double windChange;
         private Random r;
 
         /**
@@ -27,6 +29,8 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          */
         public FireSpreadAgentFactory() {
                 this.r = new Random();
+                this.windChange = 0.0;
+                this.windDirection = getRandomDirection();
         }
 
         /**
@@ -70,26 +74,14 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @param agent current fire agent
          * @return True if extinguished, false either way.
          */
-        private static boolean isExtinguished(final State state, final Pos pos, final Agent agent) {
-                Integer spread = agent.getParameters().getParameter("spread", Integer.class)
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "Agent " + agent + " has no spread parameter"))
-                                .getValue();
-
+        private static boolean isExtinguished(final Agent agent) {
                 // Verify if at current position the Tree Agent can sustain the Fire Agent.
                 Boolean notFueled = agent.getParameters().getParameter("fuel", Double.class)
                                 .orElseThrow(() -> new IllegalArgumentException(
                                                 "Agent " + agent + " has no fuel parameter"))
                                 .getValue() <= 0;
 
-                // Verify if there are near trees that can spread the fire.
-                Boolean cannotSpread = state.getAgentsByPosAndRadius(pos, spread)
-                                .stream()
-                                .filter(a -> isAgentOfDiffType.test(a, agent))
-                                .filter(a -> isFlammable(a))
-                                .count() == 0;
-
-                return notFueled && cannotSpread;
+                return notFueled;
         }
 
         /**
@@ -111,6 +103,20 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .getValue();
 
                 agent.setParameter("fuel", (fuel - cons <= 0.0) ? 0.0 : fuel - cons);
+        }
+
+        private void changeWindDirection(final State state) {
+                Integer nf = state.getAgents().stream()
+                                .filter(a -> a.getSecond().getType().equals("F"))
+                                .collect(Collectors.toList())
+                                .size();
+
+                if (r.nextDouble(0.0, 1.0) < windChange / nf) {
+                        this.windDirection = getRandomDirection();
+                        windChange = 0.0;
+                } else {
+                        windChange += 0.2 / nf;
+                }
         }
 
         /**
@@ -214,7 +220,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @return the positions where fire will spread if available (Tree Agents).
          */
         private Set<Pos> getSpreadPositionIfAvailable(final State state, final Pos pos, final Agent agent) {
-                DirectionVector dir = getRandomDirection();
+                DirectionVector dir = this.windDirection; // getRandomDirection();
 
                 Integer spread = agent.getParameters()
                                 .getParameter("spread", Integer.class)
@@ -242,13 +248,14 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          */
         private State tickFunction(final State currentState, final Pos agentPosition) {
                 Agent agent = currentState.getAgentAt(agentPosition).get();
+                changeWindDirection(currentState);
                 consumeFuel(agent);
 
-                if (!isExtinguished(currentState, agentPosition, agent)) {
+                if (isExtinguished(agent)) {
+                        currentState.removeAgent(agentPosition, agent);
+                } else {
                         Set<Pos> spreadPos = getSpreadPositionIfAvailable(currentState, agentPosition, agent);
                         spreadPos.forEach(newPos -> spreadFire(currentState, newPos, agent));
-                } else {
-                        currentState.removeAgent(agentPosition, agent);
                 }
                 return currentState;
         }
@@ -285,17 +292,17 @@ public final class FireSpreadAgentFactory implements AgentFactory {
 
                 b
                                 .addParameter(new ParameterImpl<>("spread", Integer.class,
-                                                new ParameterDomainImpl<>("Range of spread (RoS) of the agent (0 - n)",
+                                                new ParameterDomainImpl<>("Range of spread (RoS) (0 - n)",
                                                                 (Integer i) -> i > 0),
                                                 true))
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
-                                                                "Amount of fuel available for combustion (0.0-1.0)",
+                                                                "Capacità di combustibile (0.0-1.0)",
                                                                 (Double d) -> d >= 0.0 && d <= 1.0),
                                                 true))
                                 .addParameter(new ParameterImpl<>("consumption", Double.class,
                                                 new ParameterDomainImpl<>(
-                                                                "Amount of fuel consumption every tick (0.0-1.0)",
+                                                                "Combustibile consumato ad ogni tick (0.0-1.0)",
                                                                 (Double d) -> d >= 0.0 && d <= 1.0),
                                                 true))
                                 .addStrategy((state, pos) -> {
@@ -342,12 +349,12 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                 b
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
                                                 new ParameterDomainImpl<>(
-                                                                "Amount of fuel available for combustion (0.0-1.0)",
+                                                                "Capacità di combustibile (0.0-1.0)",
                                                                 (Double d) -> d >= 0.0 && d <= 1.0),
                                                 true))
                                 .addParameter(new ParameterImpl<>("flammability", Double.class,
                                                 new ParameterDomainImpl<>(
-                                                                "Measure of how quick can burn (0.0-1.0)",
+                                                                "Velocità di combustione (0.0-1.0)",
                                                                 (Double d) -> d >= 0.0 && d <= 1.0),
                                                 true))
                                 .addStrategy((state, pos) -> {
