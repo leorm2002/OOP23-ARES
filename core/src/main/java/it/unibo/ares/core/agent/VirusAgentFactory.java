@@ -21,12 +21,12 @@ public final class VirusAgentFactory implements AgentFactory {
 
         private Random r;
         private char type;
-        // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT PER TEST
-        private static int stepSizeP = 1;
-        private static int stepSizeI = 1;
-        private static int infectionRate = 0;
-        private static int recoveryRate = 0;
-        private static boolean paramSected = false;
+        // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT
+        private int stepSizeP = 1;
+        private int stepSizeI = 1;
+        private int infectionRate = 0;
+        private int recoveryRate = 0;
+        private boolean paramSected = false;
 
 
         /**
@@ -94,9 +94,18 @@ public final class VirusAgentFactory implements AgentFactory {
                 return new DirectionVectorImpl(x, y);
         }
 
+        /**
+         * Initializes the parameters for the agents.
+         * Useful for the first tick, so the factory can set the parameters for the agents
+         * when they are created on runtime.
+         *
+         * @param agents The set of agents.
+         */
         private void initializeParameters(final Set<Pair<Pos, Agent>> agents) {
                 boolean infSected = false;
                 boolean persSected = false;
+                // cerco i parametri per l'agente infetto e per l'agente sano
+                // una volta settati i parametri per ciascun tipo di agente, break
                 for (Pair<Pos, Agent> pair : agents) {
                         switch (pair.getSecond().getType()) {
                                 case "P":
@@ -140,6 +149,7 @@ public final class VirusAgentFactory implements AgentFactory {
          * @return The updated state of the agent.
          */
         private State tickFunction(final State currentState, final Pos agentPosition) {
+                // se i parametri non sono stati settati, li setto
                 if (!paramSected) {
                         initializeParameters(currentState.getAgents());
                 }
@@ -169,7 +179,7 @@ public final class VirusAgentFactory implements AgentFactory {
                         .get().getValue();
                 Pos newPos = move(agentPosition, dir, stepSize);
                 if (!currentState.isInside(newPos)) {
-                        //se l'agente è fuori dallo spazio, cambio direzione
+                        //se la nuova posizione dell'agente sarebbe fuori dallo spazio, cambio direzione
                         dir = new DirectionVectorImpl(-dir.getX(), -dir.getY());
                         newPos = limit(move(agentPosition, dir, stepSize), currentState.getDimensions());
                 }
@@ -179,7 +189,7 @@ public final class VirusAgentFactory implements AgentFactory {
                                         currentState.getAgentAt(agentPosition).get())) {
                                 if (currentState.getAgentAt(newPos).get().getType().equals("I")) {
                                         //l'agente in agentPos è sano, l'agente in newPos è infetto
-                                        //probabile infezione da contatto in agentPos
+                                        //probabile infezione dell'agente in agentPos
                                         Optional<Agent> newAgent = infectPerson(agent, agentPosition);
                                         if (newAgent.isPresent()) {
                                                 currentState.removeAgent(agentPosition, agent);
@@ -187,7 +197,8 @@ public final class VirusAgentFactory implements AgentFactory {
                                                 return currentState;
                                         }
                                 } else {
-                                        //l'agente in agentPos è infetto, l'agente in newPos è sano, probabile infezione in newPos
+                                        //l'agente in agentPos è infetto, l'agente in newPos è sano
+                                        //probabile infezione dell'agente in newPos
                                         Optional<Agent> newAgent = infectPerson(currentState.getAgentAt(newPos).get(),
                                                         newPos);
                                         if (newAgent.isPresent()) {
@@ -197,10 +208,9 @@ public final class VirusAgentFactory implements AgentFactory {
                                         }
                                 }
                         }
-                        //se la nuova posizione è occupata e non avviene un'infezione, cambio direzione
-                        currentState.getAgentAt(agentPosition).get().setParameter("direction", getRandomDirection());
-                        dir = agent.getParameters().getParameter("direction", DirectionVectorImpl.class).get()
-                                        .getValue();
+                        //se la nuova posizione è occupata da due agenti dello stesso tipo, cambio direzione
+                        dir = getRandomDirection();
+                        currentState.getAgentAt(agentPosition).get().setParameter("direction", dir);
                         newPos = limit(move(agentPosition, dir, stepSize), currentState.getDimensions());
                 }
                 if (currentState.isFree(newPos)) {
@@ -224,7 +234,8 @@ public final class VirusAgentFactory implements AgentFactory {
          *         successful, otherwise an empty Optional
          */
         private Optional<Agent> infectPerson(final Agent agent, final Pos agentPosition) {
-                if (r.nextInt(100) <= infectionRate) {
+                if (r.nextInt(100) < infectionRate) {
+                        // create a new agent with the parameters of the infected agents
                         setTypeOfAgent('I');
                         Agent a = createAgent();
                         a.setType("I");
@@ -250,7 +261,8 @@ public final class VirusAgentFactory implements AgentFactory {
          *         successful, otherwise an empty Optional
          */
         private Optional<Agent> recoveryInfected(final Agent agent, final Pos agentPosition) {
-                if (r.nextInt(100) <= recoveryRate) {
+                if (r.nextInt(100) < recoveryRate) {
+                        // create a new agent with the parameters of the person agents
                         setTypeOfAgent('P');
                         Agent a = createAgent();
                         a.setType("P");
