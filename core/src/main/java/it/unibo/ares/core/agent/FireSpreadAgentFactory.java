@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
  */
 public final class FireSpreadAgentFactory implements AgentFactory {
         private static final Integer DIRRANDOMNUMBERCEIL = 20;
-        private static final Integer VISION_ANGLE = 180;
+        private static final Integer VISION_ANGLE = 360;
         private static final Double WINDCHANGEBASEPROB = 0.2;
         private DirectionVector windDirection;
         private Double windChange;
@@ -113,7 +113,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
                                 .collect(Collectors.toList())
                                 .size();
 
-                if (r.nextDouble(0.0, 1.0) < windChange / nf) {
+                if (r.nextDouble(0.0, 0.5) < windChange / nf) {
                         this.windDirection = getRandomDirection();
                         windChange = 0.0;
                 } else {
@@ -222,7 +222,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
          * @return the positions where fire will spread if available (Tree Agents).
          */
         private Set<Pos> getSpreadPositionIfAvailable(final State state, final Pos pos, final Agent agent) {
-                DirectionVector dir = this.windDirection; // getRandomDirection();
+                DirectionVector dir = this.windDirection;
 
                 Integer spread = agent.getParameters()
                                 .getParameter("spread", Integer.class)
@@ -294,7 +294,7 @@ public final class FireSpreadAgentFactory implements AgentFactory {
 
                 b
                                 .addParameter(new ParameterImpl<>("spread", Integer.class,
-                                                new ParameterDomainImpl<>("Range of spread (RoS) (0 - n)",
+                                                new ParameterDomainImpl<>("Range of spread (RoS) (1 - n)",
                                                                 (Integer i) -> i > 0),
                                                 true))
                                 .addParameter(new ParameterImpl<>("fuel", Double.class,
