@@ -6,11 +6,9 @@ import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -58,11 +56,8 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * The btnPauseClicked method is an event handler that is called when the
      * "Pause" button is clicked.
      * It pauses the simulation and updates the GUI accordingly.
-     *
-     * @param event the ActionEvent instance representing the button click event
-     */
-    @FXML
-    void btnPauseClicked(final ActionEvent event) {
+    */
+    void pauseSimulation() {
         calculatorSupplier.pauseSimulation(simulationId);
     }
 
@@ -70,11 +65,8 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * The btnRestartClicked method is an event handler that is called when the
      * "Restart" button is clicked.
      * It restarts the simulation and updates the GUI accordingly.
-     *
-     * @param event the ActionEvent instance representing the button click event
      */
-    @FXML
-    void btnRestartClicked(final ActionEvent event) {
+    void restartSimulation() {
         calculatorSupplier.startSimulation(simulationId);
     }
 
@@ -98,13 +90,18 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * @param event the ActionEvent instance representing the button click event
      */
     @FXML
-    void btnStoplicked(final ActionEvent event) throws IOException {
+    void stopSimulation() {
         calculatorSupplier.removeSimulation(simulationId);
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Parent root;
+        try {
+            root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
+            Stage stage = (Stage) btnStop.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -121,6 +118,9 @@ public final class SecondGuiController extends DataReciever implements Initializ
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
+        btnPause.setOnAction(event -> pauseSimulation());
+        btnRestart.setOnAction(event -> restartSimulation());
+        btnStop.setOnAction(event -> stopSimulation());
     }
 
     /**

@@ -7,6 +7,7 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
+
 /**
  * GuiController is a class that controls the first GUI of the application.
  * It implements the Initializable interface and manages the interaction between
@@ -65,17 +67,6 @@ public final class FirstGuiController implements Initializable {
     private ChoiceBox<String> choiceAgent, choiceModel;
 
     /**
-     * This method is triggered when the 'Start' button is clicked.
-     * It starts the second GUI.
-     *
-     * @param event the ActionEvent associated with the button click
-     */
-    @FXML
-    void btnStartClicked(final ActionEvent event) {
-        startSecondGui();
-    }
-
-    /**
      * The initialize method is called after all @FXML annotated members have been
      * injected.
      * This method initializes the choiceModel with the model names from the
@@ -96,22 +87,42 @@ public final class FirstGuiController implements Initializable {
         guiWriter.disableElement(btnSetAgent);
         guiWriter.disableElement(btnInitialize);
         guiWriter.disableElement(choiceAgent);
-        choiceModel.setOnAction(this::writeModelParametersList);
+        choiceModel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                writeModelParametersList();
+            }
+        });
+        btnInitialize.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                initializeModel();
+            }
+        });
+
+        btnSetAgent.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                setAgentParameter();
+            }
+        });
+
+        btnStart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                startSecondGui();
+            }
+        });
     }
 
     /**
-     * This method is triggered when the Initialize button is clicked.
-     * It reads the parameters from the VBox, sets them in the calculator supplier,
+     * This method reads the parameters for the model from the VBox, sets them in the calculator supplier,
      * and then disables the VBox and the Initialize button.
-     * It also enables the Set Agent button and the ChoiceBox for the agents.
+     * It also enables the Set Agent button and the ChoiceBox for the agents adding an event handler to it.
      * If any exception occurs during this process, it shows the error message and
      * disables the Initialize button.
-     *
-     * @param event the ActionEvent instance representing the event that triggered
-     *              this method
      */
-    @FXML
-    void btnInitializeClicked(final ActionEvent event) {
+    void initializeModel() {
         try {
             BiConsumer<String, Object> parameterSetter = (key, value) -> {
                 calculatorSupplier.setModelParameter(configurationSessionId, key, value);
@@ -125,7 +136,12 @@ public final class FirstGuiController implements Initializable {
             guiWriter.enableElement(btnSetAgent);
             guiWriter.enableElement(choiceAgent);
             guiWriter.enableElement(vboxAgentPar);
-            choiceAgent.setOnAction(this::writeAgentParametersList);
+            choiceAgent.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(final ActionEvent event) {
+                    writeAgentParametersList();
+                }
+            });
         } catch (Exception e) {
             guiWriter.showError(e.getMessage());
         }
@@ -230,18 +246,13 @@ public final class FirstGuiController implements Initializable {
     }
 
     /**
-     * This method is triggered when the Set Agent button is clicked.
-     * It reads the parameters from the VBox, sets them in the calculator supplier,
+     * This method reads the parameters for an from the VBox, sets them in the calculator supplier,
      * and then disables the VBox and the Set Agent button.
      * It also enables the Start button.
      * If any exception occurs during this process, it shows the error message and
      * disables the Set Agent button.
-     *
-     * @param event the ActionEvent instance representing the event that triggered
-     *              this method
      */
-    @FXML
-    void btnSetAgentClicked(final ActionEvent event) {
+    void setAgentParameter() {
         try {
             BiConsumer<String, Object> parameterSetter = (key, value) -> {
                 calculatorSupplier.setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), key,
@@ -280,10 +291,8 @@ public final class FirstGuiController implements Initializable {
      * It first gets the agent parameters from the calculator supplier, then clears
      * the VBox,
      * and finally writes the parameters to the VBox.
-     * @param e the ActionEvent instance representing the event that triggered this
-     *         method
      */
-    private void writeAgentParametersList(final ActionEvent e) {
+    private void writeAgentParametersList() {
         Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
                 choiceAgent.getValue());
         guiWriter.clearVBox(vboxAgentPar);
@@ -298,10 +307,8 @@ public final class FirstGuiController implements Initializable {
      * calculator supplier,
      * writes the parameters to the VBox, enables the initialize button, and finally
      * disables the set agent button.
-     *
-     * @param e the ActionEvent associated with the button click
      */
-    private void writeModelParametersList(final ActionEvent e) {
+    private void writeModelParametersList() {
         choiceAgent.setOnAction(null);
         guiWriter.disableElement(choiceAgent);
         guiWriter.disableElement(btnSetAgent);
