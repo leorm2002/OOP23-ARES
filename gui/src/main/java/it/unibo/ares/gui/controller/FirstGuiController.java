@@ -92,10 +92,10 @@ public final class FirstGuiController implements Initializable {
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         guiWriter.writeChoiceBox(choiceModel, calculatorSupplier.getModels());
-        guiWriter.disableButton(btnStart);
-        guiWriter.disableButton(btnSetAgent);
-        guiWriter.disableButton(btnInitialize);
-        guiWriter.disableChoiceBox(choiceAgent);
+        guiWriter.disableElement(btnStart);
+        guiWriter.disableElement(btnSetAgent);
+        guiWriter.disableElement(btnInitialize);
+        guiWriter.disableElement(choiceAgent);
         choiceModel.setOnAction(this::writeModelParametersList);
     }
 
@@ -120,10 +120,11 @@ public final class FirstGuiController implements Initializable {
             readParamatersValueAndSet(vboxModelPar, modelParameters, parameterSetter);
             guiWriter.writeChoiceBox(choiceAgent,
                     calculatorSupplier.getAgentsSimplified(configurationSessionId));
-            guiWriter.disableVBox(vboxModelPar);
-            guiWriter.disableButton(btnInitialize);
-            guiWriter.enableButton(btnSetAgent);
-            guiWriter.enableChoiceBox(choiceAgent);
+            guiWriter.disableElement(vboxModelPar);
+            guiWriter.disableElement(btnInitialize);
+            guiWriter.enableElement(btnSetAgent);
+            guiWriter.enableElement(choiceAgent);
+            guiWriter.enableElement(vboxAgentPar);
             choiceAgent.setOnAction(this::writeAgentParametersList);
         } catch (Exception e) {
             guiWriter.showError(e.getMessage());
@@ -250,7 +251,7 @@ public final class FirstGuiController implements Initializable {
                     choiceAgent.getValue());
             readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
             if (everythingIsSet()) {
-                guiWriter.enableButton(btnStart);
+                guiWriter.enableElement(btnStart);
             }
         } catch (Exception e) {
             guiWriter.showError(e.getMessage());
@@ -302,9 +303,10 @@ public final class FirstGuiController implements Initializable {
      */
     private void writeModelParametersList(final ActionEvent e) {
         choiceAgent.setOnAction(null);
-        guiWriter.disableChoiceBox(choiceAgent);
-        guiWriter.disableButton(btnSetAgent);
-        guiWriter.disableButton(btnStart);
+        guiWriter.disableElement(choiceAgent);
+        guiWriter.disableElement(btnSetAgent);
+        guiWriter.disableElement(btnStart);
+        guiWriter.enableElement(vboxModelPar);
         /*
          * detach the event handler from the choiceAgent and disable the choiceAgent
          * and the setAgent button to prevent the user to interact with them before the
@@ -317,7 +319,7 @@ public final class FirstGuiController implements Initializable {
         Parameters modelParameters = calculatorSupplier
                 .getModelParametersParameters(configurationSessionId);
         guiWriter.writeVBox(vboxModelPar, modelParameters);
-        guiWriter.enableButton(btnInitialize);
+        guiWriter.enableElement(btnInitialize);
     }
 
     /**

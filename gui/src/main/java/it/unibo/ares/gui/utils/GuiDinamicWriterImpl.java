@@ -7,23 +7,23 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import java.util.Collection;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * WriteOnGUIImpl is a class that implements the WriteOnGUI interface.
- * It provides methods to write data on a GUI.
+ * It provides methods to manage a GUI that needs to write and read
+ * parameters and write agents to a 2d map.
  */
 public class GuiDinamicWriterImpl implements GuiDinamicWriter {
 
     /**
-     * The writeVBox method writes a set of parameters to a VBox. It clears the
-     * VBox's children,
-     * then for each parameter, it creates a new TextField with the parameter's name
+     * The writeVBox method writes parameters to a VBox. For each parameter, 
+     * it creates a new TextField with the parameter's name
      * as the ID and the parameter's value as the text,
      * and adds the TextField to the VBox's children.
      *
@@ -32,7 +32,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      */
     @Override
     public void writeVBox(final VBox vbox, final Parameters parameters) {
-        // setting the style of the textfields and labels
+        // setting the default style of the textfields and labels
         final int txtSize = 13, lblSize = 15, domainSize = 13, marginBottom = 20, marginRightLeft = 10;
         /*
          * creating a label and a textfield for each parameter and setting his style,
@@ -78,62 +78,47 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     }
 
     /**
-     * This method writes a set of items to a ChoiceBox.
+     * This method writes a collection to a ChoiceBox.
      * It first clears the ChoiceBox, then adds all items from the set to the
      * ChoiceBox.
      *
      * @param choiceBox the ChoiceBox to which the items should be written
-     * @param set       the set of items to be written to the ChoiceBox
-     * @param <T>       the type of the items in the set and the ChoiceBox
+     * @param set       the collection of items to be written to the ChoiceBox
+     * @param <T>       the type of the items in the collection and the ChoiceBox
      */
     @Override
-    public <T> void writeChoiceBox(final ChoiceBox<T> choiceBox, final Set<T> set) {
+    public <T> void writeChoiceBox(final ChoiceBox<T> choiceBox, final Collection<T> collection) {
         choiceBox.getItems().clear();
-        choiceBox.getItems().addAll(set);
-    }
-
-    /**
-     * This method disables all the TextFields in the given VBox.
-     * It iterates over the children of the VBox, and if the child is a TextField,
-     * it disables it.
-     *
-     * @param vbox the VBox whose TextFields should be disabled
-     */
-    @Override
-    public void disableVBox(final VBox vbox) {
-        vbox.getChildren().stream().filter(node -> node instanceof TextField).map(node -> (TextField) node)
-                .forEach(textField -> {
-                    textField.setDisable(true);
-                });
+        choiceBox.getItems().addAll(collection);
     }
 
     /**
      * This method writes a map of positions and its relatives strings to a 2D map
      * represented by a
      * GridPane.
-     * It first clears the AnchorPane that will contain the new GridPane, then
+     * It first clears the container that will contain the new GridPane, then
      * iterates over the data in the
      * given Map.
-     * For each data entry, it creates a new TextField, sets its text to the agent's
+     * For each data entry, it creates a new label, sets its text to the agent's
      * name, and adds it to the GridPane at the position specified by the data
      * entry.
      *
      * @param items     The Map containing the data to be
      *                  written
      *                  to the map.
-     * @param container The AnchorPane that will contain the 2D map.
+     * @param container The container that will contain the 2D map.
      * @param width     The width of the map.
      * @param height    The height of the map.
      */
     @Override
-    public void write2dMap(final Map<Pos, String> items, final AnchorPane container, final int width,
+    public void write2dMap(final Map<Pos, String> items, final Pane container, final int width,
             final int height) {
         final int maxSizeGrid = 655, prefLblSize = 40;
         container.getChildren().clear();
         GridPane grid = new GridPane();
         grid.setMaxSize(maxSizeGrid, maxSizeGrid);
         /*
-         * creating a label for each position in the map and setting his min and max
+         * creating a label (cell) for each position in the map and setting his min and max
          * size
          */
         for (int i = 0; i < width; i++) {
@@ -145,6 +130,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
         }
         /*
          * setting the text of the textfield for each agent in the map
+         * (occupied positions)
          */
         items.forEach((pos, agent) -> {
             Label txt = new Label(agent);
@@ -172,26 +158,26 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     }
 
     /**
-     * This method disables the given button if it is not already disabled.
+     * This method disables the given element if it is not already disabled.
      *
-     * @param button the Button instance to be disabled
+     * @param elem the Node to be disabled
      */
     @Override
-    public void disableButton(final Button button) {
-        if (!button.isDisable()) {
-            button.setDisable(true);
+    public void disableElement(final Node element) {
+        if (!element.isDisable()) {
+            element.setDisable(true);
         }
     }
 
     /**
-     * This method enables the given button if it is not already enabled.
+     * This method enables the given Node if it is not already enabled.
      *
-     * @param button the Button instance to be enabled
+     * @param element the Node to be enabled
      */
     @Override
-    public void enableButton(final Button button) {
-        if (button.isDisable()) {
-            button.setDisable(false);
+    public void enableElement(final Node element) {
+        if (element.isDisable()) {
+            element.setDisable(false);
         }
     }
 
@@ -201,27 +187,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param vBox the VBox instance to be cleared
      */
     @Override
-    public void clearVBox(final VBox vBox) {
-        vBox.getChildren().clear();
-    }
-
-    /**
-     * This method disables the given ChoiceBox.
-     *
-     * @param choiceBox the ChoiceBox instance to be disabled
-     */
-    @Override
-    public void disableChoiceBox(final ChoiceBox<?> choiceBox) {
-        choiceBox.setDisable(true);
-    }
-
-    /**
-     * This method enables the given ChoiceBox.
-     *
-     * @param choiceBox the ChoiceBox instance to be enabled
-     */
-    @Override
-    public void enableChoiceBox(final ChoiceBox<?> choiceBox) {
-        choiceBox.setDisable(false);
+    public void clearVBox(VBox element) {
+        element.getChildren().clear();
     }
 }
