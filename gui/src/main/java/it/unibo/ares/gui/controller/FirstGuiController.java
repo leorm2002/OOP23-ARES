@@ -6,6 +6,7 @@ import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
+import it.unibo.ares.gui.utils.HandlerAdapter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -87,38 +88,18 @@ public final class FirstGuiController implements Initializable {
         guiWriter.disableElement(btnSetAgent);
         guiWriter.disableElement(btnInitialize);
         guiWriter.disableElement(choiceAgent);
-        choiceModel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent event) {
-                writeModelParametersList();
-            }
-        });
-        btnInitialize.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent event) {
-                initializeModel();
-            }
-        });
-
-        btnSetAgent.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent event) {
-                setAgentParameter();
-            }
-        });
-
-        btnStart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent event) {
-                startSecondGui();
-            }
-        });
+        choiceModel.setOnAction(new HandlerAdapter(this::writeModelParametersList));
+        btnInitialize.setOnAction(new HandlerAdapter(this::initializeModel));
+        btnSetAgent.setOnAction(new HandlerAdapter(this::setAgentParameter));
+        btnStart.setOnAction(new HandlerAdapter(this::startSecondGui));
     }
 
     /**
-     * This method reads the parameters for the model from the VBox, sets them in the calculator supplier,
+     * This method reads the parameters for the model from the VBox, sets them in
+     * the calculator supplier,
      * and then disables the VBox and the Initialize button.
-     * It also enables the Set Agent button and the ChoiceBox for the agents adding an event handler to it.
+     * It also enables the Set Agent button and the ChoiceBox for the agents adding
+     * an event handler to it.
      * If any exception occurs during this process, it shows the error message and
      * disables the Initialize button.
      */
@@ -155,28 +136,33 @@ public final class FirstGuiController implements Initializable {
      * The TextField's ID is then used as the key, and the TextField's text is
      * used as the value in the HashMap.
      *
-     * @param vbox   the VBox from which to read the parameters
-     * @param params the Parameters object from which to retrieve the parameter
-     *               types
-     * @param parameterSetter the BiConsumer that sets the parameter in the calculator
+     * @param vbox            the VBox from which to read the parameters
+     * @param params          the Parameters object from which to retrieve the
+     *                        parameter
+     *                        types
+     * @param parameterSetter the BiConsumer that sets the parameter in the
+     *                        calculator
      */
     private void readParamatersValueAndSet(final VBox vbox, final Parameters params,
             final BiConsumer<String, Object> parameterSetter) {
         /*
-         * iterate over the children of the vbox and if the child is a TextField, get its
+         * iterate over the children of the vbox and if the child is a TextField, get
+         * its
          * ID and use it to retrieve the parameter from the Parameters object. The
          * TextField's ID is then used as the key, and the TextField's text is used as
          * the value.
          */
         vbox.getChildren().stream().filter(node -> node instanceof TextField).map(node -> (TextField) node)
                 .forEach(txt -> {
-                    String typeToString = params.getParameter(txt.getId()).map(Parameter::getType).map(Class::getSimpleName)
+                    String typeToString = params.getParameter(txt.getId()).map(Parameter::getType)
+                            .map(Class::getSimpleName)
                             .orElse("");
                     Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
                     /*
                      * switch on the type of the parameter and cast the text of the TextField to the
                      * correct type for setting it in the calculator
-                     * switch on simpleName instead of the class because we can also have not built-in
+                     * switch on simpleName instead of the class because we can also have not
+                     * built-in
                      * types, like DirectionVectorImpl
                      */
                     switch (typeToString) {
@@ -233,8 +219,8 @@ public final class FirstGuiController implements Initializable {
                              * DirectionVectorImpl(Integer.parseInt(elementi[0]),
                              * Integer.parseInt(elementi[1]));
                              * if (!inDomainRange(params, txt.getId(), vector)) {
-                             *      showErrorAndDisable(vector + " out of domain range", btnStart);
-                             *      break;
+                             * showErrorAndDisable(vector + " out of domain range", btnStart);
+                             * break;
                              * }
                              * map.put(txt.getId(), vector);
                              * break;
@@ -246,7 +232,8 @@ public final class FirstGuiController implements Initializable {
     }
 
     /**
-     * This method reads the parameters for an from the VBox, sets them in the calculator supplier,
+     * This method reads the parameters for an from the VBox, sets them in the
+     * calculator supplier,
      * and then disables the VBox and the Set Agent button.
      * It also enables the Start button.
      * If any exception occurs during this process, it shows the error message and
@@ -274,6 +261,7 @@ public final class FirstGuiController implements Initializable {
      * It iterates over the agents and checks if all the parameters are set.
      * If all the parameters are set, it returns true, otherwise it returns false.
      * Helpfull to enable the start button.
+     * 
      * @return true if all the parameters are set, false otherwise
      */
     private boolean everythingIsSet() {
@@ -340,7 +328,7 @@ public final class FirstGuiController implements Initializable {
         Parent root;
         Stage stage = (Stage) btnStart.getScene().getWindow();
         try {
-            SecondGuiController.setSecondGuiController(configurationSessionId);
+            SecondGuiController.setConfigurationId(configurationSessionId);
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
             Scene scene = new Scene(root);
             stage.setTitle("ARES");

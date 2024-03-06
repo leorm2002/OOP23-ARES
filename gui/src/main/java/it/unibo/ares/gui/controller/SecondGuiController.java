@@ -5,6 +5,7 @@ import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
+import it.unibo.ares.gui.utils.HandlerAdapter;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,12 +28,13 @@ import java.util.ResourceBundle;
 public final class SecondGuiController extends DataReciever implements Initializable {
 
     /**
-     * GuiWriter is an instance of WriteOnGUIImpl used to write parameters on the
+     * GuiWriter is an instance of WriteOnGUIImpl used to write on the
      * GUI.
      */
     private GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
     /*
      * configurationSessionId is a string that holds the ID of the configuration
+     * simlationId is a string that holds the ID of the simulation
      * 
      */
     private static String configurationSessionId;
@@ -53,55 +55,14 @@ public final class SecondGuiController extends DataReciever implements Initializ
     private AnchorPane anchorPane;
 
     /**
-     * The btnPauseClicked method is an event handler that is called when the
-     * "Pause" button is clicked.
-     * It pauses the simulation and updates the GUI accordingly.
-    */
-    void pauseSimulation() {
-        calculatorSupplier.pauseSimulation(simulationId);
-    }
-
-    /**
-     * The btnRestartClicked method is an event handler that is called when the
-     * "Restart" button is clicked.
-     * It restarts the simulation and updates the GUI accordingly.
-     */
-    void restartSimulation() {
-        calculatorSupplier.startSimulation(simulationId);
-    }
-
-    /**
      * This static method sets the configuration session ID for the
      * SecondGuiController, so the SecondGuiController when initialized
      * can start a new simulation with the given id.
      *
      * @param configurationSessionId the configuration session ID to be set
      */
-    public static void setSecondGuiController(final String configurationSessionId) {
+    public static void setConfigurationId(final String configurationSessionId) {
         SecondGuiController.configurationSessionId = configurationSessionId;
-    }
-
-    /**
-     * The btnStopClicked method is an event handler that is called when the "Stop"
-     * button is clicked.
-     * It stops the simulation and updates the GUI accordingly, switching to scene1
-     * where the user can select a new model to initialize.
-     *
-     * @param event the ActionEvent instance representing the button click event
-     */
-    @FXML
-    void stopSimulation() {
-        calculatorSupplier.removeSimulation(simulationId);
-        Parent root;
-        try {
-            root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
-            Stage stage = (Stage) btnStop.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -109,6 +70,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * been
      * completely processed. It starts a simulation with the given configuration
      * session ID.
+     * It also sets the event handlers for the buttons in the GUI.
      *
      * @param arg0 The location used to resolve relative paths for the root object,
      *             or null if the location is not known.
@@ -118,15 +80,15 @@ public final class SecondGuiController extends DataReciever implements Initializ
     @Override
     public void initialize(final URL arg0, final ResourceBundle arg1) {
         simulationId = calculatorSupplier.startSimulation(configurationSessionId, this);
-        btnPause.setOnAction(event -> pauseSimulation());
-        btnRestart.setOnAction(event -> restartSimulation());
-        btnStop.setOnAction(event -> stopSimulation());
+        btnPause.setOnAction(new HandlerAdapter(this::pauseSimulation));
+        btnRestart.setOnAction(new HandlerAdapter(this::restartSimulation));
+        btnStop.setOnAction(new HandlerAdapter(this::stopSimulation));
     }
 
     /**
      * This method is called when the next item in the simulation is available.
      * It updates the GUI with the new simulation data on the JavaFX Application
-     * thread.
+     * thread. DATARECIEVER INTERFACE
      *
      * @param item The next simulation output data.
      */
@@ -136,6 +98,8 @@ public final class SecondGuiController extends DataReciever implements Initializ
             guiWriter.write2dMap(item.getData(), anchorPane, item.getWidth(), item.getHeight());
         });
     }
+
+    //METHODS TO HANDLE
 
     /**
      * This method is used to start the first GUI. It loads the scene from
@@ -157,4 +121,43 @@ public final class SecondGuiController extends DataReciever implements Initializ
         }
     }
 
+    /**
+     * The pauseSimulation method is called when the
+     * "Pause" button is clicked.
+     * It pauses the simulation and the GUI will not be updated until the
+     * simulation is restarted (no OnNext method called).
+     */
+    void pauseSimulation() {
+        calculatorSupplier.pauseSimulation(simulationId);
+    }
+
+    /**
+     * The restartSimulation method is called when the
+     * "Restart" button is clicked.
+     * It restarts the simulation and the GUI will be updated accordingly.
+     */
+    void restartSimulation() {
+        calculatorSupplier.startSimulation(simulationId);
+    }
+
+    /**
+     * The stopSimulation method  is called when the "Stop"
+     * button is clicked.
+     * It stops the simulation and updates the GUI accordingly, switching to scene1
+     * where the user can select a new model to initialize.
+     */
+    @FXML
+    void stopSimulation() {
+        calculatorSupplier.removeSimulation(simulationId);
+        Parent root;
+        try {
+            root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
+            Stage stage = (Stage) btnStop.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
