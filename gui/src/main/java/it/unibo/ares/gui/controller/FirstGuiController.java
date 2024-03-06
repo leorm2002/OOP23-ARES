@@ -7,8 +7,6 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import it.unibo.ares.gui.utils.HandlerAdapter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -72,8 +70,8 @@ public final class FirstGuiController implements Initializable {
      * injected.
      * This method initializes the choiceModel with the model names from the
      * calculator initializer.
-     * It also sets an action event handler for the choiceModel that writes the
-     * agents and model parameters list, and disables all the rest of the GUI
+     * It also sets an action event handler adapter for the FXML elements and disables 
+     * all the rest of the GUI
      * for preventing the user to interact with it before the model is selected.
      *
      * @param arg0 The location used to resolve relative paths for the root object,
@@ -99,9 +97,8 @@ public final class FirstGuiController implements Initializable {
      * the calculator supplier,
      * and then disables the VBox and the Initialize button.
      * It also enables the Set Agent button and the ChoiceBox for the agents adding
-     * an event handler to it.
-     * If any exception occurs during this process, it shows the error message and
-     * disables the Initialize button.
+     * an event handler adapter to it.
+     * If any exception occurs during this process, it shows the error message.
      */
     void initializeModel() {
         try {
@@ -117,24 +114,20 @@ public final class FirstGuiController implements Initializable {
             guiWriter.enableElement(btnSetAgent);
             guiWriter.enableElement(choiceAgent);
             guiWriter.enableElement(vboxAgentPar);
-            choiceAgent.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent event) {
-                    writeAgentParametersList();
-                }
-            });
+            choiceAgent.setOnAction(new HandlerAdapter(this::writeAgentParametersList));
         } catch (Exception e) {
             guiWriter.showError(e.getMessage());
         }
     }
 
     /**
-     * This method reads the parameters from the VBox and returns them as a HashMap.
+     * This method reads the parameters from the VBox and sets them in the
+     * calculator supplier.
      * It iterates over the children of the VBox, and if the child is a TextField,
      * it gets its ID and uses it to retrieve the parameter from the Parameters
      * object.
      * The TextField's ID is then used as the key, and the TextField's text is
-     * used as the value in the HashMap.
+     * used as the value in the calculator.
      *
      * @param vbox            the VBox from which to read the parameters
      * @param params          the Parameters object from which to retrieve the
@@ -207,24 +200,24 @@ public final class FirstGuiController implements Initializable {
                             }
                             break;
                         case "DirectionVectorImpl":
-                            /*
-                             * // cast to Direction Vector
-                             * // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
-                             * String[] elementi = txt.getText().split("\\s+");
-                             * 
-                             * if (elementi.length < 2) {
-                             * System.out.println("Inserire almeno due elementi separati da spazio!");
-                             * }
-                             * DirectionVectorImpl vector = new
-                             * DirectionVectorImpl(Integer.parseInt(elementi[0]),
-                             * Integer.parseInt(elementi[1]));
-                             * if (!inDomainRange(params, txt.getId(), vector)) {
-                             * showErrorAndDisable(vector + " out of domain range", btnStart);
-                             * break;
-                             * }
-                             * map.put(txt.getId(), vector);
-                             * break;
-                             */
+                        /*    
+                            // cast to Direction Vector
+                            // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
+                            String[] elementi = txt.getText().split("\\s+");
+                            
+                            if (elementi.length < 2) {
+                                guiWriter.showError("Inserire almeno due elementi separati da spazio!");
+                                return;
+                            }
+                            DirectionVectorImpl vector = new DirectionVectorImpl(Integer.parseInt(elementi[0]),
+                                    Integer.parseInt(elementi[1]));
+                            try {
+                                parameterSetter.accept(txt.getId(), vector);
+                            } catch (Exception e) {
+                                guiWriter.showError(e.getMessage());
+                            }
+                            break;
+                        */
                         default:
                             break;
                     }
@@ -233,11 +226,9 @@ public final class FirstGuiController implements Initializable {
 
     /**
      * This method reads the parameters for an from the VBox, sets them in the
-     * calculator supplier,
-     * and then disables the VBox and the Set Agent button.
-     * It also enables the Start button.
-     * If any exception occurs during this process, it shows the error message and
-     * disables the Set Agent button.
+     * calculator supplier, and then enables the Start button if all the parameters
+     * are set.
+     * If any exception occurs during this process, it shows the error message.
      */
     void setAgentParameter() {
         try {

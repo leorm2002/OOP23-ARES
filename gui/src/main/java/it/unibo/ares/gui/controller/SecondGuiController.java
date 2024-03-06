@@ -70,7 +70,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * been
      * completely processed. It starts a simulation with the given configuration
      * session ID.
-     * It also sets the event handlers for the buttons in the GUI.
+     * It also sets the event handler adapters for the buttons in the GUI.
      *
      * @param arg0 The location used to resolve relative paths for the root object,
      *             or null if the location is not known.
@@ -122,8 +122,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     }
 
     /**
-     * The pauseSimulation method is called when the
-     * "Pause" button is clicked.
+     * The pauseSimulation method is called when we want to stop the simulation.
      * It pauses the simulation and the GUI will not be updated until the
      * simulation is restarted (no OnNext method called).
      */
@@ -132,8 +131,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     }
 
     /**
-     * The restartSimulation method is called when the
-     * "Restart" button is clicked.
+     * The restartSimulation method is called when we want to restart the simulation.
      * It restarts the simulation and the GUI will be updated accordingly.
      */
     void restartSimulation() {
@@ -141,8 +139,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     }
 
     /**
-     * The stopSimulation method  is called when the "Stop"
-     * button is clicked.
+     * The stopSimulation method  is called when we want to stop the simulation.
      * It stops the simulation and updates the GUI accordingly, switching to scene1
      * where the user can select a new model to initialize.
      */
