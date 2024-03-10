@@ -1,6 +1,5 @@
 package it.unibo.ares.cli;
 
-import java.util.Optional;
 
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputDataApi;

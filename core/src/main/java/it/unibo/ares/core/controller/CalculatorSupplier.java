@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This class is used as an entry point for the simulation system, it is used to
  * access the initialization and the controller of the simulations.
  */
+@SuppressFBWarnings(value = { "MS_EXPOSE_REP", "EI_EXPOSE_REP"  }, justification = "I prefer to suppress these FindBugs warnings")
 public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 

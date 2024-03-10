@@ -19,7 +19,7 @@ public final class StringCaster {
         CAST_MAP.put(Short.class, Short::parseShort);
         CAST_MAP.put(Byte.class, Byte::parseByte);
         CAST_MAP.put(boolean.class, Boolean::parseBoolean);
-        CAST_MAP.put(String.class, s -> s);
+        CAST_MAP.put(String.class, Function.identity());
     }
 
     /**

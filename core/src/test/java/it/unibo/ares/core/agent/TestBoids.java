@@ -1,6 +1,8 @@
 package it.unibo.ares.core.agent;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,6 +45,7 @@ class TestBoids {
                 Set<PosImpl> outside = IntStream.range(-10, 10).boxed()
                                 .flatMap(x -> IntStream.range(-10, 10).mapToObj(y -> new PosImpl(x, y)))
                                 .filter(p -> !inside.contains(p))
+                                .filter(p -> !p.equals(pos))
                                 .collect(Collectors.toSet());
                 // CHECKSTYLE: MagicNumber ON
                 Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")

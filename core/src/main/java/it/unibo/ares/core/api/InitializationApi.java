@@ -4,6 +4,9 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 
 import java.util.Set;
 
+/**
+ * API for the initialization of the simulation.
+ */
 public interface InitializationApi {
 
     /**

@@ -4,6 +4,9 @@ import it.unibo.ares.core.utils.pos.Pos;
 
 import java.util.Map;
 
+/**
+ * API for the output of the simulation.
+ */
 public interface SimulationOutputDataApi {
 
     /**

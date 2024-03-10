@@ -37,17 +37,17 @@ public class ApplicationRunner {
         } while (!modes.contains(mode));
         switch (mode) {
             case TERMINAL:
-                System.out.println("Avvio in modalità cli");
+                System.out.println("Avvio in modalita' cli");
                 threads.add(
                         new Thread(() -> it.unibo.ares.cli.App.mainLib(args)));
                 break;
             case GRAFIC:
-                System.out.println("Avvio in modalità grafica");
+                System.out.println("Avvio in modalita' grafica");
                 threads.add(
                         new Thread(() -> it.unibo.ares.gui.App.main(args)));
                 break;
             case COMBINED:
-                System.out.println("Avvio in modalità entrambe");
+                System.out.println("Avvio di entrambe");
                 threads.addAll(List.of(
                         new Thread(() -> it.unibo.ares.cli.App.main(args)),
                         new Thread(() -> it.unibo.ares.gui.App.main(args))));
