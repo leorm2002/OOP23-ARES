@@ -2,7 +2,8 @@
 package it.unibo.ares.core.model;
 
 import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.VirusAgentFactory;
+import it.unibo.ares.core.agent.IVirusAgentFactory;
+import it.unibo.ares.core.agent.PVirusAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
@@ -71,17 +72,14 @@ public final class VirusModelFactory implements ModelFactory {
 
         // Create a new state and populate it with agents at valid positions
         UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        VirusAgentFactory virusFactory = new VirusAgentFactory();
+        PVirusAgentFactory factoryP = new PVirusAgentFactory();
+        IVirusAgentFactory factoryI = new IVirusAgentFactory();
         for (int i = 0; i < p; i++) {
-                virusFactory.setTypeOfAgent('P');
-                Agent agent = virusFactory.createAgent();
-                agent.setType("P");
+                Agent agent = factoryP.createAgent();
                 state.addAgent(getter.next(), agent);
         }
         for (int i = 0; i < pInfected; i++) {
-                virusFactory.setTypeOfAgent('I');
-                Agent agent = virusFactory.createAgent();
-                agent.setType("I");
+                Agent agent = factoryI.createAgent();
                 state.addAgent(getter.next(), agent);
         }
         return state;
