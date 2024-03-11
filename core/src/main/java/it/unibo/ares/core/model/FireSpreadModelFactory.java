@@ -1,9 +1,8 @@
 
 package it.unibo.ares.core.model;
 
-import it.unibo.ares.core.agent.Agent;
-import it.unibo.ares.core.agent.AgentFactory;
-import it.unibo.ares.core.agent.FireSpreadAgentFactory;
+import it.unibo.ares.core.agent.FireAgentFactory;
+import it.unibo.ares.core.agent.TreeAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
@@ -15,6 +14,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
 
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Generate an instance of a fire spread model. It permits the
@@ -50,8 +50,11 @@ public class FireSpreadModelFactory implements ModelFactory {
          */
         private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
                 Integer size = parameters.getParameter("size", Integer.class).orElseThrow().getValue();
-                Integer nf = parameters.getParameter("numeroAgentiTipoF", Integer.class).get().getValue();
+                Integer nf = parameters.getParameter("numFire", Integer.class).get().getValue();
+                Double veg = parameters.getParameter("vegetation", Double.class).get().getValue();
+
                 Integer total = size * size;
+                Integer nt = (int) ((total - nf) * veg);
 
                 State state = new StateImpl(size, size);
                 if (total < nf) {
@@ -62,16 +65,19 @@ public class FireSpreadModelFactory implements ModelFactory {
                                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                                 .map(Pos.class::cast)
                                 .toList();
-
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-                AgentFactory fireSpreadFactory = new FireSpreadAgentFactory();
 
-                IntStream.range(0, total).forEach(i -> {
-                        Agent agent = (i < nf ? ((FireSpreadAgentFactory) fireSpreadFactory).getFireModelAgent()
-                                        : ((FireSpreadAgentFactory) fireSpreadFactory).getTreeModelAgent());
-                        agent.setType(i < nf ? "F" : "T");
-                        state.addAgent(getter.next(), agent);
-                });
+                FireAgentFactory fireAgentFactory = new FireAgentFactory();
+                Stream
+                                .generate(fireAgentFactory::createAgent)
+                                .limit(nf)
+                                .forEach(a -> state.addAgent(getter.next(), a));
+
+                TreeAgentFactory treeAgentFactory = new TreeAgentFactory();
+                Stream
+                                .generate(treeAgentFactory::createAgent)
+                                .limit(nt)
+                                .forEach(a -> state.addAgent(getter.next(), a));
 
                 return state;
         }
@@ -86,14 +92,18 @@ public class FireSpreadModelFactory implements ModelFactory {
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 return builder
-                                .addParameter(new ParameterImpl<>("numeroAgentiTipoF", Integer.class,
-                                                new ParameterDomainImpl<Integer>("Numero di agenti (1-n)", n -> n > 0),
+                                .addParameter(new ParameterImpl<>("numFire", Integer.class,
+                                                new ParameterDomainImpl<Integer>("Numero di agenti fuoco (1-n)",
+                                                                n -> n > 0),
+                                                true))
+                                .addParameter(new ParameterImpl<>("vegetation", Double.class,
+                                                new ParameterDomainImpl<Double>("Percentuale di vegetazione (0.0-1.0)",
+                                                                (Double d) -> d >= 0.0 && d <= 1.0),
                                                 true))
                                 .addParameter(new ParameterImpl<>("size", Integer.class,
                                                 new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)",
                                                                 n -> n > 0),
                                                 true))
-                                .addParameter(new ParameterImpl<>("windChange", Double.class, false))
                                 .addExitFunction((o, n) -> n.getAgents().isEmpty())
                                 .addInitFunction(t -> {
                                         try {
