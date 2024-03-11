@@ -171,25 +171,13 @@ public final class PVirusAgentFactory implements AgentFactory {
             // avviene un'infezione
             if (!isAgentOfSameType.test(currentState.getAgentAt(newPos).get(),
                     currentState.getAgentAt(agentPosition).get())) {
-                if (currentState.getAgentAt(newPos).get().getType().equals("I")) {
-                    // l'agente in agentPos è sano, l'agente in newPos è infetto
-                    // probabile infezione dell'agente in agentPos
-                    Optional<Agent> newAgent = infectPerson(agent, agentPosition);
-                    if (newAgent.isPresent()) {
-                        currentState.removeAgent(agentPosition, agent);
-                        currentState.addAgent(agentPosition, newAgent.get());
-                        return currentState;
-                    }
-                } else {
-                    // l'agente in agentPos è infetto, l'agente in newPos è sano
-                    // probabile infezione dell'agente in newPos
-                    Optional<Agent> newAgent = infectPerson(currentState.getAgentAt(newPos).get(),
-                            newPos);
-                    if (newAgent.isPresent()) {
-                        currentState.removeAgent(newPos, currentState.getAgentAt(newPos).get());
-                        currentState.addAgent(newPos, newAgent.get());
-                        return currentState;
-                    }
+                // l'agente in agentPos è sano, l'agente in newPos è infetto
+                // probabile infezione dell'agente in agentPos
+                Optional<Agent> newAgent = infectPerson(agent, agentPosition);
+                if (newAgent.isPresent()) {
+                    currentState.removeAgent(agentPosition, agent);
+                    currentState.addAgent(agentPosition, newAgent.get());
+                    return currentState;
                 }
             }
             // se la nuova posizione è occupata da due agenti dello stesso tipo, cambio

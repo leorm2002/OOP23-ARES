@@ -125,8 +125,23 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
             for (int j = 0; j < height; j++) {
                 Label lbl = new Label();
                 lbl.setPrefSize(prefLblSize, prefLblSize);
+                lbl.setMinSize(prefLblSize/2, prefLblSize/2);
                 grid.add(lbl, i, j);
             }
+        }
+        /*
+         * scale the dimension of the textfield in the gridpane based on the width of the
+         * gridpane
+         */
+        int txtSize;
+        if (width >= 22) {
+            txtSize = 16;
+        }
+        else if (width >= 25) {
+            txtSize = 14;
+        }
+        else {
+            txtSize = prefLblSize / 2;
         }
         /*
          * setting the text of the textfield for each agent in the map
@@ -134,7 +149,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          */
         items.forEach((pos, agent) -> {
             Label txt = new Label(agent);
-            setElementStyle(txt, prefLblSize/2);
+            setElementStyle(txt, txtSize);
             grid.add(txt, pos.getX(), pos.getY());
         });
         grid.setGridLinesVisible(true);

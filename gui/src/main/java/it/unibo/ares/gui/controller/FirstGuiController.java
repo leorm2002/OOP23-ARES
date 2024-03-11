@@ -172,6 +172,11 @@ public final class FirstGuiController implements Initializable {
                             break;
                         case "Integer":
                             try {
+                                int value = Integer.parseInt(txt.getText());
+                                if (txt.getId().equals("size") && value > 30) {
+                                    guiWriter.showError("The size of the space must be less than 30!");
+                                    return;
+                                }
                                 parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                             } catch (Exception e) {
                                 guiWriter.showError(e.getMessage());
