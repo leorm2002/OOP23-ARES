@@ -104,7 +104,9 @@ public class FireSpreadModelFactory implements ModelFactory {
                                                 new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)",
                                                                 n -> n > 0),
                                                 true))
-                                .addExitFunction((o, n) -> n.getAgents().isEmpty())
+                                .addExitFunction((o, n) -> n.getAgents().stream()
+                                                .map(a -> a.getSecond().getType()).distinct()
+                                                .allMatch(t -> !t.equals("F")))
                                 .addInitFunction(t -> {
                                         try {
                                                 return fireSpreadInitializer(t);
