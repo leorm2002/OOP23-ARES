@@ -1,5 +1,6 @@
 package it.unibo.ares.core.agent;
 
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
@@ -55,6 +56,67 @@ public final class PredatorPreyAgentFactory implements AgentFactory {
         Set<Pos> neighbors = getNeighboringPositions(state, position, visionRadius);
         return neighbors.stream().filter(p -> state.getAgentAt(p).isPresent())
                 .filter(p -> PREY.equals(state.getAgentAt(p).get().getType())).findFirst();
+    }
+
+    public Agent createPreyAgent() {
+        AgentBuilder builder = new AgentBuilderImpl();
+
+        builder.addParameter(new ParameterImpl<Integer>("visionRadiusPrey", Integer.class,
+                new ParameterDomainImpl<>("Raggio di visione dell'agente preda (0 - n)", (Integer i) -> i > 0), true));
+
+        builder.addStrategy((state, pos) -> {
+
+            var visionRadius = state.getAgentAt(pos)
+                    .orElseThrow(() -> new IllegalAccessError("No agents at that pos"))
+                    .getParameters()
+                    .getParameter("visionRadiusPrey", Integer.class)
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Agent has no visionRadius parameter"))
+                    .getValue();
+
+            Set<Pos> predatorPositions = getNeighboringPositions(state, pos, visionRadius).stream()
+                    .filter(p -> state.getAgentAt(pos).isPresent()
+                            && PREDATOR.equals(state.getAgentAt(pos).get().getType()))
+                    .collect(Collectors.toSet());
+
+            if (!predatorPositions.isEmpty()) {
+                Pos escapeRoute = findEscapeRoute(state, pos, predatorPositions);
+                state.moveAgent(pos, escapeRoute);
+            }
+            return state;
+        });
+
+        var agent = builder.build();
+        agent.setType(PREY);
+        return agent;
+    }
+
+    public Agent createPredatorAgent() {
+        AgentBuilder builder = new AgentBuilderImpl();
+
+        builder.addParameter(new ParameterImpl<Integer>("visionRadiusPredator", Integer.class,
+                new ParameterDomainImpl<>("Raggio di visione dell'agente predatore (0 - n)", (Integer i) -> i > 0),
+                true));
+
+        builder.addStrategy((state, pos) -> {
+            var visionRadius = state.getAgentAt(pos)
+                    .orElseThrow(() -> new IllegalAccessError("No agents at that pos"))
+                    .getParameters()
+                    .getParameter("visionRadiusPredator", Integer.class)
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Agent has no visionRadiusPredator parameter"))
+                    .getValue();
+
+            findPrey(state, pos, visionRadius).ifPresent(preyPosition -> {
+                state.removeAgent(preyPosition, state.getAgentAt(preyPosition).get());
+                state.moveAgent(pos, preyPosition);
+            });
+            return state;
+        });
+
+        var agent = builder.build();
+        agent.setType(PREDATOR);
+        return agent;
     }
 
     @Override

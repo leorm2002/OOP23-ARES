@@ -30,11 +30,14 @@ public final class PredatorPreyModelFactory implements ModelFactory {
         private State predatorPreyInitializer(final Parameters parameters) throws IllegalAccessException {
                 int size = parameters.getParameter("size", Integer.class)
                                 .orElseThrow(IllegalAccessException::new).getValue();
-                int numAgents = parameters.getParameter("numeroAgenti", Integer.class)
+                int numAgentsPrey = parameters.getParameter("numeroAgentiPreda", Integer.class)
+                                .orElseThrow(IllegalAccessException::new).getValue();
+
+                int numAgentsPredator = parameters.getParameter("numeroAgentiCacciatori", Integer.class)
                                 .orElseThrow(IllegalAccessException::new).getValue();
 
                 State state = new StateImpl(size, size);
-                if (size * size < numAgents) {
+                if (size * size < numAgentsPrey + numAgentsPredator) {
                         throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
                 }
 
@@ -43,11 +46,19 @@ public final class PredatorPreyModelFactory implements ModelFactory {
                                 .collect(Collectors.toList());
 
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-                AgentFactory predatorPreyFactory = new PredatorPreyAgentFactory();
-                Stream
-                                .generate(predatorPreyFactory::createAgent)
-                                .limit(numAgents)
-                                .forEach(a -> state.addAgent(getter.next(), a));
+                PredatorPreyAgentFactory predatorPreyFactory = new PredatorPreyAgentFactory();
+
+                Stream.generate(predatorPreyFactory::createPreyAgent)
+                                .limit(numAgentsPrey).forEach(a -> state.addAgent(getter.next(), a));
+
+                Stream.generate(predatorPreyFactory::createPredatorAgent)
+                                .limit(numAgentsPredator).forEach(a -> state.addAgent(getter.next(), a));
+
+                var x = state.getAgents().stream().map(a -> a.getSecond()).filter(a -> (a.getType() == "Prey"
+                                && !a.getParameters().getParameter("visionRadiusPrey").isPresent())
+                                || (a.getType() == "Predator"
+                                                && !a.getParameters().getParameter("visionRadiusPredator").isPresent()))
+                                .toList();
 
                 return state;
         }
@@ -56,8 +67,12 @@ public final class PredatorPreyModelFactory implements ModelFactory {
         public Model getModel() {
                 ModelBuilder builder = new ModelBuilderImpl();
                 return builder
-                                .addParameter(new ParameterImpl<>("numeroAgenti", Integer.class,
-                                                new ParameterDomainImpl<Integer>("Numero di agenti", n -> n >= 0),
+                                .addParameter(new ParameterImpl<>("numeroAgentiPreda", Integer.class,
+                                                new ParameterDomainImpl<Integer>("Numero di agenti preda", n -> n >= 0),
+                                                true))
+                                .addParameter(new ParameterImpl<>("numeroAgentiCacciatori", Integer.class,
+                                                new ParameterDomainImpl<Integer>("Numero di agenti cacciatori",
+                                                                n -> n >= 0),
                                                 true))
                                 .addParameter(new ParameterImpl<>("size", Integer.class,
                                                 new ParameterDomainImpl<Integer>("Dimensione della griglia",
@@ -65,7 +80,7 @@ public final class PredatorPreyModelFactory implements ModelFactory {
                                                 true))
                                 .addExitFunction(
                                                 (o, n) -> n.getAgents().stream().map(a -> a.getSecond().getType())
-                                                                .distinct().count() < 2)
+                                                                .distinct().count() < 2 || o.equals(n))
                                 .addInitFunction(t -> {
                                         try {
                                                 return predatorPreyInitializer(t);
