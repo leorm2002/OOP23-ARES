@@ -1,7 +1,8 @@
 package it.unibo.ares.core.model;
 
 import it.unibo.ares.core.agent.AgentFactory;
-import it.unibo.ares.core.agent.PredatorPreyAgentFactory;
+import it.unibo.ares.core.agent.PredatorAgentFactory;
+import it.unibo.ares.core.agent.PreyAgentFactory;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
@@ -46,19 +47,14 @@ public final class PredatorPreyModelFactory implements ModelFactory {
                                 .collect(Collectors.toList());
 
                 UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-                PredatorPreyAgentFactory predatorPreyFactory = new PredatorPreyAgentFactory();
+                AgentFactory predatorFactory = new PredatorAgentFactory();
+                AgentFactory preyFactory = new PreyAgentFactory();
 
-                Stream.generate(predatorPreyFactory::createPreyAgent)
+                Stream.generate(predatorFactory::createAgent)
                                 .limit(numAgentsPrey).forEach(a -> state.addAgent(getter.next(), a));
 
-                Stream.generate(predatorPreyFactory::createPredatorAgent)
+                Stream.generate(preyFactory::createAgent)
                                 .limit(numAgentsPredator).forEach(a -> state.addAgent(getter.next(), a));
-
-                var x = state.getAgents().stream().map(a -> a.getSecond()).filter(a -> (a.getType() == "Prey"
-                                && !a.getParameters().getParameter("visionRadiusPrey").isPresent())
-                                || (a.getType() == "Predator"
-                                                && !a.getParameters().getParameter("visionRadiusPredator").isPresent()))
-                                .toList();
 
                 return state;
         }
