@@ -97,7 +97,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (true || !isThresholdSatisfied(state, pos, agent)) { //TODO
+            if (!isThresholdSatisfied(state, pos, agent)) { 
                 Optional<PosImpl> newPos = getFreePositionIfAvailable(state, agent);
                 newPos.ifPresent(p -> state.moveAgent(pos, newPos.get()));
             }

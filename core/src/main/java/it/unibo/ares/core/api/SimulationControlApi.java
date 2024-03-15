@@ -2,6 +2,9 @@ package it.unibo.ares.core.api;
 
 import java.util.List;
 
+/**
+ * This interface provides methods to control the simulation.
+ */
 public interface SimulationControlApi {
 
     /**

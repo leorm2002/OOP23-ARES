@@ -1,6 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,19 +14,12 @@ final class EntityImplTest {
     private EntityImpl entity;
 
     /**
-     * Istantiate a new EntityImpl before each test.
-     */
-    @BeforeEach
-    public void setUp() {
-        entity = new EntityImpl();
-    }
-
-    /**
      * Should throw an IllegalStateException if the name is not set and we try to
      * get it.
      */
     @Test
     void testGetName() {
+        entity = new EntityImpl();
         assertThrows(IllegalStateException.class, () -> {
             entity.getName();
         });
@@ -38,6 +30,7 @@ final class EntityImplTest {
      */
     @Test
     void testSetName() {
+        entity = new EntityImpl();
         String name = "Test Name";
         entity.setName(name);
         assertEquals(name, entity.getName());
@@ -48,6 +41,7 @@ final class EntityImplTest {
      */
     @Test
     void testSetNameWithNull() {
+        entity = new EntityImpl();
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setName(null);
         });

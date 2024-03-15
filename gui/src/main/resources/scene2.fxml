@@ -11,7 +11,7 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="111.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnStop" mnemonicParsing="false" onAction="#btnStoplicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" text="STOP">
+            <Button fx:id="btnStop" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" text="STOP">
                <HBox.margin>
                   <Insets bottom="30.0" left="50.0" top="30.0" />
                </HBox.margin>
@@ -19,7 +19,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnPause" alignment="CENTER" mnemonicParsing="false" onAction="#btnPauseClicked" prefHeight="200.0" prefWidth="200.0" text="PAUSE">
+            <Button fx:id="btnPause" alignment="CENTER" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" text="PAUSE">
                <HBox.margin>
                   <Insets bottom="30.0" left="50.0" right="10.0" top="30.0" />
                </HBox.margin>
@@ -27,7 +27,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnRestart" alignment="CENTER" mnemonicParsing="false" onAction="#btnRestartClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" text="RESTART">
+            <Button fx:id="btnRestart" alignment="CENTER" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" text="RESTART">
                <font>
                   <Font size="20.0" />
                </font>

@@ -40,7 +40,9 @@ class SimulationInitializerTest {
         String simId = simulationInitializer.setModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
+        //CHECKSTYLE:OFF: MagicNumber è una size per provare il metodo
         simulationInitializer.setModelParameter(simId, "size", 15);
+        //CHECKSTYLE:ON: MagicNumber
         assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
     }
 
@@ -51,7 +53,9 @@ class SimulationInitializerTest {
         String simId = simulationInitializer.setModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
+        // CHECKSTYLE:OFF: MagicNumber è una size per provare il metodo
         simulationInitializer.setModelParameter(simId, "size", 15);
+        // CHECKSTYLE:ON: MagicNumber
         assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
         Set<String> agents = simulationInitializer.getAgentsSimplified(simId);
         String agent = agents.stream().findAny().get();
