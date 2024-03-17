@@ -26,6 +26,7 @@ public final class FireAgentFactory implements AgentFactory {
         private DirectionVector windDirection;
         private Double windChange;
         private Random r;
+        private ExtingueshedAgentFactory eaf;
 
         /**
          * Constructor for the FireAgentFactory.
@@ -34,6 +35,7 @@ public final class FireAgentFactory implements AgentFactory {
                 this.r = new Random();
                 this.windChange = 0.0;
                 this.windDirection = getRandomDirection();
+                this.eaf = new ExtingueshedAgentFactory();
         }
 
         /**
@@ -242,9 +244,9 @@ public final class FireAgentFactory implements AgentFactory {
                 consumeFuel(agent);
 
                 if (isExtinguished(agent)) {
-                        Agent newAgent = getExtingueshedModelAgent(0.0);
+                        Agent exAgent = eaf.createAgent();
                         currentState.removeAgent(agentPosition, agent);
-                        currentState.addAgent(agentPosition, newAgent);
+                        currentState.addAgent(agentPosition, exAgent);
                 } else {
                         Set<Pos> spreadPos = getSpreadPositionIfAvailable(currentState, agentPosition, agent);
                         spreadPos.forEach(newPos -> spreadFire(currentState, newPos, agent));
@@ -261,7 +263,7 @@ public final class FireAgentFactory implements AgentFactory {
          * 
          * @return An instance of the Fire Agent.
          */
-        public Agent getFireModelAgent(final Integer spread, final Double fuel, final Double cons) {
+        private Agent getFireModelAgent(final Integer spread, final Double fuel, final Double cons) {
                 AgentBuilder b = new AgentBuilderImpl();
                 b
                                 .addParameter(new ParameterImpl<>("spread", spread, false))
@@ -276,29 +278,9 @@ public final class FireAgentFactory implements AgentFactory {
         }
 
         /**
-         * Builds the Extinguished Agent.
+         * Builds the Fire Agent.
          * 
-         * @param flammability flammability
-         * 
-         * @return An instance of the Extinguished Agent.
-         */
-        public Agent getExtingueshedModelAgent(final Double flammability) {
-                AgentBuilder b = new AgentBuilderImpl();
-
-                b
-                                .addParameter(new ParameterImpl<>("flammability", flammability, false))
-                                .addStrategy((state, pos) -> state)
-                                .build();
-
-                Agent a = b.build();
-                a.setType("E");
-                return a;
-        }
-
-        /**
-         * Builds the Fire Spread Agent.
-         * 
-         * @return An instance of the Fire Spread Agent.
+         * @return An instance of the Fire Agent.
          */
         @Override
         public Agent createAgent() {

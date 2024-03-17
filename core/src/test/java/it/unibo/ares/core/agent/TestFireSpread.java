@@ -26,7 +26,10 @@ public class TestFireSpread {
                 // Creates a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(3, 3);
-                Agent fireAgent1 = fireFactory.getFireModelAgent(1, 1.0, 0.5);
+                Agent fireAgent1 = fireFactory.createAgent();
+                fireAgent1.setParameter("spread", 1);
+                fireAgent1.setParameter("fuel", 1.0);
+                fireAgent1.setParameter("consumption", 0.5);
                 state.addAgent(pos, fireAgent1);
 
                 // The agent should not move
@@ -53,14 +56,19 @@ public class TestFireSpread {
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
-                Agent fireAgent1 = fireFactory.getFireModelAgent(1, 1.0, 0.3);
+                Agent fireAgent1 = fireFactory.createAgent();
+                fireAgent1.setParameter("spread", 1);
+                fireAgent1.setParameter("fuel", 1.0);
+                fireAgent1.setParameter("consumption", 0.3);
                 state.addAgent(pos, fireAgent1);
                 // CHECKSTYLE: MagicNumber ON
 
                 // CHECKSTYLE: MagicNumber OFF
                 // Create a Tree-type Agent, fuel 0.5 and flammability 0.3
                 Pos pos2 = new PosImpl(2, 2);
-                Agent treeAgent1 = treeFactory.getTreeModelAgent(0.5, 0.3);
+                Agent treeAgent1 = treeFactory.createAgent();
+                treeAgent1.setParameter("fuel", 0.5);
+                treeAgent1.setParameter("flammability", 0.3);
                 state.addAgent(pos2, treeAgent1);
                 // CHECKSTYLE: MagicNumber ON
 
@@ -88,7 +96,10 @@ public class TestFireSpread {
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
-                Agent fireAgent1 = fireFactory.getFireModelAgent(1, 1.0, 0.3);
+                Agent fireAgent1 = fireFactory.createAgent();
+                fireAgent1.setParameter("spread", 1);
+                fireAgent1.setParameter("fuel", 1.0);
+                fireAgent1.setParameter("consumption", 0.3);
                 state.addAgent(pos, fireAgent1);
                 // CHECKSTYLE: MagicNumber ON
 
@@ -99,10 +110,13 @@ public class TestFireSpread {
                 PosImpl pos4 = new PosImpl(2, 2);
 
                 // Creates some Tree-type Agent with fuel 0.5 and flammability 0.3
-                state.addAgent(pos1, treeFactory.getTreeModelAgent(0.5, 0.1));
-                state.addAgent(pos2, treeFactory.getTreeModelAgent(0.5, 0.1));
-                state.addAgent(pos3, treeFactory.getTreeModelAgent(0.5, 0.1));
-                state.addAgent(pos4, treeFactory.getTreeModelAgent(0.5, 0.1));
+                Agent treeAgent = treeFactory.createAgent();
+                treeAgent.setParameter("fuel", 0.5);
+                treeAgent.setParameter("flammability", 0.1);
+                state.addAgent(pos1, treeAgent);
+                state.addAgent(pos2, treeAgent);
+                state.addAgent(pos3, treeAgent);
+                state.addAgent(pos4, treeAgent);
                 // CHECKSTYLE: MagicNumber ON
 
                 // The fire should spread to the tree
@@ -134,7 +148,10 @@ public class TestFireSpread {
                 // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
                 // spread 1, fuel 1.0 and consumption 0.3
                 Pos pos = new PosImpl(0, 0);
-                Agent fireAgent = fireFactory.getFireModelAgent(1, 1.0, 0.3);
+                Agent fireAgent = fireFactory.createAgent();
+                fireAgent.setParameter("spread", 1);
+                fireAgent.setParameter("fuel", 1.0);
+                fireAgent.setParameter("consumption", 0.3);
                 state.addAgent(pos, fireAgent);
                 // CHECKSTYLE: MagicNumber ON
 
@@ -145,10 +162,13 @@ public class TestFireSpread {
                 PosImpl pos4 = new PosImpl(2, 2);
 
                 // Creates some Tree-type Agent with fuel 0.5 and flammability 0.1
-                state.addAgent(pos1, treeFactory.getTreeModelAgent(0.5, 0.1));
-                state.addAgent(pos2, treeFactory.getTreeModelAgent(0.5, 0.1));
-                state.addAgent(pos3, treeFactory.getTreeModelAgent(0.5, 0.1));
-                state.addAgent(pos4, treeFactory.getTreeModelAgent(0.5, 0.1));
+                Agent treeAgent = treeFactory.createAgent();
+                treeAgent.setParameter("fuel", 0.5);
+                treeAgent.setParameter("flammability", 0.1);
+                state.addAgent(pos1, treeAgent);
+                state.addAgent(pos2, treeAgent);
+                state.addAgent(pos3, treeAgent);
+                state.addAgent(pos4, treeAgent);
                 // CHECKSTYLE: MagicNumber ON
 
                 fireAgent.tick(state, pos);
