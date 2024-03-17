@@ -180,6 +180,6 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         }
         return new Pair<String, Simulation>(initializationId,
                 new SimulationImpl(initializedModels.get(initializationId).getFirst(),
-                        initializedModels.get(initializationId).getSecond(), 500));
+                        initializedModels.get(initializationId).getSecond(), DEFAULTTICKRATE));
     }
 }

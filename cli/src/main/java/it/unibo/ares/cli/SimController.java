@@ -1,6 +1,5 @@
 package it.unibo.ares.cli;
 
-
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputDataApi;
 import it.unibo.ares.core.controller.CalculatorSupplier;
@@ -53,9 +52,10 @@ public final class SimController extends DataReciever {
     /**
      * Starts the simulation and waits for user input to control the simulation.
      */
-    public void startSimulation() {
+    public void startSimulation(Integer stepSize) {
         System.out.println("Inizio simulazione");
         this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
+        CalculatorSupplier.getInstance().setTickRate(inizializationId, stepSize);
         Thread reader = new Thread(new AsyncReader(this::readChar, this::isOver));
         reader.start();
         try {

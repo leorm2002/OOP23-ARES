@@ -23,7 +23,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     private final SimulationsController controller;
     private final SimulationInitializer initializer;
     private final Ticker ticker;
-    private static final long TICKRATE = 50;
+    public static final long TICKRATE = 50;
 
     /**
      * Starts the simulation with the given initialization id.

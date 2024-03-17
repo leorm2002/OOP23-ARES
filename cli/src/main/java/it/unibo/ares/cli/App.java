@@ -18,9 +18,10 @@ public final class App {
             CliInitializer cliController = new CliInitializer();
             String inizializationId = cliController.startParametrization();
             SimController simController = new SimController(inizializationId);
+            Integer step = getStep();
             System.out.println("Premi invio per iniziare la simulazione");
             System.console().readLine();
-            simController.startSimulation();
+            simController.startSimulation(step);
             System.out.println("Simulazione terminata");
         });
 
@@ -33,8 +34,32 @@ public final class App {
         }
 
     }
+
+    private static final Integer MINSTEP = 0;
+    private static final Integer STEPSIZE = 50;
+
+    private static int getStep() {
+
+        System.out.println("Inserire lo step (ms) tra un tick e l'altro (valore minimo " + MINSTEP + " ms)");
+        System.out.println("Lo step verrà arrotondato al multiplo di " + STEPSIZE
+                + " ms più vicino, se inserito 0 allora il sistema cercherà di fare il tick il più velocemente possibile.");
+        String step = System.console().readLine();
+        try {
+            int stepInt = Integer.parseInt(step);
+            if (stepInt < MINSTEP) {
+                System.out.println("Lo step deve essere maggiore di " + MINSTEP);
+                return Math.round(stepInt / (float) STEPSIZE) * STEPSIZE;
+            }
+            return stepInt;
+        } catch (NumberFormatException e) {
+            System.out.println("Inserire un valore valido");
+            return getStep();
+        }
+    }
+
     /**
      * Avvia cli, utilizzato quando cli è lanciata come libreria.
+     * 
      * @param args
      */
     public static void mainLib(final String[] args) {
@@ -43,9 +68,10 @@ public final class App {
         CliInitializer cliController = new CliInitializer();
         String inizializationId = cliController.startParametrization();
         SimController simController = new SimController(inizializationId);
+        Integer step = getStep();
         System.out.println("Premi invio per iniziare la simulazione");
         System.console().readLine();
-        simController.startSimulation();
+        simController.startSimulation(step);
         System.out.println("Simulazione terminata");
     }
 
