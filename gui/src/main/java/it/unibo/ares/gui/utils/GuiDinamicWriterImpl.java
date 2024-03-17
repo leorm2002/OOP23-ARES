@@ -205,4 +205,18 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     public void clearVBox(VBox element) {
         element.getChildren().clear();
     }
+
+    /**
+     * This method displays an alert message in a dialog box.
+     * It is typically used to show notifications in the GUI, providing
+     * feedback to the user.
+     *
+     * @param message The error message to be displayed in the dialog box.
+     */
+    @Override
+    public void showAlert(String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

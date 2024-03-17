@@ -67,6 +67,15 @@ public interface GuiDinamicWriter {
     void showError(String message);
 
     /**
+     * This method displays an alert message in a dialog box
+     * It is typically used to show notifications in the GUI, providing
+     * feedback to the user.
+     *
+     * @param message The error message to be displayed in the dialog box.
+     */
+    void showAlert(String message);
+
+    /**
      * This method cleans the specified element.
      *
      * @param vBox the VBox to be cleaned

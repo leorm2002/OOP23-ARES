@@ -1,6 +1,7 @@
 package it.unibo.ares.gui.controller;
 
 import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
@@ -90,6 +91,7 @@ public final class FirstGuiController implements Initializable {
         btnInitialize.setOnAction(new HandlerAdapter(this::initializeModel));
         btnSetAgent.setOnAction(new HandlerAdapter(this::setAgentParameter));
         btnStart.setOnAction(new HandlerAdapter(this::startSecondGui));
+        guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 30*30");
     }
 
     /**
@@ -115,6 +117,7 @@ public final class FirstGuiController implements Initializable {
             guiWriter.enableElement(choiceAgent);
             guiWriter.enableElement(vboxAgentPar);
             choiceAgent.setOnAction(new HandlerAdapter(this::writeAgentParametersList));
+            guiWriter.showAlert("Model correctly initialized, you can now set the parameters for the agents");
         } catch (Exception e) {
             guiWriter.showError(e.getMessage());
         }
@@ -151,6 +154,7 @@ public final class FirstGuiController implements Initializable {
                             .map(Class::getSimpleName)
                             .orElse("");
                     Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
+                    Parameter<?> parameter = params.getParameter(txt.getId()).orElse(null);
                     /*
                      * switch on the type of the parameter and cast the text of the TextField to the
                      * correct type for setting it in the calculator
@@ -173,13 +177,16 @@ public final class FirstGuiController implements Initializable {
                         case "Integer":
                             try {
                                 int value = Integer.parseInt(txt.getText());
-                                if (txt.getId().equals("size") && value > 30) {
-                                    guiWriter.showError("The size of the space must be less than 30!");
+                                if (parameter.getKey().equals(Model.SIZEKEY) && value > 30) {
+                                    guiWriter.showAlert("The size of the space must be less than 30!");
                                     return;
+                                } else {
+                                    parameterSetter.accept(txt.getId(), value);
                                 }
-                                parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                             } catch (Exception e) {
-                                guiWriter.showError(e.getMessage());
+                                guiWriter.showError(
+                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                                + " il valore deve essere un intero");
                             }
                             break;
                         case "Double":
@@ -187,42 +194,49 @@ public final class FirstGuiController implements Initializable {
                                 double value = Double.parseDouble(txt.getText().replace(",", "."));
                                 parameterSetter.accept(txt.getId(), value);
                             } catch (Exception e) {
-                                guiWriter.showError(e.getMessage());
+                                guiWriter.showError(
+                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                                + " il valore deve essere un decimale");
                             }
                             break;
                         case "Boolean":
                             try {
                                 parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                             } catch (Exception e) {
-                                guiWriter.showError(e.getMessage());
+                                guiWriter.showError(
+                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                                + " il valore deve essere un valore booleano (true/false)");
                             }
                             break;
                         case "Float":
                             try {
                                 parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
                             } catch (Exception e) {
-                                guiWriter.showError(e.getMessage());
+                                guiWriter.showError(
+                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                                + " il valore deve essere un decimale");
                             }
                             break;
                         case "DirectionVectorImpl":
-                        /*    
-                            // cast to Direction Vector
-                            // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
-                            String[] elementi = txt.getText().split("\\s+");
-                            
-                            if (elementi.length < 2) {
-                                guiWriter.showError("Inserire almeno due elementi separati da spazio!");
-                                return;
-                            }
-                            DirectionVectorImpl vector = new DirectionVectorImpl(Integer.parseInt(elementi[0]),
-                                    Integer.parseInt(elementi[1]));
-                            try {
-                                parameterSetter.accept(txt.getId(), vector);
-                            } catch (Exception e) {
-                                guiWriter.showError(e.getMessage());
-                            }
-                            break;
-                        */
+                            /*
+                             * // cast to Direction Vector
+                             * // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
+                             * String[] elementi = txt.getText().split("\\s+");
+                             * 
+                             * if (elementi.length < 2) {
+                             * guiWriter.showError("Inserire almeno due elementi separati da spazio!");
+                             * return;
+                             * }
+                             * DirectionVectorImpl vector = new
+                             * DirectionVectorImpl(Integer.parseInt(elementi[0]),
+                             * Integer.parseInt(elementi[1]));
+                             * try {
+                             * parameterSetter.accept(txt.getId(), vector);
+                             * } catch (Exception e) {
+                             * guiWriter.showError(e.getMessage());
+                             * }
+                             * break;
+                             */
                         default:
                             break;
                     }
@@ -245,6 +259,7 @@ public final class FirstGuiController implements Initializable {
                     choiceAgent.getValue());
             readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
             if (everythingIsSet()) {
+                guiWriter.showAlert("All the parameters are setted, you can start the simulation!");
                 guiWriter.enableElement(btnStart);
             }
         } catch (Exception e) {
