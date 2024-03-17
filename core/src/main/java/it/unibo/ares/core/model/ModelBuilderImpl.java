@@ -75,7 +75,10 @@ final class ModelBuilderImpl implements ModelBuilder {
                 for (Pair<Pos, Agent> pair : agents) {
                     Agent agent = pair.getSecond();
                     Pos pos = pair.getFirst();
-                    agent.tick(newState, pos);
+                    // utilizzo == per veridicare la referenza
+                    if (newState.getAgentAt(pos).isPresent() && newState.getAgentAt(pos).get() == agent) {
+                        agent.tick(newState, pos);
+                    }
                 }
                 return newState;
             }
