@@ -43,6 +43,11 @@ public final class FirstGuiController implements Initializable {
     private String configurationSessionId;
 
     /**
+     * alertShown is a boolean that holds the state of the alert.
+     */
+    private static boolean alertShown = false;
+
+    /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances, models, and agents.
      */
@@ -91,7 +96,10 @@ public final class FirstGuiController implements Initializable {
         btnInitialize.setOnAction(new HandlerAdapter(this::initializeModel));
         btnSetAgent.setOnAction(new HandlerAdapter(this::setAgentParameter));
         btnStart.setOnAction(new HandlerAdapter(this::startSecondGui));
-        guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 30*30");
+        if (!alertShown) {
+            guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 30*30");
+            alertShown = true;
+        }
     }
 
     /**
