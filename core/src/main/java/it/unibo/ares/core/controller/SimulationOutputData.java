@@ -15,6 +15,7 @@ public final class SimulationOutputData implements SimulationOutputDataApi {
     private final String simulationId;
     private final Integer width;
     private final Integer height;
+    private final boolean finished;
 
     /**
      * Creates a new SimulationOutputData.
@@ -25,11 +26,12 @@ public final class SimulationOutputData implements SimulationOutputDataApi {
      * @param height       the height of the simulation output
      */
     public SimulationOutputData(final Map<Pos, String> data, final String simulationId, final Integer width,
-            final Integer height) {
+            final Integer height, final boolean finished) {
         this.data = Collections.unmodifiableMap(data);
         this.simulationId = simulationId;
         this.width = width;
         this.height = height;
+        this.finished = finished;
     }
 
     /**
@@ -70,5 +72,10 @@ public final class SimulationOutputData implements SimulationOutputDataApi {
     @Override
     public Integer getHeight() {
         return height;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
     }
 }

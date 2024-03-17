@@ -37,4 +37,11 @@ public interface SimulationOutputDataApi {
      */
     Integer getHeight();
 
+    /**
+     * Checks if the simulation is finished.
+     *
+     * @return true if the simulation is finished, false otherwise.
+     */
+    boolean isFinished();
+
 }
