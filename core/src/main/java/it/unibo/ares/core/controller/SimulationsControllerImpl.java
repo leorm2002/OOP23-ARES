@@ -79,4 +79,14 @@ final class SimulationsControllerImpl extends SimulationsController {
                 .map(e -> e.getKey()).collect(Collectors.toList());
     }
 
+    @Override
+    public Integer getTickRate(String id) {
+        return simulations.get(id).getTickRate();
+    }
+
+    @Override
+    public void setTickRate(String id, Integer tickRate) {
+        simulations.get(id).setTickRate(tickRate);
+    }
+
 }

@@ -20,16 +20,21 @@ final class SimulationImpl implements Simulation {
      * @param state The state of the simulation.
      * @param model The model of the simulation.
      */
-    SimulationImpl(final State state, final Model model) {
+    SimulationImpl(final State state, final Model model, final Integer tickRate) {
         this.state = state;
         this.model = model;
         calculating = false;
+        this.tickRate = tickRate;
+        tickCount = 0;
     }
 
     private State state;
     private final Model model;
     private boolean running; // may be sincronized if we want to make it usable to await termination
     private boolean calculating;
+    private int tickCount;
+    // IN ms
+    Integer tickRate;
 
     @Override
     public State getState() {
@@ -70,6 +75,16 @@ final class SimulationImpl implements Simulation {
         this.state = this.model.tick(this.state);
     }
 
+    private boolean shouldTick() {
+        int elapsed = tickCount++ * (int) CalculatorSupplier.getInstance().getTickRate();
+        if (elapsed >= tickRate) {
+            tickCount = 0;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public CompletableFuture<SimulationOutputData> tick(final String simulationSessionId) {
         if (!this.running) {
@@ -77,6 +92,10 @@ final class SimulationImpl implements Simulation {
         }
         if (this.calculating) {
             throw new IllegalStateException("Simulation is already calculating");
+        }
+
+        if (!shouldTick()) {
+            return CompletableFuture.completedFuture(mapStateToSimulationData(this.state, simulationSessionId));
         }
 
         CompletableFuture<SimulationOutputData> future = new CompletableFuture<>();
@@ -100,12 +119,26 @@ final class SimulationImpl implements Simulation {
             throw new IllegalStateException("Simulation is already calculating");
         }
 
+        if (!shouldTick()) {
+            return mapStateToSimulationData(this.state, simulationSessionId);
+        }
+
         this.calculating = true;
         tickSim();
         SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId);
         this.calculating = false;
 
         return data;
+    }
+
+    @Override
+    public Integer getTickRate() {
+        return this.tickRate;
+    }
+
+    @Override
+    public void setTickRate(Integer tickRate) {
+        this.tickRate = tickRate;
     }
 
 }

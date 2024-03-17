@@ -27,7 +27,7 @@ import it.unibo.ares.core.model.SchellingModelFactories;
  * A class that initializes the simulation.
  */
 public final class SimulationInitializerImpl extends SimulationInitializer {
-
+    private static final int DEFAULTTICKRATE = 500;
     private ConcurrentMap<String, Model> intilizingModels;
     private ConcurrentMap<String, Pair<State, Model>> initializedModels;
     private Map<String, Supplier<Model>> modelsSupplier;
@@ -180,6 +180,6 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         }
         return new Pair<String, Simulation>(initializationId,
                 new SimulationImpl(initializedModels.get(initializationId).getFirst(),
-                        initializedModels.get(initializationId).getSecond()));
+                        initializedModels.get(initializationId).getSecond(), 500));
     }
 }

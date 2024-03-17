@@ -35,4 +35,14 @@ public interface SimulationControlApi {
      */
     List<String> getRunningSimulations();
 
+    /**
+     * get the tick rate
+     */
+    Integer getTickRate(String id);
+
+    /**
+     * set the tick rate
+     */
+    void setTickRate(String id, Integer tickRate);
+
 }
