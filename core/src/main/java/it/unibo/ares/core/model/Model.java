@@ -7,6 +7,8 @@ import it.unibo.ares.core.utils.state.State;
  * Represents a model of a simulation.
  */
 public interface Model {
+    public static final String SIZEKEY = "size";
+
     /**
      * Performs a tick of the model, updating the simulation enviroment state based
      * on the current state.

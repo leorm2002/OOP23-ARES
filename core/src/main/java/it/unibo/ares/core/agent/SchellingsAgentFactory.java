@@ -6,13 +6,10 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
@@ -56,29 +53,18 @@ public final class SchellingsAgentFactory implements AgentFactory {
 
         Set<Agent> neighBors = getNeighborgs(state, visionRadius, pos, agent);
 
-        if (neighBors.isEmpty() || getRatio(state, visionRadius, pos, agent) >= threshold) {
-            return true;
-        }
-        return false;
+        return neighBors.isEmpty() || getRatio(state, visionRadius, pos, agent) >= threshold;
     }
 
-    private static Optional<PosImpl> getFreePositionIfAvailable(final State state, final Agent agent) {
-        return IntStream.range(0, state.getDimensions().getFirst())
-                .parallel()
-                .boxed()
-                .flatMap(x -> IntStream.range(0, state.getDimensions().getSecond())
-                        .mapToObj(y -> new PosImpl(x, y)))
-                .filter(p -> state.isFree(p))
-                .filter(p -> isThresholdSatisfied(state, p, agent))
-                .findAny()
-                .or(() -> {
-                    Random r = new Random();
-                    return Stream
-                            .generate(() -> new PosImpl(r.nextInt(state.getDimensions().getFirst()),
-                                    r.nextInt(state.getDimensions().getSecond())))
-                            .filter(state::isFree)
-                            .findAny();
-                });
+    private static PosImpl getNewRandomPosition(final State state, final Agent agent) {
+        Random r = new Random();
+        PosImpl newPos = new PosImpl(r.nextInt(state.getDimensions().getFirst()),
+                r.nextInt(state.getDimensions().getSecond()));
+        while (!state.isFree(newPos)) {
+            newPos = new PosImpl(r.nextInt(state.getDimensions().getFirst()),
+                    r.nextInt(state.getDimensions().getSecond()));
+        }
+        return newPos;
     }
 
     /**
@@ -97,9 +83,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (!isThresholdSatisfied(state, pos, agent)) { 
-                Optional<PosImpl> newPos = getFreePositionIfAvailable(state, agent);
-                newPos.ifPresent(p -> state.moveAgent(pos, newPos.get()));
+            if (!isThresholdSatisfied(state, pos, agent)) {
+                state.moveAgent(pos, getNewRandomPosition(state, agent));
             }
             return state;
         });
@@ -121,8 +106,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
             if (!isThresholdSatisfied(state, pos, agent)) {
-                Optional<PosImpl> newPos = getFreePositionIfAvailable(state, agent);
-                newPos.ifPresent(p -> state.moveAgent(pos, newPos.get()));
+                state.moveAgent(pos, getNewRandomPosition(state, agent));
             }
             return state;
         });

@@ -4,15 +4,16 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
 /**
- * Provides a mock agent for testing purposes.
+ * A factory class for creating a simple agent for the Simple Model.
  */
-public final class SimpleAgentProvider {
+public final class SimpleAgentFactory implements AgentFactory {
     /**
      * Returns a mock agent that moves the agent in the top-right direction.
      * 
      * @return a mock agent that moves the agent in the top-right direction.
      */
-    public static Agent getMockAgent() {
+    @Override
+    public Agent createAgent() {
         AgentBuilder builder = new AgentBuilderImpl();
         builder.addStrategy((state, pos) -> {
             Pos newPos = new PosImpl((pos.getX() + 1)
@@ -23,9 +24,5 @@ public final class SimpleAgentProvider {
         Agent agent = builder.build();
         agent.setType("A");
         return agent;
-    }
-
-    private SimpleAgentProvider() {
-        throw new IllegalStateException("Utility class");
     }
 }

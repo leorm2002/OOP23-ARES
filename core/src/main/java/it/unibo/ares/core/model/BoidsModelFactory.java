@@ -26,7 +26,7 @@ public final class BoidsModelFactory implements ModelFactory {
     }
 
     private State schellingInitializer(final Parameters parameters) throws IllegalAccessException {
-        int size = parameters.getParameter("size", Integer.class)
+        int size = parameters.getParameter(Model.SIZEKEY, Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
         int total = parameters.getParameter("numeroUccelli", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
@@ -69,7 +69,8 @@ public final class BoidsModelFactory implements ModelFactory {
         return builder
                 .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class,
                         new ParameterDomainImpl<Integer>("Numero di agenti (1-n)", n -> n > 0), true))
-                .addParameter(new ParameterImpl<>("size", Integer.class,
+                .addParameter(new ParameterImpl<>(
+                        Model.SIZEKEY, Integer.class,
                         new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)", n -> n > 0), true))
                 .addExitFunction((o, n) -> false)
                 .addInitFunction(t -> {

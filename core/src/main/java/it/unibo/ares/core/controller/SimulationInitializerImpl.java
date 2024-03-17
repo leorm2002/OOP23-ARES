@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import it.unibo.ares.core.model.SimpleModelProvider;
+import it.unibo.ares.core.model.SimpleModelFactory;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.FireSpreadModelFactory;
 import it.unibo.ares.core.model.VirusModelFactory;
@@ -42,17 +42,19 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         ModelFactory ff = new FireSpreadModelFactory();
         ModelFactory pp = new PredatorPreyModelFactory();
         ModelFactory vf = new VirusModelFactory();
-        modelsSupplier.put("SimpleModel", SimpleModelProvider::getMockModel);
+        ModelFactory smf = new SimpleModelFactory();
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         modelsSupplier.put(ff.getModelId(), ff::getModel);
         modelsSupplier.put(pp.getModelId(), pp::getModel);
         modelsSupplier.put(vf.getModelId(), vf::getModel);
+        modelsSupplier.put(smf.getModelId(), smf::getModel);
+
         this.intilizingModels = new ConcurrentHashMap<>();
         this.initializedModels = new ConcurrentHashMap<>();
     }
 
-    private void setAgentParameter(final String initializationId, final String agentType, final String key,
+    private void setAgentParameter(final String initializationId, final String key,
             final Object value, final Predicate<Agent> predicate) {
         this.initializedModels.get(
                 initializationId).getFirst().getAgents().stream()
@@ -149,7 +151,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
     public void setAgentParameterSimplified(final String initializationId, final String agentType,
             final String key,
             final Object value) {
-        setAgentParameter(initializationId, agentType, key, value, ag -> ag.getType().equals(agentType));
+        setAgentParameter(initializationId, key, value, ag -> ag.getType().equals(agentType));
     }
 
     @Override
@@ -164,7 +166,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
 
     @Override
     Pair<String, Simulation> startSimulation(final String initializationId) {
-        //TODO rimuoere modello inizializzato
+        // TODO rimuoere modello inizializzato
         if (!this.initializedModels.containsKey(initializationId)) {
             throw new IllegalArgumentException("The model has not been initialized");
         }

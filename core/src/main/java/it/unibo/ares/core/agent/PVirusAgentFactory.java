@@ -23,7 +23,8 @@ public final class PVirusAgentFactory implements AgentFactory {
     // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT
     // Utilizzati per settare i parametri dell'agente infetto
     private int stepSizeI = 1;
-    private int infectionRate = 0, recoveryRate = 0;
+    private int infectionRate = 0;
+    private int recoveryRate = 0;
     private boolean paramSected = false;
 
     /**
