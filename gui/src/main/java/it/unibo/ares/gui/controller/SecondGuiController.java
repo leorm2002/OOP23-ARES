@@ -7,12 +7,16 @@ import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import it.unibo.ares.gui.utils.HandlerAdapter;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -40,6 +44,9 @@ public final class SecondGuiController extends DataReciever implements Initializ
     private static String configurationSessionId;
     private String simulationId;
 
+    // we set the max tick rate to 1200 ms, we can set it to whatever value we want
+    private final double maxStep = 1200;
+
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances.
@@ -53,6 +60,12 @@ public final class SecondGuiController extends DataReciever implements Initializ
     private Button btnPause, btnRestart, btnStop;
     @FXML
     private AnchorPane anchorPane;
+
+    @FXML
+    private Label lblStep;
+
+    @FXML
+    private Slider slidStep;
 
     /**
      * This static method sets the configuration session ID for the
@@ -83,6 +96,48 @@ public final class SecondGuiController extends DataReciever implements Initializ
         btnPause.setOnAction(new HandlerAdapter(this::pauseSimulation));
         btnRestart.setOnAction(new HandlerAdapter(this::restartSimulation));
         btnStop.setOnAction(new HandlerAdapter(this::stopSimulation));
+        lblStep.setText("Step: " + calculatorSupplier.getTickRate(simulationId) + " ms");
+        slidStep.setValue(mapToSliderStep(calculatorSupplier.getTickRate(simulationId)));
+        slidStep.valueProperty().addListener(new ChangeListener<Number>() {
+            /**
+            * This method is called when the value of the observable object is changed.
+            * It updates the step of the simulation and the label accordingly.
+            */
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldNumber,
+                Number newNumber) {
+                    int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), 0, (int) maxStep,
+                        (int) CalculatorSupplier.TICKRATE);
+                    lblStep.setText("Step: " + step + " ms");
+                    calculatorSupplier.setTickRate(simulationId, step);
+                }
+            });
+    }
+
+    /**
+     * This method maps the value, given in ms, in a decimal value between 0 and 1
+     * to be used in the slider.
+     *
+     * @param value the value in ms
+     * @return the value mapped to be used in the slider
+     */
+    private double mapToSliderStep(final int value) {
+        return (double) value / maxStep;
+    }
+
+    private int mapToRange(double value, double minInput, double maxInput, int minOutput, int maxOutput,
+            int step) {
+        // Ensure the value is within the specified range
+        value = Math.max(minInput, Math.min(maxInput, value));
+
+        // Calculate the normalized value
+        double normalized = (value - minInput) / (maxInput - minInput);
+
+        // Map the normalized value to the output range with step
+        int mapped = minOutput + (int) (normalized * (maxOutput - minOutput));
+        mapped = Math.round(mapped / step) * step; // Round to the nearest step
+
+        return mapped;
     }
 
     /**
@@ -99,7 +154,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
         });
     }
 
-    //METHODS TO HANDLE
+    // METHODS TO HANDLE
 
     /**
      * This method is used to start the first GUI. It loads the scene from
@@ -131,7 +186,8 @@ public final class SecondGuiController extends DataReciever implements Initializ
     }
 
     /**
-     * The restartSimulation method is called when we want to restart the simulation.
+     * The restartSimulation method is called when we want to restart the
+     * simulation.
      * It restarts the simulation and the GUI will be updated accordingly.
      */
     void restartSimulation() {
@@ -139,7 +195,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     }
 
     /**
-     * The stopSimulation method  is called when we want to stop the simulation.
+     * The stopSimulation method is called when we want to stop the simulation.
      * It stops the simulation and updates the GUI accordingly, switching to scene1
      * where the user can select a new model to initialize.
      */

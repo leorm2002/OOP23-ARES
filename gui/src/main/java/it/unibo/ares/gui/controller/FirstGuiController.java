@@ -97,7 +97,7 @@ public final class FirstGuiController implements Initializable {
         btnSetAgent.setOnAction(new HandlerAdapter(this::setAgentParameter));
         btnStart.setOnAction(new HandlerAdapter(this::startSecondGui));
         if (!alertShown) {
-            guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 30*30");
+            guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 35*35");
             alertShown = true;
         }
     }
@@ -185,8 +185,8 @@ public final class FirstGuiController implements Initializable {
                         case "Integer":
                             try {
                                 int value = Integer.parseInt(txt.getText());
-                                if (parameter.getKey().equals(Model.SIZEKEY) && value > 30) {
-                                    guiWriter.showAlert("The size of the space must be less than 30!");
+                                if (parameter.getKey().equals(Model.SIZEKEY) && value > 35) {
+                                    guiWriter.showAlert("The size of the space must be less than 35!");
                                     return;
                                 } else {
                                     parameterSetter.accept(txt.getId(), value);
