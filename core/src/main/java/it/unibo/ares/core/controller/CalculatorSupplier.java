@@ -15,13 +15,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * This class is used as an entry point for the simulation system, it is used to
  * access the initialization and the controller of the simulations.
  */
-@SuppressFBWarnings(value = { "MS_EXPOSE_REP", "EI_EXPOSE_REP"  }, justification = "I prefer to suppress these FindBugs warnings")
+@SuppressFBWarnings(value = { "MS_EXPOSE_REP",
+        "EI_EXPOSE_REP" }, justification = "I prefer to suppress these FindBugs warnings")
 public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 
     private final SimulationsController controller;
     private final SimulationInitializer initializer;
     private final Ticker ticker;
+    private static final long TICKRATE = 50;
 
     /**
      * Starts the simulation with the given initialization id.
@@ -62,7 +64,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
-        this.ticker = new TickerImpl(controller::makeModelsTick, 0, 50);
+        this.ticker = new TickerImpl(controller::makeModelsTick, 0, TICKRATE);
         ticker.start();
     }
 
@@ -120,5 +122,9 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     public void setAgentParameterSimplified(final String initializationId, final String agentId, final String key,
             final Object value) {
         initializer.setAgentParameterSimplified(initializationId, agentId, key, value);
+    }
+
+    public long getTickRate() {
+        return TICKRATE;
     }
 }
