@@ -51,10 +51,11 @@ public final class PredatorPreyModelFactory implements ModelFactory {
         AgentFactory predatorFactory = new PredatorAgentFactory();
         AgentFactory preyFactory = new PreyAgentFactory();
 
-        Stream.generate(predatorFactory::createAgent)
+        Stream.generate(preyFactory::createAgent)
                 .limit(numAgentsPrey).forEach(a -> state.addAgent(getter.next(), a));
 
-        Stream.generate(preyFactory::createAgent)
+        Stream.generate(
+                predatorFactory::createAgent)
                 .limit(numAgentsPredator).forEach(a -> state.addAgent(getter.next(), a));
 
         return state;

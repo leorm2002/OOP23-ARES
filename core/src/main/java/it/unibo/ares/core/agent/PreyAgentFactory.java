@@ -15,8 +15,7 @@ import java.util.stream.Collectors;
  * Model.
  */
 public final class PreyAgentFactory implements AgentFactory {
-    private static final String PREY = "Prey";
-    private static final String PREDATOR = "Predator";
+    public static final String PREY = "P";
 
     /**
      * Create a new instance of the factory.
@@ -66,7 +65,7 @@ public final class PreyAgentFactory implements AgentFactory {
 
             Set<Pos> predatorPositions = getNeighboringPositions(state, pos, visionRadius).stream()
                     .filter(p -> state.getAgentAt(pos).isPresent()
-                            && PREDATOR.equals(state.getAgentAt(pos).get().getType()))
+                            && PredatorAgentFactory.PREDATOR.equals(state.getAgentAt(pos).get().getType()))
                     .collect(Collectors.toSet());
 
             if (!predatorPositions.isEmpty()) {
