@@ -48,8 +48,8 @@ public final class PredatorPreyModelFactory implements ModelFactory {
                 .collect(Collectors.toList());
 
         UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        AgentFactory predatorFactory = new PredatorAgentFactory();
-        AgentFactory preyFactory = new PreyAgentFactory();
+        AgentFactory preyFactory = new PredatorAgentFactory();
+        AgentFactory predatorFactory = new PreyAgentFactory();
 
         Stream.generate(predatorFactory::createAgent)
                 .limit(numAgentsPrey).forEach(a -> state.addAgent(getter.next(), a));
