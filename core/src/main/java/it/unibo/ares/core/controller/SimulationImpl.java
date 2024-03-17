@@ -61,18 +61,22 @@ final class SimulationImpl implements Simulation {
         return this.running;
     }
 
-    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId) {
+    private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId,
+            boolean finished) {
         return new SimulationOutputData(state.getAgents().stream()
                 .collect(Collectors.toMap(
                         Pair::getFirst,
                         pair -> pair.getSecond().getType(),
                         (existingValue, newValue) -> newValue,
                         HashMap::new)),
-                simulationSessionId, state.getDimensions().getFirst(), state.getDimensions().getSecond());
+                simulationSessionId, state.getDimensions().getFirst(), state.getDimensions().getSecond(),
+                finished);
     }
 
-    private void tickSim() {
+    private boolean tickSim() {
+        State oldState = this.state;
         this.state = this.model.tick(this.state);
+        return this.model.isOver(oldState, this.state);
     }
 
     private boolean shouldTick() {
@@ -95,15 +99,15 @@ final class SimulationImpl implements Simulation {
         }
 
         if (!shouldTick()) {
-            return CompletableFuture.completedFuture(mapStateToSimulationData(this.state, simulationSessionId));
+            return CompletableFuture.completedFuture(mapStateToSimulationData(this.state, simulationSessionId, false));
         }
 
         CompletableFuture<SimulationOutputData> future = new CompletableFuture<>();
 
         new Thread(() -> {
             this.calculating = true;
-            tickSim();
-            future.complete(mapStateToSimulationData(this.state, simulationSessionId));
+            boolean over = tickSim();
+            future.complete(mapStateToSimulationData(this.state, simulationSessionId, over));
             this.calculating = false;
         }).start();
 
@@ -120,12 +124,12 @@ final class SimulationImpl implements Simulation {
         }
 
         if (!shouldTick()) {
-            return mapStateToSimulationData(this.state, simulationSessionId);
+            return mapStateToSimulationData(this.state, simulationSessionId, false);
         }
 
         this.calculating = true;
-        tickSim();
-        SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId);
+        boolean over = tickSim();
+        SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId, over);
         this.calculating = false;
 
         return data;

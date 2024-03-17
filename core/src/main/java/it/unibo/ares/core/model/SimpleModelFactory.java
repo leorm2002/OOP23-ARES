@@ -35,7 +35,7 @@ public final class SimpleModelFactory implements ModelFactory {
                                 "Dimensione della griglia (1-n)",
                                 i -> i > 0),
                         true))
-                .addExitFunction((state, state2) -> false)
+                .addExitFunction((state, state2) -> !state2.isFree(new PosImpl(0, 0)))
                 .addInitFunction(params -> {
                     Integer size = params.getParameter(
                             Model.SIZEKEY, Integer.class)
