@@ -123,16 +123,25 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * @return the value mapped to be used in the slider
      */
     private double mapToSliderStep(final int value) {
-        return (double) value / MAXSTEP;
+        int transitionPoint = 1000;
+
+        return value <= transitionPoint ? (double) value / transitionPoint * 0.5
+                : 0.5 + ((double) (value - transitionPoint) / (5000 - transitionPoint)) * 0.5;
     }
 
+    /*
+     * This method maps the input value to a range between minOutput and maxOutput
+     * Maps the slider value from 0.0 to 0.5 in 0-1000 ms and from 0.5 to 1.0 in
+     * 1000-5000 ms
+     *
+     */
     private int mapToRange(double inputValue, double minInput, double maxInput, int maxOutput,
             int step) {
         // Ensure the value is within the specified range
         Double value = Math.max(minInput, Math.min(maxInput, inputValue));
 
         double transitionPoint = 0.5;
-        double mappedValue = value <= transitionPoint ? Math.log10(10 * value + 1) * 500
+        double mappedValue = value <= transitionPoint ? (inputValue / transitionPoint * 1000)
                 : 1000 + (value - transitionPoint) * 8000;
         mappedValue = Math.round(mappedValue / step) * (float) step;
         return (int) mappedValue;
@@ -153,8 +162,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
             Platform.runLater(() -> {
                 guiWriter.write2dMap(item.getData(), anchorPane, item.getWidth(), item.getHeight());
             });
-        }
-        else {
+        } else {
             Platform.runLater(() -> {
                 guiWriter.showAlert(
                         "Fine della simulazione, premi stop per tornare alla selezione di un nuovo modello.");
