@@ -176,26 +176,6 @@ public final class SecondGuiController extends DataReciever implements Initializ
     // METHODS TO HANDLE
 
     /**
-     * This method is used to start the first GUI. It loads the scene from
-     * "scene1.fxml",
-     * sets the scene to the stage, and shows the stage.
-     *
-     * @param stage The stage on which the scene is to be set and shown.
-     */
-    public void startFirstGui(final Stage stage) {
-        Parent root;
-        try {
-            root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
-            Scene scene = new Scene(root);
-            stage.setTitle("ARES");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * The pauseSimulation method is called when we want to stop the simulation.
      * It pauses the simulation and the GUI will not be updated until the
      * simulation is restarted (no OnNext method called).

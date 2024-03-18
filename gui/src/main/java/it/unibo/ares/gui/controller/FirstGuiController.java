@@ -352,6 +352,7 @@ public final class FirstGuiController implements Initializable {
             Scene scene = new Scene(root);
             stage.setTitle("ARES");
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
