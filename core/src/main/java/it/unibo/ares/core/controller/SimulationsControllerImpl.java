@@ -36,7 +36,7 @@ final class SimulationsControllerImpl extends SimulationsController {
 
     @Override
     void makeModelsTick() {
-        boolean async = true;
+        boolean async = false;
         if (!async) {
             simulations.entrySet().stream()
                     .filter(e -> e.getValue().isRunning())

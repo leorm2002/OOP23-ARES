@@ -8,7 +8,10 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.statistics.Statistics;
+import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -21,6 +24,7 @@ final class ModelBuilderImpl implements ModelBuilder {
     private Parameters parameters;
     private BiPredicate<State, State> exitfFunction;
     private Function<Parameters, State> initFunction;
+    private StatisticsGenerator generator;
 
     ModelBuilderImpl() {
         reset();
@@ -31,6 +35,7 @@ final class ModelBuilderImpl implements ModelBuilder {
         this.parameters = new ParametersImpl();
         this.exitfFunction = null;
         this.initFunction = null;
+        this.generator = null;
     }
 
     @Override
@@ -102,6 +107,11 @@ final class ModelBuilderImpl implements ModelBuilder {
             public State initilize() {
                 return initFunction.apply(parameters);
             }
+
+            @Override
+            public Statistics getStatistics(State s) {
+                return generator == null ? () -> Collections.emptyList() : generator.generate(s);
+            }
         };
     }
 
@@ -112,6 +122,12 @@ final class ModelBuilderImpl implements ModelBuilder {
         }
         this.initFunction = initFunction;
 
+        return this;
+    }
+
+    @Override
+    public ModelBuilder addStatisticsGenerator(final StatisticsGenerator generator) {
+        this.generator = generator;
         return this;
     }
 

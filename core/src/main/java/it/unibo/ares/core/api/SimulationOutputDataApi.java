@@ -1,6 +1,7 @@
 package it.unibo.ares.core.api;
 
 import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.statistics.Statistics;
 
 import java.util.Map;
 
@@ -43,5 +44,12 @@ public interface SimulationOutputDataApi {
      * @return true if the simulation is finished, false otherwise.
      */
     boolean isFinished();
+
+    /**
+     * Ritorna le statistiche di modello
+     * 
+     * @return le statistiche del modello
+     */
+    Statistics getStatistics();
 
 }

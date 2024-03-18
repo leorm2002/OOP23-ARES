@@ -3,6 +3,7 @@ package it.unibo.ares.core.controller;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.statistics.Statistics;
 
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
@@ -72,7 +73,7 @@ final class SimulationImpl implements Simulation {
                         (existingValue, newValue) -> newValue,
                         HashMap::new)),
                 simulationSessionId, state.getDimensions().getFirst(), state.getDimensions().getSecond(),
-                finished);
+                finished, getStatistics(state));
     }
 
     private boolean tickSim() {
@@ -90,6 +91,10 @@ final class SimulationImpl implements Simulation {
         } else {
             return false;
         }
+    }
+
+    private Statistics getStatistics(State s) {
+        return model.getStatistics(s);
     }
 
     @Override

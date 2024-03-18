@@ -3,6 +3,7 @@ package it.unibo.ares.core.model;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -51,4 +52,12 @@ interface ModelBuilder {
      * @return the model builder with the added init function
      */
     ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
+
+    /**
+     * Aggiunge il generatore per permettere al modello di generare statistiche;
+     * 
+     * @param generator il generatore
+     * @return
+     */
+    ModelBuilder addStatisticsGenerator(StatisticsGenerator generator);
 }

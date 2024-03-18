@@ -122,7 +122,9 @@ public final class ParametersImpl implements Parameters {
      */
     @Override
     public Set<Parameter<?>> getParametersToset() {
-        return getParametersStream().filter(p -> !p.isSetted()).collect(Collectors.toSet());
+        return getParametersStream()
+                .filter(Parameter::userSettable)
+                .filter(p -> !p.isSetted()).collect(Collectors.toSet());
     }
 
     /*
@@ -137,7 +139,7 @@ public final class ParametersImpl implements Parameters {
 
     @Override
     public boolean areAllParametersSetted() {
-        return getParametersStream().allMatch(Parameter::isSetted);
+        return getParametersStream().filter(Parameter::userSettable).allMatch(Parameter::isSetted);
     }
 
     @SuppressWarnings("unchecked")

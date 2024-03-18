@@ -2,6 +2,7 @@ package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 
@@ -21,7 +22,7 @@ import it.unibo.ares.core.model.VirusModelFactory;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.model.ModelFactory;
 import it.unibo.ares.core.model.PredatorPreyModelFactory;
-import it.unibo.ares.core.model.SchellingModelFactories;
+import it.unibo.ares.core.model.SchellingModelFactory;
 
 /**
  * A class that initializes the simulation.
@@ -37,7 +38,7 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
-        ModelFactory sf = new SchellingModelFactories();
+        ModelFactory sf = new SchellingModelFactory();
         ModelFactory bf = new BoidsModelFactory();
         ModelFactory ff = new FireSpreadModelFactory();
         ModelFactory pp = new PredatorPreyModelFactory();

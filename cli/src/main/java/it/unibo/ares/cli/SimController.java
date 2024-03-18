@@ -1,11 +1,14 @@
 package it.unibo.ares.cli;
 
+import java.util.Optional;
+
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputDataApi;
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
+import it.unibo.ares.core.utils.statistics.Statistics;
 
 /**
  * The SimController class is responsible for controlling the simulation and
@@ -76,6 +79,20 @@ public final class SimController extends DataReciever {
         System.out.println("");
     }
 
+    private static final String SEPARATOR = "    ";
+
+    private void printStatistics(Statistics statistics) {
+        Optional<String> out = statistics.getStatistics().stream()
+                .map(p -> p.getFirst() + " " + p.getSecond())
+                .reduce((a, b) -> a + SEPARATOR + b);
+        if (out.isPresent()) {
+            System.out.println("\nStatistiche");
+            System.out.println(out.get());
+        } else {
+            System.out.println("\n\n");
+        }
+    }
+
     private String getHorizontalBar(final Integer width, final Integer cellWidth) {
         return "\n" + "-".repeat(width * (cellWidth + 2) + 1) + "\n";
     }
@@ -101,6 +118,7 @@ public final class SimController extends DataReciever {
             str.append(getHorizontalBar(width, cellWidth));
         }
         System.out.println(str.toString());
+        printStatistics(data.getStatistics());
         printInfo();
     }
 }

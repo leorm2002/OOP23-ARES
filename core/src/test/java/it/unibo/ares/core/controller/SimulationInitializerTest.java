@@ -1,7 +1,7 @@
 package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.model.ModelFactory;
-import it.unibo.ares.core.model.SchellingModelFactories;
+import it.unibo.ares.core.model.SchellingModelFactory;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class SimulationInitializerTest {
 
     @BeforeEach
     public void init() {
-        sf = new SchellingModelFactories();
+        sf = new SchellingModelFactory();
     }
 
     @Test
@@ -40,9 +40,9 @@ class SimulationInitializerTest {
         String simId = simulationInitializer.setModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
-        //CHECKSTYLE:OFF: MagicNumber è una size per provare il metodo
+        // CHECKSTYLE:OFF: MagicNumber è una size per provare il metodo
         simulationInitializer.setModelParameter(simId, "size", 15);
-        //CHECKSTYLE:ON: MagicNumber
+        // CHECKSTYLE:ON: MagicNumber
         assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
     }
 

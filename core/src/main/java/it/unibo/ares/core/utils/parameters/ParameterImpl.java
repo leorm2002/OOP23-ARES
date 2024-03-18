@@ -20,7 +20,7 @@ public final class ParameterImpl<T> implements Parameter<T> {
     @SuppressWarnings("unchecked")
     private ParameterImpl(final String key, final T value,
             final Optional<ParameterDomain<T>> domain, final Boolean userSettable) {
-        this.value = Optional.of(value);
+        this.value = Optional.ofNullable(value);
         this.key = key;
         this.type = (Class<T>) value.getClass();
         this.domain = domain;
@@ -78,7 +78,7 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * @param userSettable if the parameter is user settable
      */
     public ParameterImpl(final String key, final T value, final ParameterDomain<T> domain, final Boolean userSettable) {
-        this(key, value, Optional.of(domain), userSettable);
+        this(key, value, Optional.ofNullable(domain), userSettable);
     }
 
     /**
@@ -91,7 +91,7 @@ public final class ParameterImpl<T> implements Parameter<T> {
      */
     public ParameterImpl(final String key, final Class<T> type, final ParameterDomain<T> domain,
             final Boolean userSettable) {
-        this(key, type, Optional.of(domain), userSettable);
+        this(key, type, Optional.ofNullable(domain), userSettable);
     }
 
     /**

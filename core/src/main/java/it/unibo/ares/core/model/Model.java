@@ -1,7 +1,12 @@
 package it.unibo.ares.core.model;
 
+import java.util.Collections;
+import java.util.List;
+
+import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.statistics.Statistics;
 
 /**
  * Represents a model of a simulation.
@@ -50,5 +55,9 @@ public interface Model {
      * @return the initial state of the model
      */
     State initilize();
+
+    default Statistics getStatistics(State s) {
+        return () -> Collections.emptyList();
+    }
 
 }

@@ -1,5 +1,6 @@
 package it.unibo.ares.core.agent;
 
+import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -11,12 +12,15 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
+import javax.management.relation.Relation;
+
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
     private static final String VISIONRADIUS = "visionRadius";
     private static final String THRESHOLD = "threshold";
+    public static final String CURRENT_RATIO = "ratio";
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         String typeA = a.getType();
 
@@ -33,15 +37,15 @@ public final class SchellingsAgentFactory implements AgentFactory {
 
     }
 
-    private static double getRatio(final State state, final Integer visioRadius, final Pos pos, final Agent agent) {
-        Set<Agent> neighBors = getNeighborgs(state, visioRadius, pos, agent);
+    private static double getRatio(final Set<Agent> neighBors, final State state, final Integer visioRadius,
+            final Pos pos, final Agent agent) {
         return neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent))
                 .count()
                 / (double) neighBors.size();
 
     }
 
-    private static boolean isThresholdSatisfied(final State state, final Pos pos, final Agent agent) {
+    private static Pair<Boolean, Double> isThresholdSatisfied(final State state, final Pos pos, final Agent agent) {
         Integer visionRadius = agent.getParameters().getParameter(
                 VISIONRADIUS, Integer.class)
                 .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no visionRadius parameter"))
@@ -52,8 +56,10 @@ public final class SchellingsAgentFactory implements AgentFactory {
                 .getValue();
 
         Set<Agent> neighBors = getNeighborgs(state, visionRadius, pos, agent);
-
-        return neighBors.isEmpty() || getRatio(state, visionRadius, pos, agent) >= threshold;
+        Double ratio = getRatio(neighBors, state, visionRadius, pos, agent);
+        return new Pair<>(
+                neighBors.isEmpty() || ratio >= threshold,
+                neighBors.isEmpty() ? null : ratio);
     }
 
     private static PosImpl getNewRandomPosition(final State state, final Agent agent) {
@@ -83,7 +89,9 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (!isThresholdSatisfied(state, pos, agent)) {
+            Pair<Boolean, Double> ret = isThresholdSatisfied(state, pos, agent);
+            agent.getParameters().setParameter(CURRENT_RATIO, ret.getSecond());
+            if (Boolean.FALSE.equals(ret.getFirst())) {
                 state.moveAgent(pos, getNewRandomPosition(state, agent));
             }
             return state;
@@ -98,14 +106,17 @@ public final class SchellingsAgentFactory implements AgentFactory {
     public Agent createAgent() {
         AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Double>("threshold", Double.class, new ParameterDomainImpl<>(
+        b.addParameter(new ParameterImpl<Double>(THRESHOLD, Double.class, new ParameterDomainImpl<>(
                 "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0), true));
-        b.addParameter(new ParameterImpl<Integer>("visionRadius", Integer.class,
+        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, Integer.class,
                 new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0), true));
+        b.addParameter(new ParameterImpl<Double>(CURRENT_RATIO, Double.class, false));
 
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
-            if (!isThresholdSatisfied(state, pos, agent)) {
+            Pair<Boolean, Double> ret = isThresholdSatisfied(state, pos, agent);
+            agent.getParameters().setParameter(CURRENT_RATIO, ret.getSecond());
+            if (Boolean.FALSE.equals(ret.getFirst())) {
                 state.moveAgent(pos, getNewRandomPosition(state, agent));
             }
             return state;

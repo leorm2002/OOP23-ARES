@@ -4,6 +4,7 @@ package it.unibo.ares.core.model;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.AgentFactory;
 import it.unibo.ares.core.agent.SchellingsAgentFactory;
+import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.UniquePositionGetter;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
@@ -12,8 +13,12 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
+import it.unibo.ares.core.utils.statistics.Statistics;
+import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -23,8 +28,75 @@ import java.util.stream.Stream;
  * paramtrization of:
  * the number of agents (two types)
  */
-public final class SchellingModelFactories implements ModelFactory {
+public final class SchellingModelFactory implements ModelFactory {
     private static final String MODEL_ID = "Schelling";
+    StatisticsGenerator generator;
+
+    public SchellingModelFactory() {
+        generator = s -> (new Statistics() {
+            @Override
+            public List<Pair<String, String>> getStatistics() {
+                OptionalDouble vTot = s.getAgents().stream().parallel()
+                        .map(Pair::getSecond)
+                        .map(Agent::getParameters)
+                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(d -> {
+                            try {
+                                return d.getValue();
+                            } catch (Exception e) {
+                                return null;
+                            }
+                        })
+                        .filter(o -> o != null)
+                        .mapToDouble(d -> d)
+                        .average();
+                OptionalDouble va = s.getAgents().stream().parallel()
+                        .map(Pair::getSecond)
+                        .filter(a -> a.getType().equals("A"))
+                        .map(Agent::getParameters)
+                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(d -> {
+                            try {
+                                return d.getValue();
+                            } catch (Exception e) {
+                                return null;
+                            }
+                        })
+                        .filter(o -> o != null)
+                        .mapToDouble(d -> d)
+                        .average();
+
+                OptionalDouble vb = s.getAgents().stream().parallel()
+                        .map(Pair::getSecond)
+                        .filter(a -> a.getType().equals("B"))
+                        .map(Agent::getParameters)
+                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(d -> {
+                            try {
+                                return d.getValue();
+                            } catch (Exception e) {
+                                return null;
+                            }
+                        })
+                        .filter(o -> o != null)
+                        .mapToDouble(d -> d)
+                        .average();
+                String out = vTot.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
+                String outA = va.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
+                String outB = vb.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
+                return List.of(new Pair<>("Avg total ratio:", out),
+                        new Pair<>("Avg A ratio:", outA),
+                        new Pair<>("Avg B ratio:", outB));
+            }
+        });
+
+    }
 
     @Override
     public String getModelId() {
@@ -107,7 +179,9 @@ public final class SchellingModelFactories implements ModelFactory {
                                 "Missing parameters for the model initialization");
                     }
                 })
+                .addStatisticsGenerator(generator)
                 .build();
 
     }
+
 }
