@@ -155,10 +155,13 @@ public final class SecondGuiController extends DataReciever implements Initializ
             });
         }
         else {
-            guiWriter.showAlert(
-                    "La simulazione è terminata, premi stop per tornare alla selezione di un nuovo modello.");
-            guiWriter.disableElement(btnPause);
-            guiWriter.disableElement(btnRestart);
+            Platform.runLater(() -> {
+                guiWriter.showAlert(
+                        "Fine della simulazione, premi stop per tornare alla selezione di un nuovo modello.");
+                guiWriter.disableElement(btnPause);
+                guiWriter.disableElement(btnRestart);
+                guiWriter.disableElement(slidStep);
+            });
         }
     }
 
