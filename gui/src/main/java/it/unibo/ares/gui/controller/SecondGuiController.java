@@ -45,7 +45,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     private String simulationId;
 
     // we set the max tick rate to 1200 ms, we can set it to whatever value we want
-    private final double maxStep = 1200;
+    private static final double MAXSTEP = 5000;
 
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
@@ -100,18 +100,19 @@ public final class SecondGuiController extends DataReciever implements Initializ
         slidStep.setValue(mapToSliderStep(calculatorSupplier.getTickRate(simulationId)));
         slidStep.valueProperty().addListener(new ChangeListener<Number>() {
             /**
-            * This method is called when the value of the observable object is changed.
-            * It updates the step of the simulation and the label accordingly.
-            */
+             * This method is called when the value of the observable object is changed.
+             * It updates the step of the simulation and the label accordingly.
+             */
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldNumber,
-                Number newNumber) {
-                    int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), 0, (int) maxStep,
+                    Number newNumber) {
+                int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), 0, (int) MAXSTEP,
                         (int) CalculatorSupplier.TICKRATE);
-                    lblStep.setText("Step: " + step + " ms");
-                    calculatorSupplier.setTickRate(simulationId, step);
-                }
-            });
+                String stepString = step != 0 ? String.valueOf(step) + " ms" : "Max speed";
+                lblStep.setText("Step: " + stepString);
+                calculatorSupplier.setTickRate(simulationId, step);
+            }
+        });
     }
 
     /**
@@ -122,22 +123,19 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * @return the value mapped to be used in the slider
      */
     private double mapToSliderStep(final int value) {
-        return (double) value / maxStep;
+        return (double) value / MAXSTEP;
     }
 
-    private int mapToRange(double value, double minInput, double maxInput, int minOutput, int maxOutput,
+    private int mapToRange(double inputValue, double minInput, double maxInput, int minOutput, int maxOutput,
             int step) {
         // Ensure the value is within the specified range
-        value = Math.max(minInput, Math.min(maxInput, value));
+        Double value = Math.max(minInput, Math.min(maxInput, inputValue));
 
-        // Calculate the normalized value
-        double normalized = (value - minInput) / (maxInput - minInput);
-
-        // Map the normalized value to the output range with step
-        int mapped = minOutput + (int) (normalized * (maxOutput - minOutput));
-        mapped = Math.round(mapped / step) * step; // Round to the nearest step
-
-        return mapped;
+        double transitionPoint = 0.5;
+        double mappedValue = value <= transitionPoint ? Math.log10(10 * value + 1) * 500
+                : 1000 + (value - transitionPoint) * 8000;
+        mappedValue = Math.round(mappedValue / step) * (float) step;
+        return (int) mappedValue;
     }
 
     /**

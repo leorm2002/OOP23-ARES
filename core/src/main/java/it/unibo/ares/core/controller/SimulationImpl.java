@@ -26,6 +26,7 @@ final class SimulationImpl implements Simulation {
         calculating = false;
         this.tickRate = tickRate;
         tickCount = 0;
+        isOver = false;
     }
 
     private State state;
@@ -33,6 +34,7 @@ final class SimulationImpl implements Simulation {
     private boolean running; // may be sincronized if we want to make it usable to await termination
     private boolean calculating;
     private int tickCount;
+    private boolean isOver;
     // IN ms
     Integer tickRate;
 
@@ -76,7 +78,8 @@ final class SimulationImpl implements Simulation {
     private boolean tickSim() {
         State oldState = this.state;
         this.state = this.model.tick(this.state);
-        return this.model.isOver(oldState, this.state);
+        this.isOver = this.model.isOver(oldState, this.state);
+        return isOver;
     }
 
     private boolean shouldTick() {
@@ -98,7 +101,7 @@ final class SimulationImpl implements Simulation {
             throw new IllegalStateException("Simulation is already calculating");
         }
 
-        if (!shouldTick()) {
+        if (!shouldTick() || isOver) {
             return CompletableFuture.completedFuture(mapStateToSimulationData(this.state, simulationSessionId, false));
         }
 
@@ -123,7 +126,7 @@ final class SimulationImpl implements Simulation {
             throw new IllegalStateException("Simulation is already calculating");
         }
 
-        if (!shouldTick()) {
+        if (!shouldTick() || isOver) {
             return mapStateToSimulationData(this.state, simulationSessionId, false);
         }
 
