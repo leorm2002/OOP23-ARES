@@ -88,8 +88,8 @@ public final class SchellingModelFactory implements ModelFactory {
                         .mapToDouble(d -> d)
                         .average();
                 String out = vTot.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
-                String outA = va.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
-                String outB = vb.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
+                String outA = va.isPresent() ? String.valueOf(va.getAsDouble()) : "";
+                String outB = vb.isPresent() ? String.valueOf(vb.getAsDouble()) : "";
                 return List.of(new Pair<>("Avg total ratio:", out),
                         new Pair<>("Avg A ratio:", outA),
                         new Pair<>("Avg B ratio:", outB));
