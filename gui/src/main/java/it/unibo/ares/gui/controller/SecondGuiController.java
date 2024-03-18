@@ -106,7 +106,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldNumber,
                     Number newNumber) {
-                int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), 0, (int) MAXSTEP,
+                int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), (int) MAXSTEP,
                         (int) CalculatorSupplier.TICKRATE);
                 String stepString = step != 0 ? String.valueOf(step) + " ms" : "Max speed";
                 lblStep.setText("Step: " + stepString);
@@ -126,7 +126,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
         return (double) value / MAXSTEP;
     }
 
-    private int mapToRange(double inputValue, double minInput, double maxInput, int minOutput, int maxOutput,
+    private int mapToRange(double inputValue, double minInput, double maxInput, int maxOutput,
             int step) {
         // Ensure the value is within the specified range
         Double value = Math.max(minInput, Math.min(maxInput, inputValue));
@@ -142,14 +142,24 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * This method is called when the next item in the simulation is available.
      * It updates the GUI with the new simulation data on the JavaFX Application
      * thread. DATARECIEVER INTERFACE
+     * If the simulation is finished, it shows an alert to the user and disables the
+     * pause and restart buttons.
      *
      * @param item The next simulation output data.
      */
     @Override
     public void onNext(final SimulationOutputData item) {
-        Platform.runLater(() -> {
-            guiWriter.write2dMap(item.getData(), anchorPane, item.getWidth(), item.getHeight());
-        });
+        if (!item.isFinished()) {
+            Platform.runLater(() -> {
+                guiWriter.write2dMap(item.getData(), anchorPane, item.getWidth(), item.getHeight());
+            });
+        }
+        else {
+            guiWriter.showAlert(
+                    "La simulazione è terminata, premi stop per tornare alla selezione di un nuovo modello.");
+            guiWriter.disableElement(btnPause);
+            guiWriter.disableElement(btnRestart);
+        }
     }
 
     // METHODS TO HANDLE
