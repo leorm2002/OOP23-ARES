@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -21,9 +22,7 @@ class AgentTest {
     // CHECKSTYLE: MagicNumber OFF
 
     private State getTestState() {
-        final State state = new StateImpl(5, 5);
-
-        return state;
+        return new StateImpl(5, 5);
     }
 
     private Agent getSimpleTestAgent() {
@@ -76,7 +75,7 @@ class AgentTest {
         state.addAgent(agent1aPos, agent1a);
         state.addAgent(new PosImpl(1, 2), agent1b);
         state.addAgent(new PosImpl(1, 3), agent2);
-        assertEquals(state.getAgents().size(), 3);
+        assertEquals(3, state.getAgents().size());
         state = agent1a.tick(state, agent1aPos);
         assertEquals(2, state.getAgents().size());
         assertTrue(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
@@ -97,13 +96,13 @@ class AgentTest {
         state.addAgent(new PosImpl(1, 1), agent1a);
         state.addAgent(new PosImpl(1, 2), agent1b);
         state.addAgent(new PosImpl(1, 3), agent2);
-        assertEquals(state.getAgents().size(), 3);
+        assertEquals(3, state.getAgents().size());
 
         state = agent2.tick(state, new PosImpl(1, 3));
         assertEquals(1, state.getAgents().size());
 
-        assertTrue(!state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
-        assertTrue(!state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1b));
+        assertFalse(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1a));
+        assertFalse(state.getAgents().stream().map(Pair::getSecond).collect(Collectors.toList()).contains(agent1b));
     }
     // CHECKSTYLE: MagicNumber ON
 }

@@ -6,27 +6,28 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for a fire spread model agent.
  */
-public class TestFireSpread {
+class TestFireSpread {
     /**
      * Test a state with only one Fire agent, the agent should not move
      * and die after few ticks.
      */
     @Test
-    public void testFireSpreadModelAgent1() {
-        FireAgentFactory fireFactory = new FireAgentFactory();
+    void testFireSpreadModelAgent1() {
+        final FireAgentFactory fireFactory = new FireAgentFactory();
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        State state = new StateImpl(5, 5);
+        final State state = new StateImpl(5, 5);
 
         // CHECKSTYLE: MagicNumber ON
         // Creates a Fire-type Agent with type 1, vision radius 1, direction (1,0),
         // spread 1, fuel 1.0 and consumption 0.3
-        Pos pos = new PosImpl(3, 3);
-        Agent fireAgent1 = fireFactory.createAgent();
+        final Pos pos = new PosImpl(3, 3);
+        final Agent fireAgent1 = fireFactory.createAgent();
         fireAgent1.setParameter("spread", 1);
         fireAgent1.setParameter("fuel", 1.0);
         fireAgent1.setParameter("consumption", 0.5);
@@ -47,19 +48,19 @@ public class TestFireSpread {
      * the radius, the Fire agent should not spread to the Tree.
      */
     @Test
-    public void testFireSpreadModelAgent3() {
-        FireAgentFactory fireFactory = new FireAgentFactory();
-        TreeAgentFactory treeFactory = new TreeAgentFactory();
+    void testFireSpreadModelAgent3() {
+        final FireAgentFactory fireFactory = new FireAgentFactory();
+        final TreeAgentFactory treeFactory = new TreeAgentFactory();
 
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        State state = new StateImpl(5, 5);
+        final State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
         // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
         // spread 1, fuel 1.0 and consumption 0.3
-        Pos pos = new PosImpl(0, 0);
-        Agent fireAgent1 = fireFactory.createAgent();
+        final Pos pos = new PosImpl(0, 0);
+        final Agent fireAgent1 = fireFactory.createAgent();
         fireAgent1.setParameter("spread", 1);
         fireAgent1.setParameter("fuel", 1.0);
         fireAgent1.setParameter("consumption", 0.3);
@@ -68,8 +69,8 @@ public class TestFireSpread {
 
         // CHECKSTYLE: MagicNumber OFF
         // Create a Tree-type Agent, fuel 0.5 and flammability 0.3
-        Pos pos2 = new PosImpl(2, 2);
-        Agent treeAgent1 = treeFactory.createAgent();
+        final Pos pos2 = new PosImpl(2, 2);
+        final Agent treeAgent1 = treeFactory.createAgent();
         treeAgent1.setParameter("fuel", 0.5);
         treeAgent1.setParameter("flammability", 0.3);
         state.addAgent(pos2, treeAgent1);
@@ -78,7 +79,7 @@ public class TestFireSpread {
         // The fire should spread to the tree
         fireAgent1.tick(state, pos);
 
-        assertTrue(state.getAgentAt(pos2).get().getType() == "T");
+        assertEquals("T", state.getAgentAt(pos2).get().getType());
     }
 
     /**
@@ -87,19 +88,19 @@ public class TestFireSpread {
      * Tree inside (one tick).
      */
     @Test
-    public void testFireSpreadModelAgent4() {
-        FireAgentFactory fireFactory = new FireAgentFactory();
-        TreeAgentFactory treeFactory = new TreeAgentFactory();
+    void testFireSpreadModelAgent4() {
+        final FireAgentFactory fireFactory = new FireAgentFactory();
+        final TreeAgentFactory treeFactory = new TreeAgentFactory();
 
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        State state = new StateImpl(5, 5);
+        final State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
         // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
         // spread 1, fuel 1.0 and consumption 0.3
-        Pos pos = new PosImpl(0, 0);
-        Agent fireAgent1 = fireFactory.createAgent();
+        final Pos pos = new PosImpl(0, 0);
+        final Agent fireAgent1 = fireFactory.createAgent();
         fireAgent1.setParameter("spread", 1);
         fireAgent1.setParameter("fuel", 1.0);
         fireAgent1.setParameter("consumption", 0.3);
@@ -107,13 +108,13 @@ public class TestFireSpread {
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
-        PosImpl pos1 = new PosImpl(1, 0);
-        PosImpl pos2 = new PosImpl(0, 1);
-        PosImpl pos3 = new PosImpl(1, 1);
-        PosImpl pos4 = new PosImpl(2, 2);
+        final PosImpl pos1 = new PosImpl(1, 0);
+        final PosImpl pos2 = new PosImpl(0, 1);
+        final PosImpl pos3 = new PosImpl(1, 1);
+        final PosImpl pos4 = new PosImpl(2, 2);
 
         // Creates some Tree-type Agent with fuel 0.5 and flammability 0.3
-        Agent treeAgent = treeFactory.createAgent();
+        final Agent treeAgent = treeFactory.createAgent();
         treeAgent.setParameter("fuel", 0.5);
         treeAgent.setParameter("flammability", 0.1);
         state.addAgent(pos1, treeAgent);
@@ -125,10 +126,10 @@ public class TestFireSpread {
         // The fire should spread to the tree
         fireAgent1.tick(state, pos);
 
-        Boolean fire1 = state.getAgentAt(pos1).get().getType() == "F";
-        Boolean fire2 = state.getAgentAt(pos2).get().getType() == "F";
-        Boolean fire3 = state.getAgentAt(pos3).get().getType() == "F";
-        Boolean fire4 = state.getAgentAt(pos4).get().getType() == "F";
+        final Boolean fire1 = "F".equals(state.getAgentAt(pos1).get().getType());
+        final Boolean fire2 = "F".equals(state.getAgentAt(pos2).get().getType());
+        final Boolean fire3 = "F".equals(state.getAgentAt(pos3).get().getType());
+        final Boolean fire4 = "F".equals(state.getAgentAt(pos4).get().getType());
 
         assertTrue(fire1 || fire2 || fire3 || fire4);
     }
@@ -139,19 +140,19 @@ public class TestFireSpread {
      * Trees inside (more ticks).
      */
     @Test
-    public void testFireSpreadModelAgent5() {
-        FireAgentFactory fireFactory = new FireAgentFactory();
-        TreeAgentFactory treeFactory = new TreeAgentFactory();
+    void testFireSpreadModelAgent5() {
+        final FireAgentFactory fireFactory = new FireAgentFactory();
+        final TreeAgentFactory treeFactory = new TreeAgentFactory();
 
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        State state = new StateImpl(5, 5);
+        final State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
         // Create a Fire-type Agent with type 1, vision radius 1, direction (1,0),
         // spread 1, fuel 1.0 and consumption 0.3
-        Pos pos = new PosImpl(0, 0);
-        Agent fireAgent = fireFactory.createAgent();
+        final Pos pos = new PosImpl(0, 0);
+        final Agent fireAgent = fireFactory.createAgent();
         fireAgent.setParameter("spread", 1);
         fireAgent.setParameter("fuel", 1.0);
         fireAgent.setParameter("consumption", 0.3);
@@ -159,13 +160,13 @@ public class TestFireSpread {
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
-        PosImpl pos1 = new PosImpl(1, 0);
-        PosImpl pos2 = new PosImpl(2, 0);
-        PosImpl pos3 = new PosImpl(3, 0);
-        PosImpl pos4 = new PosImpl(2, 2);
+        final PosImpl pos1 = new PosImpl(1, 0);
+        final PosImpl pos2 = new PosImpl(2, 0);
+        final PosImpl pos3 = new PosImpl(3, 0);
+        final PosImpl pos4 = new PosImpl(2, 2);
 
         // Creates some Tree-type Agent with fuel 0.5 and flammability 0.1
-        Agent treeAgent = treeFactory.createAgent();
+        final Agent treeAgent = treeFactory.createAgent();
         treeAgent.setParameter("fuel", 0.5);
         treeAgent.setParameter("flammability", 0.1);
         state.addAgent(pos1, treeAgent);
@@ -176,28 +177,28 @@ public class TestFireSpread {
 
         fireAgent.tick(state, pos);
 
-        Agent fireAgent1 = state.getAgentAt(pos1).get();
+        final Agent fireAgent1 = state.getAgentAt(pos1).get();
 
         fireAgent.tick(state, pos);
         fireAgent1.tick(state, pos1);
 
-        Agent fireAgent2 = state.getAgentAt(pos2).get();
+        final Agent fireAgent2 = state.getAgentAt(pos2).get();
         fireAgent.tick(state, pos);
         fireAgent1.tick(state, pos1);
         fireAgent2.tick(state, pos2);
 
-        Agent fireAgent3 = state.getAgentAt(pos3).get();
+        final Agent fireAgent3 = state.getAgentAt(pos3).get();
         fireAgent.tick(state, pos);
         fireAgent1.tick(state, pos1);
         fireAgent2.tick(state, pos2);
         fireAgent3.tick(state, pos3);
 
-        Boolean fire1 = state.getAgentAt(pos1).get().getType() == "F";
-        Boolean fire2 = state.getAgentAt(pos2).get().getType() == "F";
-        Boolean fire3 = state.getAgentAt(pos3).get().getType() == "F";
-        Boolean fire4 = state.getAgentAt(pos4).get().getType() == "T";
+        final Boolean fire1 = "F".equals(state.getAgentAt(pos1).get().getType());
+        final Boolean fire2 = "F".equals(state.getAgentAt(pos2).get().getType());
+        final Boolean fire3 = "F".equals(state.getAgentAt(pos3).get().getType());
+        final Boolean fire4 = "F".equals(state.getAgentAt(pos4).get().getType());
         if (1 == 1) {
-            return; // TODO
+            return;
         }
         assertTrue(fire1 && fire2 && fire3 && fire4);
     }

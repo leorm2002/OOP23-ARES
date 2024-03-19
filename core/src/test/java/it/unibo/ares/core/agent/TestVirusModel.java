@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * This class tests the VirusAgentFactory class.
  */
-public class TestVirusModel {
+class TestVirusModel {
     private IVirusAgentFactory factoryI;
     private Pos initialPos;
     private PVirusAgentFactory factoryP;
@@ -25,7 +25,7 @@ public class TestVirusModel {
         factoryI = new IVirusAgentFactory();
         factoryP = new PVirusAgentFactory();
         initialPos = new PosImpl(0, 0);
-        Agent agent = factoryP.createAgent();
+        final Agent agent = factoryP.createAgent();
         agent.setParameter("infectionRate", infectionRate);
         agent.setParameter("stepSize", 1);
         agent.setParameter("direction", new DirectionVectorImpl(0, 0));
@@ -35,7 +35,7 @@ public class TestVirusModel {
 
     private Agent getIAgent(final int recoveryRate) {
         factoryI = new IVirusAgentFactory();
-        Agent agent = factoryI.createAgent();
+        final Agent agent = factoryI.createAgent();
         initialPos = new PosImpl(0, 0);
         agent.setParameter("direction", new DirectionVectorImpl(0, 0));
         agent.setParameter("stepSize", 1);
@@ -56,13 +56,13 @@ public class TestVirusModel {
         // create two agents, one healthy and one infected
         // then try to infect the healthy person whose infection rate is 100%, so it
         // should become infected
-        Agent agent = getPAgent(100);
-        Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
+        final Agent agent = getPAgent(100);
+        final Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
                 .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent, initialPos);
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent, initialPos);
         assertTrue(a.get().getType().equals("I"));
     }
 
@@ -74,19 +74,19 @@ public class TestVirusModel {
      * recovery rate.
      */
     @Test
-    public void testRecovery() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    void testRecovery() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
         // create two agents, one healthy and one infected
         // then try to recover the infected person whose recovery rate is 100%, so it
         // should become healthy
-        Agent agent = getIAgent(100);
+        final Agent agent = getIAgent(100);
 
-        Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
+        final Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
                 .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent, initialPos);
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent, initialPos);
         assertTrue(a.get().getType().equals("P"));
     }
 
@@ -98,19 +98,19 @@ public class TestVirusModel {
      * recovery rate.
      */
     @Test
-    public void testRecovery2() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    void testRecovery2() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
         // create two agents, one healthy and one infected
         // then try to recover the infected person whose recovery rate is 0%, so it
         // should not become healthy
-        Agent agent = getIAgent(0);
+        final Agent agent = getIAgent(0);
 
-        Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
+        final Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
                 .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent, initialPos);
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent, initialPos);
         assertTrue(a.isEmpty());
     }
 
@@ -122,19 +122,19 @@ public class TestVirusModel {
      * rate.
      */
     @Test
-    public void testInfection2() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    void testInfection2() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
         // create two agents, one healthy and one infected
         // then try to infect the healthy person whose infection rate is 0%, so it
         // should not become infected
-        Agent agent = getPAgent(0);
+        final Agent agent = getPAgent(0);
 
-        Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
+        final Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
                 .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent, initialPos);
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent, initialPos);
         assertTrue(a.isEmpty());
     }
 }

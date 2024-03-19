@@ -17,7 +17,7 @@ final class EntityImplTest {
      */
     @Test
     void testGetName() {
-        EntityImpl entity = new EntityImpl();
+        final EntityImpl entity = new EntityImpl();
         assertThrows(IllegalStateException.class, () -> {
             entity.getName();
         });
@@ -28,8 +28,8 @@ final class EntityImplTest {
      */
     @Test
     void testSetName() {
-        EntityImpl entity = new EntityImpl();
-        String name = "Test Name";
+        final EntityImpl entity = new EntityImpl();
+        final String name = "Test Name";
         entity.setName(name);
         assertEquals(name, entity.getName());
     }
@@ -39,7 +39,7 @@ final class EntityImplTest {
      */
     @Test
     void testSetNameWithNull() {
-        EntityImpl entity = new EntityImpl();
+        final EntityImpl entity = new EntityImpl();
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setName(null);
         });

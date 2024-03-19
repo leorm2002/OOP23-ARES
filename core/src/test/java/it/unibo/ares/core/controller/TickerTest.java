@@ -3,7 +3,6 @@ package it.unibo.ares.core.controller;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,7 +15,6 @@ class TickerTest {
     private static final long INITIALDELAY = 0L;
     private static final long PERIOD = 1L;
 
-
     @AfterEach
     void tearDown() throws InterruptedException {
         if (ticker != null) {
@@ -27,7 +25,7 @@ class TickerTest {
     @Test
     void startShouldExecuteTaskAtFixedRate() throws InterruptedException {
         counter = new AtomicInteger(0);
-        Runnable task = counter::incrementAndGet;
+        final Runnable task = counter::incrementAndGet;
         ticker = new TickerImpl(task, INITIALDELAY, PERIOD);
 
         ticker.start();
@@ -40,14 +38,14 @@ class TickerTest {
     @Test
     void stopShouldStopTaskExecution() throws InterruptedException {
         counter = new AtomicInteger(0);
-        Runnable task = counter::incrementAndGet;
+        final Runnable task = counter::incrementAndGet;
         ticker = new TickerImpl(task, INITIALDELAY, PERIOD);
 
         ticker.start();
         // Wait for the task to be executed at least once
         Thread.sleep(TimeUnit.SECONDS.toMillis(PERIOD + 1));
         ticker.stop();
-        int countAfterStop = counter.get();
+        final int countAfterStop = counter.get();
         Thread.sleep(TimeUnit.SECONDS.toMillis(2 * PERIOD));
 
         // Check that the task did not run after stop
