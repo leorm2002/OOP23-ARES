@@ -23,6 +23,11 @@ import java.util.stream.IntStream;
  */
 public final class VirusModelFactory implements ModelFactory {
     private static final String MODEL_ID = "VirusDiffusion";
+    /**
+     * default parameters for the virus model (used in the runtime creation of
+     * the agents).
+     */
+    public static final int RECOVERY_RATE = 5, INFECTION_RATE = 70, STEP_SIZEP = 1, STEP_SIZEI = 1;
 
     /**
      * Returns the model ID of the VirusModelFactory.

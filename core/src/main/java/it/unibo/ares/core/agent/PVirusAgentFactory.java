@@ -2,12 +2,11 @@ package it.unibo.ares.core.agent;
 
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.BiPredicate;
 
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.model.VirusModelFactory;
 import it.unibo.ares.core.utils.ComputationUtils;
-import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
@@ -20,12 +19,6 @@ import it.unibo.ares.core.utils.state.State;
 public final class PVirusAgentFactory implements AgentFactory {
 
     private Random r;
-    // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT
-    // Utilizzati per settare i parametri dell'agente infetto
-    private int stepSizeI = 1;
-    private int infectionRate;
-    private int recoveryRate;
-    private boolean paramSected;
 
     /**
      * Constructor for the PVirusAgentFactory.
@@ -44,46 +37,6 @@ public final class PVirusAgentFactory implements AgentFactory {
     };
 
     /**
-     * Initializes the parameters for the agents.
-     * Useful for the first tick, so the factory can set the parameters for the
-     * agents
-     * when they are created on runtime.
-     *
-     * @param agents The set of agents.
-     */
-    private void initializeParameters(final Set<Pair<Pos, Agent>> agents) {
-        boolean infSected = false;
-        boolean persSected = false;
-        // cerco i parametri per l'agente infetto e per l'agente sano
-        // una volta settati i parametri per ciascun tipo di agente, break
-        for (final Pair<Pos, Agent> pair : agents) {
-            switch (pair.getSecond().getType()) {
-                case "P":
-                    infectionRate = pair.getSecond().getParameters()
-                            .getParameter("infectionRate", Integer.class)
-                            .get().getValue();
-                    persSected = true;
-                    break;
-                case "I":
-                    stepSizeI = pair.getSecond().getParameters()
-                            .getParameter("stepSize", Integer.class)
-                            .get().getValue();
-                    recoveryRate = pair.getSecond().getParameters()
-                            .getParameter("recoveryRate", Integer.class)
-                            .get().getValue();
-                    infSected = true;
-                    break;
-                default:
-                    break;
-            }
-            if (persSected && infSected) {
-                paramSected = true;
-                break;
-            }
-        }
-    }
-
-    /**
      * Updates the state of the agent based on its current state and position.
      * The agent can move in the environment and get infected by other agents.
      * At every tick the agents can move or get infected.
@@ -94,10 +47,6 @@ public final class PVirusAgentFactory implements AgentFactory {
      * @return The updated state of the agent.
      */
     private State tickFunction(final State currentState, final Pos agentPosition) {
-        // se i parametri della classe non sono stati settati, li setto
-        if (!paramSected) {
-            initializeParameters(currentState.getAgents());
-        }
         if (!currentState.getAgentAt(agentPosition).isPresent()) {
             return currentState;
         }
@@ -160,8 +109,12 @@ public final class PVirusAgentFactory implements AgentFactory {
      *         successful, otherwise an empty Optional
      */
     private Optional<Agent> infectPerson(final Agent agent, final Pos agentPosition) {
+        final int infectionRate = agent.getParameters().getParameter("infectionRate", Integer.class)
+                .get().getValue();
         if (r.nextInt(100) < infectionRate) {
-            // create a new agent with the parameters of the infected agents
+            // create a new agent with the defaul parameters of the infected agents
+            final int stepSizeI = VirusModelFactory.STEP_SIZEI;
+            final int recoveryRate = VirusModelFactory.RECOVERY_RATE;
             final IVirusAgentFactory factory = new IVirusAgentFactory();
             final Agent a = factory.createAgent();
             a.setParameter("stepSize", stepSizeI);
