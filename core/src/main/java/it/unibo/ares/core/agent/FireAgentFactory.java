@@ -27,7 +27,6 @@ public final class FireAgentFactory implements AgentFactory {
         private DirectionVector windDirection;
         private Double windChange;
         private final Random r;
-        private final FireAgentFactory faf;
         private final ExtingueshedAgentFactory eaf;
 
         private static BiPredicate<Agent, Agent> agentOfDiffType = (a, b) -> {
@@ -45,7 +44,6 @@ public final class FireAgentFactory implements AgentFactory {
                 this.windChange = 0.0;
                 this.windDirection = getRandomDirection();
                 this.eaf = new ExtingueshedAgentFactory();
-                this.faf = new FireAgentFactory();
         }
 
         /**
@@ -145,7 +143,7 @@ public final class FireAgentFactory implements AgentFactory {
                 final Double newCons = flammability == 0.0 ? 0.0 : flammability + (cons * CONSFACTOR);
 
                 /* Starts a new fire */
-                final Agent newAgent = getFireAgent(spread, newFuel, newCons);
+                final Agent newAgent = getFireAgent(createAgent(), spread, newFuel, newCons);
 
                 state.removeAgent(pos, treeAgent);
                 state.addAgent(pos, newAgent);
@@ -214,12 +212,11 @@ public final class FireAgentFactory implements AgentFactory {
          * 
          * @return An instance of the Fire Agent.
          */
-        private Agent getFireAgent(final Integer spread, final Double fuel, final Double cons) {
-                Agent a = faf.createAgent();
-                a.setParameter(FUEL, fuel);
-                a.setParameter("spread", spread);
-                a.setParameter("consumption", cons);
-                return a;
+        private Agent getFireAgent(final Agent fireAgent, final Integer spread, final Double fuel, final Double cons) {
+                fireAgent.setParameter(FUEL, fuel);
+                fireAgent.setParameter("spread", spread);
+                fireAgent.setParameter("consumption", cons);
+                return fireAgent;
         }
 
         /**
