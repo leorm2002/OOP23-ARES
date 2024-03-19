@@ -23,17 +23,14 @@ public class GuiStarter extends Application {
      *               application scene can be set.
      */
     @Override
-    public void start(final Stage window) {
+    public void start(final Stage window) throws IOException {
         Parent root;
-        try {
-            root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
-            Scene scene = new Scene(root);
-            window.setTitle("ARES");
-            window.setScene(scene);
-            window.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
+        final Scene scene = new Scene(root);
+        window.setTitle("ARES");
+        window.setScene(scene);
+        FirstGuiController.setStage(window);
+        window.show();
     }
 
     /**

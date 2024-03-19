@@ -5,7 +5,11 @@ import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.pos.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
+
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -22,7 +26,7 @@ import java.util.Map;
 public class GuiDinamicWriterImpl implements GuiDinamicWriter {
 
     /**
-     * The writeVBox method writes parameters to a VBox. For each parameter, 
+     * The writeVBox method writes parameters to a VBox. For each parameter,
      * it creates a new TextField with the parameter's name
      * as the ID and the parameter's value as the text,
      * and adds the TextField to the VBox's children.
@@ -41,9 +45,9 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          * with the domain description
          */
         parameters.getParameters().stream().filter(Parameter::userSettable).forEach(p -> {
-            Label lbl = new Label(p.getKey());
-            Label domain = new Label();
-            TextField txt = new TextField();
+            final Label lbl = new Label(p.getKey());
+            final Label domain = new Label();
+            final TextField txt = new TextField();
             txt.setId(p.getKey());
             VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
             setElementStyle(domain, domainSize);
@@ -58,7 +62,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
              */
             try {
                 txt.setText(p.getValue().toString());
-            } catch (Exception e) {
+            } catch (IllegalStateException e) {
                 txt.setText("");
                 txt.setPromptText(p.getType().getSimpleName());
             }
@@ -83,7 +87,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * ChoiceBox.
      *
      * @param choiceBox the ChoiceBox to which the items should be written
-     * @param set       the collection of items to be written to the ChoiceBox
+     * @param collection       the collection of items to be written to the ChoiceBox
      * @param <T>       the type of the items in the collection and the ChoiceBox
      */
     @Override
@@ -115,32 +119,33 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
             final int height) {
         final int maxSizeGrid = 655, prefLblSize = 40;
         container.getChildren().clear();
-        GridPane grid = new GridPane();
+        final GridPane grid = new GridPane();
         grid.setMaxSize(maxSizeGrid, maxSizeGrid);
         /*
-         * creating a label (cell) for each position in the map and setting his min and max
+         * creating a label (cell) for each position in the map and setting his min and
+         * max
          * size
          */
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                Label lbl = new Label();
+                final Label lbl = new Label();
                 lbl.setPrefSize(prefLblSize, prefLblSize);
-                lbl.setMinSize(prefLblSize/2, prefLblSize/2);
+                lbl.setMinSize(prefLblSize / 2, prefLblSize / 2);
                 grid.add(lbl, i, j);
             }
         }
         /*
-         * scale the dimension of the textfield in the gridpane based on the width of the
+         * scale the dimension of the textfield in the gridpane based on the width of
+         * the
          * gridpane
          */
         int txtSize;
-        if (width >= 22 && width < 25) {
-            txtSize = 16;
-        }
-        else if (width >= 25) {
-            txtSize = 14;
-        }
-        else {
+        final int widthRange1 = 22, widthRange2 = 25, txtSize1 = 14, txtSize2 = 16;
+        if (width >= widthRange1 && width < widthRange2) {
+            txtSize = txtSize2;
+        } else if (width >= widthRange2) {
+            txtSize = txtSize1;
+        } else {
             txtSize = prefLblSize / 2;
         }
         /*
@@ -148,7 +153,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          * (occupied positions)
          */
         items.forEach((pos, agent) -> {
-            Label txt = new Label(agent);
+            final Label txt = new Label(agent);
             setElementStyle(txt, txtSize);
             grid.add(txt, pos.getX(), pos.getY());
         });
@@ -166,7 +171,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      */
     @Override
     public void showError(final String message) {
-        Alert alert = new Alert(AlertType.ERROR);
+        final Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Errore");
         alert.setContentText(message);
         alert.showAndWait();
@@ -175,7 +180,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     /**
      * This method disables the given element if it is not already disabled.
      *
-     * @param elem the Node to be disabled
+     * @param element the Node to be disabled
      */
     @Override
     public void disableElement(final Node element) {
@@ -199,10 +204,10 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
     /**
      * This method clears all the children of the given VBox.
      *
-     * @param vBox the VBox instance to be cleared
+     * @param element the VBox instance to be cleared
      */
     @Override
-    public void clearVBox(VBox element) {
+    public void clearVBox(final VBox element) {
         element.getChildren().clear();
     }
 
@@ -214,8 +219,8 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * @param message The error message to be displayed in the dialog box.
      */
     @Override
-    public void showAlert(String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+    public void showAlert(final String message) {
+        final Alert alert = new Alert(AlertType.INFORMATION);
         alert.setContentText(message);
         alert.showAndWait();
     }

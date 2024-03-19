@@ -35,7 +35,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * GuiWriter is an instance of WriteOnGUIImpl used to write on the
      * GUI.
      */
-    private GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
+    private final GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
     /*
      * configurationSessionId is a string that holds the ID of the configuration
      * simlationId is a string that holds the ID of the simulation
@@ -51,7 +51,8 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances.
      */
-    private CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
+    private final CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
+    private static Stage stage;
 
     /*
      * FXML variables
@@ -104,11 +105,11 @@ public final class SecondGuiController extends DataReciever implements Initializ
              * It updates the step of the simulation and the label accordingly.
              */
             @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldNumber,
-                    Number newNumber) {
-                int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), (int) MAXSTEP,
+            public void changed(final ObservableValue<? extends Number> observable, final Number oldNumber,
+                    final Number newNumber) {
+                final int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(),
                         (int) CalculatorSupplier.getInstance().getTickRate());
-                String stepString = step != 0 ? String.valueOf(step) + " ms" : "Max speed";
+                final String stepString = step != 0 ? step + " ms" : "Max speed";
                 lblStep.setText("Step: " + stepString);
                 calculatorSupplier.setTickRate(simulationId, step);
             }
@@ -123,10 +124,10 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * @return the value mapped to be used in the slider
      */
     private double mapToSliderStep(final int value) {
-        int transitionPoint = 1000;
+        final int transitionPoint = 1000;
 
         return value <= transitionPoint ? (double) value / transitionPoint * 0.5
-                : 0.5 + ((double) (value - transitionPoint) / (5000 - transitionPoint)) * 0.5;
+                : 0.5 + ((double) (value - transitionPoint) / (MAXSTEP - transitionPoint)) * 0.5;
     }
 
     /*
@@ -135,14 +136,15 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * 1000-5000 ms
      *
      */
-    private int mapToRange(double inputValue, double minInput, double maxInput, int maxOutput,
-            int step) {
+    private int mapToRange(final double inputValue, final double minInput, final double maxInput,
+            final int step) {
         // Ensure the value is within the specified range
-        Double value = Math.max(minInput, Math.min(maxInput, inputValue));
+        final Double value = Math.max(minInput, Math.min(maxInput, inputValue));
 
-        double transitionPoint = 0.5;
-        double mappedValue = value <= transitionPoint ? (inputValue / transitionPoint * 1000)
-                : 1000 + (value - transitionPoint) * 8000;
+        final double transitionPoint = 0.5;
+        final int moltiplier = 8000;
+        double mappedValue = value <= transitionPoint ? inputValue / transitionPoint * 1000
+                : 1000 + (value - transitionPoint) * moltiplier;
         mappedValue = Math.round(mappedValue / step) * (float) step;
         return (int) mappedValue;
     }
@@ -193,6 +195,10 @@ public final class SecondGuiController extends DataReciever implements Initializ
         calculatorSupplier.startSimulation(simulationId);
     }
 
+    static void setStage(final Stage stage) {
+        SecondGuiController.stage = stage;
+    }
+
     /**
      * The stopSimulation method is called when we want to stop the simulation.
      * It stops the simulation and updates the GUI accordingly, switching to scene1
@@ -204,12 +210,12 @@ public final class SecondGuiController extends DataReciever implements Initializ
         Parent root;
         try {
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
-            Stage stage = (Stage) btnStop.getScene().getWindow();
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             stage.setScene(scene);
+            FirstGuiController.setStage(stage);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            guiWriter.showError("Errore durante il caricamento della scena 1");
         }
     }
 }

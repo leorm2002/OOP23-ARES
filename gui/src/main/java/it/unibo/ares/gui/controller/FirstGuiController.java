@@ -35,23 +35,21 @@ public final class FirstGuiController implements Initializable {
      * GuiWriter is an instance of WriteOnGUIImpl used to manage the
      * GUI.
      */
-    private GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
+    private final GuiDinamicWriter guiWriter = new GuiDinamicWriterImpl();
     /*
      * configurationSessionId is a string that holds the ID of the configuration
      * 
      */
     private String configurationSessionId;
-
-    /**
-     * alertShown is a boolean that holds the state of the alert.
-     */
-    private static boolean alertShown = false;
+    private static final int MAXSIZE = 35;
+    private static Stage stage;
+    private static boolean alertShown;
 
     /**
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances, models, and agents.
      */
-    private CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
+    private final CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
 
     /*
      * FXML variables
@@ -97,10 +95,6 @@ public final class FirstGuiController implements Initializable {
         btnInitialize.setOnAction(new HandlerAdapter(this::initializeModel));
         btnSetAgent.setOnAction(new HandlerAdapter(this::setAgentParameter));
         btnStart.setOnAction(new HandlerAdapter(this::startSecondGui));
-        if (!alertShown) {
-            guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 35*35");
-            alertShown = true;
-        }
     }
 
     /**
@@ -113,10 +107,10 @@ public final class FirstGuiController implements Initializable {
      */
     void initializeModel() {
         try {
-            BiConsumer<String, Object> parameterSetter = (key, value) -> {
+            final BiConsumer<String, Object> parameterSetter = (key, value) -> {
                 calculatorSupplier.setModelParameter(configurationSessionId, key, value);
             };
-            Parameters modelParameters = calculatorSupplier.getModelParametersParameters(configurationSessionId);
+            final Parameters modelParameters = calculatorSupplier.getModelParametersParameters(configurationSessionId);
             readParamatersValueAndSet(vboxModelPar, modelParameters, parameterSetter);
             guiWriter.writeChoiceBox(choiceAgent,
                     calculatorSupplier.getAgentsSimplified(configurationSessionId));
@@ -127,7 +121,7 @@ public final class FirstGuiController implements Initializable {
             guiWriter.enableElement(vboxAgentPar);
             choiceAgent.setOnAction(new HandlerAdapter(this::writeAgentParametersList));
             guiWriter.showAlert("Model correctly initialized, you can now set the parameters for the agents");
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             guiWriter.showError(e.getMessage());
         }
     }
@@ -157,13 +151,14 @@ public final class FirstGuiController implements Initializable {
          * TextField's ID is then used as the key, and the TextField's text is used as
          * the value.
          */
+        final String errorString = "Per il parametro ";
         vbox.getChildren().stream().filter(node -> node instanceof TextField).map(node -> (TextField) node)
                 .forEach(txt -> {
-                    String typeToString = params.getParameter(txt.getId()).map(Parameter::getType)
+                    final String typeToString = params.getParameter(txt.getId()).map(Parameter::getType)
                             .map(Class::getSimpleName)
                             .orElse("");
-                    Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
-                    Parameter<?> parameter = params.getParameter(txt.getId()).orElse(null);
+                    final Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
+                    final Parameter<?> parameter = params.getParameter(txt.getId()).orElse(null);
                     /*
                      * switch on the type of the parameter and cast the text of the TextField to the
                      * correct type for setting it in the calculator
@@ -177,52 +172,47 @@ public final class FirstGuiController implements Initializable {
                          * error message
                          */
                         case "String":
-                            try {
-                                parameterSetter.accept(txt.getId(), txt.getText());
-                            } catch (Exception e) {
-                                guiWriter.showError(e.getMessage());
-                            }
+                            parameterSetter.accept(txt.getId(), txt.getText());
                             break;
                         case "Integer":
                             try {
-                                int value = Integer.parseInt(txt.getText());
-                                if (parameter.getKey().equals(Model.SIZEKEY) && value > 35) {
+                                final int value = Integer.parseInt(txt.getText());
+                                if (Model.SIZEKEY.equals(parameter.getKey()) && value > MAXSIZE) {
                                     guiWriter.showAlert("The size of the space must be less than 35!");
-                                    return;
                                 } else {
                                     parameterSetter.accept(txt.getId(), value);
                                 }
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 guiWriter.showError(
-                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                        errorString + parameter.getKey()
                                                 + " il valore deve essere un intero");
                             }
                             break;
                         case "Double":
                             try {
-                                double value = Double.parseDouble(txt.getText().replace(",", "."));
+                                final double value = Double.parseDouble(txt.getText().replace(",", "."));
                                 parameterSetter.accept(txt.getId(), value);
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 guiWriter.showError(
-                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                        errorString + parameter.getKey()
                                                 + " il valore deve essere un decimale");
                             }
                             break;
                         case "Boolean":
                             try {
                                 parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 guiWriter.showError(
-                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                        errorString + parameter.getKey()
                                                 + " il valore deve essere un valore booleano (true/false)");
                             }
                             break;
                         case "Float":
                             try {
                                 parameterSetter.accept(txt.getId(), StringCaster.cast(txt.getText(), type));
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 guiWriter.showError(
-                                        "Errore : " + e.getMessage() + "\n Per il parametro " + parameter.getKey()
+                                        errorString + parameter.getKey()
                                                 + " il valore deve essere un decimale");
                             }
                             break;
@@ -259,20 +249,16 @@ public final class FirstGuiController implements Initializable {
      * If any exception occurs during this process, it shows the error message.
      */
     void setAgentParameter() {
-        try {
-            BiConsumer<String, Object> parameterSetter = (key, value) -> {
-                calculatorSupplier.setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), key,
-                        value);
-            };
-            Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
-                    choiceAgent.getValue());
-            readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
-            if (everythingIsSet()) {
-                guiWriter.showAlert("All the parameters are setted, you can start the simulation!");
-                guiWriter.enableElement(btnStart);
-            }
-        } catch (Exception e) {
-            guiWriter.showError(e.getMessage());
+        final BiConsumer<String, Object> parameterSetter = (key, value) -> {
+            calculatorSupplier.setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), key,
+                    value);
+        };
+        final Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
+                choiceAgent.getValue());
+        readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
+        if (everythingIsSet()) {
+            guiWriter.showAlert("All the parameters are setted, you can start the simulation!");
+            guiWriter.enableElement(btnStart);
         }
     }
 
@@ -285,7 +271,7 @@ public final class FirstGuiController implements Initializable {
      * @return true if all the parameters are set, false otherwise
      */
     private boolean everythingIsSet() {
-        for (String agentID : calculatorSupplier.getAgentsSimplified(configurationSessionId)) {
+        for (final String agentID : calculatorSupplier.getAgentsSimplified(configurationSessionId)) {
             if (!calculatorSupplier.getAgentParametersSimplified(configurationSessionId, agentID)
                     .areAllParametersSetted()) {
                 return false;
@@ -301,7 +287,7 @@ public final class FirstGuiController implements Initializable {
      * and finally writes the parameters to the VBox.
      */
     private void writeAgentParametersList() {
-        Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
+        final Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
                 choiceAgent.getValue());
         guiWriter.clearVBox(vboxAgentPar);
         guiWriter.writeVBox(vboxAgentPar, agentParameters);
@@ -317,6 +303,10 @@ public final class FirstGuiController implements Initializable {
      * disables the set agent button.
      */
     private void writeModelParametersList() {
+        if (!alertShown) {
+            guiWriter.showAlert("La versione gui supporta in maniera stabile solo fino a una size 35*35");
+            alertShown = true;
+        }
         choiceAgent.setOnAction(null);
         guiWriter.disableElement(choiceAgent);
         guiWriter.disableElement(btnSetAgent);
@@ -331,10 +321,14 @@ public final class FirstGuiController implements Initializable {
         guiWriter.clearVBox(vboxModelPar);
         guiWriter.clearVBox(vboxAgentPar);
         configurationSessionId = calculatorSupplier.addNewModel(choiceModel.getValue());
-        Parameters modelParameters = calculatorSupplier
+        final Parameters modelParameters = calculatorSupplier
                 .getModelParametersParameters(configurationSessionId);
         guiWriter.writeVBox(vboxModelPar, modelParameters);
         guiWriter.enableElement(btnInitialize);
+    }
+
+    static void setStage(final Stage stage) {
+        FirstGuiController.stage = stage;
     }
 
     /**
@@ -346,17 +340,17 @@ public final class FirstGuiController implements Initializable {
      */
     private void startSecondGui() {
         Parent root;
-        Stage stage = (Stage) btnStart.getScene().getWindow();
         try {
             SecondGuiController.setConfigurationId(configurationSessionId);
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             stage.setTitle("ARES");
             stage.setScene(scene);
             stage.setResizable(false);
+            SecondGuiController.setStage(stage);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            guiWriter.showError("Errore durante il caricamento della scena 2");
         }
     }
 }

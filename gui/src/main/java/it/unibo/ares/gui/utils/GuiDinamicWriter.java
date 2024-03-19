@@ -78,7 +78,7 @@ public interface GuiDinamicWriter {
     /**
      * This method cleans the specified element.
      *
-     * @param vBox the VBox to be cleaned
+     * @param element the VBox to be cleaned
      */
     void clearVBox(VBox element);
 }
