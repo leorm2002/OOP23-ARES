@@ -29,7 +29,7 @@ class SimulationInitializerTest {
     void testInitializeModelWithoutSettingParameters() {
         SimulationInitializerImpl simulationInitializerImpl = new SimulationInitializerImpl();
         String modelId = sf.getModelId();
-        String simId = simulationInitializerImpl.setModel(modelId);
+        String simId = simulationInitializerImpl.addNewModel(modelId);
         assertThrows(IllegalStateException.class, () -> simulationInitializerImpl.getAgentsSimplified(simId));
     }
 
@@ -38,7 +38,7 @@ class SimulationInitializerTest {
     void testInitializeModel() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
         String modelId = sf.getModelId();
-        String simId = simulationInitializer.setModel(modelId);
+        String simId = simulationInitializer.addNewModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
         // CHECKSTYLE: MagicNumber OFF è una size per provare il metodo
@@ -53,7 +53,7 @@ class SimulationInitializerTest {
     void testParametrizeAgent() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
         String modelId = sf.getModelId();
-        String simId = simulationInitializer.setModel(modelId);
+        String simId = simulationInitializer.addNewModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
         // CHECKSTYLE: MagicNumber OFF è una size per provare il metodo

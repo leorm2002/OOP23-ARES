@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,7 +12,6 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.agent.IVirusAgentFactory;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.pos.Pos;
@@ -23,14 +21,14 @@ class ComputationUtilsTest {
     @Test
     void testInsideCone() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Pos pos = new PosImpl(0, 0);
-        DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
-        Integer radius = 3;
-        Integer angle = 90;
+        final Pos pos = new PosImpl(0, 0);
+        final DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
+        final Integer radius = 3;
+        final Integer angle = 90;
         // CHECKSTYLE: MagicNumber OFF sono numeri messi in modo da poter coprire un
         // raggio sufficiente intorno al punto da testare
 
-        Set<PosImpl> inside = Stream.concat(
+        final Set<PosImpl> inside = Stream.concat(
                 Stream.concat(
                         IntStream.rangeClosed(-3, 3).mapToObj(y -> new PosImpl(0, y)),
                         IntStream.rangeClosed(-2, 2).boxed()
@@ -40,17 +38,17 @@ class ComputationUtilsTest {
                 .filter(p -> !(p.getX() == 0 && p.getY() == 0))
                 .collect(Collectors.toSet());
 
-        Set<PosImpl> outside = IntStream.range(-10, 10).boxed()
+        final Set<PosImpl> outside = IntStream.range(-10, 10).boxed()
                 .flatMap(x -> IntStream.range(-10, 10).mapToObj(y -> new PosImpl(x, y)))
                 .filter(p -> !inside.contains(p))
                 .filter(p -> !p.equals(pos))
                 .collect(Collectors.toSet());
         // CHECKSTYLE: MagicNumber ON
 
-        for (Pos p : inside) {
+        for (final Pos p : inside) {
             assertTrue(ComputationUtils.insideCone(p, pos, dir, radius, angle));
         }
-        for (Pos p : outside) {
+        for (final Pos p : outside) {
             assertFalse(ComputationUtils.insideCone(p, pos, dir, radius, angle));
         }
     }
@@ -64,14 +62,14 @@ class ComputationUtilsTest {
     void testMove() throws NoSuchMethodException, SecurityException,
             ClassNotFoundException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
-        Pos initialPos = new PosImpl(0, 0);
-        DirectionVector dir = new DirectionVectorImpl(1, 1);
-        Integer stepSize = 1;
+        final Pos initialPos = new PosImpl(0, 0);
+        final DirectionVector dir = new DirectionVectorImpl(1, 1);
+        final Integer stepSize = 1;
 
         // The new position should be (1, 1) because the direction vector is (1, 1) and
         // the step size is 1,
         // starting from (0, 0)
-        Pos newPos = ComputationUtils.move(initialPos, dir, stepSize);
+        final Pos newPos = ComputationUtils.move(initialPos, dir, stepSize);
         assertEquals(new PosImpl(1, 1), newPos);
     }
 
@@ -88,7 +86,7 @@ class ComputationUtilsTest {
 
         // The new position should be (4, 4) because the new position is (6, 6)
         // and it's out of bound because the grid is 5x5, (maxPosX - 1, maxPosY - 1)
-        Pos limitedPos = ComputationUtils.limit(new PosImpl(outOfBoundPos, outOfBoundPos),
+        final Pos limitedPos = ComputationUtils.limit(new PosImpl(outOfBoundPos, outOfBoundPos),
                 new Pair<>(maxPos, maxPos));
         assertEquals(new PosImpl(espectedPos, espectedPos), limitedPos);
     }

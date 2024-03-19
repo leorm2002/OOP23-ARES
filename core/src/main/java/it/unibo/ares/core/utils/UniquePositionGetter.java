@@ -2,7 +2,6 @@ package it.unibo.ares.core.utils;
 
 import it.unibo.ares.core.utils.pos.Pos;
 
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,7 +53,7 @@ public class UniquePositionGetter implements Iterator<Pos> {
         if (extracted.size() == positions.size()) {
             throw new NoSuchElementException("All positions have been extracted");
         }
-        int position = Stream.generate(() -> r.nextInt(positions.size()))
+        final int position = Stream.generate(() -> r.nextInt(positions.size()))
                 .filter(i -> !extracted.contains(i))
                 .limit(1)
                 .findAny()

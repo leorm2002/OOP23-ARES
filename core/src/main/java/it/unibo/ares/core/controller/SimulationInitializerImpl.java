@@ -37,12 +37,12 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     public SimulationInitializerImpl() {
         this.modelsSupplier = new HashMap<>();
-        ModelFactory sf = new SchellingModelFactory();
-        ModelFactory bf = new BoidsModelFactory();
-        ModelFactory ff = new FireSpreadModelFactory();
-        ModelFactory pp = new PredatorPreyModelFactory();
-        ModelFactory vf = new VirusModelFactory();
-        ModelFactory smf = new SimpleModelFactory();
+        final ModelFactory sf = new SchellingModelFactory();
+        final ModelFactory bf = new BoidsModelFactory();
+        final ModelFactory ff = new FireSpreadModelFactory();
+        final ModelFactory pp = new PredatorPreyModelFactory();
+        final ModelFactory vf = new VirusModelFactory();
+        final ModelFactory smf = new SimpleModelFactory();
         modelsSupplier.put(sf.getModelId(), sf::getModel);
         modelsSupplier.put(bf.getModelId(), bf::getModel);
         modelsSupplier.put(ff.getModelId(), ff::getModel);
@@ -82,9 +82,9 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      *         configuration session.
      */
     @Override
-    public String setModel(final String modelId) {
+    public String addNewModel(final String modelId) {
         // TODO AGGIUNGERE METODO PER RIMUOVERE MODELLO IN INIZIALIZZAXIONE PASSANDO ID
-        String randomID = UUID.randomUUID().toString();
+        final String randomID = UUID.randomUUID().toString();
         this.intilizingModels.put(randomID, this.modelsSupplier.get(modelId).get());
         return randomID;
     }

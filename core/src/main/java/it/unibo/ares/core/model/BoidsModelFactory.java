@@ -26,22 +26,22 @@ public final class BoidsModelFactory implements ModelFactory {
     }
 
     private State schellingInitializer(final Parameters parameters) throws IllegalAccessException {
-        int size = parameters.getParameter(Model.SIZEKEY, Integer.class)
+        final int size = parameters.getParameter(Model.SIZEKEY, Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int total = parameters.getParameter("numeroUccelli", Integer.class)
+        final int total = parameters.getParameter("numeroUccelli", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
 
-        State state = new StateImpl(size, size);
+        final State state = new StateImpl(size, size);
         if (size * size < total) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
-        List<Pos> validPositions = IntStream.range(0, size).boxed()
+        final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                 .map(Pos.class::cast)
                 .toList();
 
-        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        BoidsAgentFactory boidsAgentFactory = new BoidsAgentFactory();
+        final UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        final BoidsAgentFactory boidsAgentFactory = new BoidsAgentFactory();
         Stream
                 .generate(boidsAgentFactory::createAgent)
                 .limit(total)
@@ -63,10 +63,10 @@ public final class BoidsModelFactory implements ModelFactory {
      * @return the model
      */
     public Model getModel() {
-        ModelBuilder builder = new ModelBuilderImpl();
         // We need only one agent supplier since all agents are equal and only differs
         // in the type
-        return builder
+        return new ModelBuilderImpl()
+
                 .addParameter(new ParameterImpl<>("numeroUccelli", Integer.class,
                         new ParameterDomainImpl<Integer>("Numero di agenti (1-n)", n -> n > 0), true))
                 .addParameter(new ParameterImpl<>(

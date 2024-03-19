@@ -1,6 +1,5 @@
 package it.unibo.ares.core.utils;
 
-
 /**
  * Represents an immutable pair of generic values.
  *
@@ -64,7 +63,7 @@ public class Pair<T, U> {
         if (!(o instanceof Pair)) {
             return false;
         }
-        Pair<?, ?> p = (Pair<?, ?>) o;
+        final Pair<?, ?> p = (Pair<?, ?>) o;
         return p.first.equals(first) && p.second.equals(second);
     }
 

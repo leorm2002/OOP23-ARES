@@ -36,7 +36,7 @@ public interface Parameter<T> {
      * @param value the value to set
      * @return the updated parameter object
      */
-    ParameterImpl<T> setValue(T value);
+    ParameterImpl<T> updateValue(T value);
 
     /**
      * Checks if the parameter has been set.

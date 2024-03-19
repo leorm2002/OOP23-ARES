@@ -14,6 +14,14 @@ import java.util.stream.Collectors;
  * model of the simulation.
  */
 final class SimulationImpl implements Simulation {
+    private State state;
+    private final Model model;
+    private boolean running; // may be sincronized if we want to make it usable to await termination
+    private boolean calculating;
+    private int tickCount;
+    private boolean isOver;
+    // IN ms
+    private Integer tickRate;
 
     /**
      * Creates a new simulation with the given state and model.
@@ -30,15 +38,6 @@ final class SimulationImpl implements Simulation {
         tickCount = 0;
         isOver = false;
     }
-
-    private State state;
-    private final Model model;
-    private boolean running; // may be sincronized if we want to make it usable to await termination
-    private boolean calculating;
-    private int tickCount;
-    private boolean isOver;
-    // IN ms
-    private Integer tickRate;
 
     @Override
     public State getState() {
@@ -78,14 +77,14 @@ final class SimulationImpl implements Simulation {
     }
 
     private boolean tickSim() {
-        State oldState = this.state;
+        final State oldState = this.state;
         this.state = this.model.tick(this.state);
         this.isOver = this.model.isOver(oldState, this.state);
         return isOver;
     }
 
     private boolean shouldTick() {
-        int elapsed = tickCount++ * (int) CalculatorSupplier.getInstance().getTickRate();
+        final int elapsed = tickCount++ * (int) CalculatorSupplier.getInstance().getTickRate();
         if (elapsed >= tickRate) {
             tickCount = 0;
             return true;
@@ -111,11 +110,11 @@ final class SimulationImpl implements Simulation {
             return CompletableFuture.completedFuture(mapStateToSimulationData(this.state, simulationSessionId, false));
         }
 
-        CompletableFuture<SimulationOutputData> future = new CompletableFuture<>();
+        final CompletableFuture<SimulationOutputData> future = new CompletableFuture<>();
 
         new Thread(() -> {
             this.calculating = true;
-            boolean over = tickSim();
+            final boolean over = tickSim();
             future.complete(mapStateToSimulationData(this.state, simulationSessionId, over));
             this.calculating = false;
         }).start();
@@ -137,8 +136,8 @@ final class SimulationImpl implements Simulation {
         }
 
         this.calculating = true;
-        boolean over = tickSim();
-        SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId, over);
+        final boolean over = tickSim();
+        final SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId, over);
         this.calculating = false;
 
         return data;

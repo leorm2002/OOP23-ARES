@@ -15,7 +15,7 @@ public final class ExtingueshedAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        AgentBuilder b = new AgentBuilderImpl();
+        final AgentBuilder b = new AgentBuilderImpl();
 
         b
                 .addParameter(new ParameterImpl<>("flammability", Double.class,
@@ -25,7 +25,7 @@ public final class ExtingueshedAgentFactory implements AgentFactory {
                 .addStrategy((state, pos) -> state)
                 .build();
 
-        Agent a = b.build();
+        final Agent a = b.build();
         a.setType("E");
         a.setParameter("flammability", 0.0);
         return a;

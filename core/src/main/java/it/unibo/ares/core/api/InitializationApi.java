@@ -24,7 +24,7 @@ public interface InitializationApi {
      * @return The id of the configuration session, used to identify the
      *         configuration session.
      */
-    String setModel(String modelId);
+    String addNewModel(String modelId);
 
     /**
      * Gets the parameters of the model.

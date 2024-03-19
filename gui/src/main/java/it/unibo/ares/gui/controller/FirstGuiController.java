@@ -76,7 +76,8 @@ public final class FirstGuiController implements Initializable {
      * injected.
      * This method initializes the choiceModel with the model names from the
      * calculator initializer.
-     * It also sets an action event handler adapter for the FXML elements and disables 
+     * It also sets an action event handler adapter for the FXML elements and
+     * disables
      * all the rest of the GUI
      * for preventing the user to interact with it before the model is selected.
      *
@@ -329,7 +330,7 @@ public final class FirstGuiController implements Initializable {
          */
         guiWriter.clearVBox(vboxModelPar);
         guiWriter.clearVBox(vboxAgentPar);
-        configurationSessionId = calculatorSupplier.setModel(choiceModel.getValue());
+        configurationSessionId = calculatorSupplier.addNewModel(choiceModel.getValue());
         Parameters modelParameters = calculatorSupplier
                 .getModelParametersParameters(configurationSessionId);
         guiWriter.writeVBox(vboxModelPar, modelParameters);

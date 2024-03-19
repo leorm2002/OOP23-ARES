@@ -23,9 +23,9 @@ public final class PVirusAgentFactory implements AgentFactory {
     // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT
     // Utilizzati per settare i parametri dell'agente infetto
     private int stepSizeI = 1;
-    private int infectionRate = 0;
-    private int recoveryRate = 0;
-    private boolean paramSected = false;
+    private int infectionRate;
+    private int recoveryRate;
+    private boolean paramSected;
 
     /**
      * Constructor for the PVirusAgentFactory.
@@ -38,8 +38,8 @@ public final class PVirusAgentFactory implements AgentFactory {
      * A predicate to check if two agents are of the same type.
      */
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
-        String typeA = a.getType();
-        String typeB = b.getType();
+        final String typeA = a.getType();
+        final String typeB = b.getType();
         return typeA.equals(typeB);
     };
 
@@ -101,12 +101,12 @@ public final class PVirusAgentFactory implements AgentFactory {
         if (!currentState.getAgentAt(agentPosition).isPresent()) {
             return currentState;
         }
-        Agent agent = currentState.getAgentAt(agentPosition).get();
+        final Agent agent = currentState.getAgentAt(agentPosition).get();
         if (!agent.getParameters().getParametersToset().isEmpty()) {
             throw new RuntimeException("Parameters not set");
         }
 
-        int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
+        final int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
                 .get().getValue();
         // assegno una nuova direzione casuale ad ogni step
         DirectionVector dir = ComputationUtils.getRandomDirection(r);
@@ -162,8 +162,8 @@ public final class PVirusAgentFactory implements AgentFactory {
     private Optional<Agent> infectPerson(final Agent agent, final Pos agentPosition) {
         if (r.nextInt(100) < infectionRate) {
             // create a new agent with the parameters of the infected agents
-            IVirusAgentFactory factory = new IVirusAgentFactory();
-            Agent a = factory.createAgent();
+            final IVirusAgentFactory factory = new IVirusAgentFactory();
+            final Agent a = factory.createAgent();
             a.setParameter("stepSize", stepSizeI);
             a.setParameter("recoveryRate", recoveryRate);
             return Optional.of(a);
@@ -178,7 +178,7 @@ public final class PVirusAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        AgentBuilder b = new AgentBuilderImpl();
+        final AgentBuilder b = new AgentBuilderImpl();
         b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
                         (Integer d) -> d > 0 && d <= 10),
@@ -190,7 +190,7 @@ public final class PVirusAgentFactory implements AgentFactory {
                         i -> i >= 0 && i <= 100),
                 true));
         b.addStrategy(this::tickFunction);
-        Agent a = b.build();
+        final Agent a = b.build();
         a.setType("P");
         return a;
     }

@@ -83,7 +83,7 @@ public final class StateImpl implements State {
     @Override
     public void moveAgent(final Pos from, final Pos to) {
         assertInsideBoard(to);
-        Agent agent = agentBoard.getEntity(from).get();
+        final Agent agent = agentBoard.getEntity(from).get();
         agentBoard.removeEntity(from, agent);
         agentBoard.addEntity(to, agent);
     }
@@ -111,7 +111,7 @@ public final class StateImpl implements State {
     @Override
     public void moveEntity(final Pos from, final Pos to) {
         assertInsideBoard(to);
-        Entity entity = entityBoard.getEntity(from).get();
+        final Entity entity = entityBoard.getEntity(from).get();
         entityBoard.removeEntity(from, entity);
         entityBoard.addEntity(to, entity);
     }
@@ -166,24 +166,6 @@ public final class StateImpl implements State {
                 .collect(Collectors.toSet());
     }
 
-    @Override
-    public void printState() {
-        var out = IntStream.range(0, size.getFirst())
-                .boxed()
-                .map(x -> IntStream.range(0, size.getSecond())
-                        .mapToObj(y -> new PosImpl(x, y))
-                        .map(pos -> {
-                            var a = getAgentAt(pos);
-                            if (a.isPresent()) {
-                                return a.get().getType();
-                            } else {
-                                return " ";
-                            }
-                        }).collect(Collectors.joining(" ")))
-                .collect(Collectors.joining("\n"));
-        System.out.println(out);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -205,7 +187,7 @@ public final class StateImpl implements State {
 
     @Override
     public State copy() {
-        StateImpl copy = new StateImpl(size.getFirst(), size.getSecond());
+        final StateImpl copy = new StateImpl(size.getFirst(), size.getSecond());
         entityBoard.getEntities().forEach(e -> copy.addEntity(e.getFirst(), e.getSecond()));
         agentBoard.getEntities().forEach(e -> copy.addAgent(e.getFirst(), e.getSecond()));
         return copy;

@@ -1,7 +1,6 @@
 package it.unibo.ares.core.agent;
 
 import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
@@ -12,7 +11,6 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -21,13 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestVirus {
     private IVirusAgentFactory factoryI;
     private Pos initialPos;
-    private DirectionVector dir;
-    private int stepSize;
     private PVirusAgentFactory factoryP;
 
     // CHECKSTYLE: MissingJavadocMethod OFF
 
-    private Pair<Agent, Agent> getTwoAgents(int infectionRate) {
+    private Pair<Agent, Agent> getTwoAgents(final int infectionRate) {
         factoryI = new IVirusAgentFactory();
         factoryP = new PVirusAgentFactory();
         initialPos = new PosImpl(0, 0);

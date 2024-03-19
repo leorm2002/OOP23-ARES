@@ -30,8 +30,7 @@ public final class SimpleModelFactory implements ModelFactory {
 
     @Override
     public Model getModel() {
-        ModelBuilder builder = new ModelBuilderImpl();
-        builder
+        return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>(
                         Model.SIZEKEY, Integer.class,
                         new ParameterDomainImpl<Integer>(
@@ -47,8 +46,7 @@ public final class SimpleModelFactory implements ModelFactory {
                     State state = new StateImpl(size, size);
                     state.addAgent(new PosImpl(0, 0), agentProvider.createAgent());
                     return state;
-                });
-
-        return builder.build();
+                })
+                .build();
     }
 }

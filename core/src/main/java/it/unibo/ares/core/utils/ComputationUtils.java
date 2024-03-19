@@ -13,9 +13,13 @@ import it.unibo.ares.core.utils.state.StateImpl;
 
 /**
  * Utility class made to contains common static computation methods between
- * different agents
+ * different agents.
  */
-public class ComputationUtils {
+public final class ComputationUtils {
+    private ComputationUtils() {
+        throw new IllegalAccessError();
+    }
+
     /**
      * Test weather a position is inside a cone.
      * 
@@ -28,12 +32,12 @@ public class ComputationUtils {
      */
     public static boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
             final Integer angle) {
-        double radAng = Math.toRadians(angle);
+        final double radAng = Math.toRadians(angle);
 
-        DirectionVector vectorToNewPoint = new DirectionVectorImpl(pos.diff(center).getX(),
+        final DirectionVector vectorToNewPoint = new DirectionVectorImpl(pos.diff(center).getX(),
                 pos.diff(center).getY());
-        double dotProduct = dir.getNormalized().pointProduct(vectorToNewPoint.getNormalized());
-        double radAngleBetween = Math.acos(dotProduct);
+        final double dotProduct = dir.getNormalized().pointProduct(vectorToNewPoint.getNormalized());
+        final double radAngleBetween = Math.acos(dotProduct);
 
         return radAngleBetween <= radAng && vectorToNewPoint.getMagnitude() <= distance;
     }
@@ -79,9 +83,10 @@ public class ComputationUtils {
      * @param r a random generator
      * @return The random direction.
      */
-    public static DirectionVectorImpl getRandomDirection(Random r) {
-        final int negBound = -10, posBound = 10;
-        int x = r.nextInt(negBound, posBound), y = r.nextInt(negBound, posBound);
+    public static DirectionVectorImpl getRandomDirection(final Random r) {
+        final int negBound = -10;
+        final int posBound = 10;
+        final int x = r.nextInt(negBound, posBound), y = r.nextInt(negBound, posBound);
         if (x == 0 && y == 0) {
             return getRandomDirection(r);
         }
@@ -99,10 +104,10 @@ public class ComputationUtils {
      */
     public static Set<Pos> computeCloseCells(final Pos pos, final DirectionVector dir, final Integer distance,
             final Integer angle) {
-        int xSign = dir.getX() > 0 ? 1 : -1;
-        int ySign = dir.getY() > 0 ? 1 : -1;
+        final int xSign = dir.getX() > 0 ? 1 : -1;
+        final int ySign = dir.getY() > 0 ? 1 : -1;
 
-        State a = new StateImpl(
+        final State a = new StateImpl(
                 Math.abs(pos.getX() + xSign * (distance + 1)),
                 Math.abs(pos.getY() + ySign * (distance + 1)));
 

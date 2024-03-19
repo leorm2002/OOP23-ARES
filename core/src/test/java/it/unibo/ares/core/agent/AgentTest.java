@@ -21,13 +21,13 @@ class AgentTest {
     // CHECKSTYLE: MagicNumber OFF
 
     private State getTestState() {
-        State state = new StateImpl(5, 5);
+        final State state = new StateImpl(5, 5);
 
         return state;
     }
 
     private Agent getSimpleTestAgent() {
-        AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
+        final AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
         agentBuilder.addStrategy((state, pos) -> state);
         return agentBuilder.build();
     }
@@ -37,32 +37,30 @@ class AgentTest {
      */
     @Test
     void simpleAgentTest() {
-        State simpleTestState = getTestState();
-        Pos testPos = new PosImpl(3, 3);
-        Agent agent = getSimpleTestAgent();
+        final State simpleTestState = getTestState();
+        final Pos testPos = new PosImpl(3, 3);
+        final Agent agent = getSimpleTestAgent();
 
         assertEquals(agent.tick(simpleTestState, testPos), simpleTestState);
     }
 
     private boolean isAgentOfSameType(final Agent a, final Agent b) {
-        Integer type1 = a.getParameters().getParameter("type", Integer.class).get().getValue();
-        Integer type2 = b.getParameters().getParameter("type", Integer.class).get().getValue();
+        final Integer type1 = a.getParameters().getParameter("type", Integer.class).get().getValue();
+        final Integer type2 = b.getParameters().getParameter("type", Integer.class).get().getValue();
         return type1.equals(type2);
     }
 
     private Agent getAgentWithStrategyAndWithParameter(final ParameterImpl<Integer> parameter) {
-        AgentBuilder b = new AgentBuilderImpl();
+        return new AgentBuilderImpl()
+                .addStrategy((state, pos) -> {
+                    state.getAgents().stream()
+                            .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos).get()))
+                            .forEach(pair -> state.removeAgent(pair.getFirst(), pair.getSecond()));
 
-        // Removes all the agents of different types
-        b.addStrategy((state, pos) -> {
-            state.getAgents().stream()
-                    .filter(pair -> !isAgentOfSameType(pair.getSecond(), state.getAgentAt(pos).get()))
-                    .forEach(pair -> state.removeAgent(pair.getFirst(), pair.getSecond()));
-
-            return state;
-        });
-        b.addParameter(parameter);
-        return b.build();
+                    return state;
+                })
+                .addParameter(parameter)
+                .build();
     }
 
     /**
@@ -70,11 +68,11 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest() {
-        Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
+        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
         State state = getTestState();
-        Pos agent1aPos = new PosImpl(1, 1);
+        final Pos agent1aPos = new PosImpl(1, 1);
         state.addAgent(agent1aPos, agent1a);
         state.addAgent(new PosImpl(1, 2), agent1b);
         state.addAgent(new PosImpl(1, 3), agent2);
@@ -91,9 +89,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest2() {
-        Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
+        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
+        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
 
         State state = getTestState();
         state.addAgent(new PosImpl(1, 1), agent1a);

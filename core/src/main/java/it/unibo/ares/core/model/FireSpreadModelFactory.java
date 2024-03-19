@@ -49,31 +49,31 @@ public class FireSpreadModelFactory implements ModelFactory {
      *                                  than the total number of cells in the grid.
      */
     private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
-        Integer size = parameters.getParameter(Model.SIZEKEY, Integer.class).orElseThrow().getValue();
-        Integer nf = parameters.getParameter("numFire", Integer.class).get().getValue();
-        Double veg = parameters.getParameter("vegetation", Double.class).get().getValue();
+        final Integer size = parameters.getParameter(Model.SIZEKEY, Integer.class).orElseThrow().getValue();
+        final Integer nf = parameters.getParameter("numFire", Integer.class).get().getValue();
+        final Double veg = parameters.getParameter("vegetation", Double.class).get().getValue();
 
-        Integer total = size * size;
-        Integer nt = (int) ((total - nf) * veg);
+        final Integer total = size * size;
+        final Integer nt = (int) ((total - nf) * veg);
 
-        State state = new StateImpl(size, size);
+        final State state = new StateImpl(size, size);
         if (total < nf) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
 
-        List<Pos> validPositions = IntStream.range(0, size).boxed()
+        final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                 .map(Pos.class::cast)
                 .toList();
-        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        final UniquePositionGetter getter = new UniquePositionGetter(validPositions);
 
-        FireAgentFactory fireAgentFactory = new FireAgentFactory();
+        final FireAgentFactory fireAgentFactory = new FireAgentFactory();
         Stream
                 .generate(fireAgentFactory::createAgent)
                 .limit(nf)
                 .forEach(a -> state.addAgent(getter.next(), a));
 
-        TreeAgentFactory treeAgentFactory = new TreeAgentFactory();
+        final TreeAgentFactory treeAgentFactory = new TreeAgentFactory();
         Stream
                 .generate(treeAgentFactory::createAgent)
                 .limit(nt)
@@ -89,9 +89,9 @@ public class FireSpreadModelFactory implements ModelFactory {
      * @return an instance of the Fire Spread model.
      * @throws IllegalAccessException If the required parameters are not provided.
      */
+    @Override
     public Model getModel() {
-        ModelBuilder builder = new ModelBuilderImpl();
-        return builder
+        return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numFire", Integer.class,
                         new ParameterDomainImpl<Integer>("Numero di agenti fuoco (1-n)",
                                 n -> n > 0),

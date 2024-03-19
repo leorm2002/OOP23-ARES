@@ -27,7 +27,7 @@ public class AsyncReader implements Runnable {
      */
     @Override
     public void run() {
-        String readed = null;
+        String readed;
         while (Boolean.FALSE.equals(exitConition.get())) {
             readed = System.console().readLine();
             consumer.accept(readed);

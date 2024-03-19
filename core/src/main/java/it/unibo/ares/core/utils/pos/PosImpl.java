@@ -6,6 +6,10 @@ import java.util.Objects;
  * A class that represents a position in a two-dimensional space.
  */
 public class PosImpl implements Pos {
+
+    private final Integer y;
+    private final Integer x;
+
     /**
      * Constructs a new PosImpl object with the specified x and y coordinates.
      *
@@ -28,9 +32,6 @@ public class PosImpl implements Pos {
         this.x = Math.round(x.floatValue());
         this.y = Math.round(y.floatValue());
     }
-
-    private final Integer y;
-    private final Integer x;
 
     /**
      * {@inheritDoc}
@@ -59,7 +60,7 @@ public class PosImpl implements Pos {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PosImpl pos = (PosImpl) o;
+        final PosImpl pos = (PosImpl) o;
         return Objects.equals(x, pos.x) && Objects.equals(y, pos.y);
     }
 

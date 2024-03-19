@@ -35,10 +35,10 @@ public final class PreyAgentFactory implements AgentFactory {
     private Pos findEscapeRoute(final State state, final Pos position, final Set<Pos> predators) {
         // Prey will try to move in the opposite direction of the average position of
         // nearby predators
-        double avgX = predators.stream().mapToInt(Pos::getX).average().orElse(position.getX());
-        double avgY = predators.stream().mapToInt(Pos::getY).average().orElse(position.getY());
-        Pos avgPos = new PosImpl(avgX, avgY);
-        Pos diff = position.diff(avgPos);
+        final double avgX = predators.stream().mapToInt(Pos::getX).average().orElse(position.getX());
+        final double avgY = predators.stream().mapToInt(Pos::getY).average().orElse(position.getY());
+        final Pos avgPos = new PosImpl(avgX, avgY);
+        final Pos diff = position.diff(avgPos);
 
         int newX = position.getX() + diff.getX();
         int newY = position.getY() + diff.getY();
@@ -51,14 +51,14 @@ public final class PreyAgentFactory implements AgentFactory {
     }
 
     private Agent createPreyAgent() {
-        AgentBuilder builder = new AgentBuilderImpl();
+        final AgentBuilder builder = new AgentBuilderImpl();
 
         builder.addParameter(new ParameterImpl<Integer>("visionRadiusPrey", Integer.class,
                 new ParameterDomainImpl<>("Raggio di visione dell'agente preda (0 - n)", (Integer i) -> i > 0), true));
 
         builder.addStrategy((state, pos) -> {
 
-            var visionRadius = state.getAgentAt(pos)
+            final var visionRadius = state.getAgentAt(pos)
                     .orElseThrow(() -> new IllegalAccessError("No agents at that pos"))
                     .getParameters()
                     .getParameter("visionRadiusPrey", Integer.class)
@@ -66,19 +66,19 @@ public final class PreyAgentFactory implements AgentFactory {
                             "Agent has no visionRadius parameter"))
                     .getValue();
 
-            Set<Pos> predatorPositions = getNeighboringPositions(state, pos, visionRadius).stream()
+            final Set<Pos> predatorPositions = getNeighboringPositions(state, pos, visionRadius).stream()
                     .filter(p -> state.getAgentAt(pos).isPresent()
                             && PredatorAgentFactory.PREDATOR.equals(state.getAgentAt(pos).get().getType()))
                     .collect(Collectors.toSet());
 
             if (!predatorPositions.isEmpty()) {
-                Pos escapeRoute = findEscapeRoute(state, pos, predatorPositions);
+                final Pos escapeRoute = findEscapeRoute(state, pos, predatorPositions);
                 state.moveAgent(pos, escapeRoute);
             }
             return state;
         });
 
-        var agent = builder.build();
+        final var agent = builder.build();
         agent.setType(PREY);
         return agent;
     }

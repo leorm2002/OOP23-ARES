@@ -1,6 +1,5 @@
 package it.unibo.ares.core.utils.directionvector;
 
-
 /**
  * Implementation of the DirectionVector interface.
  * Represents a vector with x and y components.
@@ -119,7 +118,7 @@ public final class DirectionVectorImpl implements DirectionVector {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        DirectionVectorImpl other = (DirectionVectorImpl) obj;
+        final DirectionVectorImpl other = (DirectionVectorImpl) obj;
         if (x == null) {
             if (other.x != null) {
                 return false;

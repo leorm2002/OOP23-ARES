@@ -34,7 +34,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
      * @return The id of the simulation.
      */
     public String startSimulation(final String initializationId, final Subscriber<SimulationOutputData> subscriber) {
-        Pair<String, Simulation> resp = initializer.startSimulation(initializationId);
+        final Pair<String, Simulation> resp = initializer.startSimulation(initializationId);
         controller.addSimulation(resp.getFirst(), resp.getSecond());
         controller.startSimulation(initializationId);
         controller.subscribe(initializationId, subscriber);
@@ -47,7 +47,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
      * @return the singleton instance of the calculator supplier.
      */
     public static CalculatorSupplier getInstance() {
-        CalculatorSupplier curr = instance;
+        final CalculatorSupplier curr = instance;
 
         if (curr != null) {
             return curr;
@@ -94,8 +94,8 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
-    public String setModel(final String modelId) {
-        return initializer.setModel(modelId);
+    public String addNewModel(final String modelId) {
+        return initializer.addNewModel(modelId);
     }
 
     @Override

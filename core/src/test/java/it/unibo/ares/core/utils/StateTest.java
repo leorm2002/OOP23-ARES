@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Unit test for {@link State}.
  */
-public class StateTest {
+class StateTest {
     // Disable magic number chekstyle, they're random values to
     // CHECKSTYLE: MagicNumber OFF
 
@@ -20,8 +20,8 @@ public class StateTest {
      * Test the creation of a state and its dimensions.
      */
     @Test
-    public void testState() {
-        State state = new StateImpl(5, 5);
+    void testState() {
+        final State state = new StateImpl(5, 5);
         assertEquals(state.getDimensions().getFirst(), 5);
         assertEquals(state.getDimensions().getSecond(), 5);
     }
@@ -30,8 +30,8 @@ public class StateTest {
      * Test the radius functionality.
      */
     @Test
-    public void testRadius() {
-        State state = new StateImpl(5, 5);
+    void testRadius() {
+        final State state = new StateImpl(5, 5);
 
         assertEquals(3, state.getPosByPosAndRadius(new PosImpl(0, 0), 1).size());
         assertEquals(8, state.getPosByPosAndRadius(new PosImpl(0, 0), 2).size());
@@ -55,8 +55,8 @@ public class StateTest {
      * Test adding an agent to the state which is out of bounds.
      */
     @Test
-    public void testAddAgentOutOfBounds() {
-        State state = new StateImpl(5, 5);
+    void testAddAgentOutOfBounds() {
+        final State state = new StateImpl(5, 5);
         assertThrows(IllegalArgumentException.class, () -> {
             state.addAgent(new PosImpl(-1, -1), getSimpleTestAgent());
         });

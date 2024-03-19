@@ -29,27 +29,27 @@ public final class PredatorPreyModelFactory implements ModelFactory {
     }
 
     private State predatorPreyInitializer(final Parameters parameters) throws IllegalAccessException {
-        int size = parameters.getParameter(
+        final int size = parameters.getParameter(
                 Model.SIZEKEY, Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int numAgentsPrey = parameters.getParameter("numeroAgentiPreda", Integer.class)
+        final int numAgentsPrey = parameters.getParameter("numeroAgentiPreda", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
 
-        int numAgentsPredator = parameters.getParameter("numeroAgentiCacciatori", Integer.class)
+        final int numAgentsPredator = parameters.getParameter("numeroAgentiCacciatori", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
 
-        State state = new StateImpl(size, size);
+        final State state = new StateImpl(size, size);
         if (size * size < numAgentsPrey + numAgentsPredator) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
 
-        List<Pos> validPositions = IntStream.range(0, size).boxed()
+        final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                 .collect(Collectors.toList());
 
-        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        AgentFactory predatorFactory = new PredatorAgentFactory();
-        AgentFactory preyFactory = new PreyAgentFactory();
+        final UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        final AgentFactory predatorFactory = new PredatorAgentFactory();
+        final AgentFactory preyFactory = new PreyAgentFactory();
 
         Stream.generate(preyFactory::createAgent)
                 .limit(numAgentsPrey).forEach(a -> state.addAgent(getter.next(), a));
@@ -63,8 +63,7 @@ public final class PredatorPreyModelFactory implements ModelFactory {
 
     @Override
     public Model getModel() {
-        ModelBuilder builder = new ModelBuilderImpl();
-        return builder
+        return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroAgentiPreda", Integer.class,
                         new ParameterDomainImpl<Integer>("Numero di agenti preda", n -> n >= 0),
                         true))

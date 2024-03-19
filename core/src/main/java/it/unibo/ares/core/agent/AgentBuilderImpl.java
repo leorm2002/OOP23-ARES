@@ -33,7 +33,7 @@ class AgentBuilderImpl implements AgentBuilder {
         if (strategy == null) {
             throw new IllegalStateException("Cannot build agent without strategy or parameters");
         }
-        String id = UUID.randomUUID().toString();
+        final String id = UUID.randomUUID().toString();
         return new Agent() {
 
             private String type;
@@ -114,7 +114,7 @@ class AgentBuilderImpl implements AgentBuilder {
     @Override
     public AgentBuilder addStrategy(final BiFunction<State, Pos, State> strategy) {
         if (strategy == null) {
-            throw new NullPointerException("Strategy cannot be null");
+            throw new IllegalStateException("Strategy cannot be null");
         }
         this.strategy = strategy;
         return this;

@@ -53,34 +53,34 @@ public final class VirusModelFactory implements ModelFactory {
      *                                  than the total number of cells in the grid.
      */
     private static State virusInitializer(final Parameters parameters) throws IllegalAccessException {
-        int size = parameters.getParameter(
+        final int size = parameters.getParameter(
                 Model.SIZEKEY, Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int p = parameters.getParameter("numeroPersoneSane", Integer.class)
+        final int p = parameters.getParameter("numeroPersoneSane", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int pInfected = parameters.getParameter("numeroInfetti", Integer.class)
+        final int pInfected = parameters.getParameter("numeroInfetti", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int total = p + pInfected;
-        State state = new StateImpl(size, size);
+        final int total = p + pInfected;
+        final State state = new StateImpl(size, size);
         if (size * size < total) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
 
-        List<Pos> validPositions = IntStream.range(0, size).boxed()
+        final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                 .map(Pos.class::cast)
                 .toList();
 
         // Create a new state and populate it with agents at valid positions
-        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        PVirusAgentFactory factoryP = new PVirusAgentFactory();
-        IVirusAgentFactory factoryI = new IVirusAgentFactory();
+        final UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        final PVirusAgentFactory factoryP = new PVirusAgentFactory();
+        final IVirusAgentFactory factoryI = new IVirusAgentFactory();
         for (int i = 0; i < p; i++) {
-            Agent agent = factoryP.createAgent();
+            final Agent agent = factoryP.createAgent();
             state.addAgent(getter.next(), agent);
         }
         for (int i = 0; i < pInfected; i++) {
-            Agent agent = factoryI.createAgent();
+            final Agent agent = factoryI.createAgent();
             state.addAgent(getter.next(), agent);
         }
         return state;
@@ -102,8 +102,7 @@ public final class VirusModelFactory implements ModelFactory {
      */
     @Override
     public Model getModel() {
-        ModelBuilder builder = new ModelBuilderImpl();
-        return builder
+        return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroPersoneSane", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Numero di persone sane (1-n)",

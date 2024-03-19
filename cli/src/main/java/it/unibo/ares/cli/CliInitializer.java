@@ -16,18 +16,19 @@ import java.util.stream.IntStream;
 /**
  * Class used to initialize simulation by using a CLI.
  */
+@SuppressWarnings("PMD.SystemPrintln") // E UN PROGRAMMA CLI
 public final class CliInitializer {
     private String initializationId;
 
     private String selectModel() {
         Optional<String> selected = Optional.empty();
         System.out.println("Scegli un modello:");
-        var models = CalculatorSupplier.getInstance().getModels().stream()
+        final List<String> models = CalculatorSupplier.getInstance().getModels().stream()
                 .collect(Collectors.toList());
-        List<Pair<Integer, String>> indexedModels = IntStream.range(0, models.size())
+        final List<Pair<Integer, String>> indexedModels = IntStream.range(0, models.size())
                 .mapToObj(i -> new Pair<>(i, models.get(i)))
                 .toList();
-        int index = -1;
+        int index;
         do {
             System.out.println("Scegli un modello inserendo il numero associato e premendo invio:");
             indexedModels.forEach(p -> System.out.println(p.getFirst() + " - " + p.getSecond()));
@@ -57,7 +58,7 @@ public final class CliInitializer {
                             .ifPresent(d -> System.out.println("Il parametro ha dominio: " + d.getDescription()));
                     System.out.println("Il parametro ha tipo " + param.getType().getSimpleName());
                     System.out.print("Inserisci il valore:");
-                    String value = System.console().readLine();
+                    final String value = System.console().readLine();
                     try {
                         if (agentId.isPresent()) {
                             CalculatorSupplier.getInstance()
@@ -102,14 +103,14 @@ public final class CliInitializer {
     private void parametrizzaAgenti(final Set<String> agents) {
         System.out.println("Parametrizzazione agenti");
         do {
-            for (String agent : agents) {
+            for (final String agent : agents) {
                 parametrizzaAgente(agent);
             }
         } while (!areAgentiParametrizzati(agents));
     }
 
     private boolean areAgentiParametrizzati(final Set<String> agents) {
-        for (String agent : agents) {
+        for (final String agent : agents) {
             if (!CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId, agent)
                     .areAllParametersSetted()) {
                 return false;
@@ -125,10 +126,10 @@ public final class CliInitializer {
      */
     public String startParametrization() {
         System.out.println("Inizio parametrizzazione");
-        String model = selectModel();
-        this.initializationId = CalculatorSupplier.getInstance().setModel(model);
+        final String model = selectModel();
+        this.initializationId = CalculatorSupplier.getInstance().addNewModel(model);
         parametrizzaModello();
-        Set<String> agents = CalculatorSupplier.getInstance().getAgentsSimplified(initializationId);
+        final Set<String> agents = CalculatorSupplier.getInstance().getAgentsSimplified(initializationId);
 
         parametrizzaAgenti(agents);
 

@@ -82,10 +82,10 @@ public final class ParametersImpl implements Parameters {
      */
     @Override
     public <T> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
-        Optional<Map<String, Parameter<?>>> parameterMap = Optional.ofNullable(typeMap.get(type));
+        final Optional<Map<String, Parameter<?>>> parameterMap = Optional.ofNullable(typeMap.get(type));
         if (parameterMap.isPresent()) {
             @SuppressWarnings("unchecked")
-            Parameter<T> parameter = (Parameter<T>) parameterMap.get().get(key);
+            final Parameter<T> parameter = (Parameter<T>) parameterMap.get().get(key);
             return Optional.ofNullable(parameter);
         }
         return Optional.empty();
@@ -97,9 +97,9 @@ public final class ParametersImpl implements Parameters {
     @Override
     @SuppressWarnings("unchecked")
     public <T> void setParameter(final String key, final T value) {
-        Optional<Parameter<T>> parameter = getParameter(key, (Class<T>) value.getClass());
+        final Optional<Parameter<T>> parameter = getParameter(key, (Class<T>) value.getClass());
         if (parameter.isPresent()) {
-            typeMap.get(value.getClass()).replace(key, parameter.get().setValue(value));
+            typeMap.get(value.getClass()).replace(key, parameter.get().updateValue(value));
         }
         parameter.orElseThrow(() -> new IllegalArgumentException(
                 "Parameter " + key + " does not exist or not of type " + value.getClass().getName()));
@@ -132,7 +132,7 @@ public final class ParametersImpl implements Parameters {
      */
     @Override
     public Parameters copy() {
-        Map<Class<?>, Map<String, Parameter<?>>> cloneMap = new HashMap<>();
+        final Map<Class<?>, Map<String, Parameter<?>>> cloneMap = new HashMap<>();
         typeMap.entrySet().forEach(m -> cloneMap.put(m.getKey(), new HashMap<>(m.getValue())));
         return new ParametersImpl(cloneMap);
     }

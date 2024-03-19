@@ -57,7 +57,7 @@ public class ParameterImplTest {
         assertThrows(IllegalStateException.class,
                 () -> parameter.getValue());
 
-        var settedParameter = parameter.setValue(value);
+        var settedParameter = parameter.updateValue(value);
 
         assertTrue(settedParameter.isSetted());
         assertEquals(value, settedParameter.getValue());

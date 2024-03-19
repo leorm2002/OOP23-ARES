@@ -14,6 +14,7 @@ import it.unibo.ares.core.utils.statistics.Statistics;
  * The SimController class is responsible for controlling the simulation and
  * displaying the simulation output data.
  */
+@SuppressWarnings("PMD.SystemPrintln") // E UN PROGRAMMA CLI
 public final class SimController extends DataReciever {
     private static final String START = "s";
     private static final String PAUSE = "p";
@@ -21,7 +22,7 @@ public final class SimController extends DataReciever {
     private final String inizializationId;
     private static final String SEPARATOR = "    ";
     private String simulationId;
-    private boolean isOver = false;
+    private boolean isOver;
 
     /**
      * Constructs a SimController object with the specified initialization ID.
@@ -62,12 +63,12 @@ public final class SimController extends DataReciever {
         System.out.println("Inizio simulazione");
         this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
         CalculatorSupplier.getInstance().setTickRate(inizializationId, stepSize);
-        Thread reader = new Thread(new AsyncReader(this::readChar, this::isOver));
+        final Thread reader = new Thread(new AsyncReader(this::readChar, this::isOver));
         reader.start();
         try {
             reader.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Errore nell'avvio");
         }
     }
 
@@ -88,7 +89,7 @@ public final class SimController extends DataReciever {
      * @param statistics the statistisics to print
      */
     private void printStatistics(final Statistics statistics) {
-        Optional<String> out = statistics.getStatistics().stream()
+        final Optional<String> out = statistics.getStatistics().stream()
                 .map(p -> p.getFirst() + " " + p.getSecond())
                 .reduce((a, b) -> a + SEPARATOR + b);
         if (out.isPresent()) {
@@ -104,17 +105,17 @@ public final class SimController extends DataReciever {
     }
 
     private void printData(final SimulationOutputDataApi data) {
-        Integer width = data.getWidth();
-        Integer height = data.getHeight();
-        Integer cellWidth = data.getData().values().stream().mapToInt(String::length).max().orElse(0) + 1;
-        var str = new StringBuilder();
+        final Integer width = data.getWidth();
+        final Integer height = data.getHeight();
+        final Integer cellWidth = data.getData().values().stream().mapToInt(String::length).max().orElse(0) + 1;
+        final StringBuilder str = new StringBuilder();
 
         str.append(getHorizontalBar(width, cellWidth));
 
         for (int y = 0; y < height; y++) {
-            str.append("|");
+            str.append('|');
             for (int x = 0; x < width; x++) {
-                Pos pos = new PosImpl(x, y);
+                final Pos pos = new PosImpl(x, y);
                 if (data.getData().containsKey(pos)) {
                     str.append(String.format("%-" + cellWidth + "s |", data.getData().get(pos)));
                 } else {

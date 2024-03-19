@@ -37,7 +37,7 @@ public final class SchellingModelFactory implements ModelFactory {
         GENERATOR = s -> (new Statistics() {
             @Override
             public List<Pair<String, String>> getStatistics() {
-                OptionalDouble vTot = s.getAgents().stream().parallel()
+                final OptionalDouble vTot = s.getAgents().stream().parallel()
                         .map(Pair::getSecond)
                         .map(Agent::getParameters)
                         .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
@@ -47,7 +47,7 @@ public final class SchellingModelFactory implements ModelFactory {
                         .filter(Optional::isPresent)
                         .mapToDouble(Optional::get)
                         .average();
-                OptionalDouble va = s.getAgents().stream().parallel()
+                final OptionalDouble va = s.getAgents().stream().parallel()
                         .map(Pair::getSecond)
                         .filter(a -> a.getType().equals("A"))
                         .map(Agent::getParameters)
@@ -58,7 +58,7 @@ public final class SchellingModelFactory implements ModelFactory {
                         .filter(Optional::isPresent)
                         .mapToDouble(Optional::get).average();
 
-                OptionalDouble vb = s.getAgents().stream().parallel()
+                final OptionalDouble vb = s.getAgents().stream().parallel()
                         .map(Pair::getSecond)
                         .filter(a -> a.getType().equals("B"))
                         .map(Agent::getParameters)
@@ -68,9 +68,9 @@ public final class SchellingModelFactory implements ModelFactory {
                         .map(Parameter::getOptionalValue)
                         .filter(Optional::isPresent)
                         .mapToDouble(Optional::get).average();
-                String out = vTot.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
-                String outA = va.isPresent() ? String.valueOf(va.getAsDouble()) : "";
-                String outB = vb.isPresent() ? String.valueOf(vb.getAsDouble()) : "";
+                final String out = vTot.isPresent() ? String.valueOf(vTot.getAsDouble()) : "";
+                final String outA = va.isPresent() ? String.valueOf(va.getAsDouble()) : "";
+                final String outB = vb.isPresent() ? String.valueOf(vb.getAsDouble()) : "";
                 return List.of(new Pair<>("Avg total ratio:", out),
                         new Pair<>("Avg A ratio:", outA),
                         new Pair<>("Avg B ratio:", outB));
@@ -89,26 +89,26 @@ public final class SchellingModelFactory implements ModelFactory {
     }
 
     private static State schellingInitializer(final Parameters parameters) throws IllegalAccessException {
-        int size = parameters.getParameter(
+        final int size = parameters.getParameter(
                 Model.SIZEKEY, Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int na = parameters.getParameter("numeroAgentiTipoA", Integer.class)
+        final int na = parameters.getParameter("numeroAgentiTipoA", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class)
+        final int nb = parameters.getParameter("numeroAgentiTipoB", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
-        int total = na + nb;
-        State state = new StateImpl(size, size);
+        final int total = na + nb;
+        final State state = new StateImpl(size, size);
         if (size * size < total) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
-        List<Pos> validPositions = IntStream.range(0, size).boxed()
+        final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                 .map(Pos.class::cast)
                 .toList();
 
-        UniquePositionGetter getter = new UniquePositionGetter(validPositions);
-        AgentFactory schellingFactory = new SchellingsAgentFactory();
-        List<Agent> agents = Stream
+        final UniquePositionGetter getter = new UniquePositionGetter(validPositions);
+        final AgentFactory schellingFactory = new SchellingsAgentFactory();
+        final List<Agent> agents = Stream
                 .generate(schellingFactory::createAgent)
                 .limit(total)
                 .collect(Collectors.toList());
@@ -130,10 +130,9 @@ public final class SchellingModelFactory implements ModelFactory {
      */
     @Override
     public Model getModel() {
-        ModelBuilder builder = new ModelBuilderImpl();
         // We need only one agent supplier since all agents are equal and only differs
         // in the type
-        return builder
+        return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroAgentiTipoA", Integer.class,
                         new ParameterDomainImpl<Integer>(
                                 "Numero di agenti del primo tipo (0-n)",
@@ -162,7 +161,6 @@ public final class SchellingModelFactory implements ModelFactory {
                 })
                 .addStatisticsGenerator(GENERATOR)
                 .build();
-
     }
 
 }

@@ -22,10 +22,10 @@ public final class SchellingsAgentFactory implements AgentFactory {
      * Key to access to the agent ratio.
      */
     public static final String CURRENT_RATIO = "ratio";
-    private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
-        String typeA = a.getType();
+    private static BiPredicate<Agent, Agent> agentOfSameType = (a, b) -> {
+        final String typeA = a.getType();
 
-        String typeB = b.getType();
+        final String typeB = b.getType();
         return typeA.equals(typeB);
     };
 
@@ -45,24 +45,24 @@ public final class SchellingsAgentFactory implements AgentFactory {
     }
 
     private static double getRatio(final Set<Agent> neighBors, final Agent agent) {
-        return neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent))
+        return neighBors.stream().filter(a -> agentOfSameType.test(a, agent))
                 .count()
                 / (double) neighBors.size();
 
     }
 
-    private static Pair<Boolean, Double> isThresholdSatisfied(final State state, final Pos pos, final Agent agent) {
-        Integer visionRadius = agent.getParameters().getParameter(
+    private static Pair<Boolean, Double> thresholdSatisfied(final State state, final Pos pos, final Agent agent) {
+        final Integer visionRadius = agent.getParameters().getParameter(
                 VISIONRADIUS, Integer.class)
                 .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no visionRadius parameter"))
                 .getValue();
-        Double threshold = agent.getParameters().getParameter(
+        final Double threshold = agent.getParameters().getParameter(
                 THRESHOLD, Double.class)
                 .orElseThrow(() -> new IllegalArgumentException("Agent " + agent + " has no threshold parameter"))
                 .getValue();
 
-        Set<Agent> neighBors = getNeighborgs(state, visionRadius, pos, agent);
-        Double ratio = getRatio(neighBors, agent);
+        final Set<Agent> neighBors = getNeighborgs(state, visionRadius, pos, agent);
+        final Double ratio = getRatio(neighBors, agent);
         return new Pair<>(
                 neighBors.isEmpty() || ratio >= threshold,
                 neighBors.isEmpty() ? null : ratio);
@@ -88,44 +88,42 @@ public final class SchellingsAgentFactory implements AgentFactory {
      */
     public Agent getSchellingSegregationModelAgent(final String type, final Double threshold,
             final Integer visionRadius) {
-        AgentBuilder b = new AgentBuilderImpl();
+        final AgentBuilder b = new AgentBuilderImpl();
 
         b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold, true));
         b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
-            Agent agent = state.getAgentAt(pos).get();
-            Pair<Boolean, Double> ret = isThresholdSatisfied(state, pos, agent);
+            final Agent agent = state.getAgentAt(pos).get();
+            final Pair<Boolean, Double> ret = thresholdSatisfied(state, pos, agent);
             if (Boolean.FALSE.equals(ret.getFirst())) {
                 state.moveAgent(pos, getNewRandomPosition(state));
             }
             return state;
         });
 
-        Agent a = b.build();
+        final Agent a = b.build();
         a.setType(type);
         return a;
     }
 
     @Override
     public Agent createAgent() {
-        AgentBuilder b = new AgentBuilderImpl();
+        return new AgentBuilderImpl()
 
-        b.addParameter(new ParameterImpl<Double>(THRESHOLD, Double.class, new ParameterDomainImpl<>(
-                "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0), true));
-        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, Integer.class,
-                new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0), true));
-        b.addParameter(new ParameterImpl<Double>(CURRENT_RATIO, Double.class, false));
-
-        b.addStrategy((state, pos) -> {
-            Agent agent = state.getAgentAt(pos).get();
-            Pair<Boolean, Double> ret = isThresholdSatisfied(state, pos, agent);
-            agent.getParameters().setParameter(CURRENT_RATIO, ret.getSecond());
-            if (Boolean.FALSE.equals(ret.getFirst())) {
-                state.moveAgent(pos, getNewRandomPosition(state));
-            }
-            return state;
-        });
-
-        return b.build();
+                .addParameter(new ParameterImpl<Double>(THRESHOLD, Double.class, new ParameterDomainImpl<>(
+                        "Treshold di tolleranza dell'agente (0.0-1.0)", (Double d) -> d >= 0.0 && d <= 1.0), true))
+                .addParameter(new ParameterImpl<Integer>(VISIONRADIUS, Integer.class,
+                        new ParameterDomainImpl<>("Raggio di visione dell'agente (0 - n)", (Integer i) -> i > 0), true))
+                .addParameter(new ParameterImpl<Double>(CURRENT_RATIO, Double.class, false))
+                .addStrategy((state, pos) -> {
+                    final Agent agent = state.getAgentAt(pos).get();
+                    final Pair<Boolean, Double> ret = thresholdSatisfied(state, pos, agent);
+                    agent.getParameters().setParameter(CURRENT_RATIO, ret.getSecond());
+                    if (Boolean.FALSE.equals(ret.getFirst())) {
+                        state.moveAgent(pos, getNewRandomPosition(state));
+                    }
+                    return state;
+                })
+                .build();
     }
 }

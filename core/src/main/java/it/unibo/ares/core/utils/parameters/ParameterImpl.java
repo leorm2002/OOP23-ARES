@@ -119,7 +119,7 @@ public final class ParameterImpl<T> implements Parameter<T> {
      * {@inheritDoc}
      */
     @Override
-    public ParameterImpl<T> setValue(final T value) {
+    public ParameterImpl<T> updateValue(final T value) {
         if (!this.type.isInstance(value)) {
             throw new IllegalArgumentException("Value is not of type " + this.type.getName());
         }

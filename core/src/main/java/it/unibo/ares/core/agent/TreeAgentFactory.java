@@ -15,14 +15,14 @@ public class TreeAgentFactory implements AgentFactory {
      * @return True if flammable, false either way.
      */
     public static Boolean isFlammable(final Agent a) {
-        Double flammable = a.getParameters()
+        final Double flammable = a.getParameters()
                 .getParameter("flammability", Double.class)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Agent " + a + " has no flammable parameter"))
                 .getValue();
 
         return flammable > 0;
-    };
+    }
 
     /**
      * Builds the Tree Agent.
@@ -31,7 +31,7 @@ public class TreeAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        AgentBuilder b = new AgentBuilderImpl();
+        final AgentBuilder b = new AgentBuilderImpl();
 
         b
                 .addParameter(new ParameterImpl<>("fuel", Double.class,
@@ -45,7 +45,7 @@ public class TreeAgentFactory implements AgentFactory {
                 .addStrategy((state, pos) -> state)
                 .build();
 
-        Agent a = b.build();
+        final Agent a = b.build();
         a.setType("T");
         return a;
     }

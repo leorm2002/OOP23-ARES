@@ -23,7 +23,7 @@ public final class BoidsAgentFactory implements AgentFactory {
     // PARAMETRI FINE TUNTING
     private static final Double USERCORRECTIONWEIGHT = 0.4;
     private static final Double WALLAVOIDANCEWEIGHT = 0.2;
-    private static final Integer DIRRANDOMNUMBERCEIL = 20;
+    private static final String DIRECTION = "direction";
     private final Random r;
 
     /**
@@ -48,13 +48,13 @@ public final class BoidsAgentFactory implements AgentFactory {
     private DirectionVector collisionAvoindance(
             final State s, final Pos pos, final DirectionVector dir,
             final Integer distance, final Integer angle) {
-        Set<Pos> obstacles = getObstacles(s, ComputationUtils.computeCloseCells(pos, dir, distance, angle));
+        final Set<Pos> obstacles = getObstacles(s, ComputationUtils.computeCloseCells(pos, dir, distance, angle));
         if (obstacles.isEmpty()) {
             return dir;
         }
         int newX = 0;
         int newY = 0;
-        for (Pos p : obstacles) {
+        for (final Pos p : obstacles) {
             newX += pos.getX() - p.getX();
             newY += pos.getY() - p.getY();
         }
@@ -64,11 +64,13 @@ public final class BoidsAgentFactory implements AgentFactory {
     private DirectionVector directionAlignment(
             final State s, final Pos pos, final DirectionVector dir, final Integer distance,
             final Integer angle) {
-        var closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
-        var agents = getAgentsCells(s, closeCells);
+        final var closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
+        final var agents = getAgentsCells(s, closeCells);
         return agents.stream()
                 .map(p -> s.getAgentAt(p).get().getParameters()
-                        .getParameter("direction", DirectionVectorImpl.class).get()
+                        .getParameter(
+                                DIRECTION, DirectionVectorImpl.class)
+                        .get()
                         .getValue())
                 .map(DirectionVector.class::cast)
                 .reduce((a, b) -> a.mean(b))
@@ -80,9 +82,9 @@ public final class BoidsAgentFactory implements AgentFactory {
     private DirectionVector centerCohesion(final State s, final Pos pos, final DirectionVector dir,
             final Integer distance, final Integer angle) {
         // Compute a vector pointing to che center of the flock
-        var closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
-        var agents = getAgentsCells(s, closeCells);
-        var center = closeCells.stream()
+        final var closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
+        final var agents = getAgentsCells(s, closeCells);
+        final var center = closeCells.stream()
                 .filter(p -> s.getAgentAt(p).isPresent())
                 .reduce((a, b) -> new PosImpl(a.getX() + b.getX(), a.getY() + b.getY()))
                 .map(p -> new PosImpl(p.getX() / agents.size(), p.getY() / agents.size()))
@@ -96,9 +98,9 @@ public final class BoidsAgentFactory implements AgentFactory {
             final double w1, final double w2, final double w3) {
         double i = 0;
         double j = 0;
-        List<DirectionVector> vectors = List.of(a, b, c);
-        List<Double> weights = List.of(w1, w2, w3);
-        for (DirectionVector v : vectors) {
+        final List<DirectionVector> vectors = List.of(a, b, c);
+        final List<Double> weights = List.of(w1, w2, w3);
+        for (final DirectionVector v : vectors) {
             i += v.getNormalizedX() * weights.get(vectors.indexOf(v));
             j += v.getNormalizedY() * weights.get(vectors.indexOf(v));
         }
@@ -116,7 +118,7 @@ public final class BoidsAgentFactory implements AgentFactory {
         if (distance > state.getDimensions().getFirst() && distance > state.getDimensions().getSecond()) {
             return pos;
         }
-        Optional<Pos> newPos = ComputationUtils.computeCloseCells(pos, dir, distance, 180).stream()
+        final Optional<Pos> newPos = ComputationUtils.computeCloseCells(pos, dir, distance, 180).stream()
                 .filter(state::isInside)
                 .filter(state::isFree)
                 .findAny()
@@ -138,16 +140,16 @@ public final class BoidsAgentFactory implements AgentFactory {
         if (!currentState.getAgentAt(agentPosition).isPresent()) {
             return currentState;
         }
-        Agent agent = currentState.getAgentAt(agentPosition).get();
+        final Agent agent = currentState.getAgentAt(agentPosition).get();
         if (!agent.getParameters().getParametersToset().isEmpty()) {
             throw new RuntimeException("Parameters not set");
         }
 
-        DirectionVector dir = agent.getParameters()
-                .getParameter("direction", DirectionVectorImpl.class).get().getValue();
-        Integer angle = agent.getParameters()
+        final DirectionVector dir = agent.getParameters()
+                .getParameter(DIRECTION, DirectionVectorImpl.class).get().getValue();
+        final Integer angle = agent.getParameters()
                 .getParameter("angle", Integer.class).get().getValue();
-        Integer distance = agent.getParameters()
+        final Integer distance = agent.getParameters()
                 .getParameter("distance", Integer.class).get().getValue();
 
         DirectionVector newDir = mixer(
@@ -164,8 +166,8 @@ public final class BoidsAgentFactory implements AgentFactory {
                 agent.getParameters().getParameter("cohesionWeight", Double.class)
                         .get().getValue());
 
-        agent.setParameter("direction", newDir);
-        int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
+        agent.setParameter(DIRECTION, newDir);
+        final int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
                 .get().getValue();
         Pos newPos = ComputationUtils
                 .move(agentPosition, newDir,
@@ -185,10 +187,6 @@ public final class BoidsAgentFactory implements AgentFactory {
         return currentState;
     }
 
-    private DirectionVectorImpl getRandomDirection() {
-        return new DirectionVectorImpl(r.nextInt(DIRRANDOMNUMBERCEIL) + 1, r.nextInt(DIRRANDOMNUMBERCEIL) + 1);
-    }
-
     /**
      * Creates a new Boids agent.
      * A boids Agents requires the following parameters:
@@ -203,8 +201,7 @@ public final class BoidsAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        AgentBuilder builder = new AgentBuilderImpl();
-        return builder
+        return new AgentBuilderImpl()
                 .addParameter(new ParameterImpl<>("distance", Integer.class,
                         new ParameterDomainImpl<>("il raggio di visione in celle (1-10)",
                                 (Integer d) -> d > 0 && d <= 10),
@@ -213,7 +210,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                         new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
                                 (Integer d) -> d > 0 && d <= 180),
                         true))
-                .addParameter(new ParameterImpl<>("direction", getRandomDirection(), false))
+                .addParameter(new ParameterImpl<>(DIRECTION, ComputationUtils.getRandomDirection(r), false))
                 .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
                         new ParameterDomainImpl<>(
                                 "il peso dell'evitamento degli ostacoli (0.0-1.0)",

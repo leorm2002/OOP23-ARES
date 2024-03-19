@@ -75,13 +75,12 @@ final class ModelBuilderImpl implements ModelBuilder {
 
             @Override
             public State tick(final State state) {
-                Set<Pair<Pos, Agent>> agents = state.getAgents();
-                State newState = state.copy();
-                for (Pair<Pos, Agent> pair : agents) {
-                    Agent agent = pair.getSecond();
-                    Pos pos = pair.getFirst();
-                    // utilizzo == per veridicare la referenza
-                    if (newState.getAgentAt(pos).isPresent() && newState.getAgentAt(pos).get() == agent) {
+                final Set<Pair<Pos, Agent>> agents = state.getAgents();
+                final State newState = state.copy();
+                for (final Pair<Pos, Agent> pair : agents) {
+                    final Agent agent = pair.getSecond();
+                    final Pos pos = pair.getFirst();
+                    if (newState.getAgentAt(pos).isPresent() && newState.getAgentAt(pos).get().equals(agent)) {
                         agent.tick(newState, pos);
                     }
                 }

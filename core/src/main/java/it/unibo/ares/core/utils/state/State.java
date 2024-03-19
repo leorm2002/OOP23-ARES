@@ -146,11 +146,6 @@ public interface State {
     Set<Entity> getEntitiesFromASetOfPos(Set<Pos> entities);
 
     /**
-     * Print the state.
-     */
-    void printState();
-
-    /**
      * Copy the state.
      * 
      * @return a safe modifiable copy of the state.

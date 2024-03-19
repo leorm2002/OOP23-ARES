@@ -6,7 +6,7 @@ import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.Flow.Subscriber;
 
 final class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
-    private Map<String, Subscriber<T>> subscribers = new HashMap<>();
+    private final Map<String, Subscriber<T>> subscribers = new HashMap<>();
 
     /**
      * Subscribes the subscriber to the data provider with the given ID.
@@ -24,11 +24,9 @@ final class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
      * @param identifier
      */
     public void submit(final Identifier<T> identifier) {
-        Subscriber<T> subscriber = subscribers.get(identifier.getId());
+        final Subscriber<T> subscriber = subscribers.get(identifier.getId());
         if (subscriber != null) {
             subscriber.onNext(identifier.getData());
-        } else {
-            System.out.println("No subscriber found with ID: " + identifier.getId());
         }
     }
 

@@ -22,7 +22,7 @@ final class AgentBuilderImplTest {
      */
     @Test
     void testBuildWithNullStrategy() {
-        AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
+        final AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
 
         assertThrows(IllegalStateException.class, () -> {
             agentBuilder.build();
@@ -34,9 +34,9 @@ final class AgentBuilderImplTest {
      */
     @Test
     void testBuild() {
-        AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
+        final AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
 
-        BiFunction<State, Pos, State> strategy = (state, pos) -> state;
+        final BiFunction<State, Pos, State> strategy = (state, pos) -> state;
         assertDoesNotThrow(() -> {
             agentBuilder.addStrategy(strategy)
                     .addParameter(new ParameterImpl<>("testKey", 10, true))

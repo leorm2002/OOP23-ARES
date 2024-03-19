@@ -7,12 +7,6 @@ package it.unibo.ares.core.agent;
 final class EntityImpl implements Entity {
     private String name;
 
-    /**
-     * Represents an implementation of the Entity interface.
-     */
-    EntityImpl() {
-    }
-
     /*
      * {@inheritDoc}
      */

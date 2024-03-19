@@ -14,14 +14,14 @@ public final class SimpleAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        AgentBuilder builder = new AgentBuilderImpl();
+        final AgentBuilder builder = new AgentBuilderImpl();
         builder.addStrategy((state, pos) -> {
-            Pos newPos = new PosImpl((pos.getX() + 1)
+            final Pos newPos = new PosImpl((pos.getX() + 1)
                     % state.getDimensions().getFirst(), (pos.getY() + 1) % state.getDimensions().getSecond());
             state.moveAgent(pos, newPos);
             return state;
         });
-        Agent agent = builder.build();
+        final Agent agent = builder.build();
         agent.setType("A");
         return agent;
     }

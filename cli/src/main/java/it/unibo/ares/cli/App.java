@@ -5,7 +5,16 @@ import it.unibo.ares.core.controller.CalculatorSupplier;
 /**
  * Permette di lanciare l'app in modalità cli.
  */
+@SuppressWarnings("PMD.SystemPrintln") // E UN PROGRAMMA CLI
 public final class App {
+
+    private static final Integer MINSTEP = 0;
+    private static final Integer STEPSIZE = 50;
+
+    private App() {
+        throw new IllegalAccessError("This is an utility class");
+    }
+
     /**
      * Avvia cli.
      * 
@@ -13,12 +22,12 @@ public final class App {
      */
     public static void main(final String[] args) {
         CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
-        Thread t = new Thread(() -> {
+        final Thread t = new Thread(() -> {
             System.out.println("Benvenuto in ARES!");
-            CliInitializer cliController = new CliInitializer();
-            String inizializationId = cliController.startParametrization();
-            SimController simController = new SimController(inizializationId);
-            Integer step = getStep();
+            final CliInitializer cliController = new CliInitializer();
+            final String inizializationId = cliController.startParametrization();
+            final SimController simController = new SimController(inizializationId);
+            final Integer step = getStep();
             System.out.println("Premi invio per iniziare la simulazione");
             System.console().readLine();
             simController.startSimulation(step);
@@ -29,22 +38,19 @@ public final class App {
         try {
             t.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Errore a runtime");
         }
 
     }
-
-    private static final Integer MINSTEP = 0;
-    private static final Integer STEPSIZE = 50;
 
     private static int getStep() {
 
         System.out.println("Inserire lo step (ms) tra un tick e l'altro (valore minimo " + MINSTEP + " ms)");
         System.out.println("Lo step verrà arrotondato al multiplo di " + STEPSIZE
                 + " ms più vicino, se inserito 0 allora il sistema cercherà di fare il tick il più velocemente possibile.");
-        String step = System.console().readLine();
+        final String step = System.console().readLine();
         try {
-            int stepInt = Integer.parseInt(step);
+            final int stepInt = Integer.parseInt(step);
             if (stepInt < MINSTEP) {
                 System.out.println("Lo step deve essere maggiore di " + MINSTEP);
                 return Math.round(stepInt / (float) STEPSIZE) * STEPSIZE;
@@ -64,17 +70,13 @@ public final class App {
     public static void mainLib(final String[] args) {
         CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         System.out.println("Benvenuto in ARES!");
-        CliInitializer cliController = new CliInitializer();
-        String inizializationId = cliController.startParametrization();
-        SimController simController = new SimController(inizializationId);
-        Integer step = getStep();
+        final CliInitializer cliController = new CliInitializer();
+        final String inizializationId = cliController.startParametrization();
+        final SimController simController = new SimController(inizializationId);
+        final Integer step = getStep();
         System.out.println("Premi invio per iniziare la simulazione");
         System.console().readLine();
         simController.startSimulation(step);
         System.out.println("Simulazione terminata");
-    }
-
-    private App() {
-        throw new IllegalAccessError("This is an utility class");
     }
 }

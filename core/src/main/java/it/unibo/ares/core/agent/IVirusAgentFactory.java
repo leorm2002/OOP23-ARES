@@ -18,12 +18,13 @@ import it.unibo.ares.core.utils.state.State;
  */
 public final class IVirusAgentFactory implements AgentFactory {
 
-    private Random r;
+    private final Random r;
     // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT
     // Utilizzati per settare i parametri dell'agente p
     private int stepSizeP = 1;
-    private int recoveryRate = 0, infectionRate = 0;
-    private boolean paramSected = false;
+    private int recoveryRate;
+    private int infectionRate;
+    private boolean paramSected;
 
     /**
      * Constructor for the IVirusAgentFactory.
@@ -45,7 +46,7 @@ public final class IVirusAgentFactory implements AgentFactory {
         boolean persSected = false;
         // cerco i parametri per l'agente infetto e per l'agente sano
         // una volta settati i parametri per ciascun tipo di agente, break
-        for (Pair<Pos, Agent> pair : agents) {
+        for (final Pair<Pos, Agent> pair : agents) {
             switch (pair.getSecond().getType()) {
                 case "P":
                     stepSizeP = pair.getSecond().getParameters()
@@ -91,12 +92,12 @@ public final class IVirusAgentFactory implements AgentFactory {
         if (!currentState.getAgentAt(agentPosition).isPresent()) {
             return currentState;
         }
-        Agent agent = currentState.getAgentAt(agentPosition).get();
+        final Agent agent = currentState.getAgentAt(agentPosition).get();
         if (!agent.getParameters().getParametersToset().isEmpty()) {
             throw new RuntimeException("Parameters not set");
         }
 
-        int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
+        final int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
                 .get().getValue();
         // assegno una nuova direzione casuale ad ogni step
         DirectionVector dir = ComputationUtils.getRandomDirection(r);
@@ -106,7 +107,7 @@ public final class IVirusAgentFactory implements AgentFactory {
         // se l'agente è infetto, controllo se guarisce, in caso negativo continuo con
         // lo spostamento
         if (agent.getType().equals("I")) {
-            Optional<Agent> newAgent = recoveryInfected(agent, agentPosition);
+            final Optional<Agent> newAgent = recoveryInfected(agent, agentPosition);
             if (newAgent.isPresent()) {
                 // se guarisce, rimuovo l'agente infetto e aggiungo un agente sano
                 // e ritorno lo stato aggiornato
@@ -154,8 +155,8 @@ public final class IVirusAgentFactory implements AgentFactory {
     private Optional<Agent> recoveryInfected(final Agent agent, final Pos agentPosition) {
         if (r.nextInt(100) < recoveryRate) {
             // create a new agent with the parameters of the person agents
-            PVirusAgentFactory factory = new PVirusAgentFactory();
-            Agent a = factory.createAgent();
+            final PVirusAgentFactory factory = new PVirusAgentFactory();
+            final Agent a = factory.createAgent();
             a.setParameter("stepSize", stepSizeP);
             a.setParameter("infectionRate", infectionRate);
             return Optional.of(a);
@@ -170,7 +171,7 @@ public final class IVirusAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        AgentBuilder b = new AgentBuilderImpl();
+        final AgentBuilder b = new AgentBuilderImpl();
         b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
                         (Integer d) -> d > 0 && d <= 10),
@@ -182,7 +183,7 @@ public final class IVirusAgentFactory implements AgentFactory {
                         i -> i >= 0 && i <= 100),
                 true));
         b.addStrategy(this::tickFunction);
-        Agent a = b.build();
+        final Agent a = b.build();
         a.setType("I");
         return a;
     }
