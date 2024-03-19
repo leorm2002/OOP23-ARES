@@ -56,7 +56,7 @@ public final class PVirusAgentFactory implements AgentFactory {
         boolean persSected = false;
         // cerco i parametri per l'agente infetto e per l'agente sano
         // una volta settati i parametri per ciascun tipo di agente, break
-        for (Pair<Pos, Agent> pair : agents) {
+        for (final Pair<Pos, Agent> pair : agents) {
             switch (pair.getSecond().getType()) {
                 case "P":
                     infectionRate = pair.getSecond().getParameters()
@@ -126,7 +126,7 @@ public final class PVirusAgentFactory implements AgentFactory {
                     currentState.getAgentAt(agentPosition).get())) {
                 // l'agente in agentPos è sano, l'agente in newPos è infetto
                 // probabile infezione dell'agente in agentPos
-                Optional<Agent> newAgent = infectPerson(agent, agentPosition);
+                final Optional<Agent> newAgent = infectPerson(agent, agentPosition);
                 if (newAgent.isPresent()) {
                     currentState.removeAgent(agentPosition, agent);
                     currentState.addAgent(agentPosition, newAgent.get());
