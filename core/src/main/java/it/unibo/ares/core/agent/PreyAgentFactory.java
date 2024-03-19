@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
  * Model.
  */
 public final class PreyAgentFactory implements AgentFactory {
+    /**
+     * Prey key.
+     */
     public static final String PREY = "P";
 
     /**

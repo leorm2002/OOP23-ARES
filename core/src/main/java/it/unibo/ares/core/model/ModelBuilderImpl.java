@@ -109,8 +109,8 @@ final class ModelBuilderImpl implements ModelBuilder {
             }
 
             @Override
-            public Statistics getStatistics(State s) {
-                return generator == null ? () -> Collections.emptyList() : generator.generate(s);
+            public Statistics getStatistics(final State s) {
+                return generator == null ? Collections::emptyList : generator.generate(s);
             }
         };
     }

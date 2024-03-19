@@ -107,7 +107,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
             public void changed(ObservableValue<? extends Number> observable, Number oldNumber,
                     Number newNumber) {
                 int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(), (int) MAXSTEP,
-                        (int) CalculatorSupplier.TICKRATE);
+                        (int) CalculatorSupplier.getInstance().getTickRate());
                 String stepString = step != 0 ? String.valueOf(step) + " ms" : "Max speed";
                 lblStep.setText("Step: " + stepString);
                 calculatorSupplier.setTickRate(simulationId, step);

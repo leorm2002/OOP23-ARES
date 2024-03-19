@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
  * Model.
  */
 public final class PredatorAgentFactory implements AgentFactory {
+    /**
+     * Predator key.
+     */
     public static final String PREDATOR = "H";
 
     private Set<Pos> getNeighboringPositions(final State state, final Pos position, final int visionRadius) {
@@ -29,7 +32,7 @@ public final class PredatorAgentFactory implements AgentFactory {
                 .filter(p -> PreyAgentFactory.PREY.equals(state.getAgentAt(p).get().getType())).findFirst();
     }
 
-    public Agent createPredatorAgent() {
+    private Agent createPredatorAgent() {
         AgentBuilder builder = new AgentBuilderImpl();
 
         builder.addParameter(new ParameterImpl<Integer>("visionRadiusPredator", Integer.class,

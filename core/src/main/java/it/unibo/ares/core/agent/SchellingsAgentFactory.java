@@ -12,14 +12,15 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
-import javax.management.relation.Relation;
-
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
     private static final String VISIONRADIUS = "visionRadius";
     private static final String THRESHOLD = "threshold";
+    /**
+     * Key to access to the agent ratio.
+     */
     public static final String CURRENT_RATIO = "ratio";
     private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
         String typeA = a.getType();
@@ -27,6 +28,12 @@ public final class SchellingsAgentFactory implements AgentFactory {
         String typeB = b.getType();
         return typeA.equals(typeB);
     };
+
+    private static final Random R;
+
+    static {
+        R = new Random();
+    }
 
     private static Set<Agent> getNeighborgs(final State state, final Integer visionRadius, final Pos pos,
             final Agent agent) {
@@ -37,8 +44,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
 
     }
 
-    private static double getRatio(final Set<Agent> neighBors, final State state, final Integer visioRadius,
-            final Pos pos, final Agent agent) {
+    private static double getRatio(final Set<Agent> neighBors, final Agent agent) {
         return neighBors.stream().filter(a -> isAgentOfSameType.test(a, agent))
                 .count()
                 / (double) neighBors.size();
@@ -56,19 +62,18 @@ public final class SchellingsAgentFactory implements AgentFactory {
                 .getValue();
 
         Set<Agent> neighBors = getNeighborgs(state, visionRadius, pos, agent);
-        Double ratio = getRatio(neighBors, state, visionRadius, pos, agent);
+        Double ratio = getRatio(neighBors, agent);
         return new Pair<>(
                 neighBors.isEmpty() || ratio >= threshold,
                 neighBors.isEmpty() ? null : ratio);
     }
 
-    private static PosImpl getNewRandomPosition(final State state, final Agent agent) {
-        Random r = new Random();
-        PosImpl newPos = new PosImpl(r.nextInt(state.getDimensions().getFirst()),
-                r.nextInt(state.getDimensions().getSecond()));
+    private static PosImpl getNewRandomPosition(final State state) {
+        PosImpl newPos = new PosImpl(R.nextInt(state.getDimensions().getFirst()),
+                R.nextInt(state.getDimensions().getSecond()));
         while (!state.isFree(newPos)) {
-            newPos = new PosImpl(r.nextInt(state.getDimensions().getFirst()),
-                    r.nextInt(state.getDimensions().getSecond()));
+            newPos = new PosImpl(R.nextInt(state.getDimensions().getFirst()),
+                    R.nextInt(state.getDimensions().getSecond()));
         }
         return newPos;
     }
@@ -90,9 +95,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
         b.addStrategy((state, pos) -> {
             Agent agent = state.getAgentAt(pos).get();
             Pair<Boolean, Double> ret = isThresholdSatisfied(state, pos, agent);
-            agent.getParameters().setParameter(CURRENT_RATIO, ret.getSecond());
             if (Boolean.FALSE.equals(ret.getFirst())) {
-                state.moveAgent(pos, getNewRandomPosition(state, agent));
+                state.moveAgent(pos, getNewRandomPosition(state));
             }
             return state;
         });
@@ -117,7 +121,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
             Pair<Boolean, Double> ret = isThresholdSatisfied(state, pos, agent);
             agent.getParameters().setParameter(CURRENT_RATIO, ret.getSecond());
             if (Boolean.FALSE.equals(ret.getFirst())) {
-                state.moveAgent(pos, getNewRandomPosition(state, agent));
+                state.moveAgent(pos, getNewRandomPosition(state));
             }
             return state;
         });

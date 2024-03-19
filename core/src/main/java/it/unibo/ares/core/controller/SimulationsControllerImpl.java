@@ -80,12 +80,12 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public Integer getTickRate(String id) {
+    public Integer getTickRate(final String id) {
         return simulations.get(id).getTickRate();
     }
 
     @Override
-    public void setTickRate(String id, Integer tickRate) {
+    public void setTickRate(final String id, final Integer tickRate) {
         simulations.get(id).setTickRate(tickRate);
     }
 

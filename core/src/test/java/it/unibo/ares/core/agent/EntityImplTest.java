@@ -11,15 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 final class EntityImplTest {
 
-    private EntityImpl entity;
-
     /**
      * Should throw an IllegalStateException if the name is not set and we try to
      * get it.
      */
     @Test
     void testGetName() {
-        entity = new EntityImpl();
+        EntityImpl entity = new EntityImpl();
         assertThrows(IllegalStateException.class, () -> {
             entity.getName();
         });
@@ -30,7 +28,7 @@ final class EntityImplTest {
      */
     @Test
     void testSetName() {
-        entity = new EntityImpl();
+        EntityImpl entity = new EntityImpl();
         String name = "Test Name";
         entity.setName(name);
         assertEquals(name, entity.getName());
@@ -41,7 +39,7 @@ final class EntityImplTest {
      */
     @Test
     void testSetNameWithNull() {
-        entity = new EntityImpl();
+        EntityImpl entity = new EntityImpl();
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setName(null);
         });

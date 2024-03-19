@@ -26,6 +26,8 @@ public final class SimulationOutputData implements SimulationOutputDataApi {
      * @param simulationId the id of the simulation
      * @param width        the width of the simulation output
      * @param height       the height of the simulation output
+     * @param finished     weather the sim is over
+     * @param statistics   the statistics for this iteration
      */
     public SimulationOutputData(final Map<Pos, String> data, final String simulationId, final Integer width,
             final Integer height, final boolean finished, final Statistics statistics) {

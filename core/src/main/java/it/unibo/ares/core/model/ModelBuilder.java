@@ -54,10 +54,10 @@ interface ModelBuilder {
     ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
 
     /**
-     * Aggiunge il generatore per permettere al modello di generare statistiche;
+     * Aggiunge il generatore per permettere al modello di generare statistiche.
      * 
      * @param generator il generatore
-     * @return
+     * @return the model builder itself
      */
     ModelBuilder addStatisticsGenerator(StatisticsGenerator generator);
 }

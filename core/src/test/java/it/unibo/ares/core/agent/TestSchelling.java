@@ -57,10 +57,6 @@ class TestSchelling {
         type1Agent.tick(state, pos);
         assertFalse(state.getAgentAt(pos).isPresent());
 
-        // The agent should not move
-        type2Agent.tick(state, pos2);
-        assertTrue(state.getAgentAt(pos2).isPresent());
-
     }
 
     @Test

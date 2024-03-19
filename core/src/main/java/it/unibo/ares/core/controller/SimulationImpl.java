@@ -18,8 +18,9 @@ final class SimulationImpl implements Simulation {
     /**
      * Creates a new simulation with the given state and model.
      * 
-     * @param state The state of the simulation.
-     * @param model The model of the simulation.
+     * @param state    The state of the simulation.
+     * @param model    The model of the simulation.
+     * @param tickRate the rate of ticking in ms
      */
     SimulationImpl(final State state, final Model model, final Integer tickRate) {
         this.state = state;
@@ -37,7 +38,7 @@ final class SimulationImpl implements Simulation {
     private int tickCount;
     private boolean isOver;
     // IN ms
-    Integer tickRate;
+    private Integer tickRate;
 
     @Override
     public State getState() {
@@ -65,7 +66,7 @@ final class SimulationImpl implements Simulation {
     }
 
     private SimulationOutputData mapStateToSimulationData(final State state, final String simulationSessionId,
-            boolean finished) {
+            final boolean finished) {
         return new SimulationOutputData(state.getAgents().stream()
                 .collect(Collectors.toMap(
                         Pair::getFirst,
@@ -93,7 +94,7 @@ final class SimulationImpl implements Simulation {
         }
     }
 
-    private Statistics getStatistics(State s) {
+    private Statistics getStatistics(final State s) {
         return model.getStatistics(s);
     }
 
@@ -149,7 +150,7 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
-    public void setTickRate(Integer tickRate) {
+    public void setTickRate(final Integer tickRate) {
         this.tickRate = tickRate;
     }
 

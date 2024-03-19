@@ -16,6 +16,9 @@ public final class SimpleModelFactory implements ModelFactory {
     private static final String MODEL_ID = "Simple Model";
     private final AgentFactory agentProvider;
 
+    /**
+     * Creates a simple model factory.
+     */
     public SimpleModelFactory() {
         this.agentProvider = new SimpleAgentFactory();
     }

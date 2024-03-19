@@ -23,7 +23,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     private final SimulationsController controller;
     private final SimulationInitializer initializer;
     private final Ticker ticker;
-    public static final long TICKRATE = 50;
+    private static final long TICKRATE = 50;
 
     /**
      * Starts the simulation with the given initialization id.
@@ -124,17 +124,22 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
         initializer.setAgentParameterSimplified(initializationId, agentId, key, value);
     }
 
+    /**
+     * Return the current base tick rate.
+     * 
+     * @return the tick rate in ms
+     */
     public long getTickRate() {
         return TICKRATE;
     }
 
     @Override
-    public Integer getTickRate(String id) {
+    public Integer getTickRate(final String id) {
         return controller.getTickRate(id);
     }
 
     @Override
-    public void setTickRate(String id, Integer tickRate) {
+    public void setTickRate(final String id, final Integer tickRate) {
         controller.setTickRate(id, tickRate);
     }
 }

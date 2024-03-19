@@ -4,7 +4,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.29.0"
     id("lifecycle-base")
-
 }
 
 group = "it.unibo.ares"
@@ -13,6 +12,7 @@ version = "1.0.0"
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.3")

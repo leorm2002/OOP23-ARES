@@ -102,6 +102,11 @@ public final class ParameterImpl<T> implements Parameter<T> {
         return this.value.orElseThrow(() -> new IllegalStateException("Value not set for parameter: " + this.key));
     }
 
+    @Override
+    public Optional<T> getOptionalValue() {
+        return this.value;
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -5,12 +5,12 @@ import java.util.Random;
 import java.util.Set;
 
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.utils.ComputationUtils;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.pos.Pos;
-import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 
 /**
@@ -20,7 +20,7 @@ public final class IVirusAgentFactory implements AgentFactory {
 
     private Random r;
     // PARAMETRI DA SETTARE, SETTATI A VALORI DI DEFAULT
-    // Utilizzati per settare i parametri dell'agente p 
+    // Utilizzati per settare i parametri dell'agente p
     private int stepSizeP = 1;
     private int recoveryRate = 0, infectionRate = 0;
     private boolean paramSected = false;
@@ -30,55 +30,6 @@ public final class IVirusAgentFactory implements AgentFactory {
      */
     public IVirusAgentFactory() {
         r = new Random();
-    }
-
-    /**
-     * Moves the agent in the given direction by the given step size.
-     *
-     * @param initialPos The initial position of the agent.
-     * @param dir        The direction in which the agent should move.
-     * @param stepSize   The number of steps the agent should take.
-     * @return The new position of the agent.
-     */
-    private Pos move(final Pos initialPos, final DirectionVector dir, final Integer stepSize) {
-        return new PosImpl(initialPos.getX() + dir.getNormalizedX() * stepSize,
-                initialPos.getY() + dir.getNormalizedY() * stepSize);
-    }
-
-    /**
-     * Limits the given value to the range [0, max - 1].
-     *
-     * @param curr The current value.
-     * @param max  The maximum value.
-     * @return The limited value.
-     */
-    private int limit(final int curr, final int max) {
-        return curr < 0 ? 0 : curr > (max - 1) ? (max - 1) : curr;
-    }
-
-    /**
-     * Limits the given position to the size of the environment.
-     *
-     * @param pos  The current position.
-     * @param size The size of the environment.
-     * @return The limited position.
-     */
-    private Pos limit(final Pos pos, final Pair<Integer, Integer> size) {
-        return new PosImpl(limit(pos.getX(), size.getFirst()), limit(pos.getY(), size.getSecond()));
-    }
-
-    /**
-     * Generates a random direction for the agent to move in.
-     *
-     * @return The random direction.
-     */
-    private DirectionVectorImpl getRandomDirection() {
-        final int negBound = -5, posBound = 5;
-        int x = r.nextInt(negBound, posBound), y = r.nextInt(negBound, posBound);
-        if (x == 0 && y == 0) {
-            return getRandomDirection();
-        }
-        return new DirectionVectorImpl(x, y);
     }
 
     /**
@@ -134,7 +85,7 @@ public final class IVirusAgentFactory implements AgentFactory {
     private State tickFunction(final State currentState, final Pos agentPosition) {
         // se i parametri della classe non sono stati settati, li setto
         if (!paramSected) {
-            //AL PRIMO TICK DEVO SETTARE TUTTO ANCHE QUELLI DELLA P
+            // AL PRIMO TICK DEVO SETTARE TUTTO ANCHE QUELLI DELLA P
             initializeParameters(currentState.getAgents());
         }
         if (!currentState.getAgentAt(agentPosition).isPresent()) {
@@ -148,10 +99,12 @@ public final class IVirusAgentFactory implements AgentFactory {
         int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
                 .get().getValue();
         // assegno una nuova direzione casuale ad ogni step
-        DirectionVector dir = getRandomDirection();
+        DirectionVector dir = ComputationUtils.getRandomDirection(r);
+
         currentState.getAgentAt(agentPosition).get().setParameter("direction", dir);
 
-        // se l'agente è infetto, controllo se guarisce, in caso negativo continuo con lo spostamento
+        // se l'agente è infetto, controllo se guarisce, in caso negativo continuo con
+        // lo spostamento
         if (agent.getType().equals("I")) {
             Optional<Agent> newAgent = recoveryInfected(agent, agentPosition);
             if (newAgent.isPresent()) {
@@ -162,19 +115,21 @@ public final class IVirusAgentFactory implements AgentFactory {
                 return currentState;
             }
         }
-        Pos newPos = move(agentPosition, dir, stepSize);
+        Pos newPos = ComputationUtils.move(agentPosition, dir, stepSize);
         if (!currentState.isInside(newPos)) {
             // se la nuova posizione dell'agente sarebbe fuori dallo spazio, cambio
             // direzione
             dir = new DirectionVectorImpl(-dir.getX(), -dir.getY());
-            newPos = limit(move(agentPosition, dir, stepSize), currentState.getDimensions());
+            newPos = ComputationUtils.limit(ComputationUtils.move(agentPosition, dir, stepSize),
+                    currentState.getDimensions());
         }
         if (!currentState.isFree(newPos)) {
             // se la nuova posizione è occupata, cambio
             // direzione
-            dir = getRandomDirection();
+            dir = ComputationUtils.getRandomDirection(r);
             currentState.getAgentAt(agentPosition).get().setParameter("direction", dir);
-            newPos = limit(move(agentPosition, dir, stepSize), currentState.getDimensions());
+            newPos = ComputationUtils.limit(
+                    ComputationUtils.move(agentPosition, dir, stepSize), currentState.getDimensions());
         }
         if (currentState.isFree(newPos)) {
             // se la nuova posizione è libera, l'agente si sposta
@@ -220,7 +175,7 @@ public final class IVirusAgentFactory implements AgentFactory {
                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",
                         (Integer d) -> d > 0 && d <= 10),
                 true));
-        b.addParameter(new ParameterImpl<>("direction", getRandomDirection(), false));
+        b.addParameter(new ParameterImpl<>("direction", ComputationUtils.getRandomDirection(r), false));
         b.addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
                 new ParameterDomainImpl<Integer>(
                         "Probabilità di guarigione a ogni step (0-100)",

@@ -55,12 +55,16 @@ interface Simulation {
     SimulationOutputData tickSync(String simulationSessionId);
 
     /**
-     * get the tick rate
+     * get the tick rate.
+     * 
+     * @return il tick rate in ms
      */
     Integer getTickRate();
 
     /**
-     * set the tick rate
+     * set the tick rate.
+     * 
+     * @param tickRate il tick rate in ms
      */
     void setTickRate(Integer tickRate);
 }

@@ -8,7 +8,6 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,8 +20,6 @@ class AgentTest {
     // Disable magic number chekstyle, they're random values to
     // CHECKSTYLE: MagicNumber OFF
 
-    private AgentBuilderImpl agentBuilder;
-
     private State getTestState() {
         State state = new StateImpl(5, 5);
 
@@ -30,6 +27,7 @@ class AgentTest {
     }
 
     private Agent getSimpleTestAgent() {
+        AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
         agentBuilder.addStrategy((state, pos) -> state);
         return agentBuilder.build();
     }
@@ -39,8 +37,6 @@ class AgentTest {
      */
     @Test
     void simpleAgentTest() {
-        agentBuilder = new AgentBuilderImpl();
-
         State simpleTestState = getTestState();
         Pos testPos = new PosImpl(3, 3);
         Agent agent = getSimpleTestAgent();
@@ -74,7 +70,6 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest() {
-        agentBuilder = new AgentBuilderImpl();
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
@@ -96,7 +91,6 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest2() {
-        agentBuilder = new AgentBuilderImpl();
         Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
         Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
         Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));

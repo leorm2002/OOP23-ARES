@@ -33,6 +33,7 @@ class SimulationInitializerTest {
         assertThrows(IllegalStateException.class, () -> simulationInitializerImpl.getAgentsSimplified(simId));
     }
 
+    @SuppressWarnings("checkstyle:magicnumber")
     @Test
     void testInitializeModel() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
@@ -40,12 +41,14 @@ class SimulationInitializerTest {
         String simId = simulationInitializer.setModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
-        // CHECKSTYLE:OFF: MagicNumber è una size per provare il metodo
+        // CHECKSTYLE: MagicNumber OFF è una size per provare il metodo
+
         simulationInitializer.setModelParameter(simId, "size", 15);
-        // CHECKSTYLE:ON: MagicNumber
+        // CHECKSTYLE: MagicNumber ON
         assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
     }
 
+    @SuppressWarnings("checkstyle:magicnumber")
     @Test
     void testParametrizeAgent() {
         SimulationInitializerImpl simulationInitializer = new SimulationInitializerImpl();
@@ -53,9 +56,9 @@ class SimulationInitializerTest {
         String simId = simulationInitializer.setModel(modelId);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoA", 10);
         simulationInitializer.setModelParameter(simId, "numeroAgentiTipoB", 10);
-        // CHECKSTYLE:OFF: MagicNumber è una size per provare il metodo
+        // CHECKSTYLE: MagicNumber OFF è una size per provare il metodo
         simulationInitializer.setModelParameter(simId, "size", 15);
-        // CHECKSTYLE:ON: MagicNumber
+        // CHECKSTYLE: MagicNumber ON
         assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
         Set<String> agents = simulationInitializer.getAgentsSimplified(simId);
         String agent = agents.stream().findAny().get();

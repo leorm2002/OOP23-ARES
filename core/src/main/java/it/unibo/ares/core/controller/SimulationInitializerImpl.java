@@ -2,7 +2,6 @@ package it.unibo.ares.core.controller;
 
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 

@@ -1,9 +1,5 @@
 package it.unibo.ares.core.model;
 
-import java.util.Collections;
-import java.util.List;
-
-import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.Statistics;
@@ -12,7 +8,10 @@ import it.unibo.ares.core.utils.statistics.Statistics;
  * Represents a model of a simulation.
  */
 public interface Model {
-    public static final String SIZEKEY = "size";
+    /**
+     * Key that anyone should use to represent the size of the board.
+     */
+    String SIZEKEY = "size";
 
     /**
      * Performs a tick of the model, updating the simulation enviroment state based
@@ -50,14 +49,18 @@ public interface Model {
     boolean isOver(State oldState, State newState);
 
     /**
-     * Initializes the model. Fail if not all parameters are setted
+     * Initializes the model. Fail if not all parameters are setted.
      *
      * @return the initial state of the model
      */
     State initilize();
 
-    default Statistics getStatistics(State s) {
-        return () -> Collections.emptyList();
-    }
+    /**
+     * Ritorna le eventuali statistiche.
+     * 
+     * @param s lo stato su cui calcolarle
+     * @return the statistics
+     */
+    Statistics getStatistics(State s);
 
 }

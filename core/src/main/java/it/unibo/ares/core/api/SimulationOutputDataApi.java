@@ -46,7 +46,7 @@ public interface SimulationOutputDataApi {
     boolean isFinished();
 
     /**
-     * Ritorna le statistiche di modello
+     * Ritorna le statistiche di modello.
      * 
      * @return le statistiche del modello
      */

@@ -19,6 +19,7 @@ public final class SimController extends DataReciever {
     private static final String PAUSE = "p";
     private static final String STOP = "e";
     private final String inizializationId;
+    private static final String SEPARATOR = "    ";
     private String simulationId;
     private boolean isOver = false;
 
@@ -54,8 +55,10 @@ public final class SimController extends DataReciever {
 
     /**
      * Starts the simulation and waits for user input to control the simulation.
+     * 
+     * @param stepSize the step in ms of the sim
      */
-    public void startSimulation(Integer stepSize) {
+    public void startSimulation(final Integer stepSize) {
         System.out.println("Inizio simulazione");
         this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
         CalculatorSupplier.getInstance().setTickRate(inizializationId, stepSize);
@@ -79,9 +82,12 @@ public final class SimController extends DataReciever {
         System.out.println("");
     }
 
-    private static final String SEPARATOR = "    ";
-
-    private void printStatistics(Statistics statistics) {
+    /**
+     * Print the statistics to the stdio.
+     * 
+     * @param statistics the statistisics to print
+     */
+    private void printStatistics(final Statistics statistics) {
         Optional<String> out = statistics.getStatistics().stream()
                 .map(p -> p.getFirst() + " " + p.getSecond())
                 .reduce((a, b) -> a + SEPARATOR + b);

@@ -12,8 +12,16 @@ public interface Parameter<T> {
      * Gets the value of the parameter.
      *
      * @return the value of the parameter
+     * @throws IllegalStateException if not setted
      */
     T getValue();
+
+    /**
+     * Gets the value of the parameter.
+     *
+     * @return optional of the value of the parameter
+     */
+    Optional<T> getOptionalValue();
 
     /**
      * Gets the type of the parameter.
@@ -53,6 +61,7 @@ public interface Parameter<T> {
 
     /**
      * If the user can view thus set the parameter.
+     * 
      * @return true if the parameter is user settable, false otherwise
      */
     Boolean userSettable();
