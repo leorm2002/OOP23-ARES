@@ -1,5 +1,6 @@
 package it.unibo.ares.core.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,13 +13,13 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.ares.core.agent.BoidsAgentFactory;
+import it.unibo.ares.core.agent.IVirusAgentFactory;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 
-public class ComputationUtilsTest {
+class ComputationUtilsTest {
     @Test
     void testInsideCone() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -52,5 +53,43 @@ public class ComputationUtilsTest {
         for (Pos p : outside) {
             assertFalse(ComputationUtils.insideCone(p, pos, dir, radius, angle));
         }
+    }
+
+    /*
+     * This test checks if the move method works as expected.
+     * It creates a new agent and then it tries to move it.
+     * The agent should move to the new position.
+     */
+    @Test
+    void testMove() throws NoSuchMethodException, SecurityException,
+            ClassNotFoundException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException {
+        Pos initialPos = new PosImpl(0, 0);
+        DirectionVector dir = new DirectionVectorImpl(1, 1);
+        Integer stepSize = 1;
+
+        // The new position should be (1, 1) because the direction vector is (1, 1) and
+        // the step size is 1,
+        // starting from (0, 0)
+        Pos newPos = ComputationUtils.move(initialPos, dir, stepSize);
+        assertEquals(new PosImpl(1, 1), newPos);
+    }
+
+    /*
+     * This test checks if the limit method works as expected.
+     * If the new position is out of the grid, the limit method should limit the
+     * position to the grid
+     * and return the new position (maxPosX - 1, maxPosY - 1).
+     */
+    @Test
+    void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        final int outOfBoundPos = 6, maxPos = 5, espectedPos = 4;
+
+        // The new position should be (4, 4) because the new position is (6, 6)
+        // and it's out of bound because the grid is 5x5, (maxPosX - 1, maxPosY - 1)
+        Pos limitedPos = ComputationUtils.limit(new PosImpl(outOfBoundPos, outOfBoundPos),
+                new Pair<>(maxPos, maxPos));
+        assertEquals(new PosImpl(espectedPos, espectedPos), limitedPos);
     }
 }

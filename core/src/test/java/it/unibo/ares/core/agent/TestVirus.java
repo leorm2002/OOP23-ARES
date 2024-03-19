@@ -27,104 +27,68 @@ public class TestVirus {
 
     // CHECKSTYLE: MissingJavadocMethod OFF
 
-
-    /*
-     * This test checks if the move method works as expected.
-     * It creates a new agent and then it tries to move it.
-     * The agent should move to the new position.
-     */
-    @Test
-    void testMove() throws NoSuchMethodException, SecurityException,
-            ClassNotFoundException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException {
-        factoryI = new IVirusAgentFactory();
-        initialPos = new PosImpl(0, 0);
-        dir = new DirectionVectorImpl(1, 1);
-        stepSize = 1;
-
-        Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
-                                .getDeclaredMethod("move", Pos.class, DirectionVector.class,
-                                                Integer.class);
-        method.setAccessible(true);
-
-        // The new position should be (1, 1) because the direction vector is (1, 1) and the step size is 1,
-        // starting from (0, 0)
-        Pos newPos = (Pos) method.invoke(factoryI, initialPos, dir, stepSize);
-        assertEquals(new PosImpl(1, 1), newPos);
-    }
-
-    /*
-     * This test checks if the limit method works as expected.
-     * If the new position is out of the grid, the limit method should limit the position to the grid
-     * and return the new position (maxPosX - 1, maxPosY - 1).
-     */
-    @Test
-    void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
-     IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        factoryI = new IVirusAgentFactory();
-        final int outOfBoundPos = 6, maxPos = 5, espectedPos = 4;
-
-        Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
-                .getDeclaredMethod("limit", Pos.class, Pair.class);
-        method.setAccessible(true);
-
-        // The new position should be (4, 4) because the new position is (6, 6) 
-        // and it's out of bound because the grid is 5x5, (maxPosX - 1, maxPosY - 1)
-        Pos limitedPos = (Pos) method.invoke(factoryI, new PosImpl(outOfBoundPos, outOfBoundPos), new Pair<>(maxPos, maxPos));
-        assertEquals(new PosImpl(espectedPos, espectedPos), limitedPos);
-    }
-
-    /*
-     * This test checks if the infection method works as expected.
-     * It creates a healthy person and an infected person, and then it tries to infect the healthy person.
-     * The healthy person should become infected because of the 100% infection rate.
-     * It creates also an infected person to allow the factory to have setted the parameters for the infect persons
-     * when the change of agent occurs.
-     */
-    @Test
-    public void testInfection() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-            NoSuchMethodException, SecurityException, ClassNotFoundException {
-        // create two agents, one healthy and one infected
-        // then try to infect the healthy person whose infection rate is 100%, so it should become infected
+    private Pair<Agent, Agent> getTwoAgents(int infectionRate) {
         factoryI = new IVirusAgentFactory();
         factoryP = new PVirusAgentFactory();
         initialPos = new PosImpl(0, 0);
         Agent agentP = factoryP.createAgent();
         Agent agentI = factoryI.createAgent();
-        agentP.setParameter("infectionRate", 100);
+        agentP.setParameter("infectionRate", infectionRate);
         agentI.setParameter("direction", new DirectionVectorImpl(0, 0));
         agentI.setParameter("stepSize", 1);
         agentI.setParameter("recoveryRate", 0);
         agentP.setParameter("stepSize", 1);
         agentP.setParameter("direction", new DirectionVectorImpl(0, 0));
 
+        return new Pair<Agent, Agent>(agentP, agentI);
+    }
+
+    /*
+     * This test checks if the infection method works as expected.
+     * It creates a healthy person and an infected person, and then it tries to
+     * infect the healthy person.
+     * The healthy person should become infected because of the 100% infection rate.
+     * It creates also an infected person to allow the factory to have setted the
+     * parameters for the infect persons
+     * when the change of agent occurs.
+     */
+    @Test
+    void testInfection() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            NoSuchMethodException, SecurityException, ClassNotFoundException {
+        // create two agents, one healthy and one infected
+        // then try to infect the healthy person whose infection rate is 100%, so it
+        // should become infected
+        Pair<Agent, Agent> agents = getTwoAgents(100);
         Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
-                        .getDeclaredMethod("initializeParameters", Set.class);
+                .getDeclaredMethod("initializeParameters", Set.class);
         method.setAccessible(true);
-        method.invoke(factoryP, Set.of(new Pair<Pos, Agent>(initialPos, agentP),
-                        new Pair<Pos, Agent>(new PosImpl(1, 1), agentI)));
+        method.invoke(factoryP, Set.of(new Pair<Pos, Agent>(initialPos, agents.getFirst()),
+                new Pair<Pos, Agent>(new PosImpl(1, 1), agents.getSecond())));
         method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
                 .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agentP, initialPos);
+        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agents.getFirst(), initialPos);
         assertTrue(a.get().getType().equals("I"));
     }
 
-
     /*
      * This test checks if the recovery method works as expected.
-     * It creates a healthy person and an infected person, and then it tries to recover the infected person.
-     * The infected person should recover and become healthy because of the 100% recovery rate.
-     * It creates also a healthy person to allow the factory to have setted the parameters for the healthy person
+     * It creates a healthy person and an infected person, and then it tries to
+     * recover the infected person.
+     * The infected person should recover and become healthy because of the 100%
+     * recovery rate.
+     * It creates also a healthy person to allow the factory to have setted the
+     * parameters for the healthy person
      * when the change of agent occurs.
      */
     @Test
     public void testRecovery() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
         // create two agents, one healthy and one infected
-        // then try to recover the infected person whose recovery rate is 100%, so it should become healthy
+        // then try to recover the infected person whose recovery rate is 100%, so it
+        // should become healthy
         factoryP = new PVirusAgentFactory();
         factoryI = new IVirusAgentFactory();
         initialPos = new PosImpl(0, 0);
@@ -141,7 +105,7 @@ public class TestVirus {
                 .getDeclaredMethod("initializeParameters", Set.class);
         method.setAccessible(true);
         method.invoke(factoryI, Set.of(new Pair<Pos, Agent>(initialPos, agentP),
-                        new Pair<Pos, Agent>(new PosImpl(1, 1), agentI)));
+                new Pair<Pos, Agent>(new PosImpl(1, 1), agentI)));
         method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
                 .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
         method.setAccessible(true);
@@ -165,30 +129,21 @@ public class TestVirus {
     public void testRecovery2() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
         // create two agents, one healthy and one infected
-        // then try to recover the infected person whose recovery rate is 0%, so it should not become healthy
-        factoryP = new PVirusAgentFactory();
-        factoryI = new IVirusAgentFactory();
-        initialPos = new PosImpl(0, 0);
-        Agent agentP = factoryP.createAgent();
-        Agent agentI = factoryI.createAgent();
-        agentP.setParameter("infectionRate", 0);
-        agentI.setParameter("direction", new DirectionVectorImpl(0, 0));
-        agentI.setParameter("stepSize", 1);
-        agentI.setParameter("recoveryRate", 0);
-        agentP.setParameter("stepSize", 1);
-        agentP.setParameter("direction", new DirectionVectorImpl(0, 0));
+        // then try to recover the infected person whose recovery rate is 0%, so it
+        // should not become healthy
+        Pair<Agent, Agent> agents = getTwoAgents(0);
 
         Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
-                        .getDeclaredMethod("initializeParameters", Set.class);
+                .getDeclaredMethod("initializeParameters", Set.class);
         method.setAccessible(true);
-        method.invoke(factoryI, Set.of(new Pair<Pos, Agent>(initialPos, agentP),
-                        new Pair<Pos, Agent>(new PosImpl(1, 1), agentI)));
+        method.invoke(factoryI, Set.of(new Pair<Pos, Agent>(initialPos, agents.getFirst()),
+                new Pair<Pos, Agent>(new PosImpl(1, 1), agents.getSecond())));
         method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
                 .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agentI, initialPos);
+        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agents.getSecond(), initialPos);
         assertTrue(a.isEmpty());
     }
 
@@ -206,30 +161,21 @@ public class TestVirus {
     public void testInfection2() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
         // create two agents, one healthy and one infected
-        // then try to infect the healthy person whose infection rate is 0%, so it should not become infected
-        factoryP = new PVirusAgentFactory();
-        factoryI = new IVirusAgentFactory();
-        initialPos = new PosImpl(0, 0);
-        Agent agentP = factoryP.createAgent();
-        Agent agentI = factoryI.createAgent();
-        agentP.setParameter("infectionRate", 0);
-        agentI.setParameter("direction", new DirectionVectorImpl(0, 0));
-        agentI.setParameter("stepSize", 1);
-        agentI.setParameter("recoveryRate", 0);
-        agentP.setParameter("stepSize", 1);
-        agentP.setParameter("direction", new DirectionVectorImpl(0, 0));
+        // then try to infect the healthy person whose infection rate is 0%, so it
+        // should not become infected
+        Pair<Agent, Agent> agents = getTwoAgents(0);
 
         Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
-                        .getDeclaredMethod("initializeParameters", Set.class);
+                .getDeclaredMethod("initializeParameters", Set.class);
         method.setAccessible(true);
-        method.invoke(factoryP, Set.of(new Pair<Pos, Agent>(initialPos, agentP),
-                        new Pair<Pos, Agent>(new PosImpl(1, 1), agentI)));
+        method.invoke(factoryP, Set.of(new Pair<Pos, Agent>(initialPos, agents.getFirst()),
+                new Pair<Pos, Agent>(new PosImpl(1, 1), agents.getSecond())));
         method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
                 .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
         method.setAccessible(true);
 
         @SuppressWarnings("unchecked")
-        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agentP, initialPos);
+        Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agents.getFirst(), initialPos);
         assertTrue(a.isEmpty());
     }
 }

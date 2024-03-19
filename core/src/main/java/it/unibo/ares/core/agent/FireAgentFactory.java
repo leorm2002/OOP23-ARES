@@ -8,7 +8,6 @@ import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
-import it.unibo.ares.core.utils.state.StateImpl;
 
 import java.util.Random;
 import java.util.Set;

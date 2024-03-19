@@ -11,16 +11,20 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
+/**
+ * Utility class made to contains common static computation methods between
+ * different agents
+ */
 public class ComputationUtils {
     /**
-     * Test weather a position is inside a cone
+     * Test weather a position is inside a cone.
      * 
      * @param pos      the position to test
      * @param center   the position of the observer
      * @param dir      the direction of the observer
      * @param distance the observable distance
      * @param angle    the observable angle
-     * @return
+     * @return wheater it is or not
      */
     public static boolean insideCone(final Pos pos, final Pos center, final DirectionVector dir, final Integer distance,
             final Integer angle) {
@@ -72,6 +76,7 @@ public class ComputationUtils {
     /**
      * Generates a random direction for the agent to move in.
      *
+     * @param r a random generator
      * @return The random direction.
      */
     public static DirectionVectorImpl getRandomDirection(Random r) {
@@ -83,6 +88,15 @@ public class ComputationUtils {
         return new DirectionVectorImpl(x, y);
     }
 
+    /**
+     * Get all the close cells within the distance and an angle.
+     * 
+     * @param pos      the position
+     * @param dir      the direction
+     * @param distance the max distange
+     * @param angle    the angle in degrees
+     * @return a set containing the cells
+     */
     public static Set<Pos> computeCloseCells(final Pos pos, final DirectionVector dir, final Integer distance,
             final Integer angle) {
         int xSign = dir.getX() > 0 ? 1 : -1;
