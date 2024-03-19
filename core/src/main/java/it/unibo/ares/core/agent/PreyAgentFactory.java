@@ -20,12 +20,6 @@ public final class PreyAgentFactory implements AgentFactory {
      */
     public static final String PREY = "P";
 
-    /**
-     * Create a new instance of the factory.
-     */
-    public PreyAgentFactory() {
-    }
-
     private Set<Pos> getNeighboringPositions(final State state, final Pos position, final int visionRadius) {
         return state.getPosByPosAndRadius(position, visionRadius).stream()
                 .filter(p -> !p.equals(position))
