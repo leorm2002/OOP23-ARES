@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -19,8 +18,7 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 
 class ComputationUtilsTest {
     @Test
-    void testInsideCone() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
-            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    void testInsideCone() {
         final Pos pos = new PosImpl(0, 0);
         final DirectionVector dir = new DirectionVectorImpl(1.0, 0.0);
         final Integer radius = 3;
@@ -59,9 +57,7 @@ class ComputationUtilsTest {
      * The agent should move to the new position.
      */
     @Test
-    void testMove() throws NoSuchMethodException, SecurityException,
-            ClassNotFoundException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException {
+    void testMove() {
         final Pos initialPos = new PosImpl(0, 0);
         final DirectionVector dir = new DirectionVectorImpl(1, 1);
         final Integer stepSize = 1;
@@ -80,8 +76,7 @@ class ComputationUtilsTest {
      * and return the new position (maxPosX - 1, maxPosY - 1).
      */
     @Test
-    void testPosLimit() throws NoSuchMethodException, SecurityException, ClassNotFoundException,
-            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    void testPosLimit() {
         final int outOfBoundPos = 6, maxPos = 5, espectedPos = 4;
 
         // The new position should be (4, 4) because the new position is (6, 6)

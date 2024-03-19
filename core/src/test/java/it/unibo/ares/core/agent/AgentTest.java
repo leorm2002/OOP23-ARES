@@ -1,6 +1,7 @@
 package it.unibo.ares.core.agent;
 
 import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AgentTest {
     // Disable magic number chekstyle, they're random values to
     // CHECKSTYLE: MagicNumber OFF
+    private static final String TYPE = "type";
 
     private State getTestState() {
         return new StateImpl(5, 5);
@@ -44,8 +46,8 @@ class AgentTest {
     }
 
     private boolean isAgentOfSameType(final Agent a, final Agent b) {
-        final Integer type1 = a.getParameters().getParameter("type", Integer.class).get().getValue();
-        final Integer type2 = b.getParameters().getParameter("type", Integer.class).get().getValue();
+        final Integer type1 = a.getParameters().getParameter(TYPE, Integer.class).get().getValue();
+        final Integer type2 = b.getParameters().getParameter(TYPE, Integer.class).get().getValue();
         return type1.equals(type2);
     }
 
@@ -67,9 +69,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest() {
-        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
+        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
+        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
+        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 2, true));
         State state = getTestState();
         final Pos agent1aPos = new PosImpl(1, 1);
         state.addAgent(agent1aPos, agent1a);
@@ -88,9 +90,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest2() {
-        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 1, true));
-        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>("type", 2, true));
+        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
+        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
+        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 2, true));
 
         State state = getTestState();
         state.addAgent(new PosImpl(1, 1), agent1a);

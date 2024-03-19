@@ -13,12 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * This class tests the VirusAgentFactory class.
  */
+@SuppressWarnings({ "PMD.AvoidUncheckedExceptionsInSignatures", "PMD.AvoidAccessibilityAlteration",
+        "avoidDuplicateLiterals" })
+// Reflection utilizzata per accedere a metodi privati, utilizzo di unchecked
+// per fare suppress
 class TestVirusModel {
     private IVirusAgentFactory factoryI;
     private PVirusAgentFactory factoryP;
     private static final String UNCHECKED = "unchecked";
-
-    // CHECKSTYLE: MissingJavadocMethod OFF
 
     private Agent getPAgent(final int infectionRate) {
         factoryI = new IVirusAgentFactory();

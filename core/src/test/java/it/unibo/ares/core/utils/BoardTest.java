@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Unit test for {@link Board}.
  */
 class BoardTest {
+    private static final String ENTITY = "entity";
+
     /**
      * Test adding an entity to the board.
      */
@@ -25,7 +27,7 @@ class BoardTest {
     void testAddEntity() {
         final Board<String> board = new BoardImpl<>();
         final Pos pos = new PosImpl(0, 0);
-        final String entity = "Entity";
+        final String entity = ENTITY;
         board.addEntity(pos, entity);
         final Optional<String> retrievedEntity = board.getEntity(pos);
         assertTrue(retrievedEntity.isPresent());
@@ -39,7 +41,7 @@ class BoardTest {
     void testRemoveEntity() {
         final Board<String> board = new BoardImpl<>();
         final Pos pos = new PosImpl(0, 0);
-        final String entity = "Entity";
+        final String entity = ENTITY;
         board.addEntity(pos, entity);
         board.removeEntity(pos, entity);
         final Optional<String> retrievedEntity = board.getEntity(pos);
@@ -72,7 +74,7 @@ class BoardTest {
     void testThrowingDuplicateAdd() {
         final Board<String> board = new BoardImpl<>();
         final Pos pos = new PosImpl(0, 0);
-        final String entity = "Entity";
+        final String entity = ENTITY;
         board.addEntity(pos, entity);
         assertThrows(IllegalArgumentException.class, () -> {
             board.addEntity(pos, entity);
@@ -87,7 +89,7 @@ class BoardTest {
     void testThrowingRemoveNotPresent() {
         final Board<String> board = new BoardImpl<>();
         final Pos pos = new PosImpl(0, 0);
-        final String entity = "Entity";
+        final String entity = ENTITY;
         assertThrows(IllegalArgumentException.class, () -> {
             board.removeEntity(pos, entity);
         });

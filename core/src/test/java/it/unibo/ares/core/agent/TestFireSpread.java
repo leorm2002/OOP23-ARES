@@ -18,13 +18,12 @@ class TestFireSpread {
     private static final String SPREAD = "spread";
     private static final String FLAMM = "flammability";
 
-    private FireAgentFactory fireFactory;
-    private TreeAgentFactory treeFactory;
-
     // CHECKSTYLE: MissingJavadocMethod OFF
     private Agent getFireAgent(final Double fuel, final Integer spread, final Double cons) {
-        fireFactory = new FireAgentFactory();
-        final Agent agent = fireFactory.createAgent();
+
+        final FireAgentFactory fireFactory = new FireAgentFactory();
+        final Agent agent = fireFactory
+                .createAgent();
         agent.setParameter(FUEL, fuel);
         agent.setParameter(SPREAD, spread);
         agent.setParameter(CONS, cons);
@@ -32,7 +31,7 @@ class TestFireSpread {
     }
 
     private Agent getTreeAgent(final Double fuel, final Double flamm) {
-        treeFactory = new TreeAgentFactory();
+        final TreeAgentFactory treeFactory = new TreeAgentFactory();
         final Agent agent = treeFactory.createAgent();
         agent.setParameter(FUEL, fuel);
         agent.setParameter(FLAMM, flamm);
@@ -60,7 +59,7 @@ class TestFireSpread {
         fireAgent1.tick(state, pos);
         fireAgent1.tick(state, pos);
 
-        assert state.getAgentAt(pos).get().getType().equals("E");
+        assert "E".equals(state.getAgentAt(pos).get().getType());
     }
 
     /**

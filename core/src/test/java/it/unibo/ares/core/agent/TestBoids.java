@@ -14,9 +14,10 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
-@SuppressWarnings({ "PMD.SystemPrintln", "PMD.SystemPrintln" }) // E UN PROGRAMMA CLI
-
+@SuppressWarnings({ "PMD.AvoidUncheckedExceptionsInSignatures", "PMD.AvoidAccessibilityAlteration" })
+// Reflection utilizzata per accedere a metodi privati
 class TestBoids {
+    private static final String BOIDSFACTORY = "it.unibo.ares.core.agent.BoidsAgentFactory";
 
         @Test
         void testCollisionAvoidanceNotOutOfScope()
@@ -37,10 +38,10 @@ class TestBoids {
                 state.addAgent(obstaclePos, obstacleAgent);
                 // TEST NOT VIEWED
 
-                final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
-                                                Integer.class,
-                                                Integer.class);
+        final Method method = Class.forName(BOIDSFACTORY)
+                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                        Integer.class,
+                        Integer.class);
 
                 method.setAccessible(true);
 
@@ -70,10 +71,10 @@ class TestBoids {
                 state.addAgent(obstaclePos, obstacleAgent);
                 // TEST NOT VIEWED
 
-                final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
-                                                Integer.class,
-                                                Integer.class);
+        final Method method = Class.forName(BOIDSFACTORY)
+                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                        Integer.class,
+                        Integer.class);
 
                 method.setAccessible(true);
 
@@ -108,20 +109,20 @@ class TestBoids {
                 state.addAgent(obstaclePos2, obstacleAgent2);
                 // TEST NOT VIEWED
 
-                final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
-                                                Integer.class,
-                                                Integer.class);
-                method.setAccessible(true);
-                final DirectionVector newDir = (DirectionVectorImpl) method.invoke(
-                                b, state, movingAgentPos, movingAgentDir,
-                                radius,
-                                angle);
-                // CHECKSTYLE: MagicNumber OFF sono i risultati attesi
-                final DirectionVector expectedDir = new DirectionVectorImpl(-2.0, -1.0);
-                // CHECKSTYLE: MagicNumber ON
-                assertEquals(newDir, expectedDir.getNormalized());
-        }
+        final Method method = Class.forName(BOIDSFACTORY)
+                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                        Integer.class,
+                        Integer.class);
+        method.setAccessible(true);
+        final DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                b, state, movingAgentPos, movingAgentDir,
+                radius,
+                angle);
+        // CHECKSTYLE: MagicNumber OFF sono i risultati attesi
+        final DirectionVector expectedDir = new DirectionVectorImpl(-2.0, -1.0);
+        // CHECKSTYLE: MagicNumber ON
+        assertEquals(newDir, expectedDir.getNormalized());
+    }
 
         @Test
         void testDirectionCenterCohesion()
@@ -146,10 +147,10 @@ class TestBoids {
                 state.addAgent(obstaclePos2, obstacleAgent2);
                 // TEST NOT VIEWED
 
-                final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("centerCohesion", State.class, Pos.class, DirectionVector.class,
-                                                Integer.class,
-                                                Integer.class);
+        final Method method = Class.forName(BOIDSFACTORY)
+                .getDeclaredMethod("centerCohesion", State.class, Pos.class, DirectionVector.class,
+                        Integer.class,
+                        Integer.class);
 
                 method.setAccessible(true);
                 final DirectionVector newDir = (DirectionVectorImpl) method.invoke(
@@ -188,10 +189,10 @@ class TestBoids {
                 state.addAgent(obstaclePos4, obstacleAgent4);
                 // TEST NOT VIEWED
 
-                final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
-                                                Integer.class,
-                                                Integer.class);
+        final Method method = Class.forName(BOIDSFACTORY)
+                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                        Integer.class,
+                        Integer.class);
 
                 method.setAccessible(true);
                 final DirectionVector newDir = (DirectionVectorImpl) method.invoke(
@@ -230,10 +231,10 @@ class TestBoids {
         state.addAgent(obstaclePos2, obstacleAgent2);
         // TEST NOT VIEWED
 
-                final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
-                                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
-                                                Integer.class,
-                                                Integer.class);
+        final Method method = Class.forName(BOIDSFACTORY)
+                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                        Integer.class,
+                        Integer.class);
 
         method.setAccessible(true);
         final DirectionVector newDir = (DirectionVectorImpl) method.invoke(
