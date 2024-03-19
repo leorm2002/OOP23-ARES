@@ -14,6 +14,8 @@ import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
 
+@SuppressWarnings({ "PMD.SystemPrintln", "PMD.SystemPrintln" }) // E UN PROGRAMMA CLI
+
 class TestBoids {
 
         @Test
@@ -221,24 +223,23 @@ class TestBoids {
                 final Pos obstaclePos2 = new PosImpl(2, 1);
                 obstacleAgent2.setParameter("direction", obstacleAgentsDir);
 
-                // CREATE STATE
-                State state = new StateImpl(10, 10);
-                state.addAgent(movingAgentPos, movingAgent);
-                state.addAgent(obstaclePos, obstacleAgent);
-                state.addAgent(obstaclePos2, obstacleAgent2);
-                // TEST NOT VIEWED
+        // CREATE STATE
+        final State state = new StateImpl(10, 10);
+        state.addAgent(movingAgentPos, movingAgent);
+        state.addAgent(obstaclePos, obstacleAgent);
+        state.addAgent(obstaclePos2, obstacleAgent2);
+        // TEST NOT VIEWED
 
                 final Method method = Class.forName("it.unibo.ares.core.agent.BoidsAgentFactory")
                                 .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
                                                 Integer.class,
                                                 Integer.class);
 
-                method.setAccessible(true);
-                DirectionVector newDir = (DirectionVectorImpl) method.invoke(
-                                b, state, movingAgentPos, movinAgentDir,
-                                radius, angle);
-                assertEquals(newDir, movinAgentDir.getNormalized());
+        method.setAccessible(true);
+        final DirectionVector newDir = (DirectionVectorImpl) method.invoke(
+                b, state, movingAgentPos, movinAgentDir,
+                radius, angle);
+        assertEquals(newDir, movinAgentDir.getNormalized());
 
-        }
-
+    }
 }

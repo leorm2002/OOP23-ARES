@@ -95,7 +95,7 @@ public final class DirectionVectorImpl implements DirectionVector {
      */
     @Override
     public DirectionVector mean(final DirectionVector other) {
-        return new DirectionVectorImpl((x + other.getX()), (y + other.getY()));
+        return new DirectionVectorImpl(x + other.getX(), y + other.getY());
     }
 
     @Override

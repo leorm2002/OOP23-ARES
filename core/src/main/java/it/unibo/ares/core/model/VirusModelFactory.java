@@ -69,6 +69,7 @@ public final class VirusModelFactory implements ModelFactory {
         if (size * size < total) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
+        final State state = new StateImpl(size, size);
 
         final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))

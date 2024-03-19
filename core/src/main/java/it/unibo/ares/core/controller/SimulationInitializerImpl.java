@@ -28,9 +28,9 @@ import it.unibo.ares.core.model.SchellingModelFactory;
  */
 public final class SimulationInitializerImpl extends SimulationInitializer {
     private static final int DEFAULTTICKRATE = 500;
-    private ConcurrentMap<String, Model> intilizingModels;
-    private ConcurrentMap<String, Pair<State, Model>> initializedModels;
-    private Map<String, Supplier<Model>> modelsSupplier;
+    private final ConcurrentMap<String, Model> intilizingModels;
+    private final ConcurrentMap<String, Pair<State, Model>> initializedModels;
+    private final Map<String, Supplier<Model>> modelsSupplier;
 
     /**
      * Creates a new instance of the simulation initializer.

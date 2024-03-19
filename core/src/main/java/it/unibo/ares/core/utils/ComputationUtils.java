@@ -50,7 +50,7 @@ public final class ComputationUtils {
      * @return The limited value.
      */
     private static int limit(final int curr, final int max) {
-        return curr < 0 ? 0 : curr > (max - 1) ? (max - 1) : curr;
+        return curr < 0 ? 0 : curr > max - 1 ? max - 1 : curr;
     }
 
     /**

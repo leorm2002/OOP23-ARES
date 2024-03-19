@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ParametersImplTest {
     private ParametersImpl parameters;
+    private static final String KEY = "testKey";
 
     /**
      * Istantiate a new ParametersImpl before each test.
@@ -31,12 +32,11 @@ class ParametersImplTest {
      */
     @Test
     void testAddParameterWithType() {
-        final String key = "testKey";
         final Class<Integer> type = Integer.class;
 
-        parameters.addParameter(key, type, true);
+        parameters.addParameter(KEY, type, true);
 
-        final Optional<Parameter<Integer>> parameter = parameters.getParameter(key, type);
+        final Optional<Parameter<Integer>> parameter = parameters.getParameter(KEY, type);
         assertTrue(parameter.isPresent());
         assertFalse(parameter.get().isSetted());
     }
@@ -46,12 +46,11 @@ class ParametersImplTest {
      */
     @Test
     void testAddParameterWithValue() {
-        final String key = "testKey";
         final Integer value = 10;
 
-        parameters.addParameter(key, value, true);
+        parameters.addParameter(KEY, value, true);
 
-        final Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
+        final Optional<Parameter<Integer>> parameter = parameters.getParameter(KEY, Integer.class);
         assertTrue(parameter.isPresent());
         assertTrue(parameter.get().isSetted());
         assertEquals(value, parameter.get().getValue());
@@ -62,12 +61,11 @@ class ParametersImplTest {
      */
     @Test
     void testGetParameter() {
-        final String key = "testKey";
         final Integer value = 10;
 
-        parameters.addParameter(key, value, true);
+        parameters.addParameter(KEY, value, true);
 
-        final Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
+        final Optional<Parameter<Integer>> parameter = parameters.getParameter(KEY, Integer.class);
         assertTrue(parameter.isPresent());
         assertEquals(value, parameter.get().getValue());
     }
@@ -77,14 +75,13 @@ class ParametersImplTest {
      */
     @Test
     void testSetParameter() {
-        final String key = "testKey";
         // CHECKSTYLE: MagicNumber OFF just two casual value to test
         final Integer value = 10;
         final Integer newValue = 20;
         // CHECKSTYLE: MagicNumber ON
-        parameters.addParameter(key, value, true);
-        parameters.setParameter(key, newValue);
-        final Optional<Parameter<Integer>> parameter = parameters.getParameter(key, Integer.class);
+        parameters.addParameter(KEY, value, true);
+        parameters.setParameter(KEY, newValue);
+        final Optional<Parameter<Integer>> parameter = parameters.getParameter(KEY, Integer.class);
         assertTrue(parameter.isPresent());
         assertTrue(parameter.get().isSetted());
         assertEquals(newValue, parameter.get().getValue());
@@ -108,7 +105,7 @@ class ParametersImplTest {
         final Set<Parameter<?>> parameterSet = parameters.getParameters();
         assertEquals(2, parameterSet.size());
 
-        for (Parameter<?> parameter : parameterSet) {
+        for (final Parameter<?> parameter : parameterSet) {
             assertTrue(parameter.isSetted());
         }
     }
@@ -128,7 +125,7 @@ class ParametersImplTest {
         final Set<Parameter<?>> parameterSet = parameters.getParametersToset();
         assertEquals(1, parameterSet.size());
 
-        for (Parameter<?> parameter : parameterSet) {
+        for (final Parameter<?> parameter : parameterSet) {
             assertFalse(parameter.isSetted());
         }
     }
@@ -138,13 +135,12 @@ class ParametersImplTest {
      */
     @Test
     void testAddParameterWithParameter() {
-        final String key = "testKey";
         final Integer value = 10;
-        final Parameter<Integer> parameter = new ParameterImpl<>(key, value, true);
+        final Parameter<Integer> parameter = new ParameterImpl<>(KEY, value, true);
 
         parameters.addParameter(parameter);
 
-        final Optional<Parameter<Integer>> retrievedParameter = parameters.getParameter(key, Integer.class);
+        final Optional<Parameter<Integer>> retrievedParameter = parameters.getParameter(KEY, Integer.class);
         assertTrue(retrievedParameter.isPresent());
         assertTrue(retrievedParameter.get().isSetted());
         assertEquals(value, retrievedParameter.get().getValue());
@@ -155,14 +151,13 @@ class ParametersImplTest {
      */
     @Test
     void testClone() {
-        final String key = "testKey";
         final Integer value = 10;
 
-        parameters.addParameter(key, value, true);
+        parameters.addParameter(KEY, value, true);
 
         final Parameters clone = parameters.copy();
 
-        final Optional<Parameter<Integer>> parameter = clone.getParameter(key, Integer.class);
+        final Optional<Parameter<Integer>> parameter = clone.getParameter(KEY, Integer.class);
         assertTrue(parameter.isPresent());
         assertTrue(parameter.get().isSetted());
         assertEquals(value, parameter.get().getValue());
@@ -186,13 +181,12 @@ class ParametersImplTest {
      */
     @Test
     void testAddParameterWithDuplicateKey() {
-        final String key = "testKey";
         final Integer value1 = 10;
-        parameters.addParameter(key, value1, true);
+        parameters.addParameter(KEY, value1, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
             // CHECKSTYLE: MagicNumber OFF just a casual different value to test
-            parameters.addParameter(key, 20, true);
+            parameters.addParameter(KEY, 20, true);
             // CHECKSTYLE: MagicNumber ON
         });
     }
@@ -220,11 +214,10 @@ class ParametersImplTest {
      */
     @Test
     void testSetMissingParametr() {
-        final String key = "testKey";
         final Integer value = 10;
 
         assertThrows(IllegalArgumentException.class, () -> {
-            parameters.setParameter(key, value);
+            parameters.setParameter(KEY, value);
         });
     }
 
@@ -235,13 +228,12 @@ class ParametersImplTest {
      */
     @Test
     void testSetParametrOfWrongTypeWithValue() {
-        final String key = "testKey";
         final Integer value = 10;
 
-        parameters.addParameter(key, value, true);
+        parameters.addParameter(KEY, value, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            parameters.setParameter(key, "test");
+            parameters.setParameter(KEY, "test");
         });
     }
 
@@ -252,13 +244,12 @@ class ParametersImplTest {
      */
     @Test
     void testSetParametrOfWrongTypeWithType() {
-        final String key = "testKey";
         final Class<Integer> type = Integer.class;
 
-        parameters.addParameter(key, type, true);
+        parameters.addParameter(KEY, type, true);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            parameters.setParameter(key, "test");
+            parameters.setParameter(KEY, "test");
         });
     }
 }

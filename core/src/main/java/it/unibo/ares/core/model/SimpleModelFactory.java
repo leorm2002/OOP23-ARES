@@ -39,11 +39,11 @@ public final class SimpleModelFactory implements ModelFactory {
                         true))
                 .addExitFunction((state, state2) -> !state2.isFree(new PosImpl(0, 0)))
                 .addInitFunction(params -> {
-                    Integer size = params.getParameter(
+                    final Integer size = params.getParameter(
                             Model.SIZEKEY, Integer.class)
                             .orElseThrow(() -> new IllegalArgumentException("No size parameter"))
                             .getValue();
-                    State state = new StateImpl(size, size);
+                    final State state = new StateImpl(size, size);
                     state.addAgent(new PosImpl(0, 0), agentProvider.createAgent());
                     return state;
                 })

@@ -27,6 +27,7 @@ public class FireSpreadModelFactory implements ModelFactory {
     /**
      * @return the model ID of the FireSpreadModelFactory.
      */
+    @Override
     public String getModelId() {
         return MODEL_ID;
     }
@@ -54,13 +55,12 @@ public class FireSpreadModelFactory implements ModelFactory {
         final Double veg = parameters.getParameter("vegetation", Double.class).get().getValue();
 
         final Integer total = size * size;
-        final Integer nt = (int) ((total - nf) * veg);
-
-        final State state = new StateImpl(size, size);
         if (total < nf) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
 
+        final Integer nt = (int) ((total - nf) * veg);
+        final State state = new StateImpl(size, size);
         final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
                 .map(Pos.class::cast)
@@ -107,7 +107,7 @@ public class FireSpreadModelFactory implements ModelFactory {
                         true))
                 .addExitFunction((o, n) -> n.getAgents().stream()
                         .map(a -> a.getSecond().getType()).distinct()
-                        .allMatch(t -> !t.equals("F")))
+                        .allMatch(t -> !"F".equals(t)))
                 .addInitFunction(t -> {
                     try {
                         return fireSpreadInitializer(t);

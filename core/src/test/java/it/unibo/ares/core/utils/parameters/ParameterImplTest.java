@@ -10,17 +10,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 /**
  * Test class for {@link ParameterImpl}.
  */
-public class ParameterImplTest {
+class ParameterImplTest {
+    private static final String KEY = "testKey";
+
     /**
      * Test the constructor with a value.
      */
     @Test
     void testConstructorWithValue() {
-        String key = "testKey";
-        Integer value = 10;
-        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, value, true);
+        final Integer value = 10;
+        final ParameterImpl<Integer> parameter = new ParameterImpl<>(KEY, value, true);
 
-        assertEquals(key, parameter.getKey());
+        assertEquals(KEY, parameter.getKey());
         assertEquals(value, parameter.getValue());
         assertEquals(Integer.class, parameter.getType());
         assertTrue(parameter.isSetted());
@@ -31,11 +32,10 @@ public class ParameterImplTest {
      */
     @Test
     void testConstructorWithType() {
-        String key = "testKey";
-        Class<Integer> type = Integer.class;
-        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, type, true);
+        final Class<Integer> type = Integer.class;
+        final ParameterImpl<Integer> parameter = new ParameterImpl<>(KEY, type, true);
 
-        assertEquals(key, parameter.getKey());
+        assertEquals(KEY, parameter.getKey());
         assertThrows(IllegalStateException.class,
                 () -> parameter.getValue());
         assertEquals(type, parameter.getType());
@@ -49,15 +49,14 @@ public class ParameterImplTest {
      */
     @Test
     void testSetValue() {
-        String key = "testKey";
-        Integer value = 10;
-        ParameterImpl<Integer> parameter = new ParameterImpl<>(key, Integer.class, true);
+        final Integer value = 10;
+        final ParameterImpl<Integer> parameter = new ParameterImpl<>(KEY, Integer.class, true);
 
         assertFalse(parameter.isSetted());
         assertThrows(IllegalStateException.class,
                 () -> parameter.getValue());
 
-        var settedParameter = parameter.updateValue(value);
+        final var settedParameter = parameter.updateValue(value);
 
         assertTrue(settedParameter.isSetted());
         assertEquals(value, settedParameter.getValue());

@@ -23,11 +23,11 @@ class BoardTest {
      */
     @Test
     void testAddEntity() {
-        Board<String> board = new BoardImpl<>();
-        Pos pos = new PosImpl(0, 0);
-        String entity = "Entity";
+        final Board<String> board = new BoardImpl<>();
+        final Pos pos = new PosImpl(0, 0);
+        final String entity = "Entity";
         board.addEntity(pos, entity);
-        Optional<String> retrievedEntity = board.getEntity(pos);
+        final Optional<String> retrievedEntity = board.getEntity(pos);
         assertTrue(retrievedEntity.isPresent());
         assertEquals(entity, retrievedEntity.get());
     }
@@ -37,12 +37,12 @@ class BoardTest {
      */
     @Test
     void testRemoveEntity() {
-        Board<String> board = new BoardImpl<>();
-        Pos pos = new PosImpl(0, 0);
-        String entity = "Entity";
+        final Board<String> board = new BoardImpl<>();
+        final Pos pos = new PosImpl(0, 0);
+        final String entity = "Entity";
         board.addEntity(pos, entity);
         board.removeEntity(pos, entity);
-        Optional<String> retrievedEntity = board.getEntity(pos);
+        final Optional<String> retrievedEntity = board.getEntity(pos);
         assertFalse(retrievedEntity.isPresent());
     }
 
@@ -51,14 +51,14 @@ class BoardTest {
      */
     @Test
     void testGetEntities() {
-        Board<String> board = new BoardImpl<>();
-        Pos pos1 = new PosImpl(0, 0);
-        Pos pos2 = new PosImpl(1, 1);
-        String entity1 = "Entity1";
-        String entity2 = "Entity2";
+        final Board<String> board = new BoardImpl<>();
+        final Pos pos1 = new PosImpl(0, 0);
+        final Pos pos2 = new PosImpl(1, 1);
+        final String entity1 = "Entity1";
+        final String entity2 = "Entity2";
         board.addEntity(pos1, entity1);
         board.addEntity(pos2, entity2);
-        Set<Pair<Pos, String>> entities = board.getEntities();
+        final Set<Pair<Pos, String>> entities = board.getEntities();
         assertEquals(2, entities.size());
         assertTrue(entities.contains(new Pair<>(pos1, entity1)));
         assertTrue(entities.contains(new Pair<>(pos2, entity2)));
@@ -70,9 +70,9 @@ class BoardTest {
      */
     @Test
     void testThrowingDuplicateAdd() {
-        Board<String> board = new BoardImpl<>();
-        Pos pos = new PosImpl(0, 0);
-        String entity = "Entity";
+        final Board<String> board = new BoardImpl<>();
+        final Pos pos = new PosImpl(0, 0);
+        final String entity = "Entity";
         board.addEntity(pos, entity);
         assertThrows(IllegalArgumentException.class, () -> {
             board.addEntity(pos, entity);
@@ -85,9 +85,9 @@ class BoardTest {
      */
     @Test
     void testThrowingRemoveNotPresent() {
-        Board<String> board = new BoardImpl<>();
-        Pos pos = new PosImpl(0, 0);
-        String entity = "Entity";
+        final Board<String> board = new BoardImpl<>();
+        final Pos pos = new PosImpl(0, 0);
+        final String entity = "Entity";
         assertThrows(IllegalArgumentException.class, () -> {
             board.removeEntity(pos, entity);
         });

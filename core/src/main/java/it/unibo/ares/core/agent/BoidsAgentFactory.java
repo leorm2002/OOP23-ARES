@@ -142,7 +142,7 @@ public final class BoidsAgentFactory implements AgentFactory {
         }
         final Agent agent = currentState.getAgentAt(agentPosition).get();
         if (!agent.getParameters().getParametersToset().isEmpty()) {
-            throw new RuntimeException("Parameters not set");
+            throw new IllegalStateException("Parameters not set");
         }
 
         final DirectionVector dir = agent.getParameters()
