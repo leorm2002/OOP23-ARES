@@ -1,14 +1,13 @@
 package it.unibo.ares.core.agent;
 
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
-import it.unibo.ares.core.utils.pos.Pos;
-import it.unibo.ares.core.utils.pos.PosImpl;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -16,15 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class TestVirusModel {
     private IVirusAgentFactory factoryI;
-    private Pos initialPos;
     private PVirusAgentFactory factoryP;
+    private static final String UNCHECKED = "unchecked";
 
     // CHECKSTYLE: MissingJavadocMethod OFF
 
     private Agent getPAgent(final int infectionRate) {
         factoryI = new IVirusAgentFactory();
         factoryP = new PVirusAgentFactory();
-        initialPos = new PosImpl(0, 0);
         final Agent agent = factoryP.createAgent();
         agent.setParameter("infectionRate", infectionRate);
         agent.setParameter("stepSize", 1);
@@ -36,7 +34,6 @@ class TestVirusModel {
     private Agent getIAgent(final int recoveryRate) {
         factoryI = new IVirusAgentFactory();
         final Agent agent = factoryI.createAgent();
-        initialPos = new PosImpl(0, 0);
         agent.setParameter("direction", new DirectionVectorImpl(0, 0));
         agent.setParameter("stepSize", 1);
         agent.setParameter("recoveryRate", recoveryRate);
@@ -58,12 +55,12 @@ class TestVirusModel {
         // should become infected
         final Agent agent = getPAgent(100);
         final Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
-                .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
+                .getDeclaredMethod("infectPerson", Agent.class);
         method.setAccessible(true);
 
-        @SuppressWarnings("unchecked")
-        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent, initialPos);
-        assertTrue(a.get().getType().equals("I"));
+        @SuppressWarnings(UNCHECKED)
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent);
+        assertEquals("I", a.get().getType());
     }
 
     /*
@@ -82,12 +79,12 @@ class TestVirusModel {
         final Agent agent = getIAgent(100);
 
         final Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
-                .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
+                .getDeclaredMethod("recoveryInfected", Agent.class);
         method.setAccessible(true);
 
-        @SuppressWarnings("unchecked")
-        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent, initialPos);
-        assertTrue(a.get().getType().equals("P"));
+        @SuppressWarnings(UNCHECKED)
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent);
+        assertEquals("P", a.get().getType());
     }
 
     /*
@@ -106,11 +103,11 @@ class TestVirusModel {
         final Agent agent = getIAgent(0);
 
         final Method method = Class.forName("it.unibo.ares.core.agent.IVirusAgentFactory")
-                .getDeclaredMethod("recoveryInfected", Agent.class, Pos.class);
+                .getDeclaredMethod("recoveryInfected", Agent.class);
         method.setAccessible(true);
 
-        @SuppressWarnings("unchecked")
-        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent, initialPos);
+        @SuppressWarnings(UNCHECKED)
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryI, agent);
         assertTrue(a.isEmpty());
     }
 
@@ -130,11 +127,11 @@ class TestVirusModel {
         final Agent agent = getPAgent(0);
 
         final Method method = Class.forName("it.unibo.ares.core.agent.PVirusAgentFactory")
-                .getDeclaredMethod("infectPerson", Agent.class, Pos.class);
+                .getDeclaredMethod("infectPerson", Agent.class);
         method.setAccessible(true);
 
-        @SuppressWarnings("unchecked")
-        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent, initialPos);
+        @SuppressWarnings(UNCHECKED)
+        final Optional<Agent> a = (Optional<Agent>) method.invoke(factoryP, agent);
         assertTrue(a.isEmpty());
     }
 }
