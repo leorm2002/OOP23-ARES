@@ -18,7 +18,15 @@ import it.unibo.ares.core.utils.state.State;
  */
 public final class PVirusAgentFactory implements AgentFactory {
 
-    private Random r;
+    private final Random r;
+    /*
+     * A predicate to check if two agents are of the same type.
+     */
+    private static BiPredicate<Agent, Agent> checkAgentSameType = (a, b) -> {
+        final String typeA = a.getType();
+        final String typeB = b.getType();
+        return typeA.equals(typeB);
+    };
 
     /**
      * Constructor for the PVirusAgentFactory.
@@ -26,15 +34,6 @@ public final class PVirusAgentFactory implements AgentFactory {
     public PVirusAgentFactory() {
         r = new Random();
     }
-
-    /*
-     * A predicate to check if two agents are of the same type.
-     */
-    private static BiPredicate<Agent, Agent> isAgentOfSameType = (a, b) -> {
-        final String typeA = a.getType();
-        final String typeB = b.getType();
-        return typeA.equals(typeB);
-    };
 
     /**
      * Updates the state of the agent based on its current state and position.
@@ -51,9 +50,6 @@ public final class PVirusAgentFactory implements AgentFactory {
             return currentState;
         }
         final Agent agent = currentState.getAgentAt(agentPosition).get();
-        if (!agent.getParameters().getParametersToset().isEmpty()) {
-            throw new RuntimeException("Parameters not set");
-        }
 
         final int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
                 .get().getValue();
@@ -71,11 +67,11 @@ public final class PVirusAgentFactory implements AgentFactory {
         if (!currentState.isFree(newPos)) {
             // se la nuova posizione è occupata da due agenti di tipo diverso, controllo se
             // avviene un'infezione
-            if (!isAgentOfSameType.test(currentState.getAgentAt(newPos).get(),
+            if (!checkAgentSameType.test(currentState.getAgentAt(newPos).get(),
                     currentState.getAgentAt(agentPosition).get())) {
                 // l'agente in agentPos è sano, l'agente in newPos è infetto
                 // probabile infezione dell'agente in agentPos
-                final Optional<Agent> newAgent = infectPerson(agent, agentPosition);
+                final Optional<Agent> newAgent = infectPerson(agent);
                 if (newAgent.isPresent()) {
                     currentState.removeAgent(agentPosition, agent);
                     currentState.addAgent(agentPosition, newAgent.get());
@@ -101,14 +97,13 @@ public final class PVirusAgentFactory implements AgentFactory {
      * from the agent's parameters. If a random number is less than the infection
      * rate, the agent
      * is infected and substituted with a I agent. The agent parameters are also
-     * updated.
+     * updated with the default parameters of the infected agents.
      *
      * @param agent         The agent to be infected
-     * @param agentPosition The position of the agent
      * @return An Optional containing the infected agent if infection was
      *         successful, otherwise an empty Optional
      */
-    private Optional<Agent> infectPerson(final Agent agent, final Pos agentPosition) {
+    private Optional<Agent> infectPerson(final Agent agent) {
         final int infectionRate = agent.getParameters().getParameter("infectionRate", Integer.class)
                 .get().getValue();
         if (r.nextInt(100) < infectionRate) {
@@ -125,22 +120,26 @@ public final class PVirusAgentFactory implements AgentFactory {
     }
 
     /**
-     * Creates a new agent with the given parameters.
+     * Creates a new healthy agent with the following parameters:
+     * - stepSize: the size of the step (1-10)
+     * - direction: a random direction
+     * - infectionRate: the probability of getting infected by contact (0-100)
+     * The agent is of type "P".
      *
-     * @return The new agent.
+     * @return The new healty agent.
      */
     @Override
     public Agent createAgent() {
         final AgentBuilder b = new AgentBuilderImpl();
-        b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
-                new ParameterDomainImpl<>("la dimensione del passo (1-10)",
-                        (Integer d) -> d > 0 && d <= 10),
-                true));
         b.addParameter(new ParameterImpl<>("direction", ComputationUtils.getRandomDirection(r), false));
         b.addParameter(new ParameterImpl<>("infectionRate", Integer.class,
                 new ParameterDomainImpl<Integer>(
                         "Probabilità di infenzione da contatto (0-100)",
                         i -> i >= 0 && i <= 100),
+                true));
+        b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
+                new ParameterDomainImpl<>("la dimensione del passo (1-10)",
+                        (Integer d) -> d > 0 && d <= 10),
                 true));
         b.addStrategy(this::tickFunction);
         final Agent a = b.build();

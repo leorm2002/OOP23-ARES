@@ -66,7 +66,6 @@ public final class VirusModelFactory implements ModelFactory {
         final int pInfected = parameters.getParameter("numeroInfetti", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
         final int total = p + pInfected;
-        final State state = new StateImpl(size, size);
         if (size * size < total) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
@@ -77,6 +76,7 @@ public final class VirusModelFactory implements ModelFactory {
                 .toList();
 
         // Create a new state and populate it with agents at valid positions
+        final State state = new StateImpl(size, size);
         final UniquePositionGetter getter = new UniquePositionGetter(validPositions);
         final PVirusAgentFactory factoryP = new PVirusAgentFactory();
         final IVirusAgentFactory factoryI = new IVirusAgentFactory();

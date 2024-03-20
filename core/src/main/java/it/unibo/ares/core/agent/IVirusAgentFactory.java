@@ -41,12 +41,7 @@ public final class IVirusAgentFactory implements AgentFactory {
             return currentState;
         }
         final Agent agent = currentState.getAgentAt(agentPosition).get();
-        if (!agent.getParameters().getParametersToset().isEmpty()) {
-            throw new RuntimeException("Parameters not set");
-        }
 
-        final int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
-                .get().getValue();
         // assegno una nuova direzione casuale ad ogni step
         DirectionVector dir = ComputationUtils.getRandomDirection(r);
 
@@ -54,8 +49,8 @@ public final class IVirusAgentFactory implements AgentFactory {
 
         // se l'agente è infetto, controllo se guarisce, in caso negativo continuo con
         // lo spostamento
-        if (agent.getType().equals("I")) {
-            final Optional<Agent> newAgent = recoveryInfected(agent, agentPosition);
+        if ("I".equals(agent.getType())) {
+            final Optional<Agent> newAgent = recoveryInfected(agent);
             if (newAgent.isPresent()) {
                 // se guarisce, rimuovo l'agente infetto e aggiungo un agente sano
                 // e ritorno lo stato aggiornato
@@ -64,6 +59,8 @@ public final class IVirusAgentFactory implements AgentFactory {
                 return currentState;
             }
         }
+        final int stepSize = agent.getParameters().getParameter("stepSize", Integer.class)
+                .get().getValue();
         Pos newPos = ComputationUtils.move(agentPosition, dir, stepSize);
         if (!currentState.isInside(newPos)) {
             // se la nuova posizione dell'agente sarebbe fuori dallo spazio, cambio
@@ -93,14 +90,13 @@ public final class IVirusAgentFactory implements AgentFactory {
      * from the agent's parameters. If a random number is less than the recovery
      * rate, the agent
      * is recovered and substituted with a P agent. The agent parameters are also
-     * updated.
+     * updated with the default parameters of a healthy person.
      *
      * @param agent         The agent to be recovered
-     * @param agentPosition The position of the agent
      * @return An Optional containing the recovered agent if recovery was
      *         successful, otherwise an empty Optional
      */
-    private Optional<Agent> recoveryInfected(final Agent agent, final Pos agentPosition) {
+    private Optional<Agent> recoveryInfected(final Agent agent) {
         final int recoveryRate = agent.getParameters().getParameter("recoveryRate", Integer.class)
                 .get().getValue();
         if (r.nextInt(100) < recoveryRate) {
@@ -117,9 +113,12 @@ public final class IVirusAgentFactory implements AgentFactory {
     }
 
     /**
-     * Creates a new agent with the given parameters.
+     * Creates a new infected agent with the following parameters:
+     * - stepSize: the size of the step (1-10)
+     * - direction: the direction of the agent
+     * - recoveryRate: the probability of recovery at every step (0-100).
      *
-     * @return The new agent.
+     * @return The new infected agent.
      */
     @Override
     public Agent createAgent() {
