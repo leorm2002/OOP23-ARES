@@ -31,7 +31,9 @@ public final class App {
             System.out.println("Premi invio per iniziare la simulazione");
             System.console().readLine();
             simController.startSimulation(step);
-            System.out.println("Simulazione terminata");
+            System.out.println("Simulazione terminata, arriverderci!");
+            // Close the application
+            System.exit(0);
         });
 
         t.start();
@@ -46,8 +48,8 @@ public final class App {
     private static int getStep() {
 
         System.out.println("Inserire lo step (ms) tra un tick e l'altro (valore minimo " + MINSTEP + " ms)");
-        System.out.println("Lo step verrà arrotondato al multiplo di " + STEPSIZE
-                + " ms più vicino, se inserito 0 allora il sistema cercherà di fare il tick il più velocemente possibile.");
+        System.out.println("Lo step verra' arrotondato al multiplo di " + STEPSIZE
+                + " ms più vicino, se inserito 0 allora il sistema cercherà di fare il tick il piu' velocemente possibile.");
         final String step = System.console().readLine();
         try {
             final int stepInt = Integer.parseInt(step);

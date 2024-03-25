@@ -1,9 +1,10 @@
 package it.unibo.ares.core.controller;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * A simulation is a class that contains the state of the simulation and the
@@ -43,7 +44,7 @@ interface Simulation {
      *                            to tick.
      * @return A future containing the output of the simulation.
      */
-    CompletableFuture<SimulationOutputData> tick(String simulationSessionId);
+    CompletableFuture<Optional<SimulationOutputData>> tick(String simulationSessionId);
 
     /**
      * Ticks the simulation.
@@ -52,7 +53,7 @@ interface Simulation {
      *                            to tick.
      * @return A future containing the output of the simulation.
      */
-    SimulationOutputData tickSync(String simulationSessionId);
+    Optional<SimulationOutputData> tickSync(String simulationSessionId);
 
     /**
      * get the tick rate.

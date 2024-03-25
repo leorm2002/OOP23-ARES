@@ -1,6 +1,7 @@
 package it.unibo.ares.core.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
@@ -44,6 +45,8 @@ final class SimulationsControllerImpl extends SimulationsController {
                                                                  // the
                     // id of
                     // the simulation
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .forEach(simData -> processor.submit(
                             new Identifier<>(simData.getSimulationId(), simData))); // Processing
         } else {
@@ -54,8 +57,8 @@ final class SimulationsControllerImpl extends SimulationsController {
                                                              // id of
                     // the simulation
                     .forEach(f -> f
-                            .thenAccept(simData -> processor.submit(
-                                    new Identifier<>(simData.getSimulationId(), simData)))); // Processing
+                            .thenAccept(simData -> simData.ifPresent(d -> processor.submit(
+                                    new Identifier<>(d.getSimulationId(), d))))); // Processing
         }
     }
 

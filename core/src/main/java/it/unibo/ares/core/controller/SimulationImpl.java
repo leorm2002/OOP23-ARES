@@ -1,13 +1,14 @@
 package it.unibo.ares.core.controller;
 
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.Statistics;
-
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 /**
  * A simulation is a class that contains the state of the simulation and the
@@ -98,7 +99,7 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
-    public CompletableFuture<SimulationOutputData> tick(final String simulationSessionId) {
+    public CompletableFuture<Optional<SimulationOutputData>> tick(final String simulationSessionId) {
         if (!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }
@@ -107,15 +108,15 @@ final class SimulationImpl implements Simulation {
         }
 
         if (!shouldTick() || isOver) {
-            return CompletableFuture.completedFuture(mapStateToSimulationData(this.state, simulationSessionId, false));
+            return CompletableFuture.completedFuture(Optional.empty());
         }
 
-        final CompletableFuture<SimulationOutputData> future = new CompletableFuture<>();
+        final CompletableFuture<Optional<SimulationOutputData>> future = new CompletableFuture<>();
 
         new Thread(() -> {
             this.calculating = true;
             final boolean over = tickSim();
-            future.complete(mapStateToSimulationData(this.state, simulationSessionId, over));
+            future.complete(Optional.of(mapStateToSimulationData(this.state, simulationSessionId, over)));
             this.calculating = false;
         }).start();
 
@@ -123,7 +124,7 @@ final class SimulationImpl implements Simulation {
     }
 
     @Override
-    public SimulationOutputData tickSync(final String simulationSessionId) {
+    public Optional<SimulationOutputData> tickSync(final String simulationSessionId) {
         if (!this.running) {
             throw new IllegalStateException("Simulation is not running");
         }
@@ -132,7 +133,7 @@ final class SimulationImpl implements Simulation {
         }
 
         if (!shouldTick() || isOver) {
-            return mapStateToSimulationData(this.state, simulationSessionId, false);
+            return Optional.empty();
         }
 
         this.calculating = true;
@@ -140,7 +141,7 @@ final class SimulationImpl implements Simulation {
         final SimulationOutputData data = mapStateToSimulationData(this.state, simulationSessionId, over);
         this.calculating = false;
 
-        return data;
+        return Optional.of(data);
     }
 
     @Override

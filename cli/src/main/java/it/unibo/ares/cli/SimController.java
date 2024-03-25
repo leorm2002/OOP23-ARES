@@ -105,6 +105,10 @@ public final class SimController extends DataReciever {
     }
 
     private void printData(final SimulationOutputDataApi data) {
+        if (data.isFinished()) {
+            System.out.println("Simulazione terminata, premi " + STOP + " per uscire");
+            return;
+        }
         final Integer width = data.getWidth();
         final Integer height = data.getHeight();
         final Integer cellWidth = data.getData().values().stream().mapToInt(String::length).max().orElse(0) + 1;
