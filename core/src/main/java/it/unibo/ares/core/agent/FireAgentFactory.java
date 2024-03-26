@@ -18,6 +18,8 @@ import java.util.stream.IntStream;
 /**
  * A factory class for creating Fire agents.
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals") // utilizzato per concatenazione stringa, non ha senso usare una
+                                                // costante
 public final class FireAgentFactory implements AgentFactory {
     private static final Integer DIRRANDOMNUMBERCEIL = 20;
     private static final Integer VISION_ANGLE = 360;

@@ -107,6 +107,7 @@ public final class VirusModelFactory implements ModelFactory {
      *                                  initialization are not provided.
      */
     @Override
+    @SuppressWarnings("PMD.PreserveStackTrace") // La causa è sempre qella
     public Model getModel() {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroPersoneSane", Integer.class,

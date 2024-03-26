@@ -128,6 +128,7 @@ public final class SchellingModelFactory implements ModelFactory {
      * @return a scheeling model
      */
     @Override
+    @SuppressWarnings("PMD.PreserveStackTrace") // La causa è sempre qella
     public Model getModel() {
         // We need only one agent supplier since all agents are equal and only differs
         // in the type

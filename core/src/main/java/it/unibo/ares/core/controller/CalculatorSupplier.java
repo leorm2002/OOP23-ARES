@@ -16,13 +16,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * access the initialization and the controller of the simulations.
  */
 @SuppressFBWarnings(value = { "MS_EXPOSE_REP",
-        "EI_EXPOSE_REP" }, justification = "I prefer to suppress these FindBugs warnings")
+        "EI_EXPOSE_REP" }, justification = "non sono esposti")
 public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 
     private final SimulationsController controller;
     private final SimulationInitializer initializer;
-    private final Ticker ticker;
     private static final long TICKRATE = 50;
 
     /**
@@ -46,6 +45,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
      *
      * @return the singleton instance of the calculator supplier.
      */
+    @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static CalculatorSupplier getInstance() {
         final CalculatorSupplier curr = instance;
 
@@ -64,7 +64,7 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
-        this.ticker = new TickerImpl(controller::makeModelsTick, 0, TICKRATE);
+        final Ticker ticker = new TickerImpl(controller::makeModelsTick, 0, TICKRATE);
         ticker.start();
     }
 

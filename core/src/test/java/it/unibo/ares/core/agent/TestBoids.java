@@ -18,6 +18,7 @@ import it.unibo.ares.core.utils.state.StateImpl;
 // Reflection utilizzata per accedere a metodi privati
 class TestBoids {
     private static final String BOIDSFACTORY = "it.unibo.ares.core.agent.BoidsAgentFactory";
+    private static final String COLL = "collisionAvoindance";
 
         @Test
         void testCollisionAvoidanceNotOutOfScope()
@@ -39,7 +40,7 @@ class TestBoids {
                 // TEST NOT VIEWED
 
         final Method method = Class.forName(BOIDSFACTORY)
-                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                .getDeclaredMethod(COLL, State.class, Pos.class, DirectionVector.class,
                         Integer.class,
                         Integer.class);
 
@@ -72,7 +73,7 @@ class TestBoids {
                 // TEST NOT VIEWED
 
         final Method method = Class.forName(BOIDSFACTORY)
-                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                .getDeclaredMethod(COLL, State.class, Pos.class, DirectionVector.class,
                         Integer.class,
                         Integer.class);
 
@@ -110,7 +111,7 @@ class TestBoids {
                 // TEST NOT VIEWED
 
         final Method method = Class.forName(BOIDSFACTORY)
-                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                .getDeclaredMethod(COLL, State.class, Pos.class, DirectionVector.class,
                         Integer.class,
                         Integer.class);
         method.setAccessible(true);
@@ -190,7 +191,7 @@ class TestBoids {
                 // TEST NOT VIEWED
 
         final Method method = Class.forName(BOIDSFACTORY)
-                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                .getDeclaredMethod(COLL, State.class, Pos.class, DirectionVector.class,
                         Integer.class,
                         Integer.class);
 
@@ -232,7 +233,7 @@ class TestBoids {
         // TEST NOT VIEWED
 
         final Method method = Class.forName(BOIDSFACTORY)
-                .getDeclaredMethod("collisionAvoindance", State.class, Pos.class, DirectionVector.class,
+                .getDeclaredMethod(COLL, State.class, Pos.class, DirectionVector.class,
                         Integer.class,
                         Integer.class);
 

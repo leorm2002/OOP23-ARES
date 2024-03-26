@@ -56,7 +56,7 @@ public final class ParametersImpl implements Parameters {
             throw new IllegalArgumentException("Parameter " + key + " already exists");
         }
         if (key == null || type == null) {
-            throw new NullPointerException("Parameter key or type is null");
+            throw new IllegalStateException("Parameter key or type is null");
         }
         addParameter(key, new ParameterImpl<>(key, type, userSettable));
     }

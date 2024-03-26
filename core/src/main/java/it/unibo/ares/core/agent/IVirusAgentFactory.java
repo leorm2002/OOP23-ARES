@@ -122,19 +122,18 @@ public final class IVirusAgentFactory implements AgentFactory {
      */
     @Override
     public Agent createAgent() {
-        final AgentBuilder b = new AgentBuilderImpl();
-        b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
-                new ParameterDomainImpl<>("la dimensione del passo (1-10)",
-                        (Integer d) -> d > 0 && d <= 10),
-                true));
-        b.addParameter(new ParameterImpl<>("direction", ComputationUtils.getRandomDirection(r), false));
-        b.addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
-                new ParameterDomainImpl<Integer>(
-                        "Probabilità di guarigione a ogni step (0-100)",
-                        i -> i >= 0 && i <= 100),
-                true));
-        b.addStrategy(this::tickFunction);
-        final Agent a = b.build();
+        final Agent a = new AgentBuilderImpl()
+                .addParameter(new ParameterImpl<>("stepSize", Integer.class,
+                        new ParameterDomainImpl<>("la dimensione del passo (1-10)",
+                                (Integer d) -> d > 0 && d <= 10),
+                        true))
+                .addParameter(new ParameterImpl<>("direction", ComputationUtils.getRandomDirection(r), false))
+                .addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
+                        new ParameterDomainImpl<Integer>(
+                                "Probabilità di guarigione a ogni step (0-100)",
+                                i -> i >= 0 && i <= 100),
+                        true))
+                .addStrategy(this::tickFunction).build();
         a.setType("I");
         return a;
     }

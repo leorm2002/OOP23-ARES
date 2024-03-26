@@ -38,10 +38,10 @@ public final class PredatorPreyModelFactory implements ModelFactory {
         final int numAgentsPredator = parameters.getParameter("numeroAgentiCacciatori", Integer.class)
                 .orElseThrow(IllegalAccessException::new).getValue();
 
-        final State state = new StateImpl(size, size);
         if (size * size < numAgentsPrey + numAgentsPredator) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
+        final State state = new StateImpl(size, size);
 
         final List<Pos> validPositions = IntStream.range(0, size).boxed()
                 .flatMap(i -> IntStream.range(0, size).mapToObj(j -> new PosImpl(i, j)))
@@ -62,6 +62,7 @@ public final class PredatorPreyModelFactory implements ModelFactory {
     }
 
     @Override
+    @SuppressWarnings("PMD.PreserveStackTrace") // La causa è sempre qellas
     public Model getModel() {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroAgentiPreda", Integer.class,

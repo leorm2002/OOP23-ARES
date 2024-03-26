@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * This class tests the VirusAgentFactory class.
  */
 @SuppressWarnings({ "PMD.AvoidUncheckedExceptionsInSignatures", "PMD.AvoidAccessibilityAlteration",
-        "avoidDuplicateLiterals" })
+        "PMD.AvoidDuplicateLiterals" })
 // Reflection utilizzata per accedere a metodi privati, utilizzo di unchecked
 // per fare suppress
 class TestVirusModel {

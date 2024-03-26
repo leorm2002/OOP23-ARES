@@ -52,13 +52,12 @@ public class FireSpreadModelFactory implements ModelFactory {
     private static State fireSpreadInitializer(final Parameters parameters) throws IllegalAccessException {
         final Integer size = parameters.getParameter(Model.SIZEKEY, Integer.class).orElseThrow().getValue();
         final Integer nf = parameters.getParameter("numFire", Integer.class).get().getValue();
-        final Double veg = parameters.getParameter("vegetation", Double.class).get().getValue();
 
         final Integer total = size * size;
         if (total < nf) {
             throw new IllegalArgumentException("The number of agents is greater than the size of the grid");
         }
-
+        final Double veg = parameters.getParameter("vegetation", Double.class).get().getValue();
         final Integer nt = (int) ((total - nf) * veg);
         final State state = new StateImpl(size, size);
         final List<Pos> validPositions = IntStream.range(0, size).boxed()
@@ -90,6 +89,7 @@ public class FireSpreadModelFactory implements ModelFactory {
      * @throws IllegalAccessException If the required parameters are not provided.
      */
     @Override
+    @SuppressWarnings("PMD.PreserveStackTrace") // La causa è sempre qella
     public Model getModel() {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numFire", Integer.class,
