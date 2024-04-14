@@ -83,7 +83,6 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     @Override
     public String addNewModel(final String modelId) {
-        // TODO AGGIUNGERE METODO PER RIMUOVERE MODELLO IN INIZIALIZZAXIONE PASSANDO ID
         final String randomID = UUID.randomUUID().toString();
         this.intilizingModels.put(randomID, this.modelsSupplier.get(modelId).get());
         return randomID;
@@ -122,13 +121,12 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      */
     @Override
     public Set<String> getAgentsSimplified(final String initializationId) {
-        // TODO RICALCOLO SE CAMBIA MODEL
-        // TODO RIMUOVERE MODELLO INIZIALIZZATO da INITIALIZING
         this.initializedModels.computeIfAbsent(
                 initializationId,
                 id -> new Pair<>(intilizingModels.get(
                         initializationId).initilize(),
                         intilizingModels.get(initializationId)));
+        this.intilizingModels.remove(initializationId);
         return this.initializedModels.get(
                 initializationId)
                 .getFirst()
@@ -166,7 +164,6 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
 
     @Override
     Pair<String, Simulation> startSimulation(final String initializationId) {
-        // TODO rimuoere modello inizializzato
         if (!this.initializedModels.containsKey(initializationId)) {
             throw new IllegalArgumentException("The model has not been initialized");
         }
@@ -178,8 +175,9 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
                 .anyMatch(s -> !s.isEmpty())) {
             throw new IllegalArgumentException("Some agent parameters are not set");
         }
-        return new Pair<String, Simulation>(initializationId,
-                new SimulationImpl(initializedModels.get(initializationId).getFirst(),
-                        initializedModels.get(initializationId).getSecond(), DEFAULTTICKRATE));
+        final Pair<State, Model> model = this.initializedModels.remove(initializationId);
+        return new Pair<>(initializationId,
+                new SimulationImpl(model.getFirst(),
+                        model.getSecond(), DEFAULTTICKRATE));
     }
 }

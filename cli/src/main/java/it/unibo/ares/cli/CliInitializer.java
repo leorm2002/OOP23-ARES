@@ -25,6 +25,7 @@ public final class CliInitializer {
         System.out.println("Scegli un modello:");
         final List<String> models = CalculatorSupplier.getInstance().getModels().stream()
                 .collect(Collectors.toList());
+        
         final List<Pair<Integer, String>> indexedModels = IntStream.range(0, models.size())
                 .mapToObj(i -> new Pair<>(i, models.get(i)))
                 .toList();

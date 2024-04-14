@@ -17,4 +17,11 @@ public final class App {
     public static void main(final String[] args) {
         Application.launch(GuiStarter.class, args);
     }
+
+    public static Thread mainLib(final String[] args) {
+        Thread javafxThread = new Thread(() -> {
+            Application.launch(GuiStarter.class, args);
+        });
+        return javafxThread;
+    }
 }

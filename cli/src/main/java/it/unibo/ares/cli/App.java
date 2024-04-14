@@ -70,7 +70,6 @@ public final class App {
      * @param args
      */
     public static void mainLib(final String[] args) {
-        CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         System.out.println("Benvenuto in ARES!");
         final CliInitializer cliController = new CliInitializer();
         final String inizializationId = cliController.startParametrization();

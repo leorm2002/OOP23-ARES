@@ -1,6 +1,8 @@
 package it.unibo.ares.core.utils;
 
 import it.unibo.ares.core.agent.Agent;
+import it.unibo.ares.core.utils.parameters.Parameters;
+import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
@@ -22,8 +24,8 @@ class StateTest {
     @Test
     void testState() {
         final State state = new StateImpl(5, 5);
-        assertEquals(state.getDimensions().getFirst(), 5);
-        assertEquals(state.getDimensions().getSecond(), 5);
+        assertEquals(5, state.getDimensions().getFirst());
+        assertEquals(5, state.getDimensions().getSecond());
     }
 
     /**
@@ -41,14 +43,38 @@ class StateTest {
     }
 
     private Agent getSimpleTestAgent() {
-        /*
-         * 
-         * var agentBuilder = new AgentBuilderImpl();
-         * TODO ACCESS VIA REFLECTION
-         * agentBuilder.addStrategy((state, pos) -> state);
-         * return agentBuilder.build();
-         */
-        return null;
+        return new Agent() {
+
+            @Override
+            public State tick(State state, Pos pos) {
+                return state;
+            }
+
+            @Override
+            public Parameters getParameters() {
+                throw new UnsupportedOperationException("Unimplemented method 'getParameters'");
+            }
+
+            @Override
+            public <T> void setParameter(String key, T value) {
+                throw new UnsupportedOperationException("Unimplemented method 'setParameter'");
+            }
+
+            @Override
+            public String getId() {
+                throw new UnsupportedOperationException("Unimplemented method 'getId'");
+            }
+
+            @Override
+            public String getType() {
+                throw new UnsupportedOperationException("Unimplemented method 'getType'");
+            }
+
+            @Override
+            public void setType(String type) {
+                throw new UnsupportedOperationException("Unimplemented method 'setType'");
+            }
+        };
     }
 
     /**

@@ -59,7 +59,7 @@ class TestFireSpread {
         fireAgent1.tick(state, pos);
         fireAgent1.tick(state, pos);
 
-        assert "E".equals(state.getAgentAt(pos).get().getType());
+        assertEquals("E", state.getAgentAt(pos).get().getType());
     }
 
     /**
