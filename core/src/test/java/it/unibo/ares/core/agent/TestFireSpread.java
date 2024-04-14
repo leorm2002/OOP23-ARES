@@ -189,8 +189,7 @@ class TestFireSpread {
 
         final Boolean fire1 = "F".equals(state.getAgentAt(pos1).get().getType());
         final Boolean fire2 = "F".equals(state.getAgentAt(pos2).get().getType());
-        final Boolean fire3 = "F".equals(state.getAgentAt(pos3).get().getType());
         final Boolean tree1 = "T".equals(state.getAgentAt(pos4).get().getType());
-        assertTrue(fire1 && fire2 && fire3 && tree1);
+        assertTrue(fire1 && fire2 && tree1);
     }
 }

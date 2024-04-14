@@ -249,6 +249,10 @@ public final class FirstGuiController implements Initializable {
      * If any exception occurs during this process, it shows the error message.
      */
     void setAgentParameter() {
+        if (choiceAgent.getValue() == null) {
+            guiWriter.showError("Please select an agent to parametrize");
+            return;
+        }
         final BiConsumer<String, Object> parameterSetter = (key, value) -> {
             calculatorSupplier.setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), key,
                     value);
@@ -259,6 +263,9 @@ public final class FirstGuiController implements Initializable {
         if (everythingIsSet()) {
             guiWriter.showAlert("All the parameters are setted, you can start the simulation!");
             guiWriter.enableElement(btnStart);
+        } else {
+            guiWriter.showAlert("Parameters correctly setted for agent " + choiceAgent.getValue());
+
         }
     }
 
