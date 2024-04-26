@@ -5,7 +5,6 @@ import it.unibo.ares.core.controller.CalculatorSupplier;
 /**
  * Permette di lanciare l'app in modalità cli.
  */
-@SuppressWarnings("PMD.SystemPrintln") // E UN PROGRAMMA CLI
 public final class App {
 
     private static final Integer MINSTEP = 0;
@@ -22,16 +21,17 @@ public final class App {
      */
     public static void main(final String[] args) {
         CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
+        final IOManager ioManager = new IOManagerImpl();
         final Thread t = new Thread(() -> {
-            System.out.println("Benvenuto in ARES!");
-            final CliInitializer cliController = new CliInitializer();
+            ioManager.print("Benvenuto in ARES!");
+            final CliInitializer cliController = new CliInitializer(ioManager);
             final String inizializationId = cliController.startParametrization();
-            final SimController simController = new SimController(inizializationId);
-            final Integer step = getStep();
-            System.out.println("Premi invio per iniziare la simulazione");
-            System.console().readLine();
+            final SimController simController = new SimController(inizializationId, ioManager);
+            final Integer step = getStep(ioManager);
+            ioManager.print("Premi invio per iniziare la simulazione");
+            ioManager.read();
             simController.startSimulation(step);
-            System.out.println("Simulazione terminata, arriverderci!");
+            ioManager.print("Simulazione terminata");
             // Close the application
             System.exit(0);
         });
@@ -40,27 +40,30 @@ public final class App {
         try {
             t.join();
         } catch (InterruptedException e) {
-            System.out.println("Errore a runtime");
+            ioManager.print("Errore a runtime");
         }
 
     }
 
-    private static int getStep() {
+    private static int getStep(final IOManager ioManager) {
 
-        System.out.println("Inserire lo step (ms) tra un tick e l'altro (valore minimo " + MINSTEP + " ms)");
-        System.out.println("Lo step verra' arrotondato al multiplo di " + STEPSIZE
+        ioManager.print("Inserire lo step (ms) tra un tick e l'altro (valore minimo " + MINSTEP + " ms)");
+
+        ioManager.print("Lo step verra' arrotondato al multiplo di " + STEPSIZE
                 + " ms più vicino, se inserito 0 allora il sistema cercherà di fare il tick il piu' velocemente possibile.");
-        final String step = System.console().readLine();
+
+        final String step = ioManager.read();
         try {
             final int stepInt = Integer.parseInt(step);
             if (stepInt < MINSTEP) {
-                System.out.println("Lo step deve essere maggiore di " + MINSTEP);
+                ioManager.print("Inserire un valore maggiore o uguale a " + MINSTEP);
+
                 return Math.round(stepInt / (float) STEPSIZE) * STEPSIZE;
             }
             return stepInt;
         } catch (NumberFormatException e) {
-            System.out.println("Inserire un valore valido");
-            return getStep();
+            ioManager.print("Inserire un valore valido");
+            return getStep(ioManager);
         }
     }
 
@@ -70,14 +73,15 @@ public final class App {
      * @param args
      */
     public static void mainLib(final String[] args) {
-        System.out.println("Benvenuto in ARES!");
-        final CliInitializer cliController = new CliInitializer();
+        final IOManager ioManager = new IOManagerImpl();
+        ioManager.print("Benvenuto in ARES!");
+        final CliInitializer cliController = new CliInitializer(ioManager);
         final String inizializationId = cliController.startParametrization();
-        final SimController simController = new SimController(inizializationId);
-        final Integer step = getStep();
-        System.out.println("Premi invio per iniziare la simulazione");
-        System.console().readLine();
+        final SimController simController = new SimController(inizializationId, ioManager);
+        final Integer step = getStep(ioManager);
+        ioManager.print("Premi invio per iniziare la simulazione");
+        ioManager.read();
         simController.startSimulation(step);
-        System.out.println("Simulazione terminata");
+        ioManager.print("Simulazione terminata");
     }
 }

@@ -14,7 +14,6 @@ import it.unibo.ares.core.utils.statistics.Statistics;
  * The SimController class is responsible for controlling the simulation and
  * displaying the simulation output data.
  */
-@SuppressWarnings("PMD.SystemPrintln") // E UN PROGRAMMA CLI
 public final class SimController extends DataReciever {
     private static final String START = "s";
     private static final String PAUSE = "p";
@@ -23,17 +22,20 @@ public final class SimController extends DataReciever {
     private static final String SEPARATOR = "    ";
     private String simulationId;
     private boolean isOver;
+    private final IOManager ioManager;
 
     /**
      * Constructs a SimController object with the specified initialization ID.
      *
      * @param inizializationId the initialization ID for the simulation
+     * @param ioManager        the IOManager object to use for input/output
      */
-    public SimController(final String inizializationId) {
+    public SimController(final String inizializationId, final IOManager ioManager) {
         this.inizializationId = inizializationId;
+        this.ioManager = ioManager;
     }
 
-    private void readChar(final String ch) {
+    private void processChar(final String ch) {
         switch (ch) {
             case START:
                 CalculatorSupplier.getInstance().startSimulation(simulationId);
@@ -60,15 +62,15 @@ public final class SimController extends DataReciever {
      * @param stepSize the step in ms of the sim
      */
     public void startSimulation(final Integer stepSize) {
-        System.out.println("Inizio simulazione");
+        ioManager.print("Inizio simulazione");
         this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
         CalculatorSupplier.getInstance().setTickRate(inizializationId, stepSize);
-        final Thread reader = new Thread(new AsyncReader(this::readChar, this::isOver));
+        final Thread reader = new Thread(new AsyncReader(this::processChar, this::isOver, ioManager));
         reader.start();
         try {
             reader.join();
         } catch (InterruptedException e) {
-            System.out.println("Errore nell'avvio");
+            ioManager.print("Errore nell'avvio");
         }
     }
 
@@ -78,9 +80,10 @@ public final class SimController extends DataReciever {
     }
 
     private void printInfo() {
-        System.out.println("Premi " + PAUSE + " per mettere in pausa, " + START + " per far ricominciare e " + STOP
-                + " per uscire");
-        System.out.println("");
+        ioManager
+                .print("Premi " + PAUSE + " per mettere in pausa, " + START + " per far ricominciare e " + STOP
+                        + " per uscire");
+        ioManager.print("");
     }
 
     /**
@@ -93,10 +96,10 @@ public final class SimController extends DataReciever {
                 .map(p -> p.getFirst() + " " + p.getSecond())
                 .reduce((a, b) -> a + SEPARATOR + b);
         if (out.isPresent()) {
-            System.out.println("\nStatistiche");
-            System.out.println(out.get());
+            ioManager.print("\nStatistiche");
+            ioManager.print(out.get());
         } else {
-            System.out.println("\n\n");
+            ioManager.print("\n\n");
         }
     }
 
@@ -106,7 +109,7 @@ public final class SimController extends DataReciever {
 
     private void printData(final SimulationOutputDataApi data) {
         if (data.isFinished()) {
-            System.out.println("Simulazione terminata, premi " + STOP + " per uscire");
+            ioManager.print("Simulazione terminata, premi " + STOP + " per uscire");
             return;
         }
         final Integer width = data.getWidth();
@@ -128,7 +131,7 @@ public final class SimController extends DataReciever {
             }
             str.append(getHorizontalBar(width, cellWidth));
         }
-        System.out.println(str.toString());
+        ioManager.print(str.toString());
         printStatistics(data.getStatistics());
         printInfo();
     }

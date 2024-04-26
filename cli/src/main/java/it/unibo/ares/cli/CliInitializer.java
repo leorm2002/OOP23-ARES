@@ -16,33 +16,42 @@ import java.util.stream.IntStream;
 /**
  * Class used to initialize simulation by using a CLI.
  */
-@SuppressWarnings("PMD.SystemPrintln") // E UN PROGRAMMA CLI
 public final class CliInitializer {
     private String initializationId;
+    private final IOManager ioManager;
+
+    /**
+     * Creates a new CliInitializer object.
+     * 
+     * @param ioManager the IOManager object to use for input/output
+     */
+    public CliInitializer(final IOManager ioManager) {
+        this.ioManager = ioManager;
+    }
 
     private String selectModel() {
         Optional<String> selected = Optional.empty();
-        System.out.println("Scegli un modello:");
+        ioManager.print("Scegli un modello:");
         final List<String> models = CalculatorSupplier.getInstance().getModels().stream()
                 .collect(Collectors.toList());
-        
+
         final List<Pair<Integer, String>> indexedModels = IntStream.range(0, models.size())
                 .mapToObj(i -> new Pair<>(i, models.get(i)))
                 .toList();
         int index;
         do {
-            System.out.println("Scegli un modello inserendo il numero associato e premendo invio:");
-            indexedModels.forEach(p -> System.out.println(p.getFirst() + " - " + p.getSecond()));
+            ioManager.print("Scegli un modello inserendo il numero associato e premendo invio:");
+            indexedModels.forEach(p -> ioManager.print(p.getFirst() + " - " + p.getSecond()));
             try {
-                index = Integer.parseInt(System.console().readLine());
+                index = Integer.parseInt(ioManager.read());
                 if (index < 0 || index >= indexedModels.size()) {
-                    System.out.println("Inserisci un numero valido");
+                    ioManager.print("Inserisci un numero valido");
                 } else {
                     selected = Optional.of(models.get(index));
-                    System.out.println("Hai selezionato il modello " + selected.get());
+                    ioManager.print("Hai selezionato il modello " + selected.get());
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Inserisci un numero valido");
+                ioManager.print("Inserisci un numero valido");
             }
 
         } while (!selected.isPresent());
@@ -54,12 +63,12 @@ public final class CliInitializer {
                 .filter(Parameter::userSettable)
                 .sorted(Comparator.comparing(p -> ((Parameter<?>) p).getKey()))
                 .forEachOrdered(param -> {
-                    System.out.println("\nInserisci il valore per il parametro " + param.getKey());
+                    ioManager.print("\nInserisci il valore per il parametro " + param.getKey());
                     param.getDomain()
-                            .ifPresent(d -> System.out.println("Il parametro ha dominio: " + d.getDescription()));
-                    System.out.println("Il parametro ha tipo " + param.getType().getSimpleName());
-                    System.out.print("Inserisci il valore:");
-                    final String value = System.console().readLine();
+                            .ifPresent(d -> ioManager.print("Il parametro ha dominio: " + d.getDescription()));
+                    ioManager.print("Il parametro ha tipo " + param.getType().getSimpleName());
+                    ioManager.printInLine("Inserisci il valore:");
+                    final String value = ioManager.read();
                     try {
                         if (agentId.isPresent()) {
                             CalculatorSupplier.getInstance()
@@ -71,17 +80,17 @@ public final class CliInitializer {
                                             StringCaster.cast(value, param.getType()));
                         }
                     } catch (IllegalArgumentException e) {
-                        System.out.println("*********** Parametro non valido ***********");
+                        ioManager.print("*********** Parametro non valido ***********");
 
-                        System.out.println(e.getMessage());
-                        System.out.println("*********** Parametro non valido ***********\n");
+                        ioManager.print(e.getMessage());
+                        ioManager.print("*********** Parametro non valido ***********\n");
 
                     }
                 });
     }
 
     private void parametrizzaModello() {
-        System.out.println("Parametrizzazione modello");
+        ioManager.print("Parametrizzazione modello");
         Parameters params;
         do {
 
@@ -92,7 +101,7 @@ public final class CliInitializer {
     }
 
     private void parametrizzaAgente(final String agent) {
-        System.out.println("Parametrizzazione agente " + agent);
+        ioManager.print("Parametrizzazione agente " + agent);
         Parameters params;
         do {
             params = CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId,
@@ -102,7 +111,7 @@ public final class CliInitializer {
     }
 
     private void parametrizzaAgenti(final Set<String> agents) {
-        System.out.println("Parametrizzazione agenti");
+        ioManager.print("Parametrizzazione agenti");
         do {
             for (final String agent : agents) {
                 parametrizzaAgente(agent);
@@ -126,7 +135,7 @@ public final class CliInitializer {
      * @return ritorna l'i'd con cui accedere alla simulazione
      */
     public String startParametrization() {
-        System.out.println("Inizio parametrizzazione");
+        ioManager.print("Inizio parametrizzazione");
         final String model = selectModel();
         this.initializationId = CalculatorSupplier.getInstance().addNewModel(model);
         parametrizzaModello();
@@ -134,7 +143,7 @@ public final class CliInitializer {
 
         parametrizzaAgenti(agents);
 
-        System.out.println("Fine parametrizzazione");
+        ioManager.print("Fine parametrizzazione");
 
         return initializationId;
     }

@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 public class AsyncReader implements Runnable {
     private final Consumer<String> consumer;
     private final Supplier<Boolean> exitConition;
+    private final IOManager ioManager;
 
     /**
      * Creas un reader.
@@ -16,10 +17,13 @@ public class AsyncReader implements Runnable {
      * @param consumer     il consumer che deve accettare il valore una volta che
      *                     quest'ultimo è stato letto.
      * @param exitConition il supplier che ritoni se dobbiamo terminare
+     * @param ioManager    l'ioManager da usare per leggere.
      */
-    public AsyncReader(final Consumer<String> consumer, final Supplier<Boolean> exitConition) {
+    public AsyncReader(final Consumer<String> consumer, final Supplier<Boolean> exitConition,
+            final IOManager ioManager) {
         this.consumer = consumer;
         this.exitConition = exitConition;
+        this.ioManager = ioManager;
     }
 
     /**
@@ -29,7 +33,7 @@ public class AsyncReader implements Runnable {
     public void run() {
         String readed;
         while (Boolean.FALSE.equals(exitConition.get())) {
-            readed = System.console().readLine();
+            readed = ioManager.read();
             consumer.accept(readed);
         }
     }

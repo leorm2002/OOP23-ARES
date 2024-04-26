@@ -18,10 +18,15 @@ public final class App {
         Application.launch(GuiStarter.class, args);
     }
 
+    /**
+     * Main application entry-point.
+     * 
+     * @param args
+     * @return a thread with the main application entry-point
+     */
     public static Thread mainLib(final String[] args) {
-        Thread javafxThread = new Thread(() -> {
+        return new Thread(() -> {
             Application.launch(GuiStarter.class, args);
         });
-        return javafxThread;
     }
 }

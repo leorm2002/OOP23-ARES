@@ -20,7 +20,7 @@ class TestSchelling {
     void testSchellingSegregationModelAgent1() {
         final SchellingsAgentFactory factory = new SchellingsAgentFactory();
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
         final Pos pos = new PosImpl(1, 1);
@@ -28,7 +28,7 @@ class TestSchelling {
         state.addAgent(pos, type1Agent);
 
         // The agent should not move
-        type1Agent.tick(state, pos);
+        state = type1Agent.tick(state, pos);
 
         assertTrue(state.getAgentAt(pos).isPresent());
     }
@@ -41,7 +41,7 @@ class TestSchelling {
     void testSchellingSegregationModelAgent2() {
         final SchellingsAgentFactory factory = new SchellingsAgentFactory();
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
@@ -54,7 +54,7 @@ class TestSchelling {
         state.addAgent(pos2, type2Agent);
 
         // The agent should move
-        type1Agent.tick(state, pos);
+        state = type1Agent.tick(state, pos);
         assertFalse(state.getAgentAt(pos).isPresent());
 
     }
@@ -63,7 +63,7 @@ class TestSchelling {
     void testSchellingSegregationModelAgent3() {
         final SchellingsAgentFactory factory = new SchellingsAgentFactory();
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
         // Let's create a Schelling agent with type 1, threshold 0.5 and vision radius 1
         final Pos pos = new PosImpl(1, 1);
@@ -78,13 +78,13 @@ class TestSchelling {
         final Agent type2Agent = factory.getSchellingSegregationModelAgent("2", 0.5, 1);
         state.addAgent(pos3, type2Agent);
         // The agent should not move
-        type1Agent.tick(state, pos);
+        state = type1Agent.tick(state, pos);
         assertTrue(state.getAgentAt(pos).isPresent());
         // The agent should not move
-        type2Agent.tick(state, pos2);
+        state = type2Agent.tick(state, pos2);
         assertTrue(state.getAgentAt(pos2).isPresent());
         // The agent should move
-        type1AgentB.tick(state, pos3);
+        state = type1AgentB.tick(state, pos3);
         assertFalse(state.getAgentAt(pos3).isPresent());
     }
 }

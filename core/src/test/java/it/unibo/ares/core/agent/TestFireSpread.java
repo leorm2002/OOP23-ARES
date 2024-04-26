@@ -46,7 +46,7 @@ class TestFireSpread {
     @Test
     void testFireSpreadModelAgent1() {
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
 
         // CHECKSTYLE: MagicNumber ON
         // Creates a Fire-type Agent with type 1, vision radius 1, direction (1,0),
@@ -56,8 +56,8 @@ class TestFireSpread {
         state.addAgent(pos, fireAgent1);
 
         // The agent should not move
-        fireAgent1.tick(state, pos);
-        fireAgent1.tick(state, pos);
+        state = fireAgent1.tick(state, pos);
+        state = fireAgent1.tick(state, pos);
 
         assertEquals("E", state.getAgentAt(pos).get().getType());
     }
@@ -69,7 +69,7 @@ class TestFireSpread {
     @Test
     void testFireSpreadModelAgent2() {
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
@@ -88,7 +88,7 @@ class TestFireSpread {
         // CHECKSTYLE: MagicNumber ON
 
         // The fire should spread to the tree
-        fireAgent1.tick(state, pos);
+        state = fireAgent1.tick(state, pos);
 
         assertEquals("T", state.getAgentAt(pos2).get().getType());
     }
@@ -101,7 +101,7 @@ class TestFireSpread {
     @Test
     void testFireSpreadModelAgent3() {
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
@@ -127,7 +127,7 @@ class TestFireSpread {
         // CHECKSTYLE: MagicNumber ON
 
         // The fire should spread to the tree
-        fireAgent.tick(state, pos);
+        state = fireAgent.tick(state, pos);
 
         final Boolean fire1 = "F".equals(state.getAgentAt(pos1).get().getType());
         final Boolean fire2 = "F".equals(state.getAgentAt(pos2).get().getType());
@@ -145,7 +145,7 @@ class TestFireSpread {
     @Test
     void testFireSpreadModelAgent4() {
         // CHECKSTYLE: MagicNumber OFF just the dimension of the state, not important
-        final State state = new StateImpl(5, 5);
+        State state = new StateImpl(5, 5);
         // CHECKSTYLE: MagicNumber ON
 
         // CHECKSTYLE: MagicNumber OFF
@@ -170,22 +170,22 @@ class TestFireSpread {
         state.addAgent(pos4, treeAgent);
         // CHECKSTYLE: MagicNumber ON
 
-        fireAgent.tick(state, pos);
-        fireAgent.tick(state, pos);
-        fireAgent.tick(state, pos);
-        fireAgent.tick(state, pos);
+        state = fireAgent.tick(state, pos);
+        state = fireAgent.tick(state, pos);
+        state = fireAgent.tick(state, pos);
+        state = fireAgent.tick(state, pos);
 
         final Agent agent1 = state.getAgentAt(pos1).get();
-        agent1.tick(state, pos1);
+        state = agent1.tick(state, pos1);
 
         final Agent agent2 = state.getAgentAt(pos2).get();
-        agent1.tick(state, pos1);
-        agent2.tick(state, pos2);
+        state = agent1.tick(state, pos1);
+        state = agent2.tick(state, pos2);
 
         final Agent agent3 = state.getAgentAt(pos3).get();
-        agent1.tick(state, pos1);
-        agent2.tick(state, pos2);
-        agent3.tick(state, pos3);
+        state = agent1.tick(state, pos1);
+        state = agent2.tick(state, pos2);
+        state = agent3.tick(state, pos3);
 
         final Boolean fire1 = "F".equals(state.getAgentAt(pos1).get().getType());
         final Boolean fire2 = "F".equals(state.getAgentAt(pos2).get().getType());

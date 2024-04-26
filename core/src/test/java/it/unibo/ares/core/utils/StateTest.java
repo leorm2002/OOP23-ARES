@@ -46,7 +46,7 @@ class StateTest {
         return new Agent() {
 
             @Override
-            public State tick(State state, Pos pos) {
+            public State tick(final State state, final Pos pos) {
                 return state;
             }
 
@@ -56,7 +56,7 @@ class StateTest {
             }
 
             @Override
-            public <T> void setParameter(String key, T value) {
+            public <T> void setParameter(final String key, final T value) {
                 throw new UnsupportedOperationException("Unimplemented method 'setParameter'");
             }
 
@@ -71,7 +71,7 @@ class StateTest {
             }
 
             @Override
-            public void setType(String type) {
+            public void setType(final String type) {
                 throw new UnsupportedOperationException("Unimplemented method 'setType'");
             }
         };
