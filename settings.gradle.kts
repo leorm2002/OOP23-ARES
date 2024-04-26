@@ -7,4 +7,8 @@
  * in the user manual at https://docs.gradle.org/5.5.1/userguide/multi_project_builds.html
  */
 
-rootProject.name = "sample-javafx-project"
+rootProject.name = "ares"
+include("gui")
+include("core")
+include("cli")
+include("runner")

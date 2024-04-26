@@ -4,7 +4,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.29.0"
     id("lifecycle-base")
-
 }
 
 group = "it.unibo.ares"
@@ -21,12 +20,9 @@ dependencies {
     val jUnitVersion = "5.10.1"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
-}
+    implementation(project(":core"))
 
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
-
 application {
-    mainClass.set("it.unibo.ares.runner.ApplicationRunner")
+    mainClass.set("it.unibo.ares.cli.App")
 }
