@@ -1,5 +1,10 @@
 package it.unibo.ares.gui.controller;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
+
 import it.unibo.ares.core.controller.CalculatorSupplier;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.StringCaster;
@@ -18,11 +23,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.BiConsumer;
 
 /**
  * GuiController is a class that controls the first GUI of the application.
@@ -163,8 +163,7 @@ public final class FirstGuiController implements Initializable {
                      * switch on the type of the parameter and cast the text of the TextField to the
                      * correct type for setting it in the calculator
                      * switch on simpleName instead of the class because we can also have not
-                     * built-in
-                     * types, like DirectionVectorImpl
+                     * built-in types
                      */
                     switch (typeToString) {
                         /*
@@ -216,26 +215,6 @@ public final class FirstGuiController implements Initializable {
                                                 + " il valore deve essere un decimale");
                             }
                             break;
-                        case "DirectionVectorImpl":
-                            /*
-                             * // cast to Direction Vector
-                             * // Dividi la stringa in sottostringhe utilizzando lo spazio come delimitatore
-                             * String[] elementi = txt.getText().split("\\s+");
-                             * 
-                             * if (elementi.length < 2) {
-                             * guiWriter.showError("Inserire almeno due elementi separati da spazio!");
-                             * return;
-                             * }
-                             * DirectionVectorImpl vector = new
-                             * DirectionVectorImpl(Integer.parseInt(elementi[0]),
-                             * Integer.parseInt(elementi[1]));
-                             * try {
-                             * parameterSetter.accept(txt.getId(), vector);
-                             * } catch (Exception e) {
-                             * guiWriter.showError(e.getMessage());
-                             * }
-                             * break;
-                             */
                         default:
                             break;
                     }
@@ -259,13 +238,17 @@ public final class FirstGuiController implements Initializable {
         };
         final Parameters agentParameters = calculatorSupplier.getAgentParametersSimplified(configurationSessionId,
                 choiceAgent.getValue());
-        readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
-        if (everythingIsSet()) {
-            guiWriter.showAlert("All the parameters are setted, you can start the simulation!");
-            guiWriter.enableElement(btnStart);
-        } else {
-            guiWriter.showAlert("Parameters correctly setted for agent " + choiceAgent.getValue());
+        try {
+            readParamatersValueAndSet(vboxAgentPar, agentParameters, parameterSetter);
+            if (everythingIsSet()) {
+                guiWriter.showAlert("All the parameters are setted, you can start the simulation!");
+                guiWriter.enableElement(btnStart);
+            } else {
+                guiWriter.showAlert("Parameters correctly setted for agent " + choiceAgent.getValue());
+            }
 
+        } catch (Exception e) {
+            guiWriter.showError(e.getMessage());
         }
     }
 

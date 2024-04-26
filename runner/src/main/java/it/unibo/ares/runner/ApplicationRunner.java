@@ -32,9 +32,9 @@ public class ApplicationRunner {
         List<String> modes = List.of(TERMINAL, GRAFIC, COMBINED);
         List<Thread> threads = new ArrayList<>();
         printTitle();
-        System.out.println("Premi 0 per avviare l'applicazione in modalità cli");
-        System.out.println("Premi 1 per avviare l'applicazione in modalità grafica");
-        System.out.println("Premi 2 per avviare l'applicazione in modalità entrambe");
+        System.out.println("Premi 0 per avviare l'applicazione in modalita' cli");
+        System.out.println("Premi 1 per avviare l'applicazione in modalita' grafica");
+        System.out.println("Premi 2 per avviare l'applicazione in modalita' entrambe");
         System.out.println("Premi 3 per uscire");
 
         threads.add(

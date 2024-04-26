@@ -95,12 +95,10 @@ public final class SimController extends DataReciever {
         final Optional<String> out = statistics.getStatistics().stream()
                 .map(p -> p.getFirst() + " " + p.getSecond())
                 .reduce((a, b) -> a + SEPARATOR + b);
-        if (out.isPresent()) {
+        out.ifPresent(s -> {
             ioManager.print("\nStatistiche");
-            ioManager.print(out.get());
-        } else {
-            ioManager.print("\n\n");
-        }
+            ioManager.print(s);
+        });
     }
 
     private String getHorizontalBar(final Integer width, final Integer cellWidth) {

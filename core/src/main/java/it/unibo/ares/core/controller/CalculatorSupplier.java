@@ -16,7 +16,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * access the initialization and the controller of the simulations.
  */
 @SuppressFBWarnings(value = { "MS_EXPOSE_REP",
-        "EI_EXPOSE_REP" }, justification = "non sono esposti")
+    "EI_EXPOSE_REP" }, justification = "non sono esposti")
 public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
     private static volatile CalculatorSupplier instance;
 

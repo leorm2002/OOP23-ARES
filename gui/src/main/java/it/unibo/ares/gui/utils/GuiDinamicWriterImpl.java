@@ -1,22 +1,21 @@
 package it.unibo.ares.gui.utils;
 
-import it.unibo.ares.core.utils.parameters.Parameters;
+import java.util.Collection;
+import java.util.Map;
+
 import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import java.util.Collection;
-
-import java.util.Map;
 
 /**
  * WriteOnGUIImpl is a class that implements the WriteOnGUI interface.
@@ -44,30 +43,32 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          * label
          * with the domain description
          */
-        parameters.getParameters().stream().filter(Parameter::userSettable).forEach(p -> {
-            final Label lbl = new Label(p.getKey());
-            final Label domain = new Label();
-            final TextField txt = new TextField();
-            txt.setId(p.getKey());
-            VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
-            setElementStyle(domain, domainSize);
-            setElementStyle(txt, txtSize);
-            setElementStyle(lbl, lblSize);
-            if (p.getDomain().isPresent()) {
-                domain.setText(p.getDomain().get().getDescription());
-            }
-            /*
-             * setting the text of the textfield with the value of the parameter, if the
-             * value is not present, setting the prompt text with the type of the parameter
-             */
-            try {
-                txt.setText(p.getValue().toString());
-            } catch (IllegalStateException e) {
-                txt.setText("");
-                txt.setPromptText(p.getType().getSimpleName());
-            }
-            vbox.getChildren().addAll(lbl, txt, domain);
-        });
+        parameters.getParameters().stream().filter(Parameter::userSettable)
+                .sorted((p1, p2) -> p1.getKey().compareTo(p2.getKey()))
+                .forEach(p -> {
+                    final Label lbl = new Label(p.getKey());
+                    final Label domain = new Label();
+                    final TextField txt = new TextField();
+                    txt.setId(p.getKey());
+                    VBox.setMargin(domain, new Insets(0, marginRightLeft, marginBottom, marginRightLeft));
+                    setElementStyle(domain, domainSize);
+                    setElementStyle(txt, txtSize);
+                    setElementStyle(lbl, lblSize);
+                    if (p.getDomain().isPresent()) {
+                        domain.setText(p.getDomain().get().getDescription());
+                    }
+                    /*
+                     * setting the text of the textfield with the value of the parameter, if the
+                     * value is not present, setting the prompt text with the type of the parameter
+                     */
+                    try {
+                        txt.setText(p.getValue().toString());
+                    } catch (IllegalStateException e) {
+                        txt.setText("");
+                        txt.setPromptText(p.getType().getSimpleName());
+                    }
+                    vbox.getChildren().addAll(lbl, txt, domain);
+                });
     }
 
     /**
@@ -86,9 +87,9 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
      * It first clears the ChoiceBox, then adds all items from the set to the
      * ChoiceBox.
      *
-     * @param choiceBox the ChoiceBox to which the items should be written
-     * @param collection       the collection of items to be written to the ChoiceBox
-     * @param <T>       the type of the items in the collection and the ChoiceBox
+     * @param choiceBox  the ChoiceBox to which the items should be written
+     * @param collection the collection of items to be written to the ChoiceBox
+     * @param <T>        the type of the items in the collection and the ChoiceBox
      */
     @Override
     public <T> void writeChoiceBox(final ChoiceBox<T> choiceBox, final Collection<T> collection) {
