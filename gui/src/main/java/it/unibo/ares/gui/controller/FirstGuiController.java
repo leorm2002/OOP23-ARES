@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
-import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.AresSupplier;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.StringCaster;
 import it.unibo.ares.core.utils.parameters.Parameter;
@@ -49,7 +49,7 @@ public final class FirstGuiController implements Initializable {
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances, models, and agents.
      */
-    private final CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
+    private final AresSupplier calculatorSupplier = AresSupplier.getInstance();
 
     /*
      * FXML variables
@@ -178,9 +178,8 @@ public final class FirstGuiController implements Initializable {
                                 final int value = Integer.parseInt(txt.getText());
                                 if (Model.SIZEKEY.equals(parameter.getKey()) && value > MAXSIZE) {
                                     guiWriter.showAlert("The size of the space must be less than 35!");
-                                } else {
-                                    parameterSetter.accept(txt.getId(), value);
                                 }
+                                parameterSetter.accept(txt.getId(), value);
                             } catch (NumberFormatException e) {
                                 guiWriter.showError(
                                         errorString + parameter.getKey()

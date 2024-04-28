@@ -1,24 +1,23 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.api.InitializationApi;
-import it.unibo.ares.core.api.SimulationControlApi;
-import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.parameters.Parameters;
-
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import it.unibo.ares.core.api.InitializationApi;
+import it.unibo.ares.core.api.SimulationControlApi;
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.parameters.Parameters;
 
 /**
  * This class is used as an entry point for the simulation system, it is used to
  * access the initialization and the controller of the simulations.
  */
 @SuppressFBWarnings(value = { "MS_EXPOSE_REP",
-    "EI_EXPOSE_REP" }, justification = "non sono esposti")
-public final class CalculatorSupplier implements InitializationApi, SimulationControlApi {
-    private static volatile CalculatorSupplier instance;
+        "EI_EXPOSE_REP" }, justification = "non sono esposti")
+public final class AresSupplier implements InitializationApi, SimulationControlApi {
+    private static volatile AresSupplier instance;
 
     private final SimulationsController controller;
     private final SimulationInitializer initializer;
@@ -46,22 +45,22 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
      * @return the singleton instance of the calculator supplier.
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
-    public static CalculatorSupplier getInstance() {
-        final CalculatorSupplier curr = instance;
+    public static AresSupplier getInstance() {
+        final AresSupplier curr = instance;
 
         if (curr != null) {
             return curr;
         }
-        synchronized (CalculatorSupplier.class) {
+        synchronized (AresSupplier.class) {
             if (instance == null) {
-                instance = new CalculatorSupplier(
+                instance = new AresSupplier(
                         new SimulationsControllerImpl(), new SimulationInitializerImpl());
             }
             return instance;
         }
     }
 
-    private CalculatorSupplier(final SimulationsController c, final SimulationInitializer i) {
+    private AresSupplier(final SimulationsController c, final SimulationInitializer i) {
         this.controller = c;
         this.initializer = i;
         final Ticker ticker = new TickerImpl(controller::makeModelsTick, 0, TICKRATE);

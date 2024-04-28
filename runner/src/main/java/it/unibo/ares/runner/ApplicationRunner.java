@@ -3,7 +3,7 @@ package it.unibo.ares.runner;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.AresSupplier;
 
 /**
  * Permette di lanciare l'applicativo in vaie modalita
@@ -38,7 +38,7 @@ public class ApplicationRunner {
         System.out.println("Premi 3 per uscire");
 
         threads.add(
-                new Thread(CalculatorSupplier::getInstance));
+                new Thread(AresSupplier::getInstance));
         String mode;
         do {
             mode = System.console().readLine();
