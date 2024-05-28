@@ -1,12 +1,15 @@
 package it.unibo.ares.core.utils;
 
+import java.io.Serializable;
+
 /**
  * Represents an immutable pair of generic values.
  *
  * @param <T> the type of the first value
  * @param <U> the type of the second value
  */
-public class Pair<T, U> {
+public class Pair<T extends Serializable, U extends Serializable> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final T first;
     private final U second;
 

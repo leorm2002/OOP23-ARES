@@ -142,4 +142,14 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     public void setTickRate(final String id, final Integer tickRate) {
         controller.setTickRate(id, tickRate);
     }
+
+    @Override
+    public String save(final String id) {
+        return controller.save(id);
+    }
+
+    @Override
+    public void load(final String filePath) {
+        controller.load(filePath);
+    }
 }

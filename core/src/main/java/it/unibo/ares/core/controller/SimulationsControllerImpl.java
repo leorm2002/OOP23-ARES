@@ -92,4 +92,15 @@ final class SimulationsControllerImpl extends SimulationsController {
         simulations.get(id).setTickRate(tickRate);
     }
 
+    @Override
+    public String save(final String id) {
+        // TODO: Implement this method
+        return "";
+    }
+
+    @Override
+    public void load(final String filePath) {
+        // TODO: Implement this method
+    }
+
 }

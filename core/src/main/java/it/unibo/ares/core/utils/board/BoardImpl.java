@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 
 /**
  * Implementation of the Board interface.
@@ -15,7 +16,8 @@ import java.util.stream.Collectors;
  * 
  * @param <V> the type of entities stored in the board
  */
-public final class BoardImpl<V> implements Board<V> {
+public final class BoardImpl<V extends Serializable> implements Board<V> {
+    private static final long serialVersionUID = 1L;
     private final Map<Pos, V> entities;
 
     /**

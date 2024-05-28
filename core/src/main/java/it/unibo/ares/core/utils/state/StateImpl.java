@@ -19,6 +19,7 @@ import it.unibo.ares.core.utils.pos.PosImpl;
  * It manages the entities and agents on a board.
  */
 public final class StateImpl implements State {
+    private static final long serialVersionUID = 1L;
     private final Board<Entity> entityBoard = new BoardImpl<>();
     private final Board<Agent> agentBoard = new BoardImpl<>();
     private final Pair<Integer, Integer> size;

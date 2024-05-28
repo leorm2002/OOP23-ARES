@@ -1,5 +1,7 @@
 package it.unibo.ares.core.model;
 
+import java.io.Serializable;
+
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.Statistics;
@@ -7,7 +9,7 @@ import it.unibo.ares.core.utils.statistics.Statistics;
 /**
  * Represents a model of a simulation.
  */
-public interface Model {
+public interface Model extends Serializable {
     /**
      * Key that anyone should use to represent the size of the board.
      */

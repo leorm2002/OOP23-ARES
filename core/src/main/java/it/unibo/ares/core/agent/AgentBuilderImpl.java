@@ -37,6 +37,7 @@ class AgentBuilderImpl implements AgentBuilder {
         return new Agent() {
 
             private String type;
+            private static final long serialVersionUID = 1L;
 
             @Override
             public State tick(final State state, final Pos pos) {

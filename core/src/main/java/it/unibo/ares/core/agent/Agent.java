@@ -1,5 +1,7 @@
 package it.unibo.ares.core.agent;
 
+import java.io.Serializable;
+
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
@@ -7,7 +9,7 @@ import it.unibo.ares.core.utils.state.State;
 /**
  * Represents an agent in an agent-based model.
  */
-public interface Agent {
+public interface Agent extends Serializable {
 
     /**
      * Performs a tick of the agent, updating the simulation enviroment state based
