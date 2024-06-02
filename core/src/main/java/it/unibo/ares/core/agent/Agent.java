@@ -35,7 +35,7 @@ public interface Agent extends Serializable {
      * @param value the value of the parameter
      * @param <T>   the type of the parameter
      */
-    <T> void setParameter(String key, T value);
+    <T extends Serializable> void setParameter(String key, T value);
 
     /**
      * Retrieves the id of the agent.

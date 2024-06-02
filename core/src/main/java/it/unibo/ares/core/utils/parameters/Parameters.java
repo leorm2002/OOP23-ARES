@@ -1,5 +1,6 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,27 +14,27 @@ public interface Parameters {
     /**
      * Adds a parameter with the specified key and type.
      * 
-     * @param key  the key of the parameter
-     * @param type the type of the parameter
+     * @param key          the key of the parameter
+     * @param type         the type of the parameter
      * @param userSettable if the parameter can be set by the user
      * @throws IllegalArgumentException if a parameter with the specified key
      *                                  already exists
      * @throws NullPointerException     if the key or the type is null
      */
-    void addParameter(String key, Class<?> type, Boolean userSettable);
+    <T extends Serializable> void addParameter(String key, Class<T> type, Boolean userSettable);
 
     /**
      * Adds a parameter with the specified key and value.
      * 
-     * @param key   the key of the parameter
-     * @param value the value of the parameter
-     * @param <T>   the type of the value
+     * @param key          the key of the parameter
+     * @param value        the value of the parameter
+     * @param <T>          the type of the value
      * @param userSettable if the parameter can be set by the user
      * @throws IllegalArgumentException if a parameter with the specified key
      *                                  already exists
      * @throws NullPointerException     if the key is null
      */
-    <T> void addParameter(String key, T value, Boolean userSettable);
+    <T extends Serializable> void addParameter(String key, T value, Boolean userSettable);
 
     /**
      * Adds a parameter.
@@ -43,7 +44,7 @@ public interface Parameters {
      * @throws IllegalArgumentException if a parameter with the specified key
      *                                  already exists
      */
-    <T> void addParameter(Parameter<T> parameter);
+    <T extends Serializable> void addParameter(Parameter<T> parameter);
 
     /**
      * Retrieves a parameter with the specified key and type.
@@ -54,7 +55,7 @@ public interface Parameters {
      * @return an Optional containing the parameter, or an empty Optional if not
      *         found
      */
-    <T> Optional<Parameter<T>> getParameter(String key, Class<T> type);
+    <T extends Serializable> Optional<Parameter<T>> getParameter(String key, Class<T> type);
 
     /**
      * Retrieves a parameter with the specified key, if present.
@@ -64,7 +65,7 @@ public interface Parameters {
      * @return an Optional containing the parameter, or an empty Optional if not
      *         found
      */
-    <T> Optional<Parameter<T>> getParameter(String key);
+    <T extends Serializable> Optional<Parameter<T>> getParameter(String key);
 
     /**
      * Sets the value of a parameter with the specified key.
@@ -74,7 +75,7 @@ public interface Parameters {
      * @param <T>   the type of the value
      * @throws IllegalArgumentException if the parameter does not exist
      */
-    <T> void setParameter(String key, T value);
+    <T extends Serializable> void setParameter(String key, T value);
 
     /**
      * Retrieves all the parameters.

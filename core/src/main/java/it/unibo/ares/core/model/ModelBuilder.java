@@ -1,6 +1,7 @@
 package it.unibo.ares.core.model;
 
 import it.unibo.ares.core.utils.lambda.SerializableBiPredicate;
+import it.unibo.ares.core.utils.lambda.SerializableFunction;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
@@ -36,7 +37,7 @@ interface ModelBuilder extends Serializable {
      * @param <T>       the type of the parameter value (ex. Integer, String, ...).
      * @return the model builder with the added parameter.
      */
-    <T> ModelBuilder addParameter(Parameter<T> parameter);
+    <T extends Serializable> ModelBuilder addParameter(Parameter<T> parameter);
 
     /**
      * Add the function that will be used to check wether the simulation is
@@ -53,7 +54,7 @@ interface ModelBuilder extends Serializable {
      * @param initFunction
      * @return the model builder with the added init function
      */
-    ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
+    ModelBuilder addInitFunction(SerializableFunction<Parameters, State> initFunction);
 
     /**
      * Aggiunge il generatore per permettere al modello di generare statistiche.

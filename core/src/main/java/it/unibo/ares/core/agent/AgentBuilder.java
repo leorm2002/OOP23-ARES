@@ -4,6 +4,7 @@ import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
+import java.io.Serializable;
 import java.util.function.BiFunction;
 
 /**
@@ -36,7 +37,7 @@ interface AgentBuilder {
      *                      ...).
      * @return the agent builder with the added parameter.
      */
-    <T> AgentBuilder addParameter(Parameter<T> parameterImpl);
+    <T extends Serializable> AgentBuilder addParameter(Parameter<T> parameterImpl);
 
     /**
      * Adds a strategy to the agent.

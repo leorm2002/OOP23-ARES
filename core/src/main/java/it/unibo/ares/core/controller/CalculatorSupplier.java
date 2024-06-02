@@ -5,6 +5,7 @@ import it.unibo.ares.core.api.SimulationControlApi;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Flow.Subscriber;
@@ -104,7 +105,8 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
-    public void setModelParameter(final String initializationId, final String key, final Object value) {
+    public <T extends Object & Serializable> void setModelParameter(final String initializationId, final String key,
+            final T value) {
         initializer.setModelParameter(initializationId, key, value);
     }
 
@@ -119,8 +121,9 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
-    public void setAgentParameterSimplified(final String initializationId, final String agentId, final String key,
-            final Object value) {
+    public <T extends Object & Serializable> void setAgentParameterSimplified(final String initializationId,
+            final String agentId, final String key,
+            final T value) {
         initializer.setAgentParameterSimplified(initializationId, agentId, key, value);
     }
 

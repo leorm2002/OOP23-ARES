@@ -1,5 +1,6 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Optional;
  *
  * @param <T> the type of the parameter value
  */
-public final class ParameterImpl<T> implements Parameter<T> {
+public final class ParameterImpl<T extends Serializable> implements Parameter<T>, Serializable {
 
     private final Optional<ParameterDomain<T>> domain;
     private final Optional<T> value;

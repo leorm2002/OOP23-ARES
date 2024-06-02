@@ -6,6 +6,7 @@ import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
+import java.io.Serializable;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -50,7 +51,7 @@ class AgentBuilderImpl implements AgentBuilder {
             }
 
             @Override
-            public <T> void setParameter(final String key, final T value) {
+            public <T extends Serializable> void setParameter(final String key, final T value) {
                 parameters.setParameter(key, value);
             }
 
@@ -104,7 +105,7 @@ class AgentBuilderImpl implements AgentBuilder {
      * {@inheritDoc}
      */
     @Override
-    public <T> AgentBuilder addParameter(final Parameter<T> parameter) {
+    public <T extends Serializable> AgentBuilder addParameter(final Parameter<T> parameter) {
         parameters.addParameter(parameter);
         return this;
     }

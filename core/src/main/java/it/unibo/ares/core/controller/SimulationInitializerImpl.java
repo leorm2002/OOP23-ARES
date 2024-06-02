@@ -5,6 +5,7 @@ import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -54,8 +55,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
         this.initializedModels = new ConcurrentHashMap<>();
     }
 
-    private void setAgentParameter(final String initializationId, final String key,
-            final Object value, final Predicate<Agent> predicate) {
+    private <T extends Serializable> void setAgentParameter(final String initializationId, final String key,
+            final T value, final Predicate<Agent> predicate) {
         this.initializedModels.get(
                 initializationId).getFirst().getAgents().stream()
                 .map(Pair::getSecond)
@@ -105,7 +106,8 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      * @param value The value of the parameter to set.
      */
     @Override
-    public void setModelParameter(final String initializationId, final String key, final Object value) {
+    public <T extends Object & Serializable> void setModelParameter(final String initializationId, final String key,
+            final T value) {
         this.intilizingModels.get(initializationId).getParameters().setParameter(key, value);
     }
 
@@ -146,9 +148,10 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
      * @param value     The value of the parameter to set.
      */
     @Override
-    public void setAgentParameterSimplified(final String initializationId, final String agentType,
+    public <T extends Object & Serializable> void setAgentParameterSimplified(final String initializationId,
+            final String agentType,
             final String key,
-            final Object value) {
+            final T value) {
         setAgentParameter(initializationId, key, value, ag -> ag.getType().equals(agentType));
     }
 

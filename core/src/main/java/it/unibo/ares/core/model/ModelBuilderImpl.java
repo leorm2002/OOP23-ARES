@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.lambda.SerializableBiPredicate;
+import it.unibo.ares.core.utils.lambda.SerializableFunction;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
@@ -41,7 +42,7 @@ final class ModelBuilderImpl implements ModelBuilder {
     }
 
     @Override
-    public <T> ModelBuilder addParameter(final Parameter<T> parameter) {
+    public <T extends Serializable> ModelBuilder addParameter(final Parameter<T> parameter) {
         if (parameter == null) {
             throw new IllegalArgumentException("Parameter cannot be null");
         }
@@ -95,7 +96,7 @@ final class ModelBuilderImpl implements ModelBuilder {
             }
 
             @Override
-            public <T> void setParameter(final String key, final T value) {
+            public <T extends Serializable> void setParameter(final String key, final T value) {
                 parameters.setParameter(key, value);
             }
 
@@ -117,7 +118,7 @@ final class ModelBuilderImpl implements ModelBuilder {
     }
 
     @Override
-    public ModelBuilder addInitFunction(final Function<Parameters, State> initFunction) {
+    public ModelBuilder addInitFunction(final SerializableFunction<Parameters, State> initFunction) {
         if (initFunction == null) {
             throw new IllegalArgumentException("Init function cannot be null");
         }

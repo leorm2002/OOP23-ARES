@@ -1,9 +1,11 @@
 package it.unibo.ares.core.utils.directionvector;
 
+import java.io.Serializable;
+
 /**
  * Represents a vector in a two-dimensional space.
  */
-public interface DirectionVector {
+public interface DirectionVector extends Serializable {
 
     /**
      * Gets the x-component of the direction vector.

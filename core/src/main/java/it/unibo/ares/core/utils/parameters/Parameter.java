@@ -1,5 +1,6 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Optional;
  *
  * @param <T> the type of the parameter value
  */
-public interface Parameter<T> {
+public interface Parameter<T extends Serializable> extends Serializable {
     /**
      * Gets the value of the parameter.
      *
