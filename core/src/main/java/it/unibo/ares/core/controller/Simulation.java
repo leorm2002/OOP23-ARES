@@ -69,4 +69,5 @@ interface Simulation extends Serializable {
      * @param tickRate il tick rate in ms
      */
     void setTickRate(Integer tickRate);
+
 }

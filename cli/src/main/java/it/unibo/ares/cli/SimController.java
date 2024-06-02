@@ -18,6 +18,8 @@ public final class SimController extends DataReciever {
     private static final String START = "s";
     private static final String PAUSE = "p";
     private static final String STOP = "e";
+    private static final String SAVE = "o";
+    private static final String LOAD = "l";
     private final String inizializationId;
     private static final String SEPARATOR = "    ";
     private String simulationId;
@@ -46,6 +48,12 @@ public final class SimController extends DataReciever {
                 break;
             case PAUSE:
                 CalculatorSupplier.getInstance().pauseSimulation(simulationId);
+                break;
+            case SAVE:
+                CalculatorSupplier.getInstance().saveSimulation(simulationId);
+                break;
+            case LOAD:
+                CalculatorSupplier.getInstance().loadSimulation(simulationId);
                 break;
             default:
                 break;
@@ -82,7 +90,7 @@ public final class SimController extends DataReciever {
     private void printInfo() {
         ioManager
                 .print("Premi " + PAUSE + " per mettere in pausa, " + START + " per far ricominciare e " + STOP
-                        + " per uscire");
+                        + " per uscire, " + SAVE + " per salvare ");
         ioManager.print("");
     }
 

@@ -1,17 +1,19 @@
 package it.unibo.ares.core.model;
 
+import it.unibo.ares.core.utils.lambda.SerializableBiPredicate;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
+import java.io.Serializable;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /**
  * Represents a builder for creating models.
  */
-interface ModelBuilder {
+interface ModelBuilder extends Serializable {
     /**
      * Builds an instance of the Model interface.
      *
@@ -43,7 +45,7 @@ interface ModelBuilder {
      * @param exitfFunction
      * @return the model builder with the added exit function
      */
-    ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction);
+    ModelBuilder addExitFunction(SerializableBiPredicate<State, State> exitfFunction);
 
     /**
      * Add the function that initialize the state of the model.

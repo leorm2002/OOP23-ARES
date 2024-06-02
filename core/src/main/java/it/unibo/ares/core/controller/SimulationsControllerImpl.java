@@ -2,6 +2,7 @@ package it.unibo.ares.core.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
@@ -10,10 +11,12 @@ import java.util.stream.Collectors;
 final class SimulationsControllerImpl extends SimulationsController {
     private final ConcurrentMap<String, Simulation> simulations;
     private final SimulationDataProvider<SimulationOutputData> processor;
+    private final SimulationManager manager;
 
     SimulationsControllerImpl() {
         this.simulations = new ConcurrentHashMap<>();
         this.processor = new SimulationDataProvider<>();
+        this.manager = new SimulationManagerImpl();
     }
 
     @Override
@@ -79,7 +82,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     @Override
     public List<String> getRunningSimulations() {
         return simulations.entrySet().stream().filter(e -> e.getValue().isRunning())
-                .map(e -> e.getKey()).collect(Collectors.toList());
+                .map(Entry::getKey).collect(Collectors.toList());
     }
 
     @Override
@@ -93,13 +96,12 @@ final class SimulationsControllerImpl extends SimulationsController {
     }
 
     @Override
-    public String save(final String id) {
-        // TODO: Implement this method
-        return "";
+    public String saveSimulation(final String id) {
+        return manager.save(simulations.get(id));
     }
 
     @Override
-    public void load(final String filePath) {
+    public void loadSimulation(final String filePath) {
         // TODO: Implement this method
     }
 

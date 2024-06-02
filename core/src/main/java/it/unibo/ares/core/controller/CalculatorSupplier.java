@@ -144,12 +144,13 @@ public final class CalculatorSupplier implements InitializationApi, SimulationCo
     }
 
     @Override
-    public String save(final String id) {
-        return controller.save(id);
+    public String saveSimulation(final String id) {
+        controller.pauseSimulation(id);
+        return controller.saveSimulation(id);
     }
 
     @Override
-    public void load(final String filePath) {
-        controller.load(filePath);
+    public void loadSimulation(final String filePath) {
+        controller.loadSimulation(filePath);
     }
 }

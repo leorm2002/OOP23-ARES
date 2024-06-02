@@ -3,6 +3,7 @@ package it.unibo.ares.core.model;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.lambda.SerializableBiPredicate;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
@@ -11,6 +12,7 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.Statistics;
 import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -52,7 +54,7 @@ final class ModelBuilderImpl implements ModelBuilder {
     }
 
     @Override
-    public ModelBuilder addExitFunction(final BiPredicate<State, State> exitfFunction) {
+    public ModelBuilder addExitFunction(final SerializableBiPredicate<State, State> exitfFunction) {
         if (exitfFunction == null) {
             throw new IllegalArgumentException("Exit function cannot be null");
         }
