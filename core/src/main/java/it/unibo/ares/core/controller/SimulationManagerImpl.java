@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import it.unibo.ares.core.model.ModelBuilderImpl;
+import it.unibo.ares.core.model.ModelBuilder;
 
 public class SimulationManagerImpl implements SimulationManager {
 
@@ -17,6 +19,9 @@ public class SimulationManagerImpl implements SimulationManager {
         String path = "object.data";
         Kryo kryo = new Kryo();
         kryo.register(Simulation.class);
+        kryo.register(SimulationImpl.class);
+        kryo.register(ModelBuilder.class);
+        kryo.register(ModelBuilderImpl.class);
 
         Output output;
         try {

@@ -13,7 +13,7 @@ import java.util.function.Function;
 /**
  * Represents a builder for creating models.
  */
-interface ModelBuilder extends Serializable {
+public interface ModelBuilder extends Serializable {
     /**
      * Builds an instance of the Model interface.
      *

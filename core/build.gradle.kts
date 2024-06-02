@@ -19,6 +19,7 @@ dependencies {
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.3")
     
 
+    implementation("com.esotericsoftware:kryo:5.6.0") 
     val jUnitVersion = "5.10.1"
     // JUnit API and testing engine
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")

@@ -1,5 +1,6 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
