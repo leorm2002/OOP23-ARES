@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
  * A factory class for creating agents for the Schelling Segregation Model.
  */
 public final class SchellingsAgentFactory implements AgentFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String VISIONRADIUS = "visionRadius";
     private static final String THRESHOLD = "threshold";
     /**

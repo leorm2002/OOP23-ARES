@@ -12,6 +12,8 @@ import it.unibo.ares.core.utils.lambda.SerializablePredicate;
  * @param <T> Il tipo di valore del dominio
  */
 public final class ParameterDomainImpl<T extends Serializable> implements ParameterDomain<T> {
+
+    private static final long serialVersionUID = 1L;
     private final String description;
     private final SerializablePredicate<T> predicate;
 

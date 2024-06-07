@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
  * Model.
  */
 public final class PredatorAgentFactory implements AgentFactory {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * Predator key.
      */

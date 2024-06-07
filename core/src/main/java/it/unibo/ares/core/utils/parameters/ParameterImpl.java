@@ -12,6 +12,7 @@ import java.util.Optional;
  */
 public final class ParameterImpl<T extends Serializable> implements Parameter<T>, Serializable {
 
+    private static final long serialVersionUID = 1L;
     private final ParameterDomain<T> domain;
     private final T value;
     private final Class<T> type;

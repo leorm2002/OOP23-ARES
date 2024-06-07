@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
  * Model.
  */
 public final class PreyAgentFactory implements AgentFactory {
+
+    private static final long serialVersionUID = 1L;
     /**
      * Prey key.
      */

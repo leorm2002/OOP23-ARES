@@ -22,6 +22,8 @@ import java.util.stream.Stream;
  * the number of the Fire agents and the size of the grid.
  */
 public class FireSpreadModelFactory implements ModelFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String MODEL_ID = "FireSpread";
 
     /**

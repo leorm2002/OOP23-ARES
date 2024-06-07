@@ -7,6 +7,9 @@ import it.unibo.ares.core.utils.pos.PosImpl;
  * A factory class for creating a simple agent for the Simple Model.
  */
 public final class SimpleAgentFactory implements AgentFactory {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * Returns a mock agent that moves the agent in the top-right direction.
      * 

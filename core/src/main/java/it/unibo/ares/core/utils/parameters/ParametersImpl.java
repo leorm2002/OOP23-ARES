@@ -15,6 +15,8 @@ import java.util.stream.Stream;
  * get, and set parameters.
  */
 public final class ParametersImpl implements Parameters {
+
+    private static final long serialVersionUID = 1L;
     private final Map<Class<?>, Map<String, Parameter<?>>> typeMap;
 
     /**

@@ -22,6 +22,8 @@ import java.util.stream.IntStream;
  * and "Infected").
  */
 public final class VirusModelFactory implements ModelFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String MODEL_ID = "VirusDiffusion";
     /**
      * default parameters for the virus model (used in the runtime creation of

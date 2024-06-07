@@ -24,6 +24,8 @@ import java.util.function.Function;
 }, justification = "C'è un controllo esplicito che la init function "
         + "la exit function e i parameters siano stati inizializzati.")
 final class ModelBuilderImpl implements ModelBuilder {
+
+    private static final long serialVersionUID = 1L;
     private Parameters parameters;
     private SerializableBiPredicate<State, State> exitfFunction;
     private SerializableFunction<Parameters, State> initFunction;

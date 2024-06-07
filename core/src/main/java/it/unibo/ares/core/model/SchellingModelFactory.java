@@ -30,6 +30,8 @@ import java.util.stream.Stream;
  * the number of agents (two types)
  */
 public final class SchellingModelFactory implements ModelFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String MODEL_ID = "Schelling";
     private static final StatisticsGenerator GENERATOR;
 
@@ -40,7 +42,8 @@ public final class SchellingModelFactory implements ModelFactory {
                 final OptionalDouble vTot = s.getAgents().stream().parallel()
                         .map(Pair::getSecond)
                         .map(Agent::getParameters)
-                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
+                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO,
+                                Double.class))
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .map(Parameter::getOptionalValue)
@@ -51,7 +54,8 @@ public final class SchellingModelFactory implements ModelFactory {
                         .map(Pair::getSecond)
                         .filter(a -> "A".equals(a.getType()))
                         .map(Agent::getParameters)
-                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
+                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO,
+                                Double.class))
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .map(Parameter::getOptionalValue)
@@ -62,7 +66,8 @@ public final class SchellingModelFactory implements ModelFactory {
                         .map(Pair::getSecond)
                         .filter(a -> "B".equals(a.getType()))
                         .map(Agent::getParameters)
-                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO, Double.class))
+                        .map(p -> p.getParameter(SchellingsAgentFactory.CURRENT_RATIO,
+                                Double.class))
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .map(Parameter::getOptionalValue)

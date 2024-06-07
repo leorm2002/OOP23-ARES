@@ -21,6 +21,8 @@ import java.util.stream.Stream;
  * A factory class for creating the Predator-Prey model.
  */
 public final class PredatorPreyModelFactory implements ModelFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String MODEL_ID = "PredatorPrey";
 
     @Override

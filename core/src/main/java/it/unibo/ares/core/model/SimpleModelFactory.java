@@ -11,8 +11,11 @@ import it.unibo.ares.core.utils.state.StateImpl;
 /**
  * Provides a mock model for testing purposes.
  * 
+ * 
  */
 public final class SimpleModelFactory implements ModelFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String MODEL_ID = "Simple Model";
     private final AgentFactory agentProvider;
 

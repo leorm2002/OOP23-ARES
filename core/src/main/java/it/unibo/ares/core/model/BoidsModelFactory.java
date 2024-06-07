@@ -17,6 +17,8 @@ import java.util.stream.Stream;
  * A factory class for creating the Boids model.
  */
 public final class BoidsModelFactory implements ModelFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final String MODEL_ID = "Boids";
 
     @Override

@@ -5,6 +5,8 @@ package it.unibo.ares.core.utils.directionvector;
  * Represents a vector with x and y components.
  */
 public final class DirectionVectorImpl implements DirectionVector {
+
+    private static final long serialVersionUID = 1L;
     private final Double x;
     private final Double y;
 

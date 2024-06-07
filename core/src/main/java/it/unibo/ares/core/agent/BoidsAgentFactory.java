@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  */
 public final class BoidsAgentFactory implements AgentFactory {
     // PARAMETRI FINE TUNTING
+
+    private static final long serialVersionUID = 1L;
     private static final Double USERCORRECTIONWEIGHT = 0.4;
     private static final Double WALLAVOIDANCEWEIGHT = 0.2;
     private static final String DIRECTION = "direction";
@@ -48,7 +50,8 @@ public final class BoidsAgentFactory implements AgentFactory {
     private DirectionVector collisionAvoindance(
             final State s, final Pos pos, final DirectionVector dir,
             final Integer distance, final Integer angle) {
-        final Set<Pos> obstacles = getObstacles(s, ComputationUtils.computeCloseCells(pos, dir, distance, angle));
+        final Set<Pos> obstacles = getObstacles(s,
+                ComputationUtils.computeCloseCells(pos, dir, distance, angle));
         if (obstacles.isEmpty()) {
             return dir;
         }
@@ -210,7 +213,8 @@ public final class BoidsAgentFactory implements AgentFactory {
                         new ParameterDomainImpl<>("il raggio di visione in gradi (0-180)",
                                 (Integer d) -> d > 0 && d <= 180),
                         true))
-                .addParameter(new ParameterImpl<>(DIRECTION, ComputationUtils.getRandomDirection(r), false))
+                .addParameter(new ParameterImpl<>(DIRECTION, ComputationUtils.getRandomDirection(r),
+                        false))
                 .addParameter(new ParameterImpl<>("collisionAvoidanceWeight", Double.class,
                         new ParameterDomainImpl<>(
                                 "il peso dell'evitamento degli ostacoli (0.0-1.0)",

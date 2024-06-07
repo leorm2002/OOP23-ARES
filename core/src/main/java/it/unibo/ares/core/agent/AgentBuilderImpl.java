@@ -17,6 +17,7 @@ import java.util.function.BiFunction;
  */
 class AgentBuilderImpl implements AgentBuilder {
 
+    private static final long serialVersionUID = 1L;
     private SerializableBiFunction<State, Pos, State> strategy;
     private Parameters parameters;
 
