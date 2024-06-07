@@ -25,9 +25,9 @@ import java.util.function.Function;
         + "la exit function e i parameters siano stati inizializzati.")
 final class ModelBuilderImpl implements ModelBuilder {
     private Parameters parameters;
-    private BiPredicate<State, State> exitfFunction;
-    private Function<Parameters, State> initFunction;
-    private StatisticsGenerator generator;
+    private SerializableBiPredicate<State, State> exitfFunction;
+    private SerializableFunction<Parameters, State> initFunction;
+    private transient StatisticsGenerator generator;
 
     ModelBuilderImpl() {
         reset();

@@ -9,7 +9,7 @@ import java.util.Set;
  * added, retrieved, and modified.
  * The collection can manage parameters of different types.
  */
-public interface Parameters {
+public interface Parameters extends Serializable {
 
     /**
      * Adds a parameter with the specified key and type.

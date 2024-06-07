@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.BiFunction;
 
+import it.unibo.ares.core.utils.lambda.SerializableBiFunction;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
@@ -36,7 +37,7 @@ final class AgentBuilderImplTest {
     void testBuild() {
         final AgentBuilderImpl agentBuilder = new AgentBuilderImpl();
 
-        final BiFunction<State, Pos, State> strategy = (state, pos) -> state;
+        final SerializableBiFunction<State, Pos, State> strategy = (state, pos) -> state;
         assertDoesNotThrow(() -> {
             agentBuilder.addStrategy(strategy)
                     .addParameter(new ParameterImpl<>("testKey", 10, true))

@@ -12,28 +12,28 @@ import java.util.Optional;
  */
 public final class ParameterImpl<T extends Serializable> implements Parameter<T>, Serializable {
 
-    private final Optional<ParameterDomain<T>> domain;
-    private final Optional<T> value;
+    private final ParameterDomain<T> domain;
+    private final T value;
     private final Class<T> type;
     private final String key;
     private final Boolean userSettable;
 
     @SuppressWarnings("unchecked")
-    private ParameterImpl(final String key, final T value,
-            final Optional<ParameterDomain<T>> domain, final Boolean userSettable) {
-        this.value = Optional.ofNullable(value);
+    public ParameterImpl(final String key, final T value,
+            final ParameterDomain<T> domain, final Boolean userSettable) {
+        this.value = value;
         this.key = key;
         this.type = (Class<T>) value.getClass();
         this.domain = domain;
         this.userSettable = userSettable;
     }
 
-    private ParameterImpl(final String key, final Class<T> type,
-            final Optional<ParameterDomain<T>> domain, final Boolean userSettable) {
+    public ParameterImpl(final String key, final Class<T> type,
+            final ParameterDomain<T> domain, final Boolean userSettable) {
         this.key = key;
         this.type = type;
         this.domain = domain;
-        this.value = Optional.empty();
+        this.value = null;
         this.userSettable = userSettable;
 
     }
@@ -48,7 +48,7 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      *                     user
      */
     public ParameterImpl(final String key, final T value, final Boolean userSettable) {
-        this(key, value, Optional.empty(), userSettable);
+        this(key, value, null, userSettable);
     }
 
     /**
@@ -67,7 +67,7 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      *                     settable or not.
      */
     public ParameterImpl(final String key, final Class<T> type, final Boolean userSettable) {
-        this(key, type, Optional.empty(), userSettable);
+        this(key, type, null, userSettable);
     }
 
     /**
@@ -78,9 +78,10 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      * @param domain       the domain of the parameter
      * @param userSettable if the parameter is user settable
      */
-    public ParameterImpl(final String key, final T value, final ParameterDomain<T> domain, final Boolean userSettable) {
-        this(key, value, Optional.ofNullable(domain), userSettable);
-    }
+    // public ParameterImpl(final String key, final T value, final
+    // ParameterDomain<T> domain, final Boolean userSettable) {
+    // this(key, value, Optional.ofNullable(domain), userSettable);
+    // }
 
     /**
      * Creates a new parameter with the specified key and type.
@@ -90,22 +91,24 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      * @param domain       the domain of the parameter
      * @param userSettable if the parameter is user settable
      */
-    public ParameterImpl(final String key, final Class<T> type, final ParameterDomain<T> domain,
-            final Boolean userSettable) {
-        this(key, type, Optional.ofNullable(domain), userSettable);
-    }
+    // public ParameterImpl(final String key, final Class<T> type, final
+    // ParameterDomain<T> domain,
+    // final Boolean userSettable) {
+    // this(key, type, Optional.ofNullable(domain), userSettable);
+    // }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public T getValue() {
-        return this.value.orElseThrow(() -> new IllegalStateException("Value not set for parameter: " + this.key));
+        return Optional.ofNullable(this.value)
+                .orElseThrow(() -> new IllegalStateException("Value not set for parameter: " + this.key));
     }
 
     @Override
     public Optional<T> getOptionalValue() {
-        return this.value;
+        return Optional.ofNullable(this.value);
     }
 
     /**
@@ -124,9 +127,13 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
         if (!this.type.isInstance(value)) {
             throw new IllegalArgumentException("Value is not of type " + this.type.getName());
         }
-        if (this.domain.isPresent() && !this.domain.get().isValueValid(value)) {
+        if (domain != null && !domain.isValueValid(value)) {
             throw new IllegalArgumentException("Value is not inside the domain: " + this.key);
         }
+        // if (this.domain.isPresent() && !this.domain.get().isValueValid(value)) {
+        // throw new IllegalArgumentException("Value is not inside the domain: " +
+        // this.key);
+        // }
         return new ParameterImpl<>(key, value, domain, userSettable);
     }
 
@@ -135,7 +142,7 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      */
     @Override
     public boolean isSetted() {
-        return this.value.isPresent();
+        return this.value != null;
     }
 
     /**
@@ -151,7 +158,7 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      */
     @Override
     public Optional<ParameterDomain<T>> getDomain() {
-        return this.domain;
+        return Optional.of(this.domain);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package it.unibo.ares.core.agent;
 
+import it.unibo.ares.core.utils.lambda.SerializableFunction;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.lambda.SerializableBiFunction;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -15,7 +17,7 @@ import java.util.function.BiFunction;
  */
 class AgentBuilderImpl implements AgentBuilder {
 
-    private BiFunction<State, Pos, State> strategy;
+    private SerializableBiFunction<State, Pos, State> strategy;
     private Parameters parameters;
 
     /**
@@ -114,7 +116,7 @@ class AgentBuilderImpl implements AgentBuilder {
      * {@inheritDoc}
      */
     @Override
-    public AgentBuilder addStrategy(final BiFunction<State, Pos, State> strategy) {
+    public AgentBuilder addStrategy(final SerializableBiFunction<State, Pos, State> strategy) {
         if (strategy == null) {
             throw new IllegalStateException("Strategy cannot be null");
         }
