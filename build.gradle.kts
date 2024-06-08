@@ -21,6 +21,8 @@ dependencies {
     val jUnitVersion = "5.10.1"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    implementation(project(":runner"))
+
 }
 
 tasks.withType<Test> {

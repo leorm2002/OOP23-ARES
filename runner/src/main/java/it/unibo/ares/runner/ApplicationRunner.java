@@ -3,7 +3,7 @@ package it.unibo.ares.runner;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.AresSupplier;
 
 /**
  * Permette di lanciare l'applicativo in vaie modalita
@@ -32,13 +32,13 @@ public class ApplicationRunner {
         List<String> modes = List.of(TERMINAL, GRAFIC, COMBINED);
         List<Thread> threads = new ArrayList<>();
         printTitle();
-        System.out.println("Premi 0 per avviare l'applicazione in modalità cli");
-        System.out.println("Premi 1 per avviare l'applicazione in modalità grafica");
-        System.out.println("Premi 2 per avviare l'applicazione in modalità entrambe");
+        System.out.println("Premi 0 per avviare l'applicazione in modalita' cli");
+        System.out.println("Premi 1 per avviare l'applicazione in modalita' grafica");
+        System.out.println("Premi 2 per avviare l'applicazione in modalita' entrambe");
         System.out.println("Premi 3 per uscire");
 
         threads.add(
-                new Thread(CalculatorSupplier::getInstance));
+                new Thread(AresSupplier::getInstance));
         String mode;
         do {
             mode = System.console().readLine();

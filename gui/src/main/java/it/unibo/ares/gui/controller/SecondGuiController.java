@@ -1,14 +1,18 @@
 package it.unibo.ares.gui.controller;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import it.unibo.ares.core.api.DataReciever;
-import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.AresSupplier;
 import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.gui.utils.GuiDinamicWriter;
 import it.unibo.ares.gui.utils.GuiDinamicWriterImpl;
 import it.unibo.ares.gui.utils.HandlerAdapter;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,10 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * GuiController is a class that controls the GUI of the application.
@@ -51,7 +51,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
      * calculatorSupplier is an instance of CalculatorSupplier used to supply
      * calculator instances.
      */
-    private final CalculatorSupplier calculatorSupplier = CalculatorSupplier.getInstance();
+    private final AresSupplier calculatorSupplier = AresSupplier.getInstance();
     private static Stage stage;
 
     /*
@@ -108,7 +108,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
             public void changed(final ObservableValue<? extends Number> observable, final Number oldNumber,
                     final Number newNumber) {
                 final int step = mapToRange(slidStep.getValue(), slidStep.getMin(), slidStep.getMax(),
-                        (int) CalculatorSupplier.getInstance().getTickRate());
+                        (int) AresSupplier.getInstance().getTickRate());
                 final String stepString = step != 0 ? step + " ms" : "Max speed";
                 lblStep.setText("Step: " + stepString);
                 calculatorSupplier.setTickRate(simulationId, step);

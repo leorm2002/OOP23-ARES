@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import it.unibo.ares.core.api.DataReciever;
 import it.unibo.ares.core.api.SimulationOutputDataApi;
-import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.AresSupplier;
 import it.unibo.ares.core.controller.SimulationOutputData;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
@@ -38,14 +38,14 @@ public final class SimController extends DataReciever {
     private void processChar(final String ch) {
         switch (ch) {
             case START:
-                CalculatorSupplier.getInstance().startSimulation(simulationId);
+                AresSupplier.getInstance().startSimulation(simulationId);
                 break;
             case STOP:
-                CalculatorSupplier.getInstance().pauseSimulation(simulationId);
+                AresSupplier.getInstance().pauseSimulation(simulationId);
                 this.isOver = true;
                 break;
             case PAUSE:
-                CalculatorSupplier.getInstance().pauseSimulation(simulationId);
+                AresSupplier.getInstance().pauseSimulation(simulationId);
                 break;
             default:
                 break;
@@ -63,8 +63,8 @@ public final class SimController extends DataReciever {
      */
     public void startSimulation(final Integer stepSize) {
         ioManager.print("Inizio simulazione");
-        this.simulationId = CalculatorSupplier.getInstance().startSimulation(inizializationId, this);
-        CalculatorSupplier.getInstance().setTickRate(inizializationId, stepSize);
+        this.simulationId = AresSupplier.getInstance().startSimulation(inizializationId, this);
+        AresSupplier.getInstance().setTickRate(inizializationId, stepSize);
         final Thread reader = new Thread(new AsyncReader(this::processChar, this::isOver, ioManager));
         reader.start();
         try {
@@ -95,12 +95,10 @@ public final class SimController extends DataReciever {
         final Optional<String> out = statistics.getStatistics().stream()
                 .map(p -> p.getFirst() + " " + p.getSecond())
                 .reduce((a, b) -> a + SEPARATOR + b);
-        if (out.isPresent()) {
+        out.ifPresent(s -> {
             ioManager.print("\nStatistiche");
-            ioManager.print(out.get());
-        } else {
-            ioManager.print("\n\n");
-        }
+            ioManager.print(s);
+        });
     }
 
     private String getHorizontalBar(final Integer width, final Integer cellWidth) {

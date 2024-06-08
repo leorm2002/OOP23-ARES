@@ -1,17 +1,17 @@
 package it.unibo.ares.cli;
 
-import it.unibo.ares.core.controller.CalculatorSupplier;
-import it.unibo.ares.core.utils.Pair;
-import it.unibo.ares.core.utils.StringCaster;
-import it.unibo.ares.core.utils.parameters.Parameter;
-import it.unibo.ares.core.utils.parameters.Parameters;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import it.unibo.ares.core.controller.AresSupplier;
+import it.unibo.ares.core.utils.Pair;
+import it.unibo.ares.core.utils.StringCaster;
+import it.unibo.ares.core.utils.parameters.Parameter;
+import it.unibo.ares.core.utils.parameters.Parameters;
 
 /**
  * Class used to initialize simulation by using a CLI.
@@ -32,7 +32,7 @@ public final class CliInitializer {
     private String selectModel() {
         Optional<String> selected = Optional.empty();
         ioManager.print("Scegli un modello:");
-        final List<String> models = CalculatorSupplier.getInstance().getModels().stream()
+        final List<String> models = AresSupplier.getInstance().getModels().stream()
                 .collect(Collectors.toList());
 
         final List<Pair<Integer, String>> indexedModels = IntStream.range(0, models.size())
@@ -71,11 +71,11 @@ public final class CliInitializer {
                     final String value = ioManager.read();
                     try {
                         if (agentId.isPresent()) {
-                            CalculatorSupplier.getInstance()
+                            AresSupplier.getInstance()
                                     .setAgentParameterSimplified(initializationId, agentId.get(), param.getKey(),
                                             StringCaster.cast(value, param.getType()));
                         } else {
-                            CalculatorSupplier.getInstance()
+                            AresSupplier.getInstance()
                                     .setModelParameter(initializationId, param.getKey(),
                                             StringCaster.cast(value, param.getType()));
                         }
@@ -94,7 +94,7 @@ public final class CliInitializer {
         Parameters params;
         do {
 
-            params = CalculatorSupplier.getInstance()
+            params = AresSupplier.getInstance()
                     .getModelParametersParameters(initializationId);
             parametrizzatoreGenerico(params, Optional.empty());
         } while (!params.areAllParametersSetted());
@@ -104,7 +104,7 @@ public final class CliInitializer {
         ioManager.print("Parametrizzazione agente " + agent);
         Parameters params;
         do {
-            params = CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId,
+            params = AresSupplier.getInstance().getAgentParametersSimplified(initializationId,
                     agent);
             parametrizzatoreGenerico(params, Optional.of(agent));
         } while (!params.areAllParametersSetted());
@@ -121,7 +121,7 @@ public final class CliInitializer {
 
     private boolean areAgentiParametrizzati(final Set<String> agents) {
         for (final String agent : agents) {
-            if (!CalculatorSupplier.getInstance().getAgentParametersSimplified(initializationId, agent)
+            if (!AresSupplier.getInstance().getAgentParametersSimplified(initializationId, agent)
                     .areAllParametersSetted()) {
                 return false;
             }
@@ -137,9 +137,9 @@ public final class CliInitializer {
     public String startParametrization() {
         ioManager.print("Inizio parametrizzazione");
         final String model = selectModel();
-        this.initializationId = CalculatorSupplier.getInstance().addNewModel(model);
+        this.initializationId = AresSupplier.getInstance().addNewModel(model);
         parametrizzaModello();
-        final Set<String> agents = CalculatorSupplier.getInstance().getAgentsSimplified(initializationId);
+        final Set<String> agents = AresSupplier.getInstance().getAgentsSimplified(initializationId);
 
         parametrizzaAgenti(agents);
 
