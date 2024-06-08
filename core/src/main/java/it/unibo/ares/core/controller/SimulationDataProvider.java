@@ -2,10 +2,9 @@ package it.unibo.ares.core.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.Flow.Subscriber;
 
-final class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
+final class SimulationDataProvider<T> {
     private final Map<String, Subscriber<T>> subscribers = new HashMap<>();
 
     /**
@@ -28,16 +27,5 @@ final class SimulationDataProvider<T> implements Publisher<Identifier<T>> {
         if (subscriber != null) {
             subscriber.onNext(identifier.getData());
         }
-    }
-
-    /**
-     * Not to use.
-     * 
-     * @param subscriber
-     */
-    @Deprecated
-    @Override
-    public void subscribe(final Subscriber<? super Identifier<T>> subscriber) {
-        // Not to use
     }
 }

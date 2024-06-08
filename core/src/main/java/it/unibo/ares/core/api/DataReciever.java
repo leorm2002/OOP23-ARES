@@ -20,7 +20,6 @@ public abstract class DataReciever implements Subscriber<SimulationOutputData> {
      */
     @Override
     public void onError(final Throwable throwable) {
-        throw new UnsupportedOperationException("An error occured while receiving data from the publisher.");
     }
 
     /**

@@ -1,9 +1,9 @@
 package it.unibo.ares.core.api;
 
-import it.unibo.ares.core.utils.parameters.Parameters;
-
 import java.util.Set;
 import java.io.Serializable;
+
+import it.unibo.ares.core.utils.parameters.Parameters;
 
 /**
  * API for the initialization of the simulation.

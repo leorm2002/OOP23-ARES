@@ -1,5 +1,11 @@
 package it.unibo.ares.core.agent;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import it.unibo.ares.core.utils.ComputationUtils;
 import it.unibo.ares.core.utils.directionvector.DirectionVector;
 import it.unibo.ares.core.utils.directionvector.DirectionVectorImpl;
@@ -9,22 +15,15 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 /**
  * Represents a factory for creating Boids agents.
  * 
  */
 public final class BoidsAgentFactory implements AgentFactory {
     // PARAMETRI FINE TUNTING
-
     private static final long serialVersionUID = 1L;
     private static final Double USERCORRECTIONWEIGHT = 0.4;
-    private static final Double WALLAVOIDANCEWEIGHT = 0.2;
+    private static final Double WALLAVOIDANCEWEIGHT = 0.8;
     private static final String DIRECTION = "direction";
     private final Random r;
 
@@ -111,9 +110,27 @@ public final class BoidsAgentFactory implements AgentFactory {
         j *= USERCORRECTIONWEIGHT;
         i += original.getNormalizedX() * (1 - USERCORRECTIONWEIGHT);
         j += original.getNormalizedY() * (1 - USERCORRECTIONWEIGHT);
-        i += steerAway.getNormalizedX() * WALLAVOIDANCEWEIGHT;
-        j += steerAway.getNormalizedY() * WALLAVOIDANCEWEIGHT;
+        // i += steerAway.getNormalizedX() * WALLAVOIDANCEWEIGHT;
+        // j += steerAway.getNormalizedY() * WALLAVOIDANCEWEIGHT;
         return new DirectionVectorImpl(i, j).getNormalized();
+    }
+
+    private int transform(final int z, final int max) {
+        if (z < 0) {
+
+            return max + z;
+        }
+        if (z >= max) {
+            return z - max;
+        }
+        return z;
+    }
+
+    private Pos mapToGrid(final Pos pos, final State state) {
+        // If pos is negativa => to the other side
+        // if pose over the limit => to the other side
+        return new PosImpl(transform(pos.getX(), state.getDimensions().getFirst()),
+                transform(pos.getY(), state.getDimensions().getSecond()));
     }
 
     private Pos getPosNear(final Pos pos, final State state, final int distance, final DirectionVector dir,
@@ -122,7 +139,7 @@ public final class BoidsAgentFactory implements AgentFactory {
             return pos;
         }
         final Optional<Pos> newPos = ComputationUtils.computeCloseCells(pos, dir, distance, 180).stream()
-                .filter(state::isInside)
+                .map(p -> mapToGrid(p, state))
                 .filter(state::isFree)
                 .findAny()
                 .map(Pos.class::cast);
@@ -176,11 +193,7 @@ public final class BoidsAgentFactory implements AgentFactory {
                 .move(agentPosition, newDir,
                         agent.getParameters().getParameter("stepSize", Integer.class)
                                 .get().getValue());
-        if (!currentState.isInside(newPos)) {
-            newDir = new DirectionVectorImpl(-newDir.getX(), -newDir.getY());
-            newPos = ComputationUtils.limit(ComputationUtils.move(agentPosition, newDir, stepSize),
-                    currentState.getDimensions());
-        }
+        newPos = mapToGrid(newPos, currentState);
         if (!currentState.isFree(newPos)) {
             newPos = getPosNear(newPos, currentState, stepSize * 2, newDir, angle);
         }

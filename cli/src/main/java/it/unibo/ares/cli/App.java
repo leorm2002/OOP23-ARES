@@ -1,6 +1,6 @@
 package it.unibo.ares.cli;
 
-import it.unibo.ares.core.controller.CalculatorSupplier;
+import it.unibo.ares.core.controller.AresSupplier;
 
 /**
  * Permette di lanciare l'app in modalità cli.
@@ -20,7 +20,7 @@ public final class App {
      * @param args
      */
     public static void main(final String[] args) {
-        CalculatorSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
+        AresSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         final IOManager ioManager = new IOManagerImpl();
         final Thread t = new Thread(() -> {
             ioManager.print("Benvenuto in ARES!");

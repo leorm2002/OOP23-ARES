@@ -87,7 +87,7 @@ final class SimulationImpl implements Simulation {
     }
 
     private boolean shouldTick() {
-        final int elapsed = tickCount++ * (int) CalculatorSupplier.getInstance().getTickRate();
+        final int elapsed = tickCount++ * (int) AresSupplier.getInstance().getTickRate();
         if (elapsed >= tickRate) {
             tickCount = 0;
             return true;
