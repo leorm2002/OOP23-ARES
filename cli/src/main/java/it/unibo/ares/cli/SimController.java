@@ -51,6 +51,7 @@ public final class SimController extends DataReciever {
                 break;
             case SAVE:
                 CalculatorSupplier.getInstance().saveSimulation(simulationId);
+                this.isOver = true;
                 break;
             case LOAD:
                 CalculatorSupplier.getInstance().loadSimulation(simulationId);

@@ -1,12 +1,17 @@
 package it.unibo.ares.core.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import it.unibo.ares.core.utils.configservice.ConfigService;
+import it.unibo.ares.core.utils.configservice.ConfigServiceImpl;
 
 final class SimulationsControllerImpl extends SimulationsController {
     private final ConcurrentMap<String, Simulation> simulations;
@@ -40,10 +45,14 @@ final class SimulationsControllerImpl extends SimulationsController {
 
     @Override
     void makeModelsTick() {
-        final boolean async = false;
+        ConfigService configService = ConfigServiceImpl.getInstance();
+        final boolean async = configService.read("Simulation", "async", Boolean.class);
+
+        Predicate<Map.Entry<String, Simulation>> isRunning = e -> e.getValue().isRunning();
+
         if (!async) {
             simulations.entrySet().stream()
-                    .filter(e -> e.getValue().isRunning())
+                    .filter(isRunning)
                     .map(e -> e.getValue().tickSync(e.getKey())) // Starting the calculation and mapping the future to
                                                                  // the
                     // id of
@@ -55,7 +64,7 @@ final class SimulationsControllerImpl extends SimulationsController {
         } else {
 
             simulations.entrySet().stream()
-                    .filter(e -> e.getValue().isRunning())
+                    .filter(isRunning)
                     .map(e -> e.getValue().tick(e.getKey())) // Starting the calculation and mapping the future to the
                                                              // id of
                     // the simulation

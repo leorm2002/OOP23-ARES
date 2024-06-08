@@ -17,6 +17,7 @@ repositories {
 dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.3")
+    implementation("org.ini4j:ini4j:0.5.4")
     
 
     val jUnitVersion = "5.10.1"

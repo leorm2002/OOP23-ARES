@@ -4,6 +4,6 @@ public interface SimulationManager {
 
     String save(Simulation simulation);
 
-    void load();
+    Simulation load();
 
 }
