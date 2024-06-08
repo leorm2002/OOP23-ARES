@@ -2,6 +2,7 @@ package it.unibo.ares.core.controller;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.io.Serializable;
 
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.state.State;
@@ -10,7 +11,7 @@ import it.unibo.ares.core.utils.state.State;
  * A simulation is a class that contains the state of the simulation and the
  * model of the simulation.
  */
-interface Simulation {
+interface Simulation extends Serializable {
 
     /**
      * @return the state

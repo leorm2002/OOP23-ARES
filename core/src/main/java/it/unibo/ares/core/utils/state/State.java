@@ -7,11 +7,12 @@ import it.unibo.ares.core.utils.pos.Pos;
 
 import java.util.Optional;
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * Represents the state of a system.
  */
-public interface State {
+public interface State extends Serializable {
     /**
      * Retrieves the entities in the state along with their positions.
      *

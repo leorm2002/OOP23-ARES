@@ -7,6 +7,7 @@ import java.util.Objects;
  */
 public class PosImpl implements Pos {
 
+    private static final long serialVersionUID = 1L;
     private final Integer y;
     private final Integer x;
 

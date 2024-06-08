@@ -1,9 +1,12 @@
 package it.unibo.ares.core.agent;
 
+import java.io.Serializable;
+
 /**
- * Represents an entity in the system. An entity is an object tha can only be subject of actions.
+ * Represents an entity in the system. An entity is an object tha can only be
+ * subject of actions.
  */
-public interface Entity {
+public interface Entity extends Serializable {
     /**
      * Gets the name of the entity.
      * 

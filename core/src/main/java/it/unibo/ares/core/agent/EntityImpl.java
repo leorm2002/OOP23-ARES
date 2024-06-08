@@ -5,6 +5,7 @@ package it.unibo.ares.core.agent;
  * Represents an entity with a name.
  */
 final class EntityImpl implements Entity {
+    private static final long serialVersionUID = 1L;
     private String name;
 
     /*
