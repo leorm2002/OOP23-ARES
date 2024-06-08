@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Implementation of the {@link ConfigService} interface that reads
@@ -89,15 +90,14 @@ public class ConfigServiceImpl implements ConfigService {
      * @param <T>     The type of the configuration value.
      * @return The configuration value, or null if the key is not found.
      */
-    @Override
-    public <T> T read(String section, String key, Class<T> type) {
+    private <T> Optional<T> read(String section, String key, Class<T> type) {
         String cacheKey = section + "." + key;
         if (cache.containsKey(cacheKey)) {
-            return type.cast(cache.get(cacheKey));
+            return Optional.ofNullable(type.cast(cache.get(cacheKey)));
         }
         String value = ini.get(section, key);
         if (value == null) {
-            return null;
+            return Optional.ofNullable(null);
         }
 
         Object parsedValue;
@@ -116,7 +116,11 @@ public class ConfigServiceImpl implements ConfigService {
         }
 
         cache.put(cacheKey, parsedValue);
-        return type.cast(parsedValue);
+        return Optional.ofNullable(type.cast(parsedValue));
     }
 
+    @Override
+    public Boolean isAsync() {
+        return read("simulation", "async", Boolean.class).map(Boolean::valueOf).orElse(false);
+    }
 }

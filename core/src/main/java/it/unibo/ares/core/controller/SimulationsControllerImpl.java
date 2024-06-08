@@ -45,8 +45,7 @@ final class SimulationsControllerImpl extends SimulationsController {
 
     @Override
     void makeModelsTick() {
-        ConfigService configService = ConfigServiceImpl.getInstance();
-        final boolean async = configService.read("Simulation", "async", Boolean.class);
+        final boolean async = ConfigServiceImpl.getInstance().isAsync();
 
         Predicate<Map.Entry<String, Simulation>> isRunning = e -> e.getValue().isRunning();
 
