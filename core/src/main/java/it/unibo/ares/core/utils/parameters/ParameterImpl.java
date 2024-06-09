@@ -72,33 +72,6 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
     }
 
     /**
-     * Creates a new parameter with the specified key and value.
-     * 
-     * @param key          the key of the parameter
-     * @param value        the value of the parameter
-     * @param domain       the domain of the parameter
-     * @param userSettable if the parameter is user settable
-     */
-    // public ParameterImpl(final String key, final T value, final
-    // ParameterDomain<T> domain, final Boolean userSettable) {
-    // this(key, value, Optional.ofNullable(domain), userSettable);
-    // }
-
-    /**
-     * Creates a new parameter with the specified key and type.
-     * 
-     * @param key          the key of the parameter
-     * @param type         the type of the parameter
-     * @param domain       the domain of the parameter
-     * @param userSettable if the parameter is user settable
-     */
-    // public ParameterImpl(final String key, final Class<T> type, final
-    // ParameterDomain<T> domain,
-    // final Boolean userSettable) {
-    // this(key, type, Optional.ofNullable(domain), userSettable);
-    // }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -159,7 +132,7 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
      */
     @Override
     public Optional<ParameterDomain<T>> getDomain() {
-        return Optional.of(this.domain);
+        return Optional.ofNullable(this.domain);
     }
 
     @Override

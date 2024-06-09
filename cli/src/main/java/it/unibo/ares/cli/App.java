@@ -25,15 +25,7 @@ public final class App {
         AresSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         final IOManager ioManager = new IOManagerImpl();
         final Thread t = new Thread(() -> {
-            ioManager.print("Benvenuto in ARES!");
-            final CliInitializer cliController = new CliInitializer(ioManager);
-            final String inizializationId = cliController.startParametrization();
-            final SimController simController = new SimController(inizializationId, ioManager);
-            final Integer step = getStep(ioManager);
-            ioManager.print("Premi invio per iniziare la simulazione");
-            ioManager.read();
-            simController.startSimulation(step);
-            ioManager.print("Simulazione terminata");
+            mainLib(args);
             // Close the application
             System.exit(0);
         });
@@ -69,6 +61,26 @@ public final class App {
         }
     }
 
+    private static void loadFromFileAndStart(IOManager ioManager) {
+        ioManager.print("Inserisci il path del file da caricare");
+        String path = ioManager.read();
+        final String inizializationId = UUID.randomUUID().toString();
+        final SimController simController = new SimController(inizializationId, ioManager);
+        simController.startSimulationFromFile(path, 50);
+    }
+
+    private static void normalRun(IOManager ioManager) {
+        final CliInitializer cliController = new CliInitializer(ioManager);
+        final String inizializationId = cliController.startParametrization();
+        final SimController simController = new SimController(inizializationId, ioManager);
+        final Integer step = getStep(ioManager);
+        ioManager.print("Premi invio per iniziare la simulazione");
+        ioManager.read();
+        simController.startSimulation(step);
+        ioManager.print("Simulazione terminata");
+
+    }
+
     /**
      * Avvia cli, utilizzato quando cli è lanciata come libreria.
      * 
@@ -80,20 +92,9 @@ public final class App {
         ioManager.print("Vuoi fare una nuova simulazione o caricarne una? (n/c)");
         String choice = ioManager.read();
         if (choice.equals("c")) {
-            ioManager.print("Inserisci il path del file da caricare");
-            String path = ioManager.read();
-            final String inizializationId = UUID.randomUUID().toString();
-            final SimController simController = new SimController(inizializationId, ioManager);
-            simController.startSimulationFromFile(path, 50);
-            return;
+            loadFromFileAndStart(ioManager);
+        } else {
+            normalRun(ioManager);
         }
-        final CliInitializer cliController = new CliInitializer(ioManager);
-        final String inizializationId = cliController.startParametrization();
-        final SimController simController = new SimController(inizializationId, ioManager);
-        final Integer step = getStep(ioManager);
-        ioManager.print("Premi invio per iniziare la simulazione");
-        ioManager.read();
-        simController.startSimulation(step);
-        ioManager.print("Simulazione terminata");
     }
 }
