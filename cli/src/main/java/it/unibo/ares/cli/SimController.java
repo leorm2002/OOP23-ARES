@@ -50,11 +50,9 @@ public final class SimController extends DataReciever {
                 AresSupplier.getInstance().pauseSimulation(simulationId);
                 break;
             case SAVE:
-                AresSupplier.getInstance().saveSimulation(simulationId);
+                final String savePath = AresSupplier.getInstance().saveSimulation(simulationId);
+                this.ioManager.print("Il file è stato salvato in " + savePath);
                 this.isOver = true;
-                break;
-            case LOAD:
-                AresSupplier.getInstance().loadSimulation(simulationId);
                 break;
             default:
                 break;
@@ -74,6 +72,19 @@ public final class SimController extends DataReciever {
         ioManager.print("Inizio simulazione");
         this.simulationId = AresSupplier.getInstance().startSimulation(inizializationId, this);
         AresSupplier.getInstance().setTickRate(inizializationId, stepSize);
+        final Thread reader = new Thread(new AsyncReader(this::processChar, this::isOver, ioManager));
+        reader.start();
+        try {
+            reader.join();
+        } catch (InterruptedException e) {
+            ioManager.print("Errore nell'avvio");
+        }
+    }
+
+    public void startSimulationFromFile(final String savePath, final Integer stepSize) {
+        ioManager.print("Inizio simulazione");
+        this.simulationId = AresSupplier.getInstance().startSimulationFromFile(savePath, this);
+        AresSupplier.getInstance().setTickRate(this.simulationId, stepSize);
         final Thread reader = new Thread(new AsyncReader(this::processChar, this::isOver, ioManager));
         reader.start();
         try {

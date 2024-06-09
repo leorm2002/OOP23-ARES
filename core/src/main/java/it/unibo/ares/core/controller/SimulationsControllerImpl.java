@@ -3,6 +3,7 @@ package it.unibo.ares.core.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -105,12 +106,7 @@ final class SimulationsControllerImpl extends SimulationsController {
 
     @Override
     public String saveSimulation(final String id) {
-        return manager.save(simulations.get(id));
-    }
-
-    @Override
-    public void loadSimulation(final String filePath) {
-        // TODO: Implement this method
+        return manager.save(simulations.remove(id));
     }
 
 }

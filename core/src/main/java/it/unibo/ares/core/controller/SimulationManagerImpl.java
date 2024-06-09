@@ -10,9 +10,6 @@ import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import it.unibo.ares.core.utils.configservice.ConfigService;
-import it.unibo.ares.core.utils.configservice.ConfigServiceImpl;
-
 public class SimulationManagerImpl implements SimulationManager {
 
     private String getFileName() {
@@ -40,10 +37,9 @@ public class SimulationManagerImpl implements SimulationManager {
     }
 
     @Override
-    public Simulation load() {
-        String path = "output.data";
+    public Simulation load(String filePath) {
         Simulation simulation = null;
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             simulation = (Simulation) ois.readObject();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

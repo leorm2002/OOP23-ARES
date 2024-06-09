@@ -3,6 +3,7 @@ package it.unibo.ares.core.controller;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Flow.Subscriber;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -151,8 +152,14 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
         return controller.saveSimulation(id);
     }
 
-    @Override
-    public void loadSimulation(final String filePath) {
-        controller.loadSimulation(filePath);
+    public String startSimulationFromFile(String filePath, final Subscriber<SimulationOutputData> subscriber) {
+        filePath = "output.data"; // TODO: REMOVE
+        String simulationId = UUID.randomUUID().toString();
+        SimulationManager manager = new SimulationManagerImpl();
+        Simulation loadedSim = manager.load(filePath);
+        controller.addSimulation(simulationId, loadedSim);
+        controller.startSimulation(simulationId);
+        controller.subscribe(simulationId, subscriber);
+        return simulationId;
     }
 }

@@ -1,5 +1,7 @@
 package it.unibo.ares.cli;
 
+import java.util.UUID;
+
 import it.unibo.ares.core.controller.AresSupplier;
 
 /**
@@ -75,6 +77,16 @@ public final class App {
     public static void mainLib(final String[] args) {
         final IOManager ioManager = new IOManagerImpl();
         ioManager.print("Benvenuto in ARES!");
+        ioManager.print("Vuoi fare una nuova simulazione o caricarne una? (n/c)");
+        String choice = ioManager.read();
+        if (choice.equals("c")) {
+            ioManager.print("Inserisci il path del file da caricare");
+            String path = ioManager.read();
+            final String inizializationId = UUID.randomUUID().toString();
+            final SimController simController = new SimController(inizializationId, ioManager);
+            simController.startSimulationFromFile(path, 50);
+            return;
+        }
         final CliInitializer cliController = new CliInitializer(ioManager);
         final String inizializationId = cliController.startParametrization();
         final SimController simController = new SimController(inizializationId, ioManager);
