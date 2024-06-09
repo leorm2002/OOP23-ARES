@@ -89,9 +89,10 @@ public final class App {
     public static void mainLib(final String[] args) {
         final IOManager ioManager = new IOManagerImpl();
         ioManager.print("Benvenuto in ARES!");
-        ioManager.print("Vuoi fare una nuova simulazione o caricarne una? (n/c)");
+        ioManager.print(
+                "Vuoi fare una nuova simulazione o caricarne una? Premi n per iniziarne una nuova, c per caricarne una da file");
         String choice = ioManager.read();
-        if (choice.equals("c")) {
+        if ("c".equals(choice)) {
             loadFromFileAndStart(ioManager);
         } else {
             normalRun(ioManager);
