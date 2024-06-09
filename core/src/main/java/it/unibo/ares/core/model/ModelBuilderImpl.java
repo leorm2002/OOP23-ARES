@@ -16,8 +16,6 @@ import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
 
 @SuppressFBWarnings(value = {
         "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"

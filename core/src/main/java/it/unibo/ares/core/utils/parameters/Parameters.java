@@ -14,6 +14,7 @@ public interface Parameters extends Serializable {
     /**
      * Adds a parameter with the specified key and type.
      * 
+     * @param <T>          the type of the parameter
      * @param key          the key of the parameter
      * @param type         the type of the parameter
      * @param userSettable if the parameter can be set by the user

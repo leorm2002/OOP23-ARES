@@ -24,12 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.io.Serial;
 import java.io.Serializable;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.BiConsumer;
 
 /**
  * GuiController is a class that controls the first GUI of the application.

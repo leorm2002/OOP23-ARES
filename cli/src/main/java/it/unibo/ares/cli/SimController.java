@@ -14,12 +14,17 @@ import it.unibo.ares.core.utils.statistics.Statistics;
  * The SimController class is responsible for controlling the simulation and
  * displaying the simulation output data.
  */
+/**
+ * The SimController class is responsible for controlling the simulation and
+ * handling user input.
+ * It extends the DataReciever class and provides methods to start the
+ * simulation, process user input, and print simulation data and statistics.
+ */
 public final class SimController extends DataReciever {
     private static final String START = "s";
     private static final String PAUSE = "p";
     private static final String STOP = "e";
     private static final String SAVE = "o";
-    private static final String LOAD = "l";
     private final String inizializationId;
     private static final String SEPARATOR = "    ";
     private String simulationId;
@@ -81,6 +86,12 @@ public final class SimController extends DataReciever {
         }
     }
 
+    /**
+     * Starts the simulation from a file.
+     *
+     * @param savePath The path to the file containing the simulation data.
+     * @param stepSize The step size for the simulation.
+     */
     public void startSimulationFromFile(final String savePath, final Integer stepSize) {
         ioManager.print("Inizio simulazione");
         this.simulationId = AresSupplier.getInstance().startSimulationFromFile(savePath, this);

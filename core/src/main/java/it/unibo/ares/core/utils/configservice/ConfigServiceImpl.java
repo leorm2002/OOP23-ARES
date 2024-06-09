@@ -19,14 +19,13 @@ import java.util.Optional;
  * previously read configuration values. This improves performance by avoiding
  * the need to read from the .ini file every time a configuration value is
  * requested.
- * </p>
  */
-public class ConfigServiceImpl implements ConfigService {
+public final class ConfigServiceImpl implements ConfigService {
 
     /**
      * The singleton instance of the ConfigServiceImpl.
      */
-    private static ConfigServiceImpl instance;
+    private static volatile ConfigServiceImpl instance;
     /**
      * The Ini object representing the .ini file.
      */
@@ -90,7 +89,7 @@ public class ConfigServiceImpl implements ConfigService {
      * @param <T>     The type of the configuration value.
      * @return The configuration value, or null if the key is not found.
      */
-    private <T> Optional<T> read(String section, String key, Class<T> type) {
+    private <T> Optional<T> read(final String section, final String key, final Class<T> type) {
         String cacheKey = section + "." + key;
         if (cache.containsKey(cacheKey)) {
             return Optional.ofNullable(type.cast(cache.get(cacheKey)));

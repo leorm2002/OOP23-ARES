@@ -152,8 +152,14 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
         return controller.saveSimulation(id);
     }
 
-    public String startSimulationFromFile(String filePath, final Subscriber<SimulationOutputData> subscriber) {
-        filePath = "output.data"; // TODO: REMOVE
+    /**
+     * Starts a simulation from a file.
+     *
+     * @param filePath   The path of the file containing the simulation data.
+     * @param subscriber The subscriber to receive the simulation output data.
+     * @return The ID of the started simulation.
+     */
+    public String startSimulationFromFile(final String filePath, final Subscriber<SimulationOutputData> subscriber) {
         String simulationId = UUID.randomUUID().toString();
         SimulationManager manager = new SimulationManagerImpl();
         Simulation loadedSim = manager.load(filePath);

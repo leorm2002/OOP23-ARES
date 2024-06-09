@@ -1,6 +1,5 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.utils.lambda.SerializableFunction;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
@@ -10,7 +9,6 @@ import it.unibo.ares.core.utils.lambda.SerializableBiFunction;
 
 import java.io.Serializable;
 import java.util.UUID;
-import java.util.function.BiFunction;
 
 /**
  * Implementation of the AgentBuilder interface.

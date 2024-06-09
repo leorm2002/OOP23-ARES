@@ -1,8 +1,6 @@
 package it.unibo.ares.core.utils.parameters;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.function.Predicate;
 
 import it.unibo.ares.core.utils.lambda.SerializablePredicate;
 

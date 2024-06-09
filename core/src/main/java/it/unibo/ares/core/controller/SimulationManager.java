@@ -1,5 +1,9 @@
 package it.unibo.ares.core.controller;
 
+/**
+ * The SimulationManager interface provides methods for saving and loading
+ * simulations.
+ */
 public interface SimulationManager {
 
     /**

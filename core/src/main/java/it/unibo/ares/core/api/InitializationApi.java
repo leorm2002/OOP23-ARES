@@ -39,6 +39,7 @@ public interface InitializationApi {
     /**
      * Sets a parameter of the model.
      * 
+     * @param <T>              the type of the parameter
      * @param initializationId The identifier of the model to set the parameter to.
      * @param key              The key of the parameter to set.
      * @param value            The value of the parameter to set.
@@ -74,6 +75,7 @@ public interface InitializationApi {
     /**
      * Sets a parameter of the agent.
      * 
+     * @param <T>              the type of the parameter
      * @param initializationId The identifier of the group of agents to set the
      *                         parameter to.
      * @param key              The key of the parameter to set.

@@ -6,7 +6,6 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
 import java.io.Serializable;
-import java.util.function.BiFunction;
 
 /**
  * The AgentBuilder interface represents a builder for creating instances of the

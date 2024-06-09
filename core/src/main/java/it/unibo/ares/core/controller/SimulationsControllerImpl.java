@@ -3,7 +3,6 @@ package it.unibo.ares.core.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -11,7 +10,6 @@ import java.util.concurrent.Flow.Subscriber;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import it.unibo.ares.core.utils.configservice.ConfigService;
 import it.unibo.ares.core.utils.configservice.ConfigServiceImpl;
 
 final class SimulationsControllerImpl extends SimulationsController {

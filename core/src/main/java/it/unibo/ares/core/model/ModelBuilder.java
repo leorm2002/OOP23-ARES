@@ -8,8 +8,6 @@ import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
 import java.io.Serializable;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
 
 /**
  * Represents a builder for creating models.
