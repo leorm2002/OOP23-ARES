@@ -23,17 +23,16 @@ public class SimulationManagerImpl implements SimulationManager {
      *
      * @return The generated file name.
      */
-    private String getFileName() {
+    private String getFileName() throws IOException {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
         String formattedDate = now.format(formatter);
 
         // Ensure the directory exists
         File directory = new File(DIRECTORY);
-        if (!directory.exists()) {
-            directory.mkdirs();
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new IOException("Failed to create directory: " + DIRECTORY);
         }
-
         return DIRECTORY + "Simulation-" + formattedDate + ".out";
     }
 
@@ -42,16 +41,18 @@ public class SimulationManagerImpl implements SimulationManager {
      */
     @Override
     public String save(final Simulation simulation) {
-        String path = getFileName();
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
+        try {
+            String path = getFileName();
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
             oos.writeObject(simulation);
+            oos.close();
+            return path;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return path;
+        return "";
     }
 
     /**
