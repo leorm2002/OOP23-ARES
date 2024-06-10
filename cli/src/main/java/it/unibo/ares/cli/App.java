@@ -1,5 +1,7 @@
 package it.unibo.ares.cli;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import it.unibo.ares.core.controller.AresSupplier;
@@ -61,9 +63,23 @@ public final class App {
         }
     }
 
-    private static void loadFromFileAndStart(final IOManager ioManager) {
+    private static String getPath(final IOManager ioManager) {
         ioManager.print("Inserisci il path del file da caricare");
-        String path = ioManager.read();
+        final String path = ioManager.read();
+        try {
+            if (!Files.exists(Paths.get(path))) {
+                ioManager.print("Il percorso specificato non esiste. Inserisci un percorso valido.");
+                return getPath(ioManager);
+            }
+            return path;
+        } catch (NumberFormatException e) {
+            ioManager.print("Inserisci un valore valido");
+            return getPath(ioManager);
+        }
+    }
+
+    private static void loadFromFileAndStart(final IOManager ioManager) {
+        String path = getPath(ioManager);
         final String inizializationId = UUID.randomUUID().toString();
         final Integer step = getStep(ioManager);
         final SimController simController = new SimController(inizializationId, ioManager);

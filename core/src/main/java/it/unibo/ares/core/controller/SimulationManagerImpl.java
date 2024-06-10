@@ -1,5 +1,6 @@
 package it.unibo.ares.core.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,6 +16,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class SimulationManagerImpl implements SimulationManager {
 
+    private static final String DIRECTORY = "SavedSimulations/";
+
     /**
      * Generates a unique file name based on the current date and time.
      *
@@ -22,12 +25,16 @@ public class SimulationManagerImpl implements SimulationManager {
      */
     private String getFileName() {
         LocalDateTime now = LocalDateTime.now();
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
-
         String formattedDate = now.format(formatter);
 
-        return "SavedSimulations/" + "Simulation-" + formattedDate + ".out";
+        // Ensure the directory exists
+        File directory = new File(DIRECTORY);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        return DIRECTORY + "Simulation-" + formattedDate + ".out";
     }
 
     /**
@@ -36,7 +43,7 @@ public class SimulationManagerImpl implements SimulationManager {
     @Override
     public String save(final Simulation simulation) {
         String path = getFileName();
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("output.data"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
             oos.writeObject(simulation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
