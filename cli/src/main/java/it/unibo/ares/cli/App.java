@@ -61,15 +61,16 @@ public final class App {
         }
     }
 
-    private static void loadFromFileAndStart(IOManager ioManager) {
+    private static void loadFromFileAndStart(final IOManager ioManager) {
         ioManager.print("Inserisci il path del file da caricare");
         String path = ioManager.read();
         final String inizializationId = UUID.randomUUID().toString();
+        final Integer step = getStep(ioManager);
         final SimController simController = new SimController(inizializationId, ioManager);
-        simController.startSimulationFromFile(path, 50);
+        simController.startSimulationFromFile(path, step);
     }
 
-    private static void normalRun(IOManager ioManager) {
+    private static void normalRun(final IOManager ioManager) {
         final CliInitializer cliController = new CliInitializer(ioManager);
         final String inizializationId = cliController.startParametrization();
         final SimController simController = new SimController(inizializationId, ioManager);

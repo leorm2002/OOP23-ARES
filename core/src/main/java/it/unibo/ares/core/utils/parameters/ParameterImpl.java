@@ -19,6 +19,16 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
     private final String key;
     private final Boolean userSettable;
 
+    /**
+     * Constructs a new ParameterImpl object with the specified key, value, domain,
+     * and userSettable flag.
+     *
+     * @param key          the key associated with the parameter
+     * @param value        the value of the parameter
+     * @param domain       the domain of the parameter
+     * @param userSettable a flag indicating whether the parameter is user settable
+     *                     or not
+     */
     @SuppressWarnings("unchecked")
     public ParameterImpl(final String key, final T value,
             final ParameterDomain<T> domain, final Boolean userSettable) {
@@ -29,6 +39,16 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
         this.userSettable = userSettable;
     }
 
+    /**
+     * Constructs a new ParameterImpl object with the specified key, type, domain,
+     * and userSettable flag.
+     *
+     * @param key          The key of the parameter.
+     * @param type         The type of the parameter.
+     * @param domain       The domain of the parameter.
+     * @param userSettable The flag indicating whether the parameter is
+     *                     user-settable.
+     */
     public ParameterImpl(final String key, final Class<T> type,
             final ParameterDomain<T> domain, final Boolean userSettable) {
         this.key = key;
@@ -104,10 +124,6 @@ public final class ParameterImpl<T extends Serializable> implements Parameter<T>
         if (domain != null && !domain.isValueValid(value)) {
             throw new IllegalArgumentException("Value is not inside the domain: " + this.key);
         }
-        // if (this.domain.isPresent() && !this.domain.get().isValueValid(value)) {
-        // throw new IllegalArgumentException("Value is not inside the domain: " +
-        // this.key);
-        // }
         return new ParameterImpl<>(key, value, domain, userSettable);
     }
 
