@@ -42,11 +42,11 @@ public class SimulationManagerImpl implements SimulationManager {
     @Override
     public String save(final Simulation simulation) {
         try {
-            String path = getFileName();
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
-            oos.writeObject(simulation);
-            oos.close();
-            return path;
+            String filePath = getFileName();
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+                oos.writeObject(simulation);
+            }
+            return filePath;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
