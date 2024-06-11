@@ -1,9 +1,11 @@
 package it.unibo.ares.core.model;
 
+import java.io.Serializable;
+
 /**
  * Represents a factory for creating models.
  */
-public interface ModelFactory {
+public interface ModelFactory extends Serializable {
     /**
      * Retrieves the id of the model.
      * 

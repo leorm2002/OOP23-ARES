@@ -1,10 +1,11 @@
 package it.unibo.ares.core.agent;
 
+import it.unibo.ares.core.utils.lambda.SerializableBiFunction;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
 
-import java.util.function.BiFunction;
+import java.io.Serializable;
 
 /**
  * The AgentBuilder interface represents a builder for creating instances of the
@@ -12,7 +13,7 @@ import java.util.function.BiFunction;
  * The AgentBuilder interface represents a builder for creating instances of the
  * Agent interface.
  */
-interface AgentBuilder {
+interface AgentBuilder extends Serializable {
     /**
      * Builds an instance of the Agent interface.
      *
@@ -36,7 +37,7 @@ interface AgentBuilder {
      *                      ...).
      * @return the agent builder with the added parameter.
      */
-    <T> AgentBuilder addParameter(Parameter<T> parameterImpl);
+    <T extends Serializable> AgentBuilder addParameter(Parameter<T> parameterImpl);
 
     /**
      * Adds a strategy to the agent.
@@ -45,6 +46,6 @@ interface AgentBuilder {
      * @param strategy the strategy to add.
      * @return the agent builder with the added strategy.
      */
-    AgentBuilder addStrategy(BiFunction<State, Pos, State> strategy);
+    AgentBuilder addStrategy(SerializableBiFunction<State, Pos, State> strategy);
 
 }

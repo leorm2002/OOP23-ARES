@@ -15,6 +15,8 @@ import it.unibo.ares.core.utils.statistics.Statistics;
  * model of the simulation.
  */
 final class SimulationImpl implements Simulation {
+
+    private static final long serialVersionUID = 1L;
     private State state;
     private final Model model;
     private boolean running; // may be sincronized if we want to make it usable to await termination

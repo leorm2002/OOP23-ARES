@@ -17,6 +17,7 @@ import it.unibo.ares.core.utils.state.State;
  */
 public final class IVirusAgentFactory implements AgentFactory {
 
+    private static final long serialVersionUID = 1L;
     private final Random r;
 
     /**
@@ -92,7 +93,7 @@ public final class IVirusAgentFactory implements AgentFactory {
      * is recovered and substituted with a P agent. The agent parameters are also
      * updated with the default parameters of a healthy person.
      *
-     * @param agent         The agent to be recovered
+     * @param agent The agent to be recovered
      * @return An Optional containing the recovered agent if recovery was
      *         successful, otherwise an empty Optional
      */

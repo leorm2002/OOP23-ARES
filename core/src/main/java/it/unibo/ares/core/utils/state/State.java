@@ -162,6 +162,14 @@ public interface State extends Serializable {
     boolean isFree(Pos pos);
 
     /**
+     * Check if a position is occupied.
+     * 
+     * @param pos the position to check.
+     * @return true if the position is occupied, false otherwise.
+     */
+    boolean isOccupied(Pos pos);
+
+    /**
      * Check if a position is inside the state.
      * 
      * @param pos the position to check.

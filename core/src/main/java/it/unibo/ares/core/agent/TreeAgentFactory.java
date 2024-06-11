@@ -7,6 +7,8 @@ import it.unibo.ares.core.utils.parameters.ParameterImpl;
  * A factory class for creating Tree agents.
  */
 public class TreeAgentFactory implements AgentFactory {
+
+        private static final long serialVersionUID = 1L;
         private static final String FUEL = "fuel";
         private static final String FLAMM = "flammability";
 

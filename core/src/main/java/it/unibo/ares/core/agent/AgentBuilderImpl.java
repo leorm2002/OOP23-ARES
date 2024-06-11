@@ -5,16 +5,18 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.parameters.ParametersImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.state.State;
+import it.unibo.ares.core.utils.lambda.SerializableBiFunction;
 
+import java.io.Serializable;
 import java.util.UUID;
-import java.util.function.BiFunction;
 
 /**
  * Implementation of the AgentBuilder interface.
  */
 class AgentBuilderImpl implements AgentBuilder {
 
-    private BiFunction<State, Pos, State> strategy;
+    private static final long serialVersionUID = 1L;
+    private SerializableBiFunction<State, Pos, State> strategy;
     private Parameters parameters;
 
     /**
@@ -50,7 +52,7 @@ class AgentBuilderImpl implements AgentBuilder {
             }
 
             @Override
-            public <T> void setParameter(final String key, final T value) {
+            public <T extends Serializable> void setParameter(final String key, final T value) {
                 parameters.setParameter(key, value);
             }
 
@@ -104,7 +106,7 @@ class AgentBuilderImpl implements AgentBuilder {
      * {@inheritDoc}
      */
     @Override
-    public <T> AgentBuilder addParameter(final Parameter<T> parameter) {
+    public <T extends Serializable> AgentBuilder addParameter(final Parameter<T> parameter) {
         parameters.addParameter(parameter);
         return this;
     }
@@ -113,7 +115,7 @@ class AgentBuilderImpl implements AgentBuilder {
      * {@inheritDoc}
      */
     @Override
-    public AgentBuilder addStrategy(final BiFunction<State, Pos, State> strategy) {
+    public AgentBuilder addStrategy(final SerializableBiFunction<State, Pos, State> strategy) {
         if (strategy == null) {
             throw new IllegalStateException("Strategy cannot be null");
         }

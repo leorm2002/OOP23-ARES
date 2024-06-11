@@ -1,17 +1,18 @@
 package it.unibo.ares.core.model;
 
+import it.unibo.ares.core.utils.lambda.SerializableBiPredicate;
+import it.unibo.ares.core.utils.lambda.SerializableFunction;
 import it.unibo.ares.core.utils.parameters.Parameter;
 import it.unibo.ares.core.utils.parameters.Parameters;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.statistics.StatisticsGenerator;
 
-import java.util.function.BiPredicate;
-import java.util.function.Function;
+import java.io.Serializable;
 
 /**
  * Represents a builder for creating models.
  */
-interface ModelBuilder {
+interface ModelBuilder extends Serializable {
     /**
      * Builds an instance of the Model interface.
      *
@@ -34,7 +35,7 @@ interface ModelBuilder {
      * @param <T>       the type of the parameter value (ex. Integer, String, ...).
      * @return the model builder with the added parameter.
      */
-    <T> ModelBuilder addParameter(Parameter<T> parameter);
+    <T extends Serializable> ModelBuilder addParameter(Parameter<T> parameter);
 
     /**
      * Add the function that will be used to check wether the simulation is
@@ -43,7 +44,7 @@ interface ModelBuilder {
      * @param exitfFunction
      * @return the model builder with the added exit function
      */
-    ModelBuilder addExitFunction(BiPredicate<State, State> exitfFunction);
+    ModelBuilder addExitFunction(SerializableBiPredicate<State, State> exitfFunction);
 
     /**
      * Add the function that initialize the state of the model.
@@ -51,7 +52,7 @@ interface ModelBuilder {
      * @param initFunction
      * @return the model builder with the added init function
      */
-    ModelBuilder addInitFunction(Function<Parameters, State> initFunction);
+    ModelBuilder addInitFunction(SerializableFunction<Parameters, State> initFunction);
 
     /**
      * Aggiunge il generatore per permettere al modello di generare statistiche.

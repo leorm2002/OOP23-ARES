@@ -1,7 +1,9 @@
 package it.unibo.ares.core.controller;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Flow.Subscriber;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -103,7 +105,8 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
     }
 
     @Override
-    public void setModelParameter(final String initializationId, final String key, final Object value) {
+    public <T extends Object & Serializable> void setModelParameter(final String initializationId, final String key,
+            final T value) {
         initializer.setModelParameter(initializationId, key, value);
     }
 
@@ -118,8 +121,9 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
     }
 
     @Override
-    public void setAgentParameterSimplified(final String initializationId, final String agentId, final String key,
-            final Object value) {
+    public <T extends Object & Serializable> void setAgentParameterSimplified(final String initializationId,
+            final String agentId, final String key,
+            final T value) {
         initializer.setAgentParameterSimplified(initializationId, agentId, key, value);
     }
 
@@ -143,12 +147,25 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
     }
 
     @Override
-    public String save(final String id) {
-        return controller.save(id);
+    public String saveSimulation(final String id) {
+        controller.pauseSimulation(id);
+        return controller.saveSimulation(id);
     }
 
-    @Override
-    public void load(final String filePath) {
-        controller.load(filePath);
+    /**
+     * Starts a simulation from a file.
+     *
+     * @param filePath   The path of the file containing the simulation data.
+     * @param subscriber The subscriber to receive the simulation output data.
+     * @return The ID of the started simulation.
+     */
+    public String startSimulationFromFile(final String filePath, final Subscriber<SimulationOutputData> subscriber) {
+        String simulationId = UUID.randomUUID().toString();
+        SimulationManager manager = new SimulationManagerImpl();
+        Simulation loadedSim = manager.load(filePath);
+        controller.addSimulation(simulationId, loadedSim);
+        controller.startSimulation(simulationId);
+        controller.subscribe(simulationId, subscriber);
+        return simulationId;
     }
 }

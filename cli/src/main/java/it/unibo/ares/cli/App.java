@@ -1,5 +1,9 @@
 package it.unibo.ares.cli;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.UUID;
+
 import it.unibo.ares.core.controller.AresSupplier;
 
 /**
@@ -23,15 +27,7 @@ public final class App {
         AresSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
         final IOManager ioManager = new IOManagerImpl();
         final Thread t = new Thread(() -> {
-            ioManager.print("Benvenuto in ARES!");
-            final CliInitializer cliController = new CliInitializer(ioManager);
-            final String inizializationId = cliController.startParametrization();
-            final SimController simController = new SimController(inizializationId, ioManager);
-            final Integer step = getStep(ioManager);
-            ioManager.print("Premi invio per iniziare la simulazione");
-            ioManager.read();
-            simController.startSimulation(step);
-            ioManager.print("Simulazione terminata");
+            mainLib(args);
             // Close the application
             System.exit(0);
         });
@@ -67,14 +63,30 @@ public final class App {
         }
     }
 
-    /**
-     * Avvia cli, utilizzato quando cli è lanciata come libreria.
-     * 
-     * @param args
-     */
-    public static void mainLib(final String[] args) {
-        final IOManager ioManager = new IOManagerImpl();
-        ioManager.print("Benvenuto in ARES!");
+    private static String getPath(final IOManager ioManager) {
+        ioManager.print("Inserisci il path del file da caricare");
+        final String path = ioManager.read();
+        try {
+            if (!Files.exists(Paths.get(path))) {
+                ioManager.print("Il percorso specificato non esiste. Inserisci un percorso valido.");
+                return getPath(ioManager);
+            }
+            return path;
+        } catch (NumberFormatException e) {
+            ioManager.print("Inserisci un valore valido");
+            return getPath(ioManager);
+        }
+    }
+
+    private static void loadFromFileAndStart(final IOManager ioManager) {
+        String path = getPath(ioManager);
+        final String inizializationId = UUID.randomUUID().toString();
+        final Integer step = getStep(ioManager);
+        final SimController simController = new SimController(inizializationId, ioManager);
+        simController.startSimulationFromFile(path, step);
+    }
+
+    private static void normalRun(final IOManager ioManager) {
         final CliInitializer cliController = new CliInitializer(ioManager);
         final String inizializationId = cliController.startParametrization();
         final SimController simController = new SimController(inizializationId, ioManager);
@@ -83,5 +95,24 @@ public final class App {
         ioManager.read();
         simController.startSimulation(step);
         ioManager.print("Simulazione terminata");
+
+    }
+
+    /**
+     * Avvia cli, utilizzato quando cli è lanciata come libreria.
+     * 
+     * @param args
+     */
+    public static void mainLib(final String[] args) {
+        final IOManager ioManager = new IOManagerImpl();
+        ioManager.print("Benvenuto in ARES!");
+        ioManager.print(
+                "Vuoi fare una nuova simulazione o caricarne una? Premi n per iniziarne una nuova, c per caricarne una da file");
+        String choice = ioManager.read();
+        if ("c".equals(choice)) {
+            loadFromFileAndStart(ioManager);
+        } else {
+            normalRun(ioManager);
+        }
     }
 }

@@ -8,6 +8,8 @@ import it.unibo.ares.core.utils.parameters.ParameterImpl;
  */
 public final class ExtingueshedAgentFactory implements AgentFactory {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Builds the Extingueshed Agent.
      * 

@@ -1,11 +1,13 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.io.Serializable;
+
 /**
  * A domain for a parameter.
  * 
  * @param <T> the type of the domain.
  */
-public interface ParameterDomain<T> {
+public interface ParameterDomain<T extends Serializable> extends Serializable {
     /**
      * Get the domain description.
      * 

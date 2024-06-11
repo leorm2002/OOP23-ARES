@@ -200,6 +200,11 @@ public final class StateImpl implements State {
     }
 
     @Override
+    public boolean isOccupied(final Pos pos) {
+        return !isFree(pos);
+    }
+
+    @Override
     public boolean isInside(final Pos pos) {
         return isValidPosition(pos);
     }
