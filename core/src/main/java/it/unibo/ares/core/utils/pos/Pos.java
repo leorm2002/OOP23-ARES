@@ -28,4 +28,5 @@ public interface Pos extends Serializable {
      *         the given position
      */
     Pos diff(Pos pos);
+
 }

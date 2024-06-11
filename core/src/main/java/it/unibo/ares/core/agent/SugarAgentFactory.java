@@ -12,16 +12,16 @@ public final class SugarAgentFactory implements AgentFactory {
         final AgentBuilder builder = new AgentBuilderImpl();
         builder.addParameter(new ParameterImpl<>(
                 "maxSugar", Integer.class,
-                new ParameterDomainImpl<>("zucchero massimo", (Integer i) -> i > 0),
+                new ParameterDomainImpl<>("zucchero massimo Producer", (Integer i) -> i > 0),
                 true));
 
         builder.addParameter(new ParameterImpl<>(
                 "sugarAmount", Integer.class,
-                new ParameterDomainImpl<>("quanto zucchero iniziale", (Integer i) -> i > 0),
+                new ParameterDomainImpl<>("quanto zucchero iniziale Prioducer", (Integer i) -> i >= 0),
                 true));
         builder.addParameter(new ParameterImpl<>(
                 "growthRate", Integer.class,
-                new ParameterDomainImpl<>("velocita crescita zuccero", (Integer i) -> i >= 0),
+                new ParameterDomainImpl<>("velocita crescita zuccero producer", (Integer i) -> i > 0),
                 true));
 
         builder.addStrategy((state, pos) -> {
@@ -29,21 +29,24 @@ public final class SugarAgentFactory implements AgentFactory {
                     .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
                     .getParameters()
                     .getParameter("sugarAmount", Integer.class)
-                    .orElseThrow(() -> new IllegalArgumentException("Agent has no sugarAmount parameter"))
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Agent has no sugarAmount parameter"))
                     .getValue();
 
             final int growthRate = state.getAgentAt(pos)
                     .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
                     .getParameters()
                     .getParameter("growthRate", Integer.class)
-                    .orElseThrow(() -> new IllegalArgumentException("Agent has no growthRate parameter"))
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Agent has no growthRate parameter"))
                     .getValue();
 
             final int maxSuger = state.getAgentAt(pos)
                     .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
                     .getParameters()
                     .getParameter("maxSugar", Integer.class)
-                    .orElseThrow(() -> new IllegalArgumentException("Agent has no growthRate parameter"))
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Agent has no growthRate parameter"))
                     .getValue();
 
             // Grow sugar

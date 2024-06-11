@@ -64,7 +64,8 @@ public final class SugarscapeModelFactory implements ModelFactory {
     public Model getModel() {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroAgentiConsumer", Integer.class,
-                        new ParameterDomainImpl<>("Numero di agenti consumer", (Integer n) -> n >= 0),
+                        new ParameterDomainImpl<>("Numero di agenti consumer",
+                                (Integer n) -> n >= 0),
                         true))
                 .addParameter(new ParameterImpl<>("numeroAgentiSugar", Integer.class,
                         new ParameterDomainImpl<>("Numero di agenti sugar",
@@ -76,7 +77,7 @@ public final class SugarscapeModelFactory implements ModelFactory {
                         true))
                 .addExitFunction(
                         (o, n) -> n.getAgents().stream().map(a -> a.getSecond().getType())
-                                .distinct().count() < 2 || o.equals(n))
+                                .distinct().count() == 1)
                 .addInitFunction(params -> {
                     try {
                         return sugarscapeInitializer(params);

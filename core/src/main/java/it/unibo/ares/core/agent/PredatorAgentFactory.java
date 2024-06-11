@@ -40,6 +40,11 @@ public final class PredatorAgentFactory implements AgentFactory {
                 .collect(Collectors.toSet());
     }
 
+    private Integer getDistanceBetweeenPos(final Pos p1, final Pos p2) {
+        Pos diff = p1.diff(p2);
+        return Math.abs(diff.getX()) + Math.abs(diff.getY());
+    }
+
     /**
      * Finds the position of a prey within the given vision radius.
      *
@@ -52,8 +57,7 @@ public final class PredatorAgentFactory implements AgentFactory {
         return getNeighboringPositions(state, position, visionRadius).stream()
                 .filter(p -> state.getAgentAt(p).isPresent())
                 .filter(p -> PreyAgentFactory.PREY.equals(state.getAgentAt(p).get().getType()))
-                .sorted(Comparator.comparingDouble(pos -> Math
-                        .sqrt(Math.pow(pos.diff(position).getX(), 2) + Math.pow(pos.diff(position).getY(), 2))))
+                .sorted(Comparator.comparingDouble(pos -> getDistanceBetweeenPos(pos, position)))
                 .findFirst();
     }
 
@@ -68,9 +72,8 @@ public final class PredatorAgentFactory implements AgentFactory {
      */
     private Pos getNextPositionTowardsPrey(final State state, final Pos currentPos, final Pos preyPos) {
         return getNeighboringPositions(state, currentPos, 1).stream()
-                .sorted(Comparator.comparingDouble(pos -> Math
-                        .sqrt(Math.pow(pos.diff(preyPos).getX(), 2) + Math.pow(pos.diff(preyPos).getY(), 2))))
                 .filter(state::isFree)
+                .sorted(Comparator.comparingDouble(pos -> getDistanceBetweeenPos(pos, preyPos)))
                 .findFirst()
                 .orElse(currentPos); // If no free position is found, stay in the current position
     }
