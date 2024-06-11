@@ -67,7 +67,7 @@ public final class SchellingsAgentFactory implements AgentFactory {
         final Double ratio = getRatio(neighBors, agent);
         return new Pair<>(
                 neighBors.isEmpty() || ratio >= threshold,
-                neighBors.isEmpty() ? null : ratio);
+                neighBors.isEmpty() ? 0d : ratio);
     }
 
     private static PosImpl getNewRandomPosition(final State state) {
