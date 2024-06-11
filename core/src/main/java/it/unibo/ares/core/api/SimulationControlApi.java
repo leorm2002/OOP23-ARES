@@ -57,12 +57,6 @@ public interface SimulationControlApi {
      * @param id the id of sumulation
      * @return the path of the file
      */
-    String save(String id);
+    String saveSimulation(String id);
 
-    /**
-     * set the tick rate.
-     * 
-     * @param filePath the path of the file
-     */
-    void load(String filePath);
 }

@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.Serializable;
+
 /**
  * Unit test for {@link State}.
  */
@@ -56,7 +58,7 @@ class StateTest {
             }
 
             @Override
-            public <T> void setParameter(final String key, final T value) {
+            public <T extends Serializable> void setParameter(final String key, final T value) {
                 throw new UnsupportedOperationException("Unimplemented method 'setParameter'");
             }
 

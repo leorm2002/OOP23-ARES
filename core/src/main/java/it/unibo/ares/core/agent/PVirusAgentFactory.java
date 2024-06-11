@@ -18,6 +18,7 @@ import it.unibo.ares.core.utils.state.State;
  */
 public final class PVirusAgentFactory implements AgentFactory {
 
+    private static final long serialVersionUID = 1L;
     private final Random r;
     /*
      * A predicate to check if two agents are of the same type.
@@ -99,7 +100,7 @@ public final class PVirusAgentFactory implements AgentFactory {
      * is infected and substituted with a I agent. The agent parameters are also
      * updated with the default parameters of the infected agents.
      *
-     * @param agent         The agent to be infected
+     * @param agent The agent to be infected
      * @return An Optional containing the infected agent if infection was
      *         successful, otherwise an empty Optional
      */

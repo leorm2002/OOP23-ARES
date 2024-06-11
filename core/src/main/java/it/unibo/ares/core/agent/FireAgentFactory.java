@@ -21,6 +21,8 @@ import java.util.stream.IntStream;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // utilizzato per concatenazione stringa, non ha senso usare una
                                                 // costante
 public final class FireAgentFactory implements AgentFactory {
+
+    private static final long serialVersionUID = 1L;
     private static final Integer DIRRANDOMNUMBERCEIL = 20;
     private static final Integer VISION_ANGLE = 360;
     private static final Double CONSFACTOR = 0.1;

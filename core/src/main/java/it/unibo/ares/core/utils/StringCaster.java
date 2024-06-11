@@ -3,6 +3,7 @@ package it.unibo.ares.core.utils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.io.Serializable;
 
 /**
  * A class that casts a string to a given type.
@@ -32,7 +33,7 @@ public final class StringCaster {
      */
     @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "PMD.PreserveStackTrace" }) // non si è sicuri di quale
                                                                                          // eccezione
-    public static <T> T cast(final String value, final Class<T> type) {
+    public static <T extends Serializable> T cast(final String value, final Class<T> type) {
         if (!CAST_MAP.containsKey(type)) {
             throw new IllegalArgumentException("Il tipo di dato non è supportato");
         }

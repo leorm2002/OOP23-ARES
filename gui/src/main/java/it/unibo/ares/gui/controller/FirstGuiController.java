@@ -24,6 +24,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.Serializable;
+
 /**
  * GuiController is a class that controls the first GUI of the application.
  * It implements the Initializable interface and manages the interaction between
@@ -107,7 +109,7 @@ public final class FirstGuiController implements Initializable {
      */
     void initializeModel() {
         try {
-            final BiConsumer<String, Object> parameterSetter = (key, value) -> {
+            final BiConsumer<String, Serializable> parameterSetter = (key, value) -> {
                 calculatorSupplier.setModelParameter(configurationSessionId, key, value);
             };
             final Parameters modelParameters = calculatorSupplier.getModelParametersParameters(configurationSessionId);
@@ -143,7 +145,7 @@ public final class FirstGuiController implements Initializable {
      *                        calculator
      */
     private void readParamatersValueAndSet(final VBox vbox, final Parameters params,
-            final BiConsumer<String, Object> parameterSetter) {
+            final BiConsumer<String, Serializable> parameterSetter) {
         /*
          * iterate over the children of the vbox and if the child is a TextField, get
          * its
@@ -157,7 +159,8 @@ public final class FirstGuiController implements Initializable {
                     final String typeToString = params.getParameter(txt.getId()).map(Parameter::getType)
                             .map(Class::getSimpleName)
                             .orElse("");
-                    final Class<?> type = params.getParameter(txt.getId()).map(Parameter::getType).orElse(null);
+                    final Class<Serializable> type = params.getParameter(txt.getId()).map(Parameter::getType)
+                            .orElse(null);
                     final Parameter<?> parameter = params.getParameter(txt.getId()).orElse(null);
                     /*
                      * switch on the type of the parameter and cast the text of the TextField to the
@@ -231,7 +234,7 @@ public final class FirstGuiController implements Initializable {
             guiWriter.showError("Please select an agent to parametrize");
             return;
         }
-        final BiConsumer<String, Object> parameterSetter = (key, value) -> {
+        final BiConsumer<String, Serializable> parameterSetter = (key, value) -> {
             calculatorSupplier.setAgentParameterSimplified(configurationSessionId, choiceAgent.getValue(), key,
                     value);
         };

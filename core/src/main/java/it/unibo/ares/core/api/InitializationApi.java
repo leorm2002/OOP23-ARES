@@ -1,6 +1,9 @@
 package it.unibo.ares.core.api;
 
 import java.util.Set;
+import java.io.Serializable;
+
+import it.unibo.ares.core.utils.parameters.Parameters;
 
 import it.unibo.ares.core.utils.parameters.Parameters;
 
@@ -38,11 +41,12 @@ public interface InitializationApi {
     /**
      * Sets a parameter of the model.
      * 
+     * @param <T>              the type of the parameter
      * @param initializationId The identifier of the model to set the parameter to.
      * @param key              The key of the parameter to set.
      * @param value            The value of the parameter to set.
      */
-    void setModelParameter(String initializationId, String key, Object value);
+    <T extends Object & Serializable> void setModelParameter(String initializationId, String key, T value);
 
     /**
      * Gets a simplified view of the agents of the model, it permets only to
@@ -73,6 +77,7 @@ public interface InitializationApi {
     /**
      * Sets a parameter of the agent.
      * 
+     * @param <T>              the type of the parameter
      * @param initializationId The identifier of the group of agents to set the
      *                         parameter to.
      * @param key              The key of the parameter to set.
@@ -80,6 +85,7 @@ public interface InitializationApi {
      * @param agentId          The identifier of the group of agents to set the
      *                         parameter to.
      */
-    void setAgentParameterSimplified(String initializationId, String agentId, String key, Object value);
+    <T extends Object & Serializable> void setAgentParameterSimplified(String initializationId, String agentId,
+            String key, T value);
 
 }

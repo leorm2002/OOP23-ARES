@@ -1,15 +1,19 @@
 package it.unibo.ares.core.utils.parameters;
 
-import java.util.function.Predicate;
+import java.io.Serializable;
+
+import it.unibo.ares.core.utils.lambda.SerializablePredicate;
 
 /**
  * Implementazione di un dominio di un parametro.
  * 
  * @param <T> Il tipo di valore del dominio
  */
-public final class ParameterDomainImpl<T> implements ParameterDomain<T> {
+public final class ParameterDomainImpl<T extends Serializable> implements ParameterDomain<T> {
+
+    private static final long serialVersionUID = 1L;
     private final String description;
-    private final Predicate<T> predicate;
+    private final SerializablePredicate<T> predicate;
 
     /**
      * Crea un nuovo dominio.
@@ -17,7 +21,7 @@ public final class ParameterDomainImpl<T> implements ParameterDomain<T> {
      * @param description la decrizione del dominio in linguaggio naturale
      * @param predicate   Il predicato per testare che un valore sia nel dominio
      */
-    public ParameterDomainImpl(final String description, final Predicate<T> predicate) {
+    public ParameterDomainImpl(final String description, final SerializablePredicate<T> predicate) {
         this.description = description;
         this.predicate = predicate;
     }

@@ -1,5 +1,6 @@
 package it.unibo.ares.core.utils.parameters;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,6 +14,8 @@ import java.util.stream.Stream;
  * get, and set parameters.
  */
 public final class ParametersImpl implements Parameters {
+
+    private static final long serialVersionUID = 1L;
     private final Map<Class<?>, Map<String, Parameter<?>>> typeMap;
 
     /**
@@ -36,7 +39,7 @@ public final class ParametersImpl implements Parameters {
     /*
      * {@inheritDoc}
      */
-    private <T> void addParameter(final String key, final Parameter<T> parameter) {
+    private <T extends Serializable> void addParameter(final String key, final Parameter<T> parameter) {
         typeMap.entrySet().stream().filter(e -> e.getValue().containsKey(key)).findAny().ifPresent(e -> {
             throw new IllegalArgumentException("Parameter " + key + " already exists");
         });
@@ -51,7 +54,8 @@ public final class ParametersImpl implements Parameters {
      * {@inheritDoc}
      */
     @Override
-    public void addParameter(final String key, final Class<?> type, final Boolean userSettable) {
+    public <T extends Serializable> void addParameter(final String key, final Class<T> type,
+            final Boolean userSettable) {
         if (this.getParameter(key, type).isPresent()) {
             throw new IllegalArgumentException("Parameter " + key + " already exists");
         }
@@ -65,7 +69,7 @@ public final class ParametersImpl implements Parameters {
      * {@inheritDoc}
      */
     @Override
-    public <T> void addParameter(final String key, final T value, final Boolean userSettable) {
+    public <T extends Serializable> void addParameter(final String key, final T value, final Boolean userSettable) {
         addParameter(key, new ParameterImpl<>(key, value, userSettable));
     }
 
@@ -73,7 +77,7 @@ public final class ParametersImpl implements Parameters {
      * {@inheritDoc}
      */
     @Override
-    public <T> void addParameter(final Parameter<T> parameter) {
+    public <T extends Serializable> void addParameter(final Parameter<T> parameter) {
         addParameter(parameter.getKey(), parameter);
     }
 
@@ -81,7 +85,7 @@ public final class ParametersImpl implements Parameters {
      * {@inheritDoc}
      */
     @Override
-    public <T> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
+    public <T extends Serializable> Optional<Parameter<T>> getParameter(final String key, final Class<T> type) {
         final Optional<Map<String, Parameter<?>>> parameterMap = Optional.ofNullable(typeMap.get(type));
         if (parameterMap.isPresent()) {
             @SuppressWarnings("unchecked")
@@ -96,7 +100,7 @@ public final class ParametersImpl implements Parameters {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> void setParameter(final String key, final T value) {
+    public <T extends Serializable> void setParameter(final String key, final T value) {
         final Optional<Parameter<T>> parameter = getParameter(key, (Class<T>) value.getClass());
         if (parameter.isPresent()) {
             typeMap.get(value.getClass()).replace(key, parameter.get().updateValue(value));
@@ -144,7 +148,7 @@ public final class ParametersImpl implements Parameters {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<Parameter<T>> getParameter(final String key) {
+    public <T extends Serializable> Optional<Parameter<T>> getParameter(final String key) {
         return getParametersStream().filter(p -> p.getKey().equals(key)).map(p -> (Parameter<T>) p).findAny();
     }
 }
