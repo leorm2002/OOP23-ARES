@@ -3,9 +3,17 @@ package it.unibo.ares.core.agent;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 
+/**
+ * Represents a factory for creating Sugar agents.
+ * 
+ */
 public final class SugarAgentFactory implements AgentFactory {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * This class represents a SugarAgentFactory, which is responsible for creating
+     * SugarAgents.
+     */
     public static final String SUGAR = "S";
 
     private Agent createSugarAgent() {

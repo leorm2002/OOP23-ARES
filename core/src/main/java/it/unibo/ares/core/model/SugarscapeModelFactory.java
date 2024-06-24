@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+/**
+ * A factory class for creating the SugarscapeModelFactory model.
+ */
 public final class SugarscapeModelFactory implements ModelFactory {
 
     private static final long serialVersionUID = 1L;
