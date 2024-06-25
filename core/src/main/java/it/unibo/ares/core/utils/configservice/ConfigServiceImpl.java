@@ -9,12 +9,10 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Implementation of the {@link ConfigService} interface that reads
+ * Implementation of the ConfigService interface that reads
  * configuration values from a .ini file.
  * This class uses the Singleton pattern to ensure that only one instance of the
  * class is created.
- * The configuration file is loaded from the classpath at the path
- * "config.ini".
  * The {@link #read(String, String, Class)} method uses a cache to store
  * previously read configuration values. This improves performance by avoiding
  * the need to read from the .ini file every time a configuration value is
@@ -45,8 +43,6 @@ public final class ConfigServiceImpl implements ConfigService {
     }
 
     /**
-     * Returns the singleton instance of the ConfigServiceImpl.
-     *
      * @return the singleton instance of the ConfigServiceImpl.
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
@@ -66,17 +62,15 @@ public final class ConfigServiceImpl implements ConfigService {
 
     /**
      * Loads the configuration from the .ini file.
-     *
+     * 
      * @throws IOException if the configuration file cannot be loaded.
      */
     private void loadConfig() throws IOException {
-        // Load the .ini file from the classpath
         URL resource = getClass().getClassLoader().getResource("config.ini");
         if (resource == null) {
             throw new IOException("Configuration file not found");
         }
 
-        // Load the .ini file using ini4j
         ini = new Ini(resource);
     }
 
