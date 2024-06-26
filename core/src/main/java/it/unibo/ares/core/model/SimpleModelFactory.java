@@ -36,9 +36,9 @@ public final class SimpleModelFactory implements ModelFactory {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>(
                         Model.SIZEKEY, Integer.class,
-                        new ParameterDomainImpl<Integer>(
+                        new ParameterDomainImpl<>(
                                 "Dimensione della griglia (1-n)",
-                                i -> i > 0),
+                                (Integer i) -> i > 0),
                         true))
                 .addExitFunction((state, state2) -> !state2.isFree(new PosImpl(0, 0)))
                 .addInitFunction(params -> {
