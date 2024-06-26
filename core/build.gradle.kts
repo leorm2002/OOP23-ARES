@@ -24,12 +24,14 @@ dependencies {
     // JUnit API and testing engine
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
-
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    // testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.12.0'
 }
 
 tasks.test {
     useJUnitPlatform()
 }
+
 application {
     // Define the main class for the application
     mainClass.set("it.unibo.ares.core.App")
