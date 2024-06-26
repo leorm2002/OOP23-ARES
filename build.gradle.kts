@@ -4,7 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.55.0"
     id("lifecycle-base")
-
+    id("com.github.ben-manes.versions") version "0.51.0"
 }
 
 group = "it.unibo.ares"

@@ -5,7 +5,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.55.0"
     id("lifecycle-base")
-
 }
 
 group = "it.unibo.ares"
@@ -22,7 +21,7 @@ val javaFXModules = listOf(
         "graphics"
 )
 
-val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
+val supportedPlatforms = listOf("linux", "mac", "win", "mac-aarch64") // All required for OOP
 
 dependencies {
     val javaFxVersion = "22.0.1"
