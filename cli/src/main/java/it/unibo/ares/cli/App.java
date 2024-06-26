@@ -21,7 +21,7 @@ public final class App {
     /**
      * Avvia cli.
      * 
-     * @param args
+     * @param args args passati da riga di comando
      */
     public static void main(final String[] args) {
         AresSupplier.getInstance(); // Faccio in modo che non sia sul thread della cli
@@ -101,7 +101,7 @@ public final class App {
     /**
      * Avvia cli, utilizzato quando cli è lanciata come libreria.
      * 
-     * @param args
+     * @param args args passati da riga di comando
      */
     public static void mainLib(final String[] args) {
         final IOManager ioManager = new IOManagerImpl();
