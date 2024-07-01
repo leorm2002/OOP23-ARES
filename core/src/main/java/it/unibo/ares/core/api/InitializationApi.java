@@ -37,6 +37,15 @@ public interface InitializationApi {
     Parameters getModelParametersParameters(String initializationId);
 
     /**
+     * Gets the parameters of the model.
+     * 
+     * @param initializedId The identifier of the model to get the parameters
+     *                      from.
+     * @return a set containing all the parameters of the model.
+     */
+    Parameters getInitializedModelParameters(String initializedId);
+
+    /**
      * Sets a parameter of the model.
      * 
      * @param <T>              the type of the parameter

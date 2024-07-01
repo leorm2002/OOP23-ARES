@@ -2,7 +2,6 @@ package it.unibo.ares.core.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -47,8 +46,6 @@ public class SimulationManagerImpl implements SimulationManager {
                 oos.writeObject(simulation);
             }
             return filePath;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,11 +60,7 @@ public class SimulationManagerImpl implements SimulationManager {
         Simulation simulation = null;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             simulation = (Simulation) ois.readObject();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return simulation;
