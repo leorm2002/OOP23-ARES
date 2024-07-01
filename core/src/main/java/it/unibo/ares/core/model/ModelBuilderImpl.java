@@ -114,6 +114,7 @@ final class ModelBuilderImpl implements ModelBuilder {
             public Statistics getStatistics(final State s) {
                 return generator == null ? Collections::emptyList : generator.generate(s);
             }
+
         };
     }
 

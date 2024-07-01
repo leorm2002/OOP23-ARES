@@ -134,9 +134,9 @@ public final class PVirusAgentFactory implements AgentFactory {
         final AgentBuilder b = new AgentBuilderImpl();
         b.addParameter(new ParameterImpl<>("direction", ComputationUtils.getRandomDirection(r), false));
         b.addParameter(new ParameterImpl<>("infectionRate", Integer.class,
-                new ParameterDomainImpl<Integer>(
+                new ParameterDomainImpl<>(
                         "Probabilità di infenzione da contatto (0-100)",
-                        i -> i >= 0 && i <= 100),
+                        (Integer i) -> i >= 0 && i <= 100),
                 true));
         b.addParameter(new ParameterImpl<>("stepSize", Integer.class,
                 new ParameterDomainImpl<>("la dimensione del passo (1-10)",

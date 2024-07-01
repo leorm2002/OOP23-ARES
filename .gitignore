@@ -10,4 +10,5 @@ bin/
 
 .settings
 .vscode/settings.json
-SavedSimulations/*
+*/SavedSimulations/*
+/SavedSimulations/*

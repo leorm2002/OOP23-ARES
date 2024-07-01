@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import it.unibo.ares.core.model.SimpleModelFactory;
+import it.unibo.ares.core.model.SugarscapeModelFactory;
 import it.unibo.ares.core.model.BoidsModelFactory;
 import it.unibo.ares.core.model.FireSpreadModelFactory;
 import it.unibo.ares.core.model.VirusModelFactory;
@@ -44,13 +45,14 @@ public final class SimulationInitializerImpl extends SimulationInitializer {
                 final ModelFactory pp = new PredatorPreyModelFactory();
                 final ModelFactory vf = new VirusModelFactory();
                 final ModelFactory smf = new SimpleModelFactory();
+                final ModelFactory ssm = new SugarscapeModelFactory();
                 modelsSupplier.put(sf.getModelId(), sf::getModel);
                 modelsSupplier.put(bf.getModelId(), bf::getModel);
                 modelsSupplier.put(ff.getModelId(), ff::getModel);
                 modelsSupplier.put(pp.getModelId(), pp::getModel);
                 modelsSupplier.put(vf.getModelId(), vf::getModel);
                 modelsSupplier.put(smf.getModelId(), smf::getModel);
-
+                modelsSupplier.put(ssm.getModelId(), ssm::getModel);
                 this.intilizingModels = new ConcurrentHashMap<>();
                 this.initializedModels = new ConcurrentHashMap<>();
         }

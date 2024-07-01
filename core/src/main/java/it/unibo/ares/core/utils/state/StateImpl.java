@@ -208,4 +208,5 @@ public final class StateImpl implements State {
     public boolean isInside(final Pos pos) {
         return isValidPosition(pos);
     }
+
 }

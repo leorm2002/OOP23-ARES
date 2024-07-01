@@ -10,7 +10,7 @@ import java.util.Optional;
  *
  * @param <T> the type of the parameter value
  */
-public final class ParameterImpl<T extends Serializable> implements Parameter<T>, Serializable {
+public final class ParameterImpl<T extends Serializable> implements Parameter<T> {
 
     private static final long serialVersionUID = 1L;
     private final ParameterDomain<T> domain;

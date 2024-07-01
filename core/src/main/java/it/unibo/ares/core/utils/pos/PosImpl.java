@@ -80,4 +80,5 @@ public class PosImpl implements Pos {
     public Pos diff(final Pos pos) {
         return new PosImpl(this.getX() - pos.getX(), this.getY() - pos.getY());
     }
+
 }

@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 import it.unibo.ares.core.utils.parameters.Parameters;
 
-import it.unibo.ares.core.utils.parameters.Parameters;
-
 /**
  * API for the initialization of the simulation.
  */

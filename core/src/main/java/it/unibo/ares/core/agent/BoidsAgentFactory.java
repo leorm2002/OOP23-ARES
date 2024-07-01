@@ -23,7 +23,6 @@ public final class BoidsAgentFactory implements AgentFactory {
     // PARAMETRI FINE TUNTING
     private static final long serialVersionUID = 1L;
     private static final Double USERCORRECTIONWEIGHT = 0.4;
-    private static final Double WALLAVOIDANCEWEIGHT = 0.8;
     private static final String DIRECTION = "direction";
     private final Random r;
 
@@ -110,8 +109,6 @@ public final class BoidsAgentFactory implements AgentFactory {
         j *= USERCORRECTIONWEIGHT;
         i += original.getNormalizedX() * (1 - USERCORRECTIONWEIGHT);
         j += original.getNormalizedY() * (1 - USERCORRECTIONWEIGHT);
-        // i += steerAway.getNormalizedX() * WALLAVOIDANCEWEIGHT;
-        // j += steerAway.getNormalizedY() * WALLAVOIDANCEWEIGHT;
         return new DirectionVectorImpl(i, j).getNormalized();
     }
 

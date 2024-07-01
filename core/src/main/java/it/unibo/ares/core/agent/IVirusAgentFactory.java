@@ -130,9 +130,9 @@ public final class IVirusAgentFactory implements AgentFactory {
                         true))
                 .addParameter(new ParameterImpl<>("direction", ComputationUtils.getRandomDirection(r), false))
                 .addParameter(new ParameterImpl<>("recoveryRate", Integer.class,
-                        new ParameterDomainImpl<Integer>(
+                        new ParameterDomainImpl<>(
                                 "Probabilità di guarigione a ogni step (0-100)",
-                                i -> i >= 0 && i <= 100),
+                                (Integer i) -> i >= 0 && i <= 100),
                         true))
                 .addStrategy(this::tickFunction).build();
         a.setType("I");

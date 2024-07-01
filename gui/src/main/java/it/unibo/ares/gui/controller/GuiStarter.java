@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +28,8 @@ public class GuiStarter extends Application {
         Parent root;
         root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
         final Scene scene = new Scene(root);
+        Image icon = new Image(ClassLoader.getSystemResourceAsStream("icon.png"));
+        window.getIcons().add(icon);
         window.setTitle("ARES");
         window.setScene(scene);
         FirstGuiController.setStage(window);

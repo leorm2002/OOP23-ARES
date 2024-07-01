@@ -95,17 +95,17 @@ public class FireSpreadModelFactory implements ModelFactory {
     public Model getModel() {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numFire", Integer.class,
-                        new ParameterDomainImpl<Integer>("Numero di agenti fuoco (1-n)",
-                                n -> n > 0),
+                        new ParameterDomainImpl<>("Numero di agenti fuoco (1-n)",
+                                (Integer n) -> n > 0),
                         true))
                 .addParameter(new ParameterImpl<>("vegetation", Double.class,
-                        new ParameterDomainImpl<Double>("Percentuale di vegetazione (0.0-1.0)",
+                        new ParameterDomainImpl<>("Percentuale di vegetazione (0.0-1.0)",
                                 (Double d) -> d >= 0.0 && d <= 1.0),
                         true))
                 .addParameter(new ParameterImpl<>(
                         Model.SIZEKEY, Integer.class,
-                        new ParameterDomainImpl<Integer>("Dimensione della griglia (1-n)",
-                                n -> n > 0),
+                        new ParameterDomainImpl<>("Dimensione della griglia (1-n)",
+                                (Integer n) -> n > 0),
                         true))
                 .addExitFunction((o, n) -> n.getAgents().stream()
                         .map(a -> a.getSecond().getType()).distinct()

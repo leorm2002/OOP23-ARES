@@ -10,8 +10,6 @@ import java.io.Serializable;
 /**
  * The AgentBuilder interface represents a builder for creating instances of the
  * Agent interface.
- * The AgentBuilder interface represents a builder for creating instances of the
- * Agent interface.
  */
 interface AgentBuilder extends Serializable {
     /**
