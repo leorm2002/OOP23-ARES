@@ -89,6 +89,14 @@ public final class App {
     private static void normalRun(final IOManager ioManager) {
         final CliInitializer cliController = new CliInitializer(ioManager);
         final String inizializationId = cliController.startParametrization();
+        ioManager.print(
+                "Vuoi esportare i parametri inseriti in un file? Premi s per esportare, "
+                        + "qualsiasi altro tasto per continuare senza esportare.");
+
+        String choice = ioManager.read();
+        if ("s".equals(choice)) {
+            cliController.exportParametersData();
+        }
         final SimController simController = new SimController(inizializationId, ioManager);
         final Integer step = getStep(ioManager);
         ioManager.print("Premi invio per iniziare la simulazione");

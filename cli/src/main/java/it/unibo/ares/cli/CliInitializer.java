@@ -1,5 +1,11 @@
 package it.unibo.ares.cli;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +25,7 @@ import it.unibo.ares.core.utils.parameters.Parameters;
 public final class CliInitializer {
     private String initializationId;
     private final IOManager ioManager;
+    private static String folderPath = "ParametersData/";
 
     /**
      * Creates a new CliInitializer object.
@@ -148,4 +155,64 @@ public final class CliInitializer {
         return initializationId;
     }
 
+    /**
+     * Esporta i dati dei parametri del modello e degli agenti in un file di testo
+     * formattato.
+     * 
+     * @throws IOException se si verifica un errore durante la creazione delle
+     *                     directory o la scrittura del file.
+     */
+    public void exportParametersData() {
+        final Set<String> agents = AresSupplier.getInstance().getAgentsSimplified(initializationId);
+        final Parameters modelParams = AresSupplier.getInstance().getInitializedModelParameters(initializationId);
+
+        if (agents == null || modelParams == null) {
+            ioManager.print("Errore: parametri del modello o agenti non inizializzati correttamente.");
+            return;
+        }
+
+        final String filePath = folderPath + initializationId + ".txt";
+        final Path path = Paths.get(filePath);
+        final Path parentPath = path.getParent();
+
+        if (parentPath != null) {
+            try {
+                Files.createDirectories(parentPath);
+            } catch (IOException e) {
+                ioManager.print("Errore nella creazione delle directory: " + e.getMessage());
+                return;
+            }
+        }
+
+        StringBuilder dataBuilder = new StringBuilder();
+
+        dataBuilder.append("Parametri del Modello:\n");
+        modelParams
+                .getParameters()
+                .stream()
+                .filter(Parameter::userSettable)
+                .forEach(
+                        p -> dataBuilder.append("\t").append(p.getKey()).append(": ").append(p.getValue())
+                                .append("\n"));
+
+        dataBuilder.append("Parametri degli Agenti:\n");
+        agents.forEach(agent -> {
+            dataBuilder.append("\t").append(agent).append(":\n");
+            AresSupplier.getInstance()
+                    .getAgentParametersSimplified(initializationId, agent)
+                    .getParameters()
+                    .stream()
+                    .filter(Parameter::userSettable)
+                    .forEach(p -> dataBuilder.append("\t\t").append(p.getKey()).append(": ").append(p.getValue())
+                            .append("\n"));
+        });
+
+        try (FileWriter fileWriter = new FileWriter(filePath, StandardCharsets.UTF_8)) {
+            fileWriter.write(dataBuilder.toString());
+            ioManager.print("Esportazione dei parametri avvenuta con successo.");
+            ioManager.print("File salvato in: " + filePath);
+        } catch (IOException e) {
+            ioManager.print("Errore nell'esportazione dei parametri: " + e.getMessage());
+        }
+    }
 }

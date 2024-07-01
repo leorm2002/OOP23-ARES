@@ -105,6 +105,11 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
     }
 
     @Override
+    public Parameters getInitializedModelParameters(final String initializedId) {
+        return initializer.getInitializedModelParameters(initializedId);
+    }
+
+    @Override
     public <T extends Object & Serializable> void setModelParameter(final String initializationId, final String key,
             final T value) {
         initializer.setModelParameter(initializationId, key, value);
@@ -168,4 +173,5 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
         controller.subscribe(simulationId, subscriber);
         return simulationId;
     }
+
 }
