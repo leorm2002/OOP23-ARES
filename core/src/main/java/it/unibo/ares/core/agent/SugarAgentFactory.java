@@ -60,7 +60,7 @@ public final class SugarAgentFactory implements AgentFactory {
             // Grow sugar
             state.getAgentAt(pos)
                     .ifPresent(agent -> agent.getParameters().setParameter("sugarAmount",
-                            Math.max(sugarAmount + growthRate, maxSuger)));
+                            Math.min(sugarAmount + growthRate, maxSuger)));
 
             return state;
         });

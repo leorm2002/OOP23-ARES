@@ -114,13 +114,20 @@ public final class ConsumerAgentFactory implements AgentFactory {
                 .collect(Collectors.toSet());
     }
 
-    private void consumeSugar(final State state, final Pos pos, final Pos sugarPos, final int sugar,
+    private void consumeSugar(final State state, final Pos pos, final Pos sugarPos,
             final int maxSugar) {
         final int sugarAmount = state.getAgentAt(sugarPos)
                 .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
                 .getParameters()
                 .getParameter("sugarAmount", Integer.class)
                 .orElseThrow(() -> new IllegalArgumentException("Agent has no sugarAmount parameter"))
+                .getValue();
+
+        final int sugar = state.getAgentAt(pos)
+                .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
+                .getParameters()
+                .getParameter("sugar", Integer.class)
+                .orElseThrow(() -> new IllegalArgumentException("Agent has no sugar parameter"))
                 .getValue();
 
         final int maxSugarIntake = Math.min(maxSugar - sugar, sugarAmount);
@@ -208,7 +215,7 @@ public final class ConsumerAgentFactory implements AgentFactory {
                     .findFirst()
                     .ifPresent(sugarPos -> {
                         if (getDistanceBetweeenPos(sugarPos, pos) == 1) {
-                            consumeSugar(state, pos, sugarPos, sugar, maxSugar);
+                            consumeSugar(state, pos, sugarPos, maxSugar);
                         } else {
                             state.moveAgent(pos, getNextPositionTowardsPos(state, pos, sugarPos));
                         }
