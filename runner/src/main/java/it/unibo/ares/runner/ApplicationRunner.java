@@ -13,6 +13,7 @@ public class ApplicationRunner {
     private static final String GRAFIC = "1";
     private static final String COMBINED = "2";
     private static final String EXIT = "3";
+    private static final List<String> modes = List.of(TERMINAL, GRAFIC, COMBINED, EXIT);
 
     private static void printTitle() {
         System.out.println("   _____ _____________________ _________");
@@ -29,7 +30,6 @@ public class ApplicationRunner {
      * @param args
      */
     public static void main(String[] args) {
-        List<String> modes = List.of(TERMINAL, GRAFIC, COMBINED);
         List<Thread> threads = new ArrayList<>();
         printTitle();
         System.out.println("Premi 0 per avviare l'applicazione in modalita' cli");
@@ -61,7 +61,9 @@ public class ApplicationRunner {
                         it.unibo.ares.gui.App.mainLib(args)));
                 break;
             case EXIT:
-                return;
+                System.out.println("Arrivederci");
+                System.exit(0);
+                break;
             default:
                 break;
         }
