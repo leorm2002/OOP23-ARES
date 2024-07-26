@@ -1,16 +1,16 @@
 package it.unibo.ares.core.agent;
 
+import java.util.Random;
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
-
-import java.util.Random;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
 
 /**
  * A factory class for creating agents for the Schelling Segregation Model.
@@ -66,8 +66,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
         final Set<Agent> neighbors = getNeighborgs(state, visionRadius, pos, agent);
         final double ratio = getRatio(neighbors, agent);
 
-        boolean isThresholdSatisfied = neighbors.isEmpty() || ratio >= threshold;
-        double actualRatio = neighbors.isEmpty() ? 0d : ratio;
+        final boolean isThresholdSatisfied = neighbors.isEmpty() || ratio >= threshold;
+        final double actualRatio = neighbors.isEmpty() ? 0d : ratio;
 
         return new Pair<>(isThresholdSatisfied, actualRatio);
     }
@@ -94,8 +94,8 @@ public final class SchellingsAgentFactory implements AgentFactory {
             final Integer visionRadius) {
         final AgentBuilder b = new AgentBuilderImpl();
 
-        b.addParameter(new ParameterImpl<Double>(THRESHOLD, threshold, true));
-        b.addParameter(new ParameterImpl<Integer>(VISIONRADIUS, visionRadius, true));
+        b.addParameter(new ParameterImpl<>(THRESHOLD, threshold, true));
+        b.addParameter(new ParameterImpl<>(VISIONRADIUS, visionRadius, true));
         b.addStrategy((state, pos) -> {
             final Agent agent = state.getAgentAt(pos).get();
             final Pair<Boolean, Double> ret = thresholdSatisfied(state, pos, agent);

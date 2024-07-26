@@ -1,13 +1,13 @@
 package it.unibo.ares.core.agent;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * A factory class for creating prey agents for the Predator-Prey Model.
@@ -53,8 +53,8 @@ public final class PreyAgentFactory implements AgentFactory {
         final Pos avgPos = new PosImpl(avgX, avgY);
         final Pos diff = position.diff(avgPos);
 
-        int moveX = (int) Math.signum(diff.getX());
-        int moveY = (int) Math.signum(diff.getY());
+        final int moveX = (int) Math.signum(diff.getX());
+        final int moveY = (int) Math.signum(diff.getY());
 
         int newX = position.getX() + moveX;
         int newY = position.getY() + moveY;
@@ -63,7 +63,7 @@ public final class PreyAgentFactory implements AgentFactory {
         newX = Math.max(0, Math.min(newX, state.getDimensions().getFirst() - 1));
         newY = Math.max(0, Math.min(newY, state.getDimensions().getSecond() - 1));
 
-        Pos pos = new PosImpl(newX, newY);
+        final Pos pos = new PosImpl(newX, newY);
         if (state.isFree(pos)) {
             return pos;
         }
@@ -115,7 +115,7 @@ public final class PreyAgentFactory implements AgentFactory {
             return state;
         });
 
-        final var agent = builder.build();
+        final Agent agent = builder.build();
         agent.setType(PREY);
         return agent;
     }

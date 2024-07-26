@@ -184,7 +184,7 @@ public final class CliInitializer {
             }
         }
 
-        StringBuilder dataBuilder = new StringBuilder();
+        final StringBuilder dataBuilder = new StringBuilder(128);
 
         dataBuilder.append("Parametri del Modello:\n");
         modelParams
@@ -192,19 +192,19 @@ public final class CliInitializer {
                 .stream()
                 .filter(Parameter::userSettable)
                 .forEach(
-                        p -> dataBuilder.append("\t").append(p.getKey()).append(": ").append(p.getValue())
-                                .append("\n"));
+                        p -> dataBuilder.append('\t').append(p.getKey()).append(": ").append(p.getValue())
+                                .append('\n'));
 
         dataBuilder.append("Parametri degli Agenti:\n");
         agents.forEach(agent -> {
-            dataBuilder.append("\t").append(agent).append(":\n");
+            dataBuilder.append('\t').append(agent).append(":\n");
             AresSupplier.getInstance()
                     .getAgentParametersSimplified(initializationId, agent)
                     .getParameters()
                     .stream()
                     .filter(Parameter::userSettable)
                     .forEach(p -> dataBuilder.append("\t\t").append(p.getKey()).append(": ").append(p.getValue())
-                            .append("\n"));
+                            .append('\n'));
         });
 
         try (FileWriter fileWriter = new FileWriter(filePath, StandardCharsets.UTF_8)) {

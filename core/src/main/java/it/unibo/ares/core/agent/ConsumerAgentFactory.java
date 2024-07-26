@@ -15,6 +15,8 @@ import it.unibo.ares.core.utils.state.State;
  * 
  */
 public final class ConsumerAgentFactory implements AgentFactory {
+    private static final String ERR = "No agents at that pos";
+    private static final String SUGAR = "sugar";
 
     private static final long serialVersionUID = 1L;
     /**
@@ -63,7 +65,7 @@ public final class ConsumerAgentFactory implements AgentFactory {
     }
 
     private Integer getDistanceBetweeenPos(final Pos p1, final Pos p2) {
-        Pos diff = p1.diff(p2);
+        final Pos diff = p1.diff(p2);
         return Math.abs(diff.getX()) + Math.abs(diff.getY());
     }
 
@@ -117,22 +119,22 @@ public final class ConsumerAgentFactory implements AgentFactory {
     private void consumeSugar(final State state, final Pos pos, final Pos sugarPos,
             final int maxSugar) {
         final int sugarAmount = state.getAgentAt(sugarPos)
-                .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
+                .orElseThrow(() -> new IllegalStateException(ERR))
                 .getParameters()
                 .getParameter("sugarAmount", Integer.class)
                 .orElseThrow(() -> new IllegalArgumentException("Agent has no sugarAmount parameter"))
                 .getValue();
 
         final int sugar = state.getAgentAt(pos)
-                .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
+                .orElseThrow(() -> new IllegalStateException(ERR))
                 .getParameters()
-                .getParameter("sugar", Integer.class)
+                .getParameter(SUGAR, Integer.class)
                 .orElseThrow(() -> new IllegalArgumentException("Agent has no sugar parameter"))
                 .getValue();
 
         final int maxSugarIntake = Math.min(maxSugar - sugar, sugarAmount);
         state.getAgentAt(pos)
-                .ifPresent(agent -> agent.getParameters().setParameter("sugar", sugar + maxSugarIntake));
+                .ifPresent(agent -> agent.getParameters().setParameter(SUGAR, sugar + maxSugarIntake));
 
         state.getAgentAt(sugarPos)
                 .ifPresent(agent -> agent.getParameters().setParameter("sugarAmount", sugarAmount - maxSugarIntake));
@@ -149,7 +151,7 @@ public final class ConsumerAgentFactory implements AgentFactory {
                 new ParameterDomainImpl<>("velocita metaboilismo consumer", (Integer i) -> i > 0),
                 true));
         builder.addParameter(new ParameterImpl<>(
-                "sugar", Integer.class,
+                SUGAR, Integer.class,
                 new ParameterDomainImpl<>("zucchero iniziale consumer", (Integer i) -> i >= 0),
                 true));
         builder.addParameter(new ParameterImpl<>(
@@ -158,16 +160,9 @@ public final class ConsumerAgentFactory implements AgentFactory {
                 true));
 
         builder.addStrategy((state, pos) -> {
-            final int visionRadius = state.getAgentAt(pos)
-                    .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
-                    .getParameters()
-                    .getParameter("visionRadius", Integer.class)
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            "Agent has no visionRadius parameter"))
-                    .getValue();
 
             final int metabolismRate = state.getAgentAt(pos)
-                    .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
+                    .orElseThrow(() -> new IllegalStateException(ERR))
                     .getParameters()
                     .getParameter("metabolismRate", Integer.class)
                     .orElseThrow(() -> new IllegalArgumentException(
@@ -175,16 +170,9 @@ public final class ConsumerAgentFactory implements AgentFactory {
                     .getValue();
 
             final int sugar = state.getAgentAt(pos)
-                    .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
+                    .orElseThrow(() -> new IllegalStateException(ERR))
                     .getParameters()
-                    .getParameter("sugar", Integer.class)
-                    .orElseThrow(() -> new IllegalArgumentException("Agent has no sugar parameter"))
-                    .getValue();
-
-            final int maxSugar = state.getAgentAt(pos)
-                    .orElseThrow(() -> new IllegalStateException("No agents at that pos"))
-                    .getParameters()
-                    .getParameter("maxSugar", Integer.class)
+                    .getParameter(SUGAR, Integer.class)
                     .orElseThrow(() -> new IllegalArgumentException("Agent has no sugar parameter"))
                     .getValue();
 
@@ -193,8 +181,23 @@ public final class ConsumerAgentFactory implements AgentFactory {
                 return state;
             }
 
+            final int visionRadius = state.getAgentAt(pos)
+                    .orElseThrow(() -> new IllegalStateException(ERR))
+                    .getParameters()
+                    .getParameter("visionRadius", Integer.class)
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Agent has no visionRadius parameter"))
+                    .getValue();
+
+            final int maxSugar = state.getAgentAt(pos)
+                    .orElseThrow(() -> new IllegalStateException(ERR))
+                    .getParameters()
+                    .getParameter("maxSugar", Integer.class)
+                    .orElseThrow(() -> new IllegalArgumentException("Agent has no sugar parameter"))
+                    .getValue();
+
             state.getAgentAt(pos)
-                    .ifPresent(agent -> agent.getParameters().setParameter("sugar",
+                    .ifPresent(agent -> agent.getParameters().setParameter(SUGAR,
                             sugar - metabolismRate));
 
             getSugarPositions(state, pos, visionRadius,
@@ -225,7 +228,7 @@ public final class ConsumerAgentFactory implements AgentFactory {
             return state;
         });
 
-        final var agent = builder.build();
+        final Agent agent = builder.build();
         agent.setType(CONSUMER);
         return agent;
     }

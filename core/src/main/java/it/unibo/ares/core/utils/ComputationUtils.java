@@ -113,7 +113,7 @@ public final class ComputationUtils {
 
         return a.getPosByPosAndRadius(pos, distance)
                 .stream()
-                .filter(p -> ComputationUtils.insideCone(p, pos, dir, distance, angle))
+                .filter(p -> insideCone(p, pos, dir, distance, angle))
                 .collect(Collectors.toSet());
     }
 

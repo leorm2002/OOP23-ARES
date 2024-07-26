@@ -38,7 +38,6 @@ final class SimulationImpl implements Simulation {
         this.model = model;
         calculating = false;
         this.tickRate = tickRate;
-        tickCount = 0;
         isOver = false;
     }
 
@@ -87,11 +86,12 @@ final class SimulationImpl implements Simulation {
     }
 
     private boolean shouldTick() {
-        final int elapsed = tickCount++ * (int) AresSupplier.getInstance().getTickRate();
+        final int elapsed = tickCount * (int) AresSupplier.getInstance().getTickRate();
         if (elapsed >= tickRate) {
             tickCount = 0;
             return true;
         } else {
+            tickCount += 1;
             return false;
         }
     }

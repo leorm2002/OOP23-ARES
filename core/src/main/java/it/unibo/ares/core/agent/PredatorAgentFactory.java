@@ -1,14 +1,14 @@
 package it.unibo.ares.core.agent;
 
-import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
-import it.unibo.ares.core.utils.parameters.ParameterImpl;
-import it.unibo.ares.core.utils.pos.Pos;
-import it.unibo.ares.core.utils.state.State;
-
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import it.unibo.ares.core.utils.parameters.ParameterDomainImpl;
+import it.unibo.ares.core.utils.parameters.ParameterImpl;
+import it.unibo.ares.core.utils.pos.Pos;
+import it.unibo.ares.core.utils.state.State;
 
 /**
  * A factory class for creating predator agents for the Predator-Prey Model.
@@ -41,7 +41,7 @@ public final class PredatorAgentFactory implements AgentFactory {
     }
 
     private Integer getDistanceBetweeenPos(final Pos p1, final Pos p2) {
-        Pos diff = p1.diff(p2);
+        final Pos diff = p1.diff(p2);
         return Math.abs(diff.getX()) + Math.abs(diff.getY());
     }
 
@@ -117,7 +117,7 @@ public final class PredatorAgentFactory implements AgentFactory {
             return state;
         });
 
-        final var agent = builder.build();
+        final Agent agent = builder.build();
         agent.setType(PREDATOR);
         return agent;
     }

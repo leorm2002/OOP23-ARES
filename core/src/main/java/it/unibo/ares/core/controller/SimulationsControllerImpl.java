@@ -2,8 +2,8 @@ package it.unibo.ares.core.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Flow.Subscriber;
@@ -46,7 +46,7 @@ final class SimulationsControllerImpl extends SimulationsController {
     void makeModelsTick() {
         final boolean async = ConfigServiceImpl.getInstance().isAsync();
 
-        Predicate<Map.Entry<String, Simulation>> isRunning = e -> e.getValue().isRunning();
+        final Predicate<Map.Entry<String, Simulation>> isRunning = e -> e.getValue().isRunning();
 
         if (!async) {
             simulations.entrySet().stream()

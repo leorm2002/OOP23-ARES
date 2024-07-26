@@ -1,12 +1,12 @@
 package it.unibo.ares.core.utils.configservice;
 
-import org.ini4j.Ini;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.ini4j.Ini;
 
 /**
  * Implementation of the ConfigService interface that reads
@@ -18,6 +18,7 @@ import java.util.Optional;
  * the need to read from the .ini file every time a configuration value is
  * requested.
  */
+@SuppressWarnings({ "PMD.SystemPrintln", "PMD.LooseCoupling" }) // E UN PROGRAMMA CLI, Ini4j non ha interfacce
 public final class ConfigServiceImpl implements ConfigService {
 
     /**
@@ -28,17 +29,18 @@ public final class ConfigServiceImpl implements ConfigService {
      * The Ini object representing the .ini file.
      */
     private Ini ini;
+
     /**
      * The cache of configuration values.
      */
-    private Map<String, Object> cache = new HashMap<>();
+    private final Map<String, Object> cache = new HashMap<>();
 
     // Private constructor to prevent instantiation
     private ConfigServiceImpl() {
         try {
             loadConfig();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
 
@@ -66,7 +68,7 @@ public final class ConfigServiceImpl implements ConfigService {
      * @throws IOException if the configuration file cannot be loaded.
      */
     private void loadConfig() throws IOException {
-        URL resource = getClass().getClassLoader().getResource("config.ini");
+        final URL resource = getClass().getClassLoader().getResource("config.ini");
         if (resource == null) {
             throw new IOException("Configuration file not found");
         }
@@ -84,16 +86,16 @@ public final class ConfigServiceImpl implements ConfigService {
      * @return The configuration value, or null if the key is not found.
      */
     private <T> Optional<T> read(final String section, final String key, final Class<T> type) {
-        String cacheKey = section + "." + key;
+        final String cacheKey = section + "." + key;
         if (cache.containsKey(cacheKey)) {
             return Optional.ofNullable(type.cast(cache.get(cacheKey)));
         }
-        String value = ini.get(section, key);
+        final String value = ini.get(section, key);
         if (value == null) {
             return Optional.ofNullable(null);
         }
 
-        Object parsedValue;
+        final Object parsedValue;
         if (type == String.class) {
             parsedValue = value;
         } else if (type == Integer.class) {

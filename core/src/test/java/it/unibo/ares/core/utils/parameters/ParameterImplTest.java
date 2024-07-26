@@ -1,11 +1,11 @@
 package it.unibo.ares.core.utils.parameters;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for {@link ParameterImpl}.
@@ -37,7 +37,7 @@ class ParameterImplTest {
 
         assertEquals(KEY, parameter.getKey());
         assertThrows(IllegalStateException.class,
-                () -> parameter.getValue());
+                parameter::getValue);
         assertEquals(type, parameter.getType());
         assertFalse(parameter.isSetted());
     }
@@ -54,9 +54,9 @@ class ParameterImplTest {
 
         assertFalse(parameter.isSetted());
         assertThrows(IllegalStateException.class,
-                () -> parameter.getValue());
+                parameter::getValue);
 
-        final var settedParameter = parameter.updateValue(value);
+        final ParameterImpl<Integer> settedParameter = parameter.updateValue(value);
 
         assertTrue(settedParameter.isSetted());
         assertEquals(value, settedParameter.getValue());

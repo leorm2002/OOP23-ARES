@@ -1,13 +1,13 @@
 package it.unibo.ares.gui.controller;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * GuiStarter is a class that extends the Application class from JavaFX.
@@ -25,10 +25,9 @@ public class GuiStarter extends Application {
      */
     @Override
     public void start(final Stage window) throws IOException {
-        Parent root;
-        root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
+        final Parent root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
         final Scene scene = new Scene(root);
-        Image icon = new Image(ClassLoader.getSystemResourceAsStream("icon.png"));
+        final Image icon = new Image(ClassLoader.getSystemResourceAsStream("icon.png"));
         window.getIcons().add(icon);
         window.setTitle("ARES");
         window.setScene(scene);

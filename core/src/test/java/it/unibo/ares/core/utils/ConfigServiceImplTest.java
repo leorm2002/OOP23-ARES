@@ -1,16 +1,18 @@
 package it.unibo.ares.core.utils;
 
-import it.unibo.ares.core.utils.configservice.ConfigServiceImpl;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
 
+import it.unibo.ares.core.utils.configservice.ConfigServiceImpl;
+
+@SuppressWarnings({ "PMD.AvoidUncheckedExceptionsInSignatures", "PMD.AvoidAccessibilityAlteration" })
 class ConfigServiceImplTest {
 
     private static final String CONFIG_SERVICE = "it.unibo.ares.core.utils.configservice.ConfigServiceImpl";
@@ -27,7 +29,7 @@ class ConfigServiceImplTest {
         method.setAccessible(true);
 
         // Create an instance of ConfigServiceImpl
-        ConfigServiceImpl instance = ConfigServiceImpl.getInstance();
+        final ConfigServiceImpl instance = ConfigServiceImpl.getInstance();
 
         // Invoke the method
         final Object obj = method.invoke(instance, "Test", "flag_false",
@@ -54,7 +56,7 @@ class ConfigServiceImplTest {
         method.setAccessible(true);
 
         // Create an instance of ConfigServiceImpl
-        ConfigServiceImpl instance = ConfigServiceImpl.getInstance();
+        final ConfigServiceImpl instance = ConfigServiceImpl.getInstance();
 
         // Invoke the method
         final Object obj = method.invoke(instance, "Test", "flag_true",

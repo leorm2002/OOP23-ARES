@@ -1,6 +1,7 @@
 package it.unibo.ares.gui.controller;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
@@ -23,8 +24,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.Serializable;
 
 /**
  * GuiController is a class that controls the first GUI of the application.
@@ -229,6 +228,7 @@ public final class FirstGuiController implements Initializable {
      * are set.
      * If any exception occurs during this process, it shows the error message.
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void setAgentParameter() {
         if (choiceAgent.getValue() == null) {
             guiWriter.showError("Please select an agent to parametrize");
@@ -331,7 +331,7 @@ public final class FirstGuiController implements Initializable {
      * exception.
      */
     private void startSecondGui() {
-        Parent root;
+        final Parent root;
         try {
             SecondGuiController.setConfigurationId(configurationSessionId);
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene2.fxml"));

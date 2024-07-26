@@ -1,17 +1,16 @@
 package it.unibo.ares.core.controller;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 class TickerTest {
     private TickerImpl ticker;
-    private AtomicInteger counter;
     private static final long INITIALDELAY = 0L;
     private static final long PERIOD = 1L;
 
@@ -24,7 +23,7 @@ class TickerTest {
 
     @Test
     void startShouldExecuteTaskAtFixedRate() throws InterruptedException {
-        counter = new AtomicInteger(0);
+        final AtomicInteger counter = new AtomicInteger(0);
         final Runnable task = counter::incrementAndGet;
         ticker = new TickerImpl(task, INITIALDELAY, PERIOD);
 
@@ -37,7 +36,7 @@ class TickerTest {
 
     @Test
     void stopShouldStopTaskExecution() throws InterruptedException {
-        counter = new AtomicInteger(0);
+        final AtomicInteger counter = new AtomicInteger(0);
         final Runnable task = counter::incrementAndGet;
         ticker = new TickerImpl(task, INITIALDELAY, PERIOD);
 
