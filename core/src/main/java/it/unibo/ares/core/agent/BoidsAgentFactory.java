@@ -65,8 +65,8 @@ public final class BoidsAgentFactory implements AgentFactory {
     private DirectionVector directionAlignment(
             final State s, final Pos pos, final DirectionVector dir, final Integer distance,
             final Integer angle) {
-        final var closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
-        final var agents = getAgentsCells(s, closeCells);
+        final Set<Pos> closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
+        final Set<Pos> agents = getAgentsCells(s, closeCells);
         return agents.stream()
                 .map(p -> s.getAgentAt(p).get().getParameters()
                         .getParameter(
@@ -74,18 +74,18 @@ public final class BoidsAgentFactory implements AgentFactory {
                         .get()
                         .getValue())
                 .map(DirectionVector.class::cast)
-                .reduce((a, b) -> a.mean(b))
+                .reduce(DirectionVector::mean)
                 .map(d -> new DirectionVectorImpl(d.getX() / agents.size(), d.getY() / agents.size()))
-                .map(d -> d.getNormalized())
+                .map(DirectionVectorImpl::getNormalized)
                 .orElse(dir);
     }
 
     private DirectionVector centerCohesion(final State s, final Pos pos, final DirectionVector dir,
             final Integer distance, final Integer angle) {
         // Compute a vector pointing to che center of the flock
-        final var closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
-        final var agents = getAgentsCells(s, closeCells);
-        final var center = closeCells.stream()
+        final Set<Pos> closeCells = ComputationUtils.computeCloseCells(pos, dir, distance, angle);
+        final Set<Pos> agents = getAgentsCells(s, closeCells);
+        final Pos center = closeCells.stream()
                 .filter(p -> s.getAgentAt(p).isPresent())
                 .reduce((a, b) -> new PosImpl(a.getX() + b.getX(), a.getY() + b.getY()))
                 .map(p -> new PosImpl(p.getX() / agents.size(), p.getY() / agents.size()))
@@ -93,7 +93,7 @@ public final class BoidsAgentFactory implements AgentFactory {
         return new DirectionVectorImpl(center.getX() - pos.getX(), center.getY() - pos.getY()).getNormalized();
     }
 
-    private DirectionVector mixer(final DirectionVector original, final DirectionVector steerAway,
+    private DirectionVector mixer(final DirectionVector original,
             final DirectionVector a, final DirectionVector b,
             final DirectionVector c,
             final double w1, final double w2, final double w3) {
@@ -169,10 +169,8 @@ public final class BoidsAgentFactory implements AgentFactory {
         final Integer distance = agent.getParameters()
                 .getParameter("distance", Integer.class).get().getValue();
 
-        DirectionVector newDir = mixer(
+        final DirectionVector newDir = mixer(
                 dir,
-                steerAwayFromBorder(agentPosition, currentState.getDimensions().getFirst(),
-                        currentState.getDimensions().getSecond()),
                 collisionAvoindance(currentState, agentPosition, dir, distance, angle),
                 directionAlignment(currentState, agentPosition, dir, distance, angle),
                 centerCohesion(currentState, agentPosition, dir, distance, angle),

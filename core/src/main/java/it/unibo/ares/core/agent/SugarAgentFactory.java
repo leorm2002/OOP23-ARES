@@ -65,7 +65,7 @@ public final class SugarAgentFactory implements AgentFactory {
             return state;
         });
 
-        final var agent = builder.build();
+        final Agent agent = builder.build();
         agent.setType(SUGAR);
         return agent;
     }

@@ -99,7 +99,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
         btnStop.setOnAction(new HandlerAdapter(this::stopSimulation));
         lblStep.setText("Step: " + calculatorSupplier.getTickRate(simulationId) + " ms");
         slidStep.setValue(mapToSliderStep(calculatorSupplier.getTickRate(simulationId)));
-        slidStep.valueProperty().addListener(new ChangeListener<Number>() {
+        slidStep.valueProperty().addListener(new ChangeListener<>() {
             /**
              * This method is called when the value of the observable object is changed.
              * It updates the step of the simulation and the label accordingly.
@@ -127,7 +127,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
         final int transitionPoint = 1000;
 
         return value <= transitionPoint ? (double) value / transitionPoint * 0.5
-                : 0.5 + ((double) (value - transitionPoint) / (MAXSTEP - transitionPoint)) * 0.5;
+                : 0.5 + (value - transitionPoint) / (MAXSTEP - transitionPoint) * 0.5;
     }
 
     /*
@@ -207,7 +207,7 @@ public final class SecondGuiController extends DataReciever implements Initializ
     @FXML
     void stopSimulation() {
         calculatorSupplier.removeSimulation(simulationId);
-        Parent root;
+        final Parent root;
         try {
             root = FXMLLoader.load(ClassLoader.getSystemResource("scene1.fxml"));
             final Scene scene = new Scene(root);

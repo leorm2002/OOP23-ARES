@@ -79,7 +79,7 @@ public final class App {
     }
 
     private static void loadFromFileAndStart(final IOManager ioManager) {
-        String path = getPath(ioManager);
+        final String path = getPath(ioManager);
         final String inizializationId = UUID.randomUUID().toString();
         final Integer step = getStep(ioManager);
         final SimController simController = new SimController(inizializationId, ioManager);
@@ -93,7 +93,7 @@ public final class App {
                 "Vuoi esportare i parametri inseriti in un file? Premi s per esportare, "
                         + "qualsiasi altro tasto per continuare senza esportare.");
 
-        String choice = ioManager.read();
+        final String choice = ioManager.read();
         if ("s".equals(choice)) {
             cliController.exportParametersData();
         }
@@ -116,7 +116,7 @@ public final class App {
         ioManager.print("Benvenuto in ARES!");
         ioManager.print(
                 "Vuoi fare una nuova simulazione o caricarne una? Premi n per iniziarne una nuova, c per caricarne una da file");
-        String choice = ioManager.read();
+        final String choice = ioManager.read();
         if ("c".equals(choice)) {
             loadFromFileAndStart(ioManager);
         } else {

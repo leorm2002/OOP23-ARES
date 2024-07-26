@@ -1,23 +1,24 @@
 package it.unibo.ares.core.controller;
 
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.model.Model;
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
-import it.unibo.ares.core.agent.Agent;
-import java.util.stream.IntStream;
-import java.util.stream.Collectors;
 
 class SimulationManagerImplTest {
 
@@ -35,7 +36,7 @@ class SimulationManagerImplTest {
 
     private SimulationImpl simulation;
     private SimulationManager simulationManager;
-    private final Integer tickRate = 100;
+    private static final Integer TICKRATE = 100;
 
     @BeforeEach
     void setUp() {
@@ -48,24 +49,24 @@ class SimulationManagerImplTest {
                         .flatMap(i -> IntStream.range(1, 3).mapToObj(j -> new PosImpl(i, j)))
                         .map(p -> new Pair<>((Pos) p, mockAgent)).collect(Collectors.toSet()));
         when(mockState.getDimensions()).thenReturn(new Pair<>(10, 10));
-        simulation = new SimulationImpl(mockState, mockModel, tickRate);
+        simulation = new SimulationImpl(mockState, mockModel, TICKRATE);
         simulationManager = new SimulationManagerImpl();
     }
 
     @Test
     void testSaveLoadSimulation() {
         // Save the simulation
-        String filePath = simulationManager.save(simulation);
+        final String filePath = simulationManager.save(simulation);
 
         assertNotNull(filePath);
         assertFalse(filePath.isEmpty());
 
-        Simulation loadedSimulation = simulationManager.load(filePath);
+        final Simulation loadedSimulation = simulationManager.load(filePath);
 
         assertNotNull(loadedSimulation);
 
-        assertEquals(simulation.getState().getAgents().stream().map(p -> p.getFirst()).collect(Collectors.toSet()),
-                loadedSimulation.getState().getAgents().stream().map(p -> p.getFirst()).collect(Collectors.toSet()));
+        assertEquals(simulation.getState().getAgents().stream().map(Pair::getFirst).collect(Collectors.toSet()),
+                loadedSimulation.getState().getAgents().stream().map(Pair::getFirst).collect(Collectors.toSet()));
         assertEquals(simulation.getState().getDimensions(), loadedSimulation.getState().getDimensions());
         assertEquals(simulation.getModel().getClass(), loadedSimulation.getModel().getClass());
     }

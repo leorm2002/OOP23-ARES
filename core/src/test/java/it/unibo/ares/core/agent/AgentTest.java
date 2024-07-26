@@ -1,18 +1,19 @@
 package it.unibo.ares.core.agent;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
 import it.unibo.ares.core.utils.Pair;
 import it.unibo.ares.core.utils.parameters.ParameterImpl;
 import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
-import org.junit.jupiter.api.Test;
-
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for {\@link Agent}.
@@ -68,9 +69,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest() {
-        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
-        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
-        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 2, true));
+        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<>(TYPE, 1, true));
+        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<>(TYPE, 1, true));
+        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<>(TYPE, 2, true));
         State state = getTestState();
         final Pos agent1aPos = new PosImpl(1, 1);
         state.addAgent(agent1aPos, agent1a);
@@ -89,9 +90,9 @@ class AgentTest {
      */
     @Test
     void agentWithStrategyAndParametersTest2() {
-        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
-        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 1, true));
-        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<Integer>(TYPE, 2, true));
+        final Agent agent1a = getAgentWithStrategyAndWithParameter(new ParameterImpl<>(TYPE, 1, true));
+        final Agent agent1b = getAgentWithStrategyAndWithParameter(new ParameterImpl<>(TYPE, 1, true));
+        final Agent agent2 = getAgentWithStrategyAndWithParameter(new ParameterImpl<>(TYPE, 2, true));
 
         State state = getTestState();
         state.addAgent(new PosImpl(1, 1), agent1a);

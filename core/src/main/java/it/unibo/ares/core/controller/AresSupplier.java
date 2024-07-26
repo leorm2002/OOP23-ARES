@@ -165,9 +165,9 @@ public final class AresSupplier implements InitializationApi, SimulationControlA
      * @return The ID of the started simulation.
      */
     public String startSimulationFromFile(final String filePath, final Subscriber<SimulationOutputData> subscriber) {
-        String simulationId = UUID.randomUUID().toString();
-        SimulationManager manager = new SimulationManagerImpl();
-        Simulation loadedSim = manager.load(filePath);
+        final String simulationId = UUID.randomUUID().toString();
+        final SimulationManager manager = new SimulationManagerImpl();
+        final Simulation loadedSim = manager.load(filePath);
         controller.addSimulation(simulationId, loadedSim);
         controller.startSimulation(simulationId);
         controller.subscribe(simulationId, subscriber);

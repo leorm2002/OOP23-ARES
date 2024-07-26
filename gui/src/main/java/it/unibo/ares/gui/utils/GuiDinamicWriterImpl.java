@@ -140,7 +140,7 @@ public class GuiDinamicWriterImpl implements GuiDinamicWriter {
          * the
          * gridpane
          */
-        int txtSize;
+        final int txtSize;
         final int widthRange1 = 22, widthRange2 = 25, txtSize1 = 14, txtSize2 = 16;
         if (width >= widthRange1 && width < widthRange2) {
             txtSize = txtSize2;

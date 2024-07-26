@@ -2,7 +2,7 @@ plugins {
     java
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.danilopianini.gradle-java-qa") version "1.55.0"
+    id("org.danilopianini.gradle-java-qa") version "1.59.0"
     id("lifecycle-base")
 }
 

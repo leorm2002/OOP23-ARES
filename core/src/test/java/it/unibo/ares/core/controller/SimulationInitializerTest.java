@@ -1,15 +1,17 @@
 package it.unibo.ares.core.controller;
 
-import it.unibo.ares.core.model.ModelFactory;
-import it.unibo.ares.core.model.SchellingModelFactory;
-import it.unibo.ares.core.utils.parameters.Parameters;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import it.unibo.ares.core.model.ModelFactory;
+import it.unibo.ares.core.model.SchellingModelFactory;
+import it.unibo.ares.core.utils.parameters.Parameters;
 
 class SimulationInitializerTest {
     private ModelFactory sf;
@@ -45,7 +47,7 @@ class SimulationInitializerTest {
 
         simulationInitializer.setModelParameter(simId, "size", 15);
         // CHECKSTYLE: MagicNumber ON
-        assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
+        assertFalse(simulationInitializer.getAgentsSimplified(simId).isEmpty());
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
@@ -59,10 +61,10 @@ class SimulationInitializerTest {
         // CHECKSTYLE: MagicNumber OFF è una size per provare il metodo
         simulationInitializer.setModelParameter(simId, "size", 15);
         // CHECKSTYLE: MagicNumber ON
-        assertTrue(simulationInitializer.getAgentsSimplified(simId).size() > 0);
+        assertFalse(simulationInitializer.getAgentsSimplified(simId).isEmpty());
         final Set<String> agents = simulationInitializer.getAgentsSimplified(simId);
         final String agent = agents.stream().findAny().get();
         final Parameters agentParams = simulationInitializer.getAgentParametersSimplified(simId, agent);
-        assertTrue(agentParams.getParametersToset().size() > 0);
+        assertFalse(agentParams.getParametersToset().isEmpty());
     }
 }

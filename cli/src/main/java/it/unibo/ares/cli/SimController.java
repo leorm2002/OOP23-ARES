@@ -155,7 +155,7 @@ public final class SimController extends DataReciever {
                 if (data.getData().containsKey(pos)) {
                     str.append(String.format("%-" + cellWidth + "s |", data.getData().get(pos)));
                 } else {
-                    str.append(" ".repeat(cellWidth) + " |");
+                    str.append(" ".repeat(cellWidth)).append(" |");
                 }
             }
             str.append(getHorizontalBar(width, cellWidth));

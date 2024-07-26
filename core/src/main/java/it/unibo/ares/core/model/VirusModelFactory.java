@@ -1,6 +1,9 @@
 
 package it.unibo.ares.core.model;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 import it.unibo.ares.core.agent.Agent;
 import it.unibo.ares.core.agent.IVirusAgentFactory;
 import it.unibo.ares.core.agent.PVirusAgentFactory;
@@ -12,9 +15,6 @@ import it.unibo.ares.core.utils.pos.Pos;
 import it.unibo.ares.core.utils.pos.PosImpl;
 import it.unibo.ares.core.utils.state.State;
 import it.unibo.ares.core.utils.state.StateImpl;
-
-import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * This class generates an instance of a virus diffusion model.
@@ -112,20 +112,20 @@ public final class VirusModelFactory implements ModelFactory {
     public Model getModel() {
         return new ModelBuilderImpl()
                 .addParameter(new ParameterImpl<>("numeroPersoneSane", Integer.class,
-                        new ParameterDomainImpl<Integer>(
+                        new ParameterDomainImpl<>(
                                 "Numero di persone sane (1-n)",
-                                i -> i >= 1),
+                                (Integer i) -> i >= 1),
                         true))
                 .addParameter(new ParameterImpl<>("numeroInfetti", Integer.class,
-                        new ParameterDomainImpl<Integer>(
+                        new ParameterDomainImpl<>(
                                 "Numero di persone infette (1-n)",
-                                i -> i >= 1),
+                                (Integer i) -> i >= 1),
                         true))
                 .addParameter(new ParameterImpl<>(
                         Model.SIZEKEY, Integer.class,
-                        new ParameterDomainImpl<Integer>(
+                        new ParameterDomainImpl<>(
                                 "Dimensione della griglia (1-n)",
-                                i -> i > 0),
+                                (Integer i) -> i > 0),
                         true))
                 .addExitFunction((o, n) -> o.getAgents().stream()
                         .allMatch(p -> n.getAgents().stream().anyMatch(p::equals)))
